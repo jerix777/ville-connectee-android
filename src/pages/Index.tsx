@@ -1,92 +1,13 @@
-
 import { MainLayout } from "@/components/layout/MainLayout";
 import { FeatureCard } from "@/components/ui/feature-card";
 import { BookmarkCheck, Building, Calendar, Bell, Info, MapPin, Users, MessageSquare, Star, Link as LinkIcon } from "lucide-react";
-
-const featuresSection1 = [
-  {
-    title: "Événements",
-    icon: Calendar,
-    to: "/evenements",
-    description: "Consultez les événements à venir"
-  },
-  {
-    title: "Main d'œuvre",
-    icon: Users,
-    to: "/main-doeuvre",
-    description: "Trouvez des professionnels qualifiés"
-  },
-  {
-    title: "Marché",
-    icon: Star,
-    to: "/marche",
-    description: "Achetez et vendez des biens"
-  },
-  {
-    title: "Offres d'emploi",
-    icon: Building,
-    to: "/emplois",
-    description: "Consultez les opportunités d'emploi"
-  },
-  {
-    title: "Annuaire",
-    icon: LinkIcon,
-    to: "/annuaire", 
-    description: "Retrouvez les contacts locaux"
-  },
-  {
-    title: "Associations",
-    icon: Users,
-    to: "/associations",
-    description: "Découvrez les associations"
-  },
-];
-
-const featuresSection2 = [
-  {
-    title: "Alertes",
-    icon: Bell,
-    to: "/alertes",
-    description: "Signalements et alertes locales"
-  },
-  {
-    title: "Communiqués",
-    icon: Info,
-    to: "/annonces",
-    description: "Annonces officielles"
-  },
-  {
-    title: "Services & Commerces",
-    icon: Building,
-    to: "/services",
-    description: "Services et entreprises locales"
-  },
-  {
-    title: "Villages",
-    icon: MapPin,
-    to: "/villages",
-    description: "Informations sur les villages"
-  },
-  {
-    title: "Souvenirs",
-    icon: BookmarkCheck,
-    to: "/souvenirs",
-    description: "Mémoire collective"
-  },
-  {
-    title: "Tribune & Suggestions",
-    icon: MessageSquare,
-    to: "/tribune",
-    description: "Votre espace d'expression"
-  },
-];
 
 export default function Index() {
   return (
     <MainLayout>
       {/* Hero Section */}
       <section className="mb-10">
-        <div className="rounded-xl bg-gradient-to-r from-ville-DEFAULT to-ville-dark p-8 text-white">
+        <div className="rounded-xl bg-gradient-to-r from-ville-DEFAULT to-ville-dark p-8 text-ville-foreground">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
             Bienvenue sur Ville Connectée
           </h1>
@@ -97,7 +18,7 @@ export default function Index() {
             <button className="bg-white text-ville-DEFAULT px-6 py-3 rounded-md font-medium hover:bg-opacity-90 transition-all">
               Découvrir
             </button>
-            <button className="bg-transparent border border-white px-6 py-3 rounded-md font-medium hover:bg-white hover:bg-opacity-10 transition-all">
+            <button className="bg-transparent border border-ville-DEFAULT text-ville-DEFAULT px-6 py-3 rounded-md font-medium hover:bg-ville-light transition-all">
               En savoir plus
             </button>
           </div>
