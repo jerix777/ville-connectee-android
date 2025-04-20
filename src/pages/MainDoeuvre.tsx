@@ -1,4 +1,3 @@
-
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,7 +22,7 @@ interface Worker {
 // Sample domains
 const domains = [
   "Maçonnerie",
-  "Plomberie",
+  "Plomberie", 
   "Électricité",
   "Menuiserie",
   "Peinture",
@@ -270,7 +269,7 @@ export default function MainDoeuvrePage() {
             <SelectValue placeholder="Tous les domaines" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Tous les domaines</SelectItem>
+            <SelectItem value="all">Tous les domaines</SelectItem>
             {domains.map(domain => (
               <SelectItem key={domain} value={domain}>{domain}</SelectItem>
             ))}
