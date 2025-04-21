@@ -252,7 +252,7 @@ export default function MainDoeuvrePage() {
             <SelectValue placeholder="Tous les domaines" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Tous les domaines</SelectItem>
+            <SelectItem value="all">Tous les domaines</SelectItem>
             {metiers.map(metier => (
               <SelectItem key={metier.id} value={metier.id}>{metier.nom}</SelectItem>
             ))}
