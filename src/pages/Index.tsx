@@ -1,6 +1,85 @@
+
 import { MainLayout } from "@/components/layout/MainLayout";
 import { FeatureCard } from "@/components/ui/feature-card";
 import { BookmarkCheck, Building, Calendar, Bell, Info, MapPin, Users, MessageSquare, Star, Link as LinkIcon } from "lucide-react";
+
+const featuresSection1 = [
+  {
+    title: "Événements",
+    icon: Calendar,
+    to: "/evenements",
+    description: "Consultez les événements à venir"
+  },
+  {
+    title: "Main d'œuvre",
+    icon: Users,
+    to: "/main-doeuvre",
+    description: "Trouvez des professionnels qualifiés"
+  },
+  {
+    title: "Marché",
+    icon: Star,
+    to: "/marche",
+    description: "Achetez et vendez des biens"
+  },
+  {
+    title: "Offres d'emploi",
+    icon: Building,
+    to: "/emplois",
+    description: "Consultez les opportunités d'emploi"
+  },
+  {
+    title: "Annuaire",
+    icon: LinkIcon,
+    to: "/annuaire", 
+    description: "Retrouvez les contacts locaux"
+  },
+  {
+    title: "Associations",
+    icon: Users,
+    to: "/associations",
+    description: "Découvrez les associations"
+  },
+];
+
+const featuresSection2 = [
+  {
+    title: "Alertes",
+    icon: Bell,
+    to: "/alertes",
+    description: "Signalements et alertes locales"
+  },
+  {
+    title: "Communiqués",
+    icon: Info,
+    to: "/annonces",
+    description: "Annonces officielles"
+  },
+  {
+    title: "Services & Commerces",
+    icon: Building,
+    to: "/services",
+    description: "Services et entreprises locales"
+  },
+  {
+    title: "Villages",
+    icon: MapPin,
+    to: "/villages",
+    description: "Informations sur les villages"
+  },
+  {
+    title: "Souvenirs",
+    icon: BookmarkCheck,
+    to: "/souvenirs",
+    description: "Mémoire collective"
+  },
+  {
+    title: "Tribune & Suggestions",
+    icon: MessageSquare,
+    to: "/tribune",
+    description: "Votre espace d'expression"
+  },
+];
 
 export default function Index() {
   return (
