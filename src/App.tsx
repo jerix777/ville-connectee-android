@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -10,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import EvenementsPage from "./pages/Evenements";
 import MainDoeuvrePage from "./pages/MainDoeuvre";
 import MarchePage from "./pages/Marche";
+import ActualitesPage from "./pages/Actualites";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +21,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/actualites" element={<ActualitesPage />} />
           <Route path="/evenements" element={<EvenementsPage />} />
           <Route path="/main-doeuvre" element={<MainDoeuvrePage />} />
           <Route path="/marche" element={<MarchePage />} />
