@@ -25,7 +25,7 @@ function MarketItemCard({ item }: { item: MarketItem }) {
             <p className="text-sm text-gray-500">{item.vendeur}</p>
           </div>
           <div className={`${item.is_for_sale ? "bg-ville-light text-ville-DEFAULT" : "bg-blue-100 text-blue-600"} px-3 py-1 rounded-full text-sm font-medium`}>
-            {item.is_for_sale ? `${item.prix} €` : `Budget: ${item.prix} €`}
+            {item.is_for_sale ? `${item.prix} CFA` : `Budget: ${item.prix} CFA`}
           </div>
         </div>
       </CardHeader>
@@ -136,7 +136,7 @@ function SellForm({ onClose }: { onClose: () => void }) {
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="prix">Prix (€)</Label>
+          <Label htmlFor="prix">Prix (CFA)</Label>
           <Input
             id="prix"
             name="prix"
@@ -265,7 +265,7 @@ function BuyForm({ onClose }: { onClose: () => void }) {
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="prix">Prix d'achat maximum (€)</Label>
+          <Label htmlFor="prix">Prix d'achat maximum (CFA)</Label>
           <Input
             id="prix"
             name="prix"
@@ -455,3 +455,4 @@ export default function MarchePage() {
     </MainLayout>
   );
 }
+
