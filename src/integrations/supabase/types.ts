@@ -9,7 +9,166 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      evenements: {
+        Row: {
+          contact1: string
+          contact2: string | null
+          created_at: string | null
+          date_debut: string
+          date_fin: string
+          heure_debut: string
+          heure_fin: string
+          id: string
+          lieu: string
+          organisateur: string
+          titre: string
+          type_id: string
+        }
+        Insert: {
+          contact1: string
+          contact2?: string | null
+          created_at?: string | null
+          date_debut: string
+          date_fin: string
+          heure_debut: string
+          heure_fin: string
+          id?: string
+          lieu: string
+          organisateur: string
+          titre: string
+          type_id: string
+        }
+        Update: {
+          contact1?: string
+          contact2?: string | null
+          created_at?: string | null
+          date_debut?: string
+          date_fin?: string
+          heure_debut?: string
+          heure_fin?: string
+          id?: string
+          lieu?: string
+          organisateur?: string
+          titre?: string
+          type_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "evenements_type_id_fkey"
+            columns: ["type_id"]
+            isOneToOne: false
+            referencedRelation: "event_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_types: {
+        Row: {
+          id: string
+          label: string
+        }
+        Insert: {
+          id?: string
+          label: string
+        }
+        Update: {
+          id?: string
+          label?: string
+        }
+        Relationships: []
+      }
+      marche: {
+        Row: {
+          contact1: string
+          contact2: string | null
+          created_at: string | null
+          description: string
+          id: string
+          is_for_sale: boolean
+          prix: number
+          titre: string
+          vendeur: string
+        }
+        Insert: {
+          contact1: string
+          contact2?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+          is_for_sale?: boolean
+          prix: number
+          titre: string
+          vendeur: string
+        }
+        Update: {
+          contact1?: string
+          contact2?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          is_for_sale?: boolean
+          prix?: number
+          titre?: string
+          vendeur?: string
+        }
+        Relationships: []
+      }
+      metiers: {
+        Row: {
+          id: string
+          nom: string
+        }
+        Insert: {
+          id?: string
+          nom: string
+        }
+        Update: {
+          id?: string
+          nom?: string
+        }
+        Relationships: []
+      }
+      professionnels: {
+        Row: {
+          base: string
+          contact1: string
+          contact2: string | null
+          created_at: string | null
+          id: string
+          metier_id: string
+          nom: string
+          surnom: string | null
+        }
+        Insert: {
+          base: string
+          contact1: string
+          contact2?: string | null
+          created_at?: string | null
+          id?: string
+          metier_id: string
+          nom: string
+          surnom?: string | null
+        }
+        Update: {
+          base?: string
+          contact1?: string
+          contact2?: string | null
+          created_at?: string | null
+          id?: string
+          metier_id?: string
+          nom?: string
+          surnom?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "professionnels_metier_id_fkey"
+            columns: ["metier_id"]
+            isOneToOne: false
+            referencedRelation: "metiers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

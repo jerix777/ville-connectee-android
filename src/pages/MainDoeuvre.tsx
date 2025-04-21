@@ -1,3 +1,4 @@
+
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,85 +8,24 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Phone, Plus, User } from "lucide-react";
 import { useState } from "react";
-
-// Types for our worker
-interface Worker {
-  id: string;
-  name: string;
-  domain: string;
-  nickname?: string;
-  contact1: string;
-  contact2?: string;
-  base: string;
-}
-
-// Sample domains
-const domains = [
-  "Maçonnerie",
-  "Plomberie", 
-  "Électricité",
-  "Menuiserie",
-  "Peinture",
-  "Jardinage",
-  "Nettoyage",
-  "Cuisine",
-  "Transport",
-  "Coiffure",
-  "Couture",
-  "Informatique",
-  "Réparation Auto",
-  "Autre"
-];
-
-// Sample workers data
-const sampleWorkers: Worker[] = [
-  {
-    id: "1",
-    name: "Jean Dupont",
-    domain: "Plomberie",
-    contact1: "0123456789",
-    contact2: "0987654321",
-    base: "Centre-ville"
-  },
-  {
-    id: "2",
-    name: "Marie Martin",
-    nickname: "Marie la Menuisière",
-    domain: "Menuiserie",
-    contact1: "0123456789",
-    base: "Quartier Nord"
-  },
-  {
-    id: "3",
-    name: "Pierre Dubois",
-    domain: "Électricité",
-    contact1: "0123456789",
-    base: "Quartier Sud"
-  },
-  {
-    id: "4",
-    name: "Sophie Leroy",
-    domain: "Peinture",
-    contact1: "0123456789",
-    contact2: "0987654321",
-    base: "Quartier Est"
-  }
-];
+import { useToast } from "@/components/ui/use-toast";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Professional, Metier, getMetiers, getProfessionals, addProfessional } from "@/services/professionalService";
 
 // Worker Card component
-function WorkerCard({ worker }: { worker: Worker }) {
+function WorkerCard({ worker }: { worker: Professional }) {
   return (
     <Card className="mb-4">
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
-            <CardTitle>{worker.name}</CardTitle>
-            {worker.nickname && (
-              <p className="text-sm text-gray-500">"{worker.nickname}"</p>
+            <CardTitle>{worker.nom}</CardTitle>
+            {worker.surnom && (
+              <p className="text-sm text-gray-500">"{worker.surnom}"</p>
             )}
           </div>
           <div className="bg-ville-light text-ville-DEFAULT px-3 py-1 rounded-full text-sm font-medium">
-            {worker.domain}
+            {worker.metier?.nom || ""}
           </div>
         </div>
       </CardHeader>
@@ -115,14 +55,41 @@ function WorkerCard({ worker }: { worker: Worker }) {
 }
 
 // AddWorkerForm component
-function AddWorkerForm() {
+function AddWorkerForm({ onClose }: { onClose: () => void }) {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
-    domain: "",
-    name: "",
-    nickname: "",
+    nom: "",
+    surnom: "",
+    metier_id: "",
     contact1: "",
     contact2: "",
     base: ""
+  });
+  
+  const { data: metiers = [] } = useQuery({
+    queryKey: ['metiers'],
+    queryFn: getMetiers
+  });
+  
+  const addWorkerMutation = useMutation({
+    mutationFn: addProfessional,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['professionals'] });
+      toast({
+        title: "Professionnel ajouté",
+        description: "Le professionnel a été ajouté avec succès",
+      });
+      onClose();
+    },
+    onError: (error) => {
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de l'ajout du professionnel",
+        variant: "destructive"
+      });
+      console.error("Error adding professional:", error);
+    }
   });
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,49 +98,47 @@ function AddWorkerForm() {
   };
   
   const handleSelectChange = (value: string) => {
-    setFormData(prev => ({ ...prev, domain: value }));
+    setFormData(prev => ({ ...prev, metier_id: value }));
   };
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Professionnel ajouté:", formData);
-    // Ici, vous ajouteriez normalement le travailleur à votre état ou base de données
-    // puis vous fermeriez la dialogue
+    addWorkerMutation.mutate(formData);
   };
   
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="domain">Domaine d'activité</Label>
+          <Label htmlFor="metier_id">Domaine d'activité</Label>
           <Select onValueChange={handleSelectChange}>
             <SelectTrigger>
               <SelectValue placeholder="Sélectionner un domaine" />
             </SelectTrigger>
             <SelectContent>
-              {domains.map(domain => (
-                <SelectItem key={domain} value={domain}>{domain}</SelectItem>
+              {metiers.map(metier => (
+                <SelectItem key={metier.id} value={metier.id}>{metier.nom}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="name">Nom et prénoms</Label>
+          <Label htmlFor="nom">Nom et prénoms</Label>
           <Input
-            id="name"
-            name="name"
-            value={formData.name}
+            id="nom"
+            name="nom"
+            value={formData.nom}
             onChange={handleChange}
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="nickname">Surnom (optionnel)</Label>
+          <Label htmlFor="surnom">Surnom (optionnel)</Label>
           <Input
-            id="nickname"
-            name="nickname"
-            value={formData.nickname}
+            id="surnom"
+            name="surnom"
+            value={formData.surnom}
             onChange={handleChange}
           />
         </div>
@@ -210,8 +175,12 @@ function AddWorkerForm() {
       </div>
       
       <DialogFooter>
-        <Button type="submit" className="bg-ville-DEFAULT hover:bg-ville-dark">
-          Je m'inscris
+        <Button 
+          type="submit" 
+          className="bg-ville-DEFAULT hover:bg-ville-dark"
+          disabled={addWorkerMutation.isPending}
+        >
+          {addWorkerMutation.isPending ? "Inscription en cours..." : "Je m'inscris"}
         </Button>
       </DialogFooter>
     </form>
@@ -221,27 +190,41 @@ function AddWorkerForm() {
 export default function MainDoeuvrePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [domainFilter, setDomainFilter] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
+  const { data: metiers = [] } = useQuery({
+    queryKey: ['metiers'],
+    queryFn: getMetiers
+  });
+  
+  const { data: workers = [], isLoading, error } = useQuery({
+    queryKey: ['professionals'],
+    queryFn: getProfessionals
+  });
   
   // Filter workers based on search and domain
-  const filteredWorkers = sampleWorkers.filter(worker => {
+  const filteredWorkers = workers.filter(worker => {
     const matchesSearch = searchQuery === "" || 
-      worker.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (worker.nickname && worker.nickname.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      worker.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (worker.surnom && worker.surnom.toLowerCase().includes(searchQuery.toLowerCase())) ||
       worker.base.toLowerCase().includes(searchQuery.toLowerCase());
       
-    const matchesDomain = domainFilter === "" || worker.domain === domainFilter;
+    const matchesDomain = domainFilter === "" || worker.metier_id === domainFilter;
     
     return matchesSearch && matchesDomain;
   });
   
   // Group workers by domain
-  const workersByDomain = domains.reduce((acc, domain) => {
-    const workersInDomain = filteredWorkers.filter(worker => worker.domain === domain);
+  const workersByDomain = metiers.reduce((acc, metier) => {
+    const workersInDomain = filteredWorkers.filter(worker => worker.metier_id === metier.id);
     if (workersInDomain.length > 0) {
-      acc[domain] = workersInDomain;
+      acc[metier.id] = {
+        metier,
+        workers: workersInDomain
+      };
     }
     return acc;
-  }, {} as Record<string, Worker[]>);
+  }, {} as Record<string, { metier: Metier, workers: Professional[] }>);
   
   return (
     <MainLayout>
@@ -269,14 +252,14 @@ export default function MainDoeuvrePage() {
             <SelectValue placeholder="Tous les domaines" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tous les domaines</SelectItem>
-            {domains.map(domain => (
-              <SelectItem key={domain} value={domain}>{domain}</SelectItem>
+            <SelectItem value="">Tous les domaines</SelectItem>
+            {metiers.map(metier => (
+              <SelectItem key={metier.id} value={metier.id}>{metier.nom}</SelectItem>
             ))}
           </SelectContent>
         </Select>
         
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button className="bg-ville-DEFAULT hover:bg-ville-dark">
               <Plus size={16} className="mr-2" />
@@ -290,13 +273,21 @@ export default function MainDoeuvrePage() {
                 Inscrivez-vous comme professionnel pour proposer vos services
               </DialogDescription>
             </DialogHeader>
-            <AddWorkerForm />
+            <AddWorkerForm onClose={() => setIsDialogOpen(false)} />
           </DialogContent>
         </Dialog>
       </div>
       
       {/* Results section */}
-      {filteredWorkers.length === 0 ? (
+      {isLoading ? (
+        <div className="text-center py-10">
+          <p>Chargement des professionnels...</p>
+        </div>
+      ) : error ? (
+        <div className="text-center py-10 text-red-500">
+          <p>Une erreur est survenue lors du chargement des professionnels</p>
+        </div>
+      ) : filteredWorkers.length === 0 ? (
         <div className="text-center py-10 text-gray-500">
           <User size={48} className="mx-auto mb-4 text-gray-400" />
           <p>Aucun professionnel trouvé</p>
@@ -311,9 +302,9 @@ export default function MainDoeuvrePage() {
         </div>
       ) : (
         // Group by domain when no specific domain is selected
-        Object.entries(workersByDomain).map(([domain, workers]) => (
-          <div key={domain} className="mb-8">
-            <h2 className="text-xl font-semibold mb-4 text-ville-dark">{domain}</h2>
+        Object.entries(workersByDomain).map(([domainId, { metier, workers }]) => (
+          <div key={domainId} className="mb-8">
+            <h2 className="text-xl font-semibold mb-4 text-ville-dark">{metier.nom}</h2>
             {workers.map(worker => (
               <WorkerCard key={worker.id} worker={worker} />
             ))}
