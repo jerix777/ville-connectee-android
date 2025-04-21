@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Bell, BookmarkCheck, Building, Calendar, Home, Info, Link as LinkIcon, MapPin, MessageSquare, Search, Star, Users } from "lucide-react";
+import { Bell, BookmarkCheck, Building, Calendar, Home, Info, Link as LinkIcon, MapPin, MessageSquare, Search, Star, Users, BriefcaseBusiness } from "lucide-react";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -23,7 +22,7 @@ const navItems = [
   { path: "/evenements", label: "Événements", icon: Calendar },
   { path: "/main-doeuvre", label: "Main d'œuvre", icon: Users },
   { path: "/marche", label: "Marché", icon: Star },
-  { path: "/emplois", label: "Offres d'emploi", icon: Building },
+  { path: "/emplois", label: "Offres d'emploi", icon: BriefcaseBusiness },
   { path: "/annuaire", label: "Annuaire", icon: LinkIcon },
   { path: "/associations", label: "Associations", icon: Users },
   { path: "/immobilier", label: "Espace immobilier", icon: Building },
@@ -65,7 +64,6 @@ export function Sidebar({ isOpen }: SidebarProps) {
     isOpen ? "translate-x-0" : "-translate-x-full"
   );
 
-  // Filter navigation items based on search
   const filteredNavItems = searchQuery
     ? navItems.filter((item) =>
         item.label.toLowerCase().includes(searchQuery.toLowerCase())
