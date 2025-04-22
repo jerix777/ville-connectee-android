@@ -15,7 +15,7 @@ export interface OffreEmploi {
 // Charger toutes les offres d'emploi, en les triant par date de publication
 export async function getOffresEmploi(): Promise<OffreEmploi[]> {
   const { data, error } = await supabase
-    .from("offres_emploi" as any)
+    .from("offres_emploi")
     .select("*")
     .order("publie_le", { ascending: false });
 
@@ -23,25 +23,27 @@ export async function getOffresEmploi(): Promise<OffreEmploi[]> {
     console.error("Erreur chargement offres:", error);
     return [];
   }
-  // Filtrer pour ne garder que les objets correspondant à l’interface attendue
-  return (data ?? []).filter(
-    (o): o is OffreEmploi =>
-      typeof o === "object" &&
+  
+  // Convertir et vérifier que les données correspondent à notre interface
+  return (data || []).filter((o): o is OffreEmploi => {
+    return (
       o !== null &&
+      typeof o === "object" &&
       "titre" in o &&
       "description" in o &&
       "employeur" in o &&
       "type_contrat" in o &&
       "localisation" in o
-  );
+    );
+  });
 }
 
-// Ajouter une offre d'emploi (en omettant l’id et la date de publication, gérés côté BDD)
+// Ajouter une offre d'emploi (en omettant l'id et la date de publication, gérés côté BDD)
 export async function addOffreEmploi(
   offre: Omit<OffreEmploi, "id" | "publie_le" | "created_at">
 ): Promise<OffreEmploi | null> {
   const { data, error } = await supabase
-    .from("offres_emploi" as any)
+    .from("offres_emploi")
     .insert([offre])
     .select();
 
