@@ -161,6 +161,39 @@ export type Database = {
         }
         Relationships: []
       }
+      offres_emploi: {
+        Row: {
+          created_at: string | null
+          description: string
+          employeur: string
+          id: string
+          localisation: string
+          publie_le: string | null
+          titre: string
+          type_contrat: string
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          employeur: string
+          id?: string
+          localisation: string
+          publie_le?: string | null
+          titre: string
+          type_contrat: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          employeur?: string
+          id?: string
+          localisation?: string
+          publie_le?: string | null
+          titre?: string
+          type_contrat?: string
+        }
+        Relationships: []
+      }
       professionnels: {
         Row: {
           base: string
