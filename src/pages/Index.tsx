@@ -86,18 +86,18 @@ export default function Index() {
     <MainLayout>
       {/* Hero Section */}
       <section className="mb-10">
-        <div className="rounded-xl bg-gradient-to-r from-ville-DEFAULT to-ville-dark p-8 text-ville-foreground">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+        <div className="rounded-xl bg-gradient-to-r from-ville-DEFAULT to-ville-dark p-8 text-black">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-black">
             Bienvenue sur Ville Connectée
           </h1>
-          <p className="text-lg opacity-90 mb-6">
+          <p className="text-lg opacity-90 mb-6 text-black">
             Votre application Android pour tous les services de votre ville
           </p>
           <div className="flex space-x-4">
-            <button className="bg-white text-ville-DEFAULT px-6 py-3 rounded-md font-medium hover:bg-opacity-90 transition-all">
+            <button className="bg-white text-ville-DEFAULT px-6 py-3 rounded-md font-medium hover:bg-opacity-90 transition-all text-black">
               Découvrir
             </button>
-            <button className="bg-transparent border border-ville-DEFAULT text-ville-DEFAULT px-6 py-3 rounded-md font-medium hover:bg-ville-light transition-all">
+            <button className="bg-transparent border border-ville-DEFAULT text-ville-DEFAULT px-6 py-3 rounded-md font-medium hover:bg-ville-light transition-all text-black">
               En savoir plus
             </button>
           </div>
