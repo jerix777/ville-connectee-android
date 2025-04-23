@@ -1,4 +1,3 @@
-
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,7 +12,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Event, EventType, addEvent, formatDate, getEventTypes, getEvents } from "@/services/eventService";
 
-// EventCard component
 function EventCard({ event }: { event: Event }) {
   return (
     <Card className="mb-4">
@@ -51,7 +49,6 @@ function EventCard({ event }: { event: Event }) {
   );
 }
 
-// AddEventForm component
 function AddEventForm({ onClose }: { onClose: () => void }) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -108,127 +105,129 @@ function AddEventForm({ onClose }: { onClose: () => void }) {
   };
   
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="type_id">Type d'événement</Label>
-          <Select onValueChange={handleSelectChange}>
-            <SelectTrigger>
-              <SelectValue placeholder="Sélectionner un type" />
-            </SelectTrigger>
-            <SelectContent>
-              {eventTypes.map(type => (
-                <SelectItem key={type.id} value={type.id}>{type.label}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+    <ScrollArea className="max-h-[60vh]">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="type_id">Type d'événement</Label>
+            <Select onValueChange={handleSelectChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Sélectionner un type" />
+              </SelectTrigger>
+              <SelectContent>
+                {eventTypes.map(type => (
+                  <SelectItem key={type.id} value={type.id}>{type.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="titre">Titre</Label>
+            <Input
+              id="titre"
+              name="titre"
+              value={formData.titre}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="organisateur">Organisateur</Label>
+            <Input
+              id="organisateur"
+              name="organisateur"
+              value={formData.organisateur}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="lieu">Lieu</Label>
+            <Input
+              id="lieu"
+              name="lieu"
+              value={formData.lieu}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="date_debut">Date de début</Label>
+            <Input
+              id="date_debut"
+              name="date_debut"
+              type="date"
+              value={formData.date_debut}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="heure_debut">Heure de début</Label>
+            <Input
+              id="heure_debut"
+              name="heure_debut"
+              type="time"
+              value={formData.heure_debut}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="date_fin">Date de fin</Label>
+            <Input
+              id="date_fin"
+              name="date_fin"
+              type="date"
+              value={formData.date_fin}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="heure_fin">Heure de fin</Label>
+            <Input
+              id="heure_fin"
+              name="heure_fin"
+              type="time"
+              value={formData.heure_fin}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="contact1">Contact 1</Label>
+            <Input
+              id="contact1"
+              name="contact1"
+              value={formData.contact1}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="contact2">Contact 2 (optionnel)</Label>
+            <Input
+              id="contact2"
+              name="contact2"
+              value={formData.contact2}
+              onChange={handleChange}
+            />
+          </div>
         </div>
         
-        <div className="space-y-2">
-          <Label htmlFor="titre">Titre</Label>
-          <Input
-            id="titre"
-            name="titre"
-            value={formData.titre}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="organisateur">Organisateur</Label>
-          <Input
-            id="organisateur"
-            name="organisateur"
-            value={formData.organisateur}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="lieu">Lieu</Label>
-          <Input
-            id="lieu"
-            name="lieu"
-            value={formData.lieu}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="date_debut">Date de début</Label>
-          <Input
-            id="date_debut"
-            name="date_debut"
-            type="date"
-            value={formData.date_debut}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="heure_debut">Heure de début</Label>
-          <Input
-            id="heure_debut"
-            name="heure_debut"
-            type="time"
-            value={formData.heure_debut}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="date_fin">Date de fin</Label>
-          <Input
-            id="date_fin"
-            name="date_fin"
-            type="date"
-            value={formData.date_fin}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="heure_fin">Heure de fin</Label>
-          <Input
-            id="heure_fin"
-            name="heure_fin"
-            type="time"
-            value={formData.heure_fin}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="contact1">Contact 1</Label>
-          <Input
-            id="contact1"
-            name="contact1"
-            value={formData.contact1}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="contact2">Contact 2 (optionnel)</Label>
-          <Input
-            id="contact2"
-            name="contact2"
-            value={formData.contact2}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
-      
-      <DialogFooter>
-        <Button 
-          type="submit" 
-          className="bg-ville-DEFAULT hover:bg-ville-dark"
-          disabled={addEventMutation.isPending}
-        >
-          {addEventMutation.isPending ? "Enregistrement..." : "Enregistrer l'événement"}
-        </Button>
-      </DialogFooter>
-    </form>
+        <DialogFooter>
+          <Button 
+            type="submit" 
+            className="bg-ville-DEFAULT hover:bg-ville-dark"
+            disabled={addEventMutation.isPending}
+          >
+            {addEventMutation.isPending ? "Enregistrement..." : "Enregistrer l'événement"}
+          </Button>
+        </DialogFooter>
+      </form>
+    </ScrollArea>
   );
 }
 
@@ -239,7 +238,6 @@ export default function EvenementsPage() {
     queryFn: getEvents
   });
   
-  // Filter events for today
   const today = new Date().toISOString().split('T')[0];
   const eventsToday = events.filter(event => event.date_debut === today);
   const upcomingEvents = events.filter(event => event.date_debut > today);

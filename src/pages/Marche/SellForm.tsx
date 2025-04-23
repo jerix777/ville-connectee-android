@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -8,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { addMarketItem } from "@/services/marketService";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface SellFormProps {
   onClose: () => void;
@@ -70,80 +70,82 @@ export function SellForm({ onClose }: SellFormProps) {
   };
   
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="vendeur">Nom et prénom</Label>
-          <Input
-            id="vendeur"
-            name="vendeur"
-            value={formData.vendeur}
-            onChange={handleChange}
-          />
+    <ScrollArea className="max-h-[60vh]">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="vendeur">Nom et prénom</Label>
+            <Input
+              id="vendeur"
+              name="vendeur"
+              value={formData.vendeur}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="titre">Objet à vendre</Label>
+            <Input
+              id="titre"
+              name="titre"
+              value={formData.titre}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="description">Caractéristiques</Label>
+            <Textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              rows={3}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="prix">Prix (CFA)</Label>
+            <Input
+              id="prix"
+              name="prix"
+              type="number"
+              value={formData.prix}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="contact1">Contact 1</Label>
+            <Input
+              id="contact1"
+              name="contact1"
+              value={formData.contact1}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="contact2">Contact 2 (optionnel)</Label>
+            <Input
+              id="contact2"
+              name="contact2"
+              value={formData.contact2}
+              onChange={handleChange}
+            />
+          </div>
         </div>
         
-        <div className="space-y-2">
-          <Label htmlFor="titre">Objet à vendre</Label>
-          <Input
-            id="titre"
-            name="titre"
-            value={formData.titre}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="description">Caractéristiques</Label>
-          <Textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            rows={3}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="prix">Prix (CFA)</Label>
-          <Input
-            id="prix"
-            name="prix"
-            type="number"
-            value={formData.prix}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="contact1">Contact 1</Label>
-          <Input
-            id="contact1"
-            name="contact1"
-            value={formData.contact1}
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="contact2">Contact 2 (optionnel)</Label>
-          <Input
-            id="contact2"
-            name="contact2"
-            value={formData.contact2}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
-      
-      <DialogFooter>
-        <Button 
-          type="submit" 
-          className="bg-ville-DEFAULT hover:bg-ville-dark"
-          disabled={addItemMutation.isPending}
-        >
-          {addItemMutation.isPending ? "Publication en cours..." : "Publier la vente"}
-        </Button>
-      </DialogFooter>
-    </form>
+        <DialogFooter>
+          <Button 
+            type="submit" 
+            className="bg-ville-DEFAULT hover:bg-ville-dark"
+            disabled={addItemMutation.isPending}
+          >
+            {addItemMutation.isPending ? "Publication en cours..." : "Publier la vente"}
+          </Button>
+        </DialogFooter>
+      </form>
+    </ScrollArea>
   );
 }
