@@ -24,20 +24,7 @@ export async function getOffresEmploi(): Promise<OffreEmploi[]> {
     return [];
   }
   
-  // Convertir et vérifier que les données correspondent à notre interface
-  return (data || []).map((item): OffreEmploi => {
-    // Ensure all required fields are present
-    return {
-      id: item.id,
-      titre: item.titre,
-      description: item.description,
-      employeur: item.employeur,
-      type_contrat: item.type_contrat,
-      localisation: item.localisation,
-      publie_le: item.publie_le,
-      created_at: item.created_at
-    };
-  });
+  return (data || []) as OffreEmploi[];
 }
 
 // Ajouter une offre d'emploi (en omettant l'id et la date de publication, gérés côté BDD)
@@ -55,17 +42,7 @@ export async function addOffreEmploi(
   }
 
   if (data && data.length > 0) {
-    const record = data[0];
-    return {
-      id: record.id,
-      titre: record.titre,
-      description: record.description,
-      employeur: record.employeur,
-      type_contrat: record.type_contrat,
-      localisation: record.localisation,
-      publie_le: record.publie_le,
-      created_at: record.created_at
-    };
+    return data[0] as OffreEmploi;
   }
   return null;
 }

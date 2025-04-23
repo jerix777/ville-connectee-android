@@ -1,4 +1,3 @@
-
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -98,6 +97,14 @@ function SellForm({ onClose }: { onClose: () => void }) {
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.titre || !formData.vendeur || !formData.description || !formData.prix || !formData.contact1) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez remplir tous les champs obligatoires",
+        variant: "destructive"
+      });
+      return;
+    }
     addItemMutation.mutate(formData);
   };
   
@@ -227,6 +234,14 @@ function BuyForm({ onClose }: { onClose: () => void }) {
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.titre || !formData.vendeur || !formData.description || !formData.prix || !formData.contact1) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez remplir tous les champs obligatoires",
+        variant: "destructive"
+      });
+      return;
+    }
     addItemMutation.mutate(formData);
   };
   
@@ -455,4 +470,3 @@ export default function MarchePage() {
     </MainLayout>
   );
 }
-
