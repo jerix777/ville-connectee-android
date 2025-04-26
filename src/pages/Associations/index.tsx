@@ -20,7 +20,7 @@ export default function AssociationsPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("associations")
-        .select<"*, id, nom, description, contact, created_at">("*")
+        .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data as Association[];
