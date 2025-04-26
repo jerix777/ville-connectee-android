@@ -12,6 +12,7 @@ import MarchePage from "./pages/Marche";
 import ActualitesPage from "./pages/Actualites";
 import EmploisPage from "./pages/Emplois";
 import AnnuairePage from "./pages/Annuaire";
+import AssociationsPage from "./pages/Associations";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/marche" element={<MarchePage />} />
           <Route path="/emplois" element={<EmploisPage />} />
           <Route path="/annuaire" element={<AnnuairePage />} />
+          <Route path="/associations" element={<AssociationsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
