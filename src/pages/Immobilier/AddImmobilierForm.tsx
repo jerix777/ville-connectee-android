@@ -1,4 +1,3 @@
-
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -34,6 +33,7 @@ const formSchema = z.object({
   vendeur: z.string().min(2, "Le nom du vendeur est requis")
 });
 
+// Define the form values type to match what addImmobilier expects
 type FormValues = z.infer<typeof formSchema>;
 
 export function AddImmobilierForm() {
@@ -59,7 +59,22 @@ export function AddImmobilierForm() {
 
   const onSubmit = async (values: FormValues) => {
     try {
-      const response = await addImmobilier(values);
+      // Cast the form values to the expected type to ensure all required fields are present
+      const immobilierData: Omit<Immobilier, "id" | "created_at"> = {
+        titre: values.titre,
+        type: values.type,
+        description: values.description,
+        prix: values.prix,
+        surface: values.surface,
+        pieces: values.pieces,
+        chambres: values.chambres,
+        adresse: values.adresse,
+        contact: values.contact,
+        is_for_sale: values.is_for_sale,
+        vendeur: values.vendeur
+      };
+
+      const response = await addImmobilier(immobilierData);
 
       if (response) {
         toast({
