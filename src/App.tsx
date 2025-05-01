@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -13,6 +14,7 @@ import ActualitesPage from "./pages/Actualites";
 import EmploisPage from "./pages/Emplois";
 import AnnuairePage from "./pages/Annuaire";
 import AssociationsPage from "./pages/Associations";
+import ImmobilierPage from "./pages/Immobilier";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +33,7 @@ const App = () => (
           <Route path="/emplois" element={<EmploisPage />} />
           <Route path="/annuaire" element={<AnnuairePage />} />
           <Route path="/associations" element={<AssociationsPage />} />
+          <Route path="/immobilier" element={<ImmobilierPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

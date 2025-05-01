@@ -134,6 +134,54 @@ export type Database = {
         }
         Relationships: []
       }
+      immobilier: {
+        Row: {
+          adresse: string
+          chambres: number | null
+          contact: string
+          created_at: string | null
+          description: string
+          id: string
+          is_for_sale: boolean | null
+          pieces: number | null
+          prix: number
+          surface: number
+          titre: string
+          type: string
+          vendeur: string
+        }
+        Insert: {
+          adresse: string
+          chambres?: number | null
+          contact: string
+          created_at?: string | null
+          description: string
+          id?: string
+          is_for_sale?: boolean | null
+          pieces?: number | null
+          prix: number
+          surface: number
+          titre: string
+          type: string
+          vendeur: string
+        }
+        Update: {
+          adresse?: string
+          chambres?: number | null
+          contact?: string
+          created_at?: string | null
+          description?: string
+          id?: string
+          is_for_sale?: boolean | null
+          pieces?: number | null
+          prix?: number
+          surface?: number
+          titre?: string
+          type?: string
+          vendeur?: string
+        }
+        Relationships: []
+      }
       marche: {
         Row: {
           contact1: string
