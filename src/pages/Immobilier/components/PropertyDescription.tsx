@@ -7,6 +7,6 @@ interface PropertyDescriptionProps {
 
 export function PropertyDescription({ description }: PropertyDescriptionProps) {
   return (
-    <p className="text-sm text-gray-700 line-clamp-2 mb-2">{description}</p>
+    <p className="text-sm text-gray-700 line-clamp-3 mb-2">{description}</p>
   );
 }
