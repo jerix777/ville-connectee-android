@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -139,7 +140,7 @@ export function BuyForm({ onClose }: BuyFormProps) {
         <DialogFooter>
           <Button 
             type="submit" 
-            className="bg-ville-DEFAULT hover:bg-ville-dark"
+            variant="ville"
             disabled={addItemMutation.isPending}
           >
             {addItemMutation.isPending ? "Publication en cours..." : "Publier la demande"}

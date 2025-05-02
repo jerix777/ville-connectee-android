@@ -50,7 +50,7 @@ export default function ImmobilierPage() {
 
           <Button 
             onClick={() => setShowAddForm(!showAddForm)} 
-            variant={showAddForm ? "outline" : "default"}
+            variant={showAddForm ? "outline" : "ville"}
           >
             {showAddForm ? (
               <>

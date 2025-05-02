@@ -185,7 +185,7 @@ export function AddEventForm({ onClose }: AddEventFormProps) {
         <DialogFooter>
           <Button 
             type="submit" 
-            className="bg-ville-DEFAULT hover:bg-ville-dark"
+            variant="ville"
             disabled={addEventMutation.isPending}
           >
             {addEventMutation.isPending ? "Enregistrement..." : "Enregistrer l'événement"}

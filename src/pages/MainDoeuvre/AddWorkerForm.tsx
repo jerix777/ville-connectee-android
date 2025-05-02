@@ -129,7 +129,7 @@ export function AddWorkerForm({ onClose }: AddWorkerFormProps) {
       <DialogFooter>
         <Button 
           type="submit" 
-          className="bg-ville-DEFAULT hover:bg-ville-dark"
+          variant="ville"
           disabled={addWorkerMutation.isPending}
         >
           {addWorkerMutation.isPending ? "Inscription en cours..." : "Je m'inscris"}

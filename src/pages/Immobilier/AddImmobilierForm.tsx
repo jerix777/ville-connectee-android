@@ -37,7 +37,7 @@ export function AddImmobilierForm() {
             <ContactFields form={form} />
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" variant="ville" className="w-full">
             Publier l'annonce
           </Button>
         </form>

@@ -1,3 +1,4 @@
+
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -82,7 +83,7 @@ export default function MainDoeuvrePage() {
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-ville-DEFAULT hover:bg-ville-dark">
+            <Button variant="ville">
               <Plus size={16} className="mr-2" />
               Je m'inscris
             </Button>

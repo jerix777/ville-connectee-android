@@ -36,7 +36,7 @@ export function AddOffreForm({ onAdded }: AddOffreFormProps) {
       setForm({ titre: "", description: "", employeur: "", type_contrat: "", localisation: "" });
       onAdded();
     } else {
-      toast({ title: "Erreur", description: "Impossible d’ajouter l’offre", variant: "destructive" });
+      toast({ title: "Erreur", description: "Impossible d'ajouter l'offre", variant: "destructive" });
     }
   };
 
@@ -49,8 +49,8 @@ export function AddOffreForm({ onAdded }: AddOffreFormProps) {
         <Input name="localisation" placeholder="Localisation" value={form.localisation} onChange={handleChange} required />
       </div>
       <Textarea className="mt-2" name="description" placeholder="Description du poste" value={form.description} onChange={handleChange} required />
-      <Button type="submit" className="mt-2" disabled={loading}>
-        {loading ? "Ajout..." : "Ajouter l’offre"}
+      <Button type="submit" className="mt-2" variant="ville" disabled={loading}>
+        {loading ? "Ajout..." : "Ajouter l'offre"}
       </Button>
     </form>
   );
