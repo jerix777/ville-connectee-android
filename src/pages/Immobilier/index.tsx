@@ -8,6 +8,7 @@ import { ImmobilierCard } from "./ImmobilierCard";
 import { AddImmobilierForm } from "./AddImmobilierForm";
 import { Button } from "@/components/ui/button";
 import { Building, Plus, X } from "lucide-react";
+import { AlertSubscription } from "./components/AlertSubscription";
 
 export default function ImmobilierPage() {
   const [showAddForm, setShowAddForm] = useState(false);
@@ -48,20 +49,24 @@ export default function ImmobilierPage() {
             Espace Immobilier
           </h1>
 
-          <Button 
-            onClick={() => setShowAddForm(!showAddForm)} 
-            variant={showAddForm ? "outline" : "ville"}
-          >
-            {showAddForm ? (
-              <>
-                <X size={16} /> Annuler
-              </>
-            ) : (
-              <>
-                <Plus size={16} /> Publier une annonce
-              </>
-            )}
-          </Button>
+          <div className="flex items-center gap-2">
+            <AlertSubscription />
+            
+            <Button 
+              onClick={() => setShowAddForm(!showAddForm)} 
+              variant={showAddForm ? "outline" : "ville"}
+            >
+              {showAddForm ? (
+                <>
+                  <X size={16} /> Annuler
+                </>
+              ) : (
+                <>
+                  <Plus size={16} /> Publier une annonce
+                </>
+              )}
+            </Button>
+          </div>
         </div>
 
         {showAddForm && (

@@ -47,22 +47,20 @@ export function usePropertyForm() {
       const response = await addImmobilier(immobilierData);
 
       if (response) {
-        toast({
-          title: "Annonce ajoutée",
-          description: "Votre annonce immobilière a été publiée avec succès."
-        });
-
         // Réinitialiser le formulaire
         form.reset();
 
         // Rafraîchir les données dans la page
         queryClient.invalidateQueries({ queryKey: ["immobilier"] });
+        
+        return true;
       } else {
         toast({
           variant: "destructive",
           title: "Erreur",
           description: "Impossible d'ajouter l'annonce immobilière."
         });
+        return false;
       }
     } catch (err) {
       toast({
@@ -71,6 +69,7 @@ export function usePropertyForm() {
         description: "Une erreur s'est produite lors de l'ajout de l'annonce."
       });
       console.error("Erreur lors de l'ajout:", err);
+      return false;
     }
   };
 
