@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { Bell } from "lucide-react";
+import { saveAlerte } from "@/services/alertesService";
 
 export function AlertSubscription() {
   const { toast } = useToast();
@@ -14,22 +15,63 @@ export function AlertSubscription() {
   const [priceMax, setPriceMax] = useState("");
   const [isLocation, setIsLocation] = useState(false);
   const [isVente, setIsVente] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Here we would typically save this to a database via an API call
-    // For demonstration, we're just showing a toast notification
-    toast({
-      title: "Alerte configurée",
-      description: `Vous recevrez des alertes pour les ${isVente ? 'ventes' : ''}${isVente && isLocation ? ' et ' : ''}${isLocation ? 'locations' : ''} à l'adresse ${email}`,
-    });
+    if (!email) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez saisir une adresse email valide",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!isLocation && !isVente) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez sélectionner au moins un type de bien (vente ou location)",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const alerte = {
+      email,
+      prix_max: priceMax ? parseInt(priceMax) : undefined,
+      is_location: isLocation,
+      is_vente: isVente,
+    };
+
+    const result = await saveAlerte(alerte);
+
+    if (result) {
+      toast({
+        title: "Alerte configurée",
+        description: `Vous recevrez des alertes pour les ${isVente ? 'ventes' : ''}${isVente && isLocation ? ' et ' : ''}${isLocation ? 'locations' : ''} à l'adresse ${email}`,
+      });
+      setIsOpen(false);
+      
+      // Reset form
+      setEmail("");
+      setPriceMax("");
+      setIsLocation(false);
+      setIsVente(true);
+    } else {
+      toast({
+        title: "Erreur",
+        description: "Impossible de configurer l'alerte. Veuillez réessayer.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
-    <AlertDialog>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
+        <Button id="alert-trigger" variant="outline" className="gap-2">
           <Bell className="h-4 w-4" />
           Créer une alerte
         </Button>
@@ -89,7 +131,7 @@ export function AlertSubscription() {
 
           <AlertDialogFooter>
             <AlertDialogCancel>Annuler</AlertDialogCancel>
-            <AlertDialogAction type="submit">Créer l'alerte</AlertDialogAction>
+            <AlertDialogAction type="submit" onClick={handleSubmit}>Créer l'alerte</AlertDialogAction>
           </AlertDialogFooter>
         </form>
       </AlertDialogContent>
