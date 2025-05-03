@@ -307,6 +307,36 @@ export type Database = {
           },
         ]
       }
+      villages: {
+        Row: {
+          code_postal: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          nom: string
+          population: number | null
+        }
+        Insert: {
+          code_postal?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          nom: string
+          population?: number | null
+        }
+        Update: {
+          code_postal?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          nom?: string
+          population?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
