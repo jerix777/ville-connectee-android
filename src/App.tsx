@@ -5,6 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import EvenementsPage from "./pages/Evenements";
@@ -19,33 +20,37 @@ import AlertesPage from "./pages/Alertes";
 import AnnoncesPage from "./pages/Annonces";
 import VillagesPage from "./pages/Villages";
 import NecrologiePage from "./pages/Necrologie";
+import AuthPage from "./pages/Auth";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/actualites" element={<ActualitesPage />} />
-          <Route path="/evenements" element={<EvenementsPage />} />
-          <Route path="/main-doeuvre" element={<MainDoeuvrePage />} />
-          <Route path="/marche" element={<MarchePage />} />
-          <Route path="/emplois" element={<EmploisPage />} />
-          <Route path="/annuaire" element={<AnnuairePage />} />
-          <Route path="/associations" element={<AssociationsPage />} />
-          <Route path="/immobilier" element={<ImmobilierPage />} />
-          <Route path="/alertes" element={<AlertesPage />} />
-          <Route path="/annonces" element={<AnnoncesPage />} />
-          <Route path="/villages" element={<VillagesPage />} />
-          <Route path="/necrologie" element={<NecrologiePage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/actualites" element={<ActualitesPage />} />
+            <Route path="/evenements" element={<EvenementsPage />} />
+            <Route path="/main-doeuvre" element={<MainDoeuvrePage />} />
+            <Route path="/marche" element={<MarchePage />} />
+            <Route path="/emplois" element={<EmploisPage />} />
+            <Route path="/annuaire" element={<AnnuairePage />} />
+            <Route path="/associations" element={<AssociationsPage />} />
+            <Route path="/immobilier" element={<ImmobilierPage />} />
+            <Route path="/alertes" element={<AlertesPage />} />
+            <Route path="/annonces" element={<AnnoncesPage />} />
+            <Route path="/villages" element={<VillagesPage />} />
+            <Route path="/necrologie" element={<NecrologiePage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

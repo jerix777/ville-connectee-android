@@ -66,6 +66,35 @@ export type Database = {
         }
         Relationships: []
       }
+      commune_preferences: {
+        Row: {
+          commune_id: string
+          created_at: string | null
+          id: string
+          session_id: string
+        }
+        Insert: {
+          commune_id: string
+          created_at?: string | null
+          id?: string
+          session_id: string
+        }
+        Update: {
+          commune_id?: string
+          created_at?: string | null
+          id?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commune_preferences_commune_id_fkey"
+            columns: ["commune_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       evenements: {
         Row: {
           contact1: string
@@ -339,6 +368,41 @@ export type Database = {
             columns: ["metier_id"]
             isOneToOne: false
             referencedRelation: "metiers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users_profiles: {
+        Row: {
+          commune_id: string | null
+          created_at: string | null
+          id: string
+          nom: string | null
+          prenom: string | null
+          user_id: string
+        }
+        Insert: {
+          commune_id?: string | null
+          created_at?: string | null
+          id?: string
+          nom?: string | null
+          prenom?: string | null
+          user_id: string
+        }
+        Update: {
+          commune_id?: string | null
+          created_at?: string | null
+          id?: string
+          nom?: string | null
+          prenom?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_profiles_commune_id_fkey"
+            columns: ["commune_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
             referencedColumns: ["id"]
           },
         ]

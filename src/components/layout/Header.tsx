@@ -3,6 +3,12 @@ import { Bell, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
+import { getCommune } from "@/services/communeService";
+import { UserProfileMenu } from "@/components/UserProfileMenu";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { CommuneSelector } from "@/components/CommuneSelector";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -11,7 +17,12 @@ interface HeaderProps {
 
 export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
+  const [communeName, setCommuneName] = useState<string>("Ville Connectée");
+  const [loading, setLoading] = useState(true);
+  const [showCommuneSelector, setShowCommuneSelector] = useState(false);
+  const { communeId } = useAuth();
 
+  // Effet pour détecter le défilement
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
@@ -22,6 +33,18 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  // Effet pour charger le nom de la commune
+  useEffect(() => {
+    const loadCommune = async () => {
+      setLoading(true);
+      const commune = await getCommune(communeId);
+      setCommuneName(commune?.nom || "Ville Connectée");
+      setLoading(false);
+    };
+    
+    loadCommune();
+  }, [communeId]);
 
   return (
     <header 
@@ -44,12 +67,23 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
         >
           <Menu size={24} />
         </Button>
-        <h1 className="text-xl font-bold">
-          Ville Connectée
+        
+        <h1 
+          className={cn(
+            "text-xl font-bold cursor-pointer",
+            !communeId && "hover:underline"
+          )}
+          onClick={() => !communeId && setShowCommuneSelector(true)}
+        >
+          {loading ? (
+            <Skeleton className="h-6 w-32" />
+          ) : (
+            communeName
+          )}
         </h1>
       </div>
       
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         <Button 
           variant="ghost" 
           size="icon" 
@@ -60,8 +94,18 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
         >
           <Bell size={20} />
         </Button>
+        
+        <UserProfileMenu />
       </div>
+      
+      <Dialog open={showCommuneSelector} onOpenChange={setShowCommuneSelector}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Sélectionner votre commune</DialogTitle>
+          </DialogHeader>
+          <CommuneSelector onClose={() => setShowCommuneSelector(false)} />
+        </DialogContent>
+      </Dialog>
     </header>
   );
 }
-
