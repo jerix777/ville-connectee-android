@@ -8,7 +8,7 @@ import {
   getSessionCommune, 
   getLocalCommuneId 
 } from "@/services/authService";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 interface AuthContextType extends AuthState {
   refreshProfile: () => Promise<void>;
@@ -17,7 +17,6 @@ interface AuthContextType extends AuthState {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { toast } = useToast();
   const [state, setState] = useState<AuthState>({
     user: null,
     session: null,
@@ -98,28 +97,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Configurer l'écouteur pour les changements d'authentification
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         console.log("Auth state changed:", event);
         
         if (session && session.user) {
           // L'utilisateur vient de se connecter ou sa session a été mise à jour
-          const profile = await getUserProfile(session.user.id);
-          
-          setState({
-            user: session.user,
-            session,
-            profile,
-            isLoading: false,
-            communeId: profile?.commune_id || getLocalCommuneId(),
-            sessionId: getOrCreateSessionId(),
-          });
-          
-          if (event === 'SIGNED_IN') {
-            toast({
-              title: "Connecté",
-              description: "Vous êtes maintenant connecté",
+          // Important: Utiliser un timeout pour éviter les deadlocks
+          setTimeout(async () => {
+            const profile = await getUserProfile(session.user.id);
+            
+            setState({
+              user: session.user,
+              session,
+              profile,
+              isLoading: false,
+              communeId: profile?.commune_id || getLocalCommuneId(),
+              sessionId: getOrCreateSessionId(),
             });
-          }
+            
+            if (event === 'SIGNED_IN') {
+              toast({
+                title: "Connecté",
+                description: "Vous êtes maintenant connecté",
+              });
+            }
+          }, 0);
         } else if (event === 'SIGNED_OUT') {
           // L'utilisateur s'est déconnecté
           setState({
@@ -146,7 +148,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [toast]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ ...state, refreshProfile }}>

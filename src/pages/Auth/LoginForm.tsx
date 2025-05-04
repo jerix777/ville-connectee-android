@@ -6,7 +6,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { signIn } from "@/services/authService";
 import { Loader2 } from "lucide-react";
 
@@ -22,7 +22,6 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
-  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const form = useForm<FormValues>({

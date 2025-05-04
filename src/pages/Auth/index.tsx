@@ -4,7 +4,7 @@ import { MainLayout } from "@/components/layout/MainLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { LoginForm } from "./LoginForm";
 import { SignupForm } from "./SignupForm";
 import { CommuneSelector } from "@/components/CommuneSelector";
@@ -13,11 +13,16 @@ import { UserCircle, Lock, Home } from "lucide-react";
 export default function AuthPage() {
   const { user, communeId } = useAuth();
   const [activeTab, setActiveTab] = useState<string>("login");
+  const navigate = useNavigate();
   
   // Si l'utilisateur est déjà connecté, rediriger vers la page d'accueil
   if (user) {
     return <Navigate to="/" replace />;
   }
+
+  const handleLoginSuccess = () => {
+    navigate("/");
+  };
 
   return (
     <MainLayout>
@@ -41,7 +46,7 @@ export default function AuthPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <LoginForm onSuccess={() => {}} />
+                  <LoginForm onSuccess={handleLoginSuccess} />
                 </CardContent>
               </TabsContent>
               
