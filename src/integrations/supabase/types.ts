@@ -233,6 +233,42 @@ export type Database = {
         }
         Relationships: []
       }
+      necrologie: {
+        Row: {
+          created_at: string | null
+          date_deces: string
+          date_naissance: string | null
+          id: string
+          lieu_deces: string | null
+          message: string | null
+          nom: string
+          photo_url: string | null
+          prenom: string
+        }
+        Insert: {
+          created_at?: string | null
+          date_deces: string
+          date_naissance?: string | null
+          id?: string
+          lieu_deces?: string | null
+          message?: string | null
+          nom: string
+          photo_url?: string | null
+          prenom: string
+        }
+        Update: {
+          created_at?: string | null
+          date_deces?: string
+          date_naissance?: string | null
+          id?: string
+          lieu_deces?: string | null
+          message?: string | null
+          nom?: string
+          photo_url?: string | null
+          prenom?: string
+        }
+        Relationships: []
+      }
       offres_emploi: {
         Row: {
           created_at: string | null

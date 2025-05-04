@@ -18,6 +18,7 @@ import ImmobilierPage from "./pages/Immobilier";
 import AlertesPage from "./pages/Alertes";
 import AnnoncesPage from "./pages/Annonces";
 import VillagesPage from "./pages/Villages";
+import NecrologiePage from "./pages/Necrologie";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/alertes" element={<AlertesPage />} />
           <Route path="/annonces" element={<AnnoncesPage />} />
           <Route path="/villages" element={<VillagesPage />} />
+          <Route path="/necrologie" element={<NecrologiePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
