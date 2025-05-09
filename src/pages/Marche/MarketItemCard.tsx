@@ -34,7 +34,10 @@ export function MarketItemCard({ item }: { item: MarketItem }) {
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="outline" className="w-full">Contacter</Button>
+        <Button variant="ville" className="w-full">
+          <Phone className="h-4 w-4 mr-1" />
+          Contacter
+        </Button>
       </CardFooter>
     </Card>
   );

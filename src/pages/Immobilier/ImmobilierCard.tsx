@@ -7,6 +7,8 @@ import { PropertyDetails } from "./components/PropertyDetails";
 import { LocationInfo } from "./components/LocationInfo";
 import { PropertyDescription } from "./components/PropertyDescription";
 import { CardFooter } from "./components/CardFooter";
+import { Button } from "@/components/ui/button";
+import { Phone } from "lucide-react";
 
 interface ImmobilierCardProps {
   bien: Immobilier;
@@ -35,6 +37,12 @@ export function ImmobilierCard({ bien }: ImmobilierCardProps) {
         vendeur={bien.vendeur}
         contact={bien.contact}
       />
+      <div className="p-4 pt-0">
+        <Button variant="ville" className="w-full">
+          <Phone className="h-4 w-4 mr-1" />
+          Contacter le vendeur
+        </Button>
+      </div>
     </Card>
   );
 }

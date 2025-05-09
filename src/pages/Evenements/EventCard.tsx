@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Clock, MapPin, Phone } from "lucide-react";
+import { Clock, MapPin, Phone, Info } from "lucide-react";
 import { Event } from "@/services/eventService";
 import { formatDate } from "@/services/eventService";
 
@@ -36,7 +36,10 @@ export function EventCard({ event }: { event: Event }) {
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="outline" className="w-full">Voir les détails</Button>
+        <Button variant="ville" className="w-full">
+          <Info className="h-4 w-4 mr-1" />
+          Voir les détails
+        </Button>
       </CardFooter>
     </Card>
   );

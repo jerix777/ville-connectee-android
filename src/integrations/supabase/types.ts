@@ -66,6 +66,33 @@ export type Database = {
         }
         Relationships: []
       }
+      commune: {
+        Row: {
+          created_at: string
+          denomination: string
+          id: string
+          latitude: number | null
+          longitude: number | null
+          superficie: number | null
+        }
+        Insert: {
+          created_at?: string
+          denomination: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          superficie?: number | null
+        }
+        Update: {
+          created_at?: string
+          denomination?: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          superficie?: number | null
+        }
+        Relationships: []
+      }
       commune_preferences: {
         Row: {
           commune_id: string
@@ -410,6 +437,7 @@ export type Database = {
       villages: {
         Row: {
           code_postal: string | null
+          commune_id: string | null
           created_at: string | null
           description: string | null
           id: string
@@ -419,6 +447,7 @@ export type Database = {
         }
         Insert: {
           code_postal?: string | null
+          commune_id?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
@@ -428,6 +457,7 @@ export type Database = {
         }
         Update: {
           code_postal?: string | null
+          commune_id?: string | null
           created_at?: string | null
           description?: string | null
           id?: string

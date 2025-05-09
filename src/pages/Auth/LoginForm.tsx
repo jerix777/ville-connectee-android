@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
 import { signIn } from "@/services/authService";
-import { Loader2 } from "lucide-react";
+import { Loader2, LogIn } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email("Adresse email invalide"),
@@ -100,7 +100,10 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
               Connexion...
             </>
           ) : (
-            "Se connecter"
+            <>
+              <LogIn className="mr-2 h-4 w-4" />
+              Se connecter
+            </>
           )}
         </Button>
       </form>

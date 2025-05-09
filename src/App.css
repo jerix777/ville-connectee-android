@@ -42,3 +42,17 @@
   color: #888;
 }
 
+/* Assurez-vous que tous les boutons sont visibles */
+.button-visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Annulez les effets qui masquent les boutons */
+*[class*="hover:opacity"],
+*[class*="group-hover:opacity"],
+*[class*="hover:visible"],
+*[class*="group-hover:visible"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+}

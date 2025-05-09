@@ -25,10 +25,12 @@ export function ObituaryCard({ obituary, onEdit, onDelete }: ObituaryCardProps) 
           <CardTitle>{obituary.prenom} {obituary.nom}</CardTitle>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={() => onEdit(obituary)}>
-              <Pencil className="h-4 w-4" />
+              <Pencil className="h-4 w-4 mr-1" />
+              Modifier
             </Button>
-            <Button variant="outline" size="sm" className="text-red-600 hover:bg-red-100" onClick={() => onDelete(obituary)}>
-              <Trash2 className="h-4 w-4" />
+            <Button variant="destructive" size="sm" onClick={() => onDelete(obituary)}>
+              <Trash2 className="h-4 w-4 mr-1" />
+              Supprimer
             </Button>
           </div>
         </div>
