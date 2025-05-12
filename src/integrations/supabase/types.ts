@@ -17,6 +17,7 @@ export type Database = {
           id: string
           image_url: string | null
           publie_le: string | null
+          quartier_id: string | null
           titre: string
           type: string
         }
@@ -27,6 +28,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           publie_le?: string | null
+          quartier_id?: string | null
           titre: string
           type: string
         }
@@ -37,10 +39,19 @@ export type Database = {
           id?: string
           image_url?: string | null
           publie_le?: string | null
+          quartier_id?: string | null
           titre?: string
           type?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "actualites_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       associations: {
         Row: {
@@ -49,6 +60,7 @@ export type Database = {
           description: string
           id: string
           nom: string
+          quartier_id: string | null
         }
         Insert: {
           contact: string
@@ -56,6 +68,7 @@ export type Database = {
           description: string
           id?: string
           nom: string
+          quartier_id?: string | null
         }
         Update: {
           contact?: string
@@ -63,8 +76,17 @@ export type Database = {
           description?: string
           id?: string
           nom?: string
+          quartier_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "associations_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       commune: {
         Row: {
@@ -134,6 +156,7 @@ export type Database = {
           id: string
           lieu: string
           organisateur: string
+          quartier_id: string | null
           titre: string
           type_id: string
         }
@@ -148,6 +171,7 @@ export type Database = {
           id?: string
           lieu: string
           organisateur: string
+          quartier_id?: string | null
           titre: string
           type_id: string
         }
@@ -162,10 +186,18 @@ export type Database = {
           id?: string
           lieu?: string
           organisateur?: string
+          quartier_id?: string | null
           titre?: string
           type_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "evenements_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "evenements_type_id_fkey"
             columns: ["type_id"]
@@ -201,6 +233,7 @@ export type Database = {
           is_for_sale: boolean | null
           pieces: number | null
           prix: number
+          quartier_id: string | null
           surface: number
           titre: string
           type: string
@@ -216,6 +249,7 @@ export type Database = {
           is_for_sale?: boolean | null
           pieces?: number | null
           prix: number
+          quartier_id?: string | null
           surface: number
           titre: string
           type: string
@@ -231,12 +265,21 @@ export type Database = {
           is_for_sale?: boolean | null
           pieces?: number | null
           prix?: number
+          quartier_id?: string | null
           surface?: number
           titre?: string
           type?: string
           vendeur?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "immobilier_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       marche: {
         Row: {
@@ -247,6 +290,7 @@ export type Database = {
           id: string
           is_for_sale: boolean
           prix: number
+          quartier_id: string | null
           titre: string
           vendeur: string
         }
@@ -258,6 +302,7 @@ export type Database = {
           id?: string
           is_for_sale?: boolean
           prix: number
+          quartier_id?: string | null
           titre: string
           vendeur: string
         }
@@ -269,10 +314,19 @@ export type Database = {
           id?: string
           is_for_sale?: boolean
           prix?: number
+          quartier_id?: string | null
           titre?: string
           vendeur?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "marche_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       metiers: {
         Row: {
@@ -300,6 +354,7 @@ export type Database = {
           nom: string
           photo_url: string | null
           prenom: string
+          quartier_id: string | null
         }
         Insert: {
           created_at?: string | null
@@ -311,6 +366,7 @@ export type Database = {
           nom: string
           photo_url?: string | null
           prenom: string
+          quartier_id?: string | null
         }
         Update: {
           created_at?: string | null
@@ -322,8 +378,17 @@ export type Database = {
           nom?: string
           photo_url?: string | null
           prenom?: string
+          quartier_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "necrologie_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       offres_emploi: {
         Row: {
@@ -333,6 +398,7 @@ export type Database = {
           id: string
           localisation: string
           publie_le: string | null
+          quartier_id: string | null
           titre: string
           type_contrat: string
         }
@@ -343,6 +409,7 @@ export type Database = {
           id?: string
           localisation: string
           publie_le?: string | null
+          quartier_id?: string | null
           titre: string
           type_contrat: string
         }
@@ -353,10 +420,19 @@ export type Database = {
           id?: string
           localisation?: string
           publie_le?: string | null
+          quartier_id?: string | null
           titre?: string
           type_contrat?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "offres_emploi_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       professionnels: {
         Row: {
@@ -367,6 +443,7 @@ export type Database = {
           id: string
           metier_id: string
           nom: string
+          quartier_id: string | null
           surnom: string | null
         }
         Insert: {
@@ -377,6 +454,7 @@ export type Database = {
           id?: string
           metier_id: string
           nom: string
+          quartier_id?: string | null
           surnom?: string | null
         }
         Update: {
@@ -387,6 +465,7 @@ export type Database = {
           id?: string
           metier_id?: string
           nom?: string
+          quartier_id?: string | null
           surnom?: string | null
         }
         Relationships: [
@@ -395,6 +474,54 @@ export type Database = {
             columns: ["metier_id"]
             isOneToOne: false
             referencedRelation: "metiers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "professionnels_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quartiers: {
+        Row: {
+          code_postal: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          nom: string
+          population: number | null
+          village_id: string
+        }
+        Insert: {
+          code_postal?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          nom: string
+          population?: number | null
+          village_id: string
+        }
+        Update: {
+          code_postal?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          nom?: string
+          population?: number | null
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quartiers_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
             referencedColumns: ["id"]
           },
         ]

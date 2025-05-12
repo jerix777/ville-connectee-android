@@ -3,8 +3,20 @@ import { Phone } from "lucide-react";
 import { MarketItem } from "@/services/marketService";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "@/hooks/use-toast";
 
 export function MarketItemCard({ item }: { item: MarketItem }) {
+  const handleContact = () => {
+    // Copier le numéro dans le presse-papier
+    navigator.clipboard.writeText(item.contact1);
+    
+    // Afficher une notification
+    toast({
+      title: "Numéro copié !",
+      description: `Le numéro de ${item.vendeur} a été copié dans le presse-papier.`,
+    });
+  };
+
   return (
     <Card className="mb-4">
       <CardHeader>
@@ -34,7 +46,7 @@ export function MarketItemCard({ item }: { item: MarketItem }) {
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="ville" className="w-full">
+        <Button variant="ville" className="w-full" onClick={handleContact}>
           <Phone className="h-4 w-4 mr-1" />
           Contacter
         </Button>
