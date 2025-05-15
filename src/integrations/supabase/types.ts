@@ -567,6 +567,47 @@ export type Database = {
           },
         ]
       }
+      tribune: {
+        Row: {
+          approuve: boolean | null
+          auteur: string
+          contenu: string
+          created_at: string | null
+          id: string
+          image_url: string | null
+          quartier_id: string | null
+          titre: string
+        }
+        Insert: {
+          approuve?: boolean | null
+          auteur: string
+          contenu: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          quartier_id?: string | null
+          titre: string
+        }
+        Update: {
+          approuve?: boolean | null
+          auteur?: string
+          contenu?: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          quartier_id?: string | null
+          titre?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tribune_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users_profiles: {
         Row: {
           commune_id: string | null

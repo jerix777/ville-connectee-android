@@ -21,6 +21,7 @@ import AnnoncesPage from "./pages/Annonces";
 import VillagesPage from "./pages/Villages";
 import NecrologiePage from "./pages/Necrologie";
 import SouvenirsPage from "./pages/Souvenirs";
+import TribunePage from "./pages/Tribune";
 import AuthPage from "./pages/Auth";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="/villages" element={<VillagesPage />} />
             <Route path="/necrologie" element={<NecrologiePage />} />
             <Route path="/souvenirs" element={<SouvenirsPage />} />
+            <Route path="/tribune" element={<TribunePage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
