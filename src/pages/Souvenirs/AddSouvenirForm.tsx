@@ -86,8 +86,11 @@ export const AddSouvenirForm = ({ onSuccess }: { onSuccess: () => void }) => {
       }
       
       return addSouvenir({
-        ...data,
+        titre: data.titre,
+        description: data.description,
         date_souvenir: format(data.date_souvenir, "yyyy-MM-dd"),
+        auteur: data.auteur,
+        quartier_id: data.quartier_id,
         photo_url,
       });
     },
