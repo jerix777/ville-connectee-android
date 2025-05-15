@@ -526,6 +526,47 @@ export type Database = {
           },
         ]
       }
+      souvenirs: {
+        Row: {
+          auteur: string
+          created_at: string | null
+          date_souvenir: string
+          description: string
+          id: string
+          photo_url: string | null
+          quartier_id: string | null
+          titre: string
+        }
+        Insert: {
+          auteur: string
+          created_at?: string | null
+          date_souvenir: string
+          description: string
+          id?: string
+          photo_url?: string | null
+          quartier_id?: string | null
+          titre: string
+        }
+        Update: {
+          auteur?: string
+          created_at?: string | null
+          date_souvenir?: string
+          description?: string
+          id?: string
+          photo_url?: string | null
+          quartier_id?: string | null
+          titre?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "souvenirs_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users_profiles: {
         Row: {
           commune_id: string | null
