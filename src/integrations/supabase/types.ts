@@ -567,6 +567,53 @@ export type Database = {
           },
         ]
       }
+      suggestions: {
+        Row: {
+          auteur: string
+          contenu: string
+          created_at: string | null
+          id: string
+          image_url: string | null
+          quartier_id: string | null
+          reponse: string | null
+          status: string | null
+          titre: string
+          updated_at: string | null
+        }
+        Insert: {
+          auteur: string
+          contenu: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          quartier_id?: string | null
+          reponse?: string | null
+          status?: string | null
+          titre: string
+          updated_at?: string | null
+        }
+        Update: {
+          auteur?: string
+          contenu?: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          quartier_id?: string | null
+          reponse?: string | null
+          status?: string | null
+          titre?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "suggestions_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tribune: {
         Row: {
           approuve: boolean | null

@@ -22,6 +22,7 @@ import VillagesPage from "./pages/Villages";
 import NecrologiePage from "./pages/Necrologie";
 import SouvenirsPage from "./pages/Souvenirs";
 import TribunePage from "./pages/Tribune";
+import SuggestionsPage from "./pages/Suggestions";
 import AuthPage from "./pages/Auth";
 
 const queryClient = new QueryClient();
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/necrologie" element={<NecrologiePage />} />
             <Route path="/souvenirs" element={<SouvenirsPage />} />
             <Route path="/tribune" element={<TribunePage />} />
+            <Route path="/suggestions" element={<SuggestionsPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
