@@ -9,6 +9,7 @@ import { UserProfileMenu } from "@/components/UserProfileMenu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { CommuneSelector } from "@/components/CommuneSelector";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "@/hooks/use-toast";
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -38,9 +39,19 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
   useEffect(() => {
     const loadCommune = async () => {
       setLoading(true);
-      const commune = await getCommune(communeId);
-      setCommuneName(commune?.nom || "Ville Connectée");
-      setLoading(false);
+      try {
+        const commune = await getCommune(communeId);
+        setCommuneName(commune?.nom || "Ville Connectée");
+      } catch (error) {
+        console.error("Erreur lors du chargement de la commune:", error);
+        toast({
+          title: "Erreur",
+          description: "Impossible de charger les informations de la commune",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
     };
     
     loadCommune();
@@ -71,9 +82,9 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
         <h1 
           className={cn(
             "text-xl font-bold cursor-pointer",
-            !communeId && "hover:underline"
+            "hover:underline"
           )}
-          onClick={() => !communeId && setShowCommuneSelector(true)}
+          onClick={() => setShowCommuneSelector(true)}
         >
           {loading ? (
             <Skeleton className="h-6 w-32" />

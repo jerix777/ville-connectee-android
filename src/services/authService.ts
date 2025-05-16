@@ -2,6 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "@/hooks/use-toast";
 
 export interface UserProfile {
   id: string;
@@ -38,7 +39,11 @@ export const getLocalCommuneId = (): string | null => {
 
 // Enregistre l'ID de la commune sélectionnée localement
 export const setLocalCommuneId = (communeId: string): void => {
-  localStorage.setItem("communeId", communeId);
+  if (communeId) {
+    localStorage.setItem("communeId", communeId);
+  } else {
+    localStorage.removeItem("communeId");
+  }
 };
 
 // Récupère le profil utilisateur
@@ -68,6 +73,34 @@ export async function updateUserProfile(
   updates: Partial<Omit<UserProfile, "id" | "user_id" | "created_at">>
 ): Promise<UserProfile | null> {
   try {
+    // Vérifiez d'abord si le profil existe
+    const existingProfile = await getUserProfile(userId);
+    
+    if (!existingProfile) {
+      // Créer un nouveau profil si aucun n'existe
+      const { data, error } = await supabase
+        .from("users_profiles")
+        .insert({
+          user_id: userId,
+          ...updates
+        })
+        .select()
+        .single();
+        
+      if (error) {
+        console.error("Erreur création profil:", error);
+        return null;
+      }
+      
+      // Si une commune est spécifiée, mettre à jour le stockage local
+      if (updates.commune_id) {
+        setLocalCommuneId(updates.commune_id);
+      }
+      
+      return data as UserProfile;
+    }
+    
+    // Mettre à jour le profil existant
     const { data, error } = await supabase
       .from("users_profiles")
       .update(updates)
@@ -78,6 +111,11 @@ export async function updateUserProfile(
     if (error) {
       console.error("Erreur mise à jour profil:", error);
       return null;
+    }
+    
+    // Si une commune est spécifiée, mettre à jour le stockage local
+    if (updates.commune_id) {
+      setLocalCommuneId(updates.commune_id);
     }
     
     return data as UserProfile;
@@ -93,12 +131,22 @@ export async function saveSessionCommune(
   communeId: string
 ): Promise<boolean> {
   try {
+    if (!sessionId || !communeId) {
+      console.error("ID de session ou de commune manquant");
+      return false;
+    }
+    
     // Vérifie si une préférence existe déjà pour ce sessionId
-    const { data: existingPref } = await supabase
+    const { data: existingPref, error: queryError } = await supabase
       .from("commune_preferences")
       .select("id")
       .eq("session_id", sessionId)
       .maybeSingle();
+    
+    if (queryError) {
+      console.error("Erreur vérification préférence:", queryError);
+      // On continue pour essayer d'insérer une nouvelle préférence
+    }
     
     if (existingPref) {
       // Mise à jour
@@ -125,6 +173,12 @@ export async function saveSessionCommune(
     
     // Sauvegarde locale également
     setLocalCommuneId(communeId);
+    
+    toast({
+      title: "Commune sélectionnée",
+      description: "Votre préférence de commune a été enregistrée"
+    });
+    
     return true;
   } catch (err) {
     console.error("Erreur inattendue:", err);
@@ -135,20 +189,37 @@ export async function saveSessionCommune(
 // Récupère les préférences de commune pour les utilisateurs non connectés
 export async function getSessionCommune(sessionId: string): Promise<string | null> {
   try {
+    if (!sessionId) {
+      console.error("ID de session manquant");
+      return null;
+    }
+    
+    // Essayons d'abord la valeur stockée localement
+    const localCommuneId = getLocalCommuneId();
+    if (localCommuneId) {
+      return localCommuneId;
+    }
+    
     const { data, error } = await supabase
       .from("commune_preferences")
       .select("commune_id")
       .eq("session_id", sessionId)
       .maybeSingle();
       
-    if (error || !data) {
+    if (error) {
       console.error("Erreur récupération préférence:", error);
       return null;
     }
     
-    return data.commune_id;
+    if (data && data.commune_id) {
+      // Met à jour aussi le stockage local
+      setLocalCommuneId(data.commune_id);
+      return data.commune_id;
+    }
+    
+    return null;
   } catch (err) {
-    console.error("Erreur inattendue:", err);
+    console.error("Erreur inattendue lors de la récupération de la commune:", err);
     return null;
   }
 }

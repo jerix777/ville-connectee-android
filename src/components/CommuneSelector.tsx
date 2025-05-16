@@ -6,7 +6,7 @@ import { getVillages, Village } from "@/services/villageService";
 import { updateUserProfile, saveSessionCommune } from "@/services/authService";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { Check } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 
 interface CommuneSelectorProps {
   onClose?: () => void;
@@ -25,7 +25,20 @@ export function CommuneSelector({ onClose }: CommuneSelectorProps) {
       setIsLoading(true);
       try {
         const villagesData = await getVillages();
-        setVillages(villagesData);
+        if (Array.isArray(villagesData) && villagesData.length > 0) {
+          setVillages(villagesData);
+          
+          // Si aucune commune n'est sélectionnée, on prend la première par défaut
+          if (!selectedCommune && !currentCommuneId) {
+            setSelectedCommune(villagesData[0].id);
+          }
+        } else {
+          toast({
+            title: "Aucune commune disponible",
+            description: "Veuillez contacter l'administrateur",
+            variant: "destructive"
+          });
+        }
       } catch (error) {
         console.error("Erreur lors du chargement des villages", error);
         toast({
@@ -39,7 +52,7 @@ export function CommuneSelector({ onClose }: CommuneSelectorProps) {
     };
 
     fetchVillages();
-  }, [toast]);
+  }, [toast, currentCommuneId, selectedCommune]);
 
   const handleSubmit = async () => {
     if (!selectedCommune) {
@@ -61,7 +74,9 @@ export function CommuneSelector({ onClose }: CommuneSelectorProps) {
         });
 
         if (updated) {
-          await refreshProfile();
+          if (refreshProfile) {
+            await refreshProfile();
+          }
           toast({
             title: "Succès",
             description: "Votre commune a été mise à jour",
@@ -71,14 +86,18 @@ export function CommuneSelector({ onClose }: CommuneSelectorProps) {
         }
       } else {
         // Utilisateur non connecté - sauvegarder la préférence de session
+        if (!sessionId) {
+          toast({
+            title: "Erreur",
+            description: "Identifiant de session non disponible",
+            variant: "destructive"
+          });
+          return;
+        }
+        
         const success = await saveSessionCommune(sessionId, selectedCommune);
         
         if (success) {
-          toast({
-            title: "Succès",
-            description: "Votre commune a été enregistrée",
-          });
-          
           if (refreshProfile) {
             await refreshProfile();
           }
@@ -109,31 +128,46 @@ export function CommuneSelector({ onClose }: CommuneSelectorProps) {
       </p>
       
       <div className="space-y-4">
-        <Select
-          value={selectedCommune || ""}
-          onValueChange={setSelectedCommune}
-          disabled={isLoading}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Sélectionnez une commune" />
-          </SelectTrigger>
-          <SelectContent>
-            {villages.map((village) => (
-              <SelectItem key={village.id} value={village.id}>
-                {village.nom}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-4">
+            <Loader2 className="h-6 w-6 animate-spin text-ville-DEFAULT" />
+          </div>
+        ) : (
+          <Select
+            value={selectedCommune || ""}
+            onValueChange={setSelectedCommune}
+            disabled={isLoading || isSubmitting}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Sélectionnez une commune" />
+            </SelectTrigger>
+            <SelectContent>
+              {villages.map((village) => (
+                <SelectItem key={village.id} value={village.id}>
+                  {village.nom}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
 
         <Button 
           onClick={handleSubmit} 
-          disabled={!selectedCommune || isSubmitting} 
+          disabled={!selectedCommune || isSubmitting || isLoading} 
           className="w-full"
           variant="ville"
         >
-          <Check className="mr-2 h-4 w-4" />
-          Confirmer
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Chargement...
+            </>
+          ) : (
+            <>
+              <Check className="mr-2 h-4 w-4" />
+              Confirmer
+            </>
+          )}
         </Button>
       </div>
     </div>
