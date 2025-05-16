@@ -100,7 +100,13 @@ export function AddServiceCommerceForm() {
       }
       
       const serviceData: ServiceCommerceInput = {
-        ...values,
+        nom: values.nom,
+        categorie: values.categorie,
+        description: values.description,
+        adresse: values.adresse,
+        contact: values.contact,
+        horaires: values.horaires,
+        quartier_id: values.quartier_id,
         image_url: imageUrl || undefined,
       };
       
