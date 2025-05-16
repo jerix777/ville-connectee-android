@@ -526,6 +526,56 @@ export type Database = {
           },
         ]
       }
+      services_commerces: {
+        Row: {
+          adresse: string
+          categorie: string
+          contact: string
+          created_at: string | null
+          description: string
+          horaires: string | null
+          id: string
+          image_url: string | null
+          nom: string
+          quartier_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          adresse: string
+          categorie: string
+          contact: string
+          created_at?: string | null
+          description: string
+          horaires?: string | null
+          id?: string
+          image_url?: string | null
+          nom: string
+          quartier_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          adresse?: string
+          categorie?: string
+          contact?: string
+          created_at?: string | null
+          description?: string
+          horaires?: string | null
+          id?: string
+          image_url?: string | null
+          nom?: string
+          quartier_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "services_commerces_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       souvenirs: {
         Row: {
           auteur: string

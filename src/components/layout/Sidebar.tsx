@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -28,7 +29,7 @@ const navItems = [
   { path: "/immobilier", label: "Espace immobilier", icon: Building },
   { path: "/alertes", label: "Alertes", icon: Bell },
   { path: "/annonces", label: "Communiqués officiels", icon: Info },
-  { path: "/services", label: "Services et commerces", icon: MapPin },
+  { path: "/services", label: "Services et commerces", icon: Building },
   { path: "/villages", label: "Villages", icon: MapPin },
   { path: "/necrologie", label: "Nécrologie", icon: BookmarkCheck },
   { path: "/souvenirs", label: "Souvenirs", icon: Calendar },
