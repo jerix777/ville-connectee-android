@@ -36,7 +36,7 @@ export function EventCard({ event }: { event: Event }) {
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="ville" className="w-full">
+        <Button variant="secondary" className="w-full">
           <Info className="h-4 w-4 mr-1" />
           Voir les détails
         </Button>

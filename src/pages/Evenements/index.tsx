@@ -35,7 +35,7 @@ export default function EvenementsPage() {
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-ville-DEFAULT hover:bg-ville-dark">
+            <Button className="bg-secondary hover:bg-ville-dark">
               <Plus size={16} className="mr-2" />
               Ajouter un événement
             </Button>

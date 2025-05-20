@@ -140,7 +140,7 @@ export function BuyForm({ onClose }: BuyFormProps) {
         <DialogFooter>
           <Button 
             type="submit" 
-            variant="ville"
+            variant="secondary"
             disabled={addItemMutation.isPending}
           >
             {addItemMutation.isPending ? "Publication en cours..." : "Publier la demande"}

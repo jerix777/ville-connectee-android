@@ -46,7 +46,7 @@ export function MarketItemCard({ item }: { item: MarketItem }) {
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="ville" className="w-full" onClick={handleContact}>
+        <Button variant="secondary" className="w-full" onClick={handleContact}>
           <Phone className="h-4 w-4 mr-1" />
           Contacter
         </Button>

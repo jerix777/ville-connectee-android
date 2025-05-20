@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react";
+import { MainLayout } from "@/components/layout/MainLayout";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -25,7 +26,7 @@ export default function NecrologiePage() {
       setObituaries(data);
       setIsLoading(false);
     }
-    
+
     fetchObituaries();
   }, []);
 
@@ -42,9 +43,9 @@ export default function NecrologiePage() {
 
   const handleConfirmDelete = async () => {
     if (!obituaryToDelete) return;
-    
+
     const success = await deleteObituary(obituaryToDelete.id);
-    
+
     if (success) {
       setObituaries(prev => prev.filter(o => o.id !== obituaryToDelete.id));
       toast({
@@ -58,18 +59,18 @@ export default function NecrologiePage() {
         variant: "destructive"
       });
     }
-    
+
     setObituaryToDelete(null);
   };
 
   // Gestion de soumission du formulaire
   const handleSubmitForm = async (data: ObituaryFormData) => {
     setIsSubmitting(true);
-    
+
     if (selectedObituary) {
       // Mise à jour
       const updated = await updateObituary(selectedObituary.id, data);
-      
+
       if (updated) {
         setObituaries(prev => prev.map(o => o.id === selectedObituary.id ? updated : o));
         toast({
@@ -88,7 +89,7 @@ export default function NecrologiePage() {
     } else {
       // Création
       const created = await addObituary(data);
-      
+
       if (created) {
         setObituaries(prev => [created, ...prev]);
         toast({
@@ -104,65 +105,67 @@ export default function NecrologiePage() {
         });
       }
     }
-    
+
     setIsSubmitting(false);
   };
 
   return (
-    <div className="container py-6 mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Nécrologie</h1>
-        <Button onClick={() => {
-          setSelectedObituary(undefined);
-          setIsFormOpen(true);
-        }}>
-          <Plus className="mr-2 h-4 w-4" />
-          Ajouter un avis de décès
-        </Button>
-      </div>
-
-      {isLoading ? (
-        <p className="text-center py-4">Chargement des avis de décès...</p>
-      ) : obituaries.length === 0 ? (
-        <p className="text-center py-4">Aucun avis de décès disponible.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {obituaries.map((obituary) => (
-            <ObituaryCard
-              key={obituary.id}
-              obituary={obituary}
-              onEdit={handleEditObituary}
-              onDelete={handleDeleteClick}
-            />
-          ))}
+    <MainLayout>
+      <div className="container py-6 mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Nécrologie</h1>
+          <Button onClick={() => {
+            setSelectedObituary(undefined);
+            setIsFormOpen(true);
+          }}>
+            <Plus className="mr-2 h-4 w-4" />
+            Ajouter un avis de décès
+          </Button>
         </div>
-      )}
 
-      {/* Formulaire d'ajout/modification */}
-      <ObituaryForm
-        open={isFormOpen}
-        onOpenChange={setIsFormOpen}
-        onSubmit={handleSubmitForm}
-        initialData={selectedObituary}
-        isSubmitting={isSubmitting}
-      />
+        {isLoading ? (
+          <p className="text-center py-4">Chargement des avis de décès...</p>
+        ) : obituaries.length === 0 ? (
+          <p className="text-center py-4">Aucun avis de décès disponible.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {obituaries.map((obituary) => (
+              <ObituaryCard
+                key={obituary.id}
+                obituary={obituary}
+                onEdit={handleEditObituary}
+                onDelete={handleDeleteClick}
+              />
+            ))}
+          </div>
+        )}
 
-      {/* Modal de confirmation de suppression */}
-      <Dialog open={!!obituaryToDelete} onOpenChange={(open) => !open && setObituaryToDelete(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirmer la suppression</DialogTitle>
-            <DialogDescription>
-              Êtes-vous sûr de vouloir supprimer l'avis de décès de {obituaryToDelete?.prenom} {obituaryToDelete?.nom} ?
-              Cette action est irréversible.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setObituaryToDelete(null)}>Annuler</Button>
-            <Button variant="destructive" onClick={handleConfirmDelete}>Supprimer</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+        {/* Formulaire d'ajout/modification */}
+        <ObituaryForm
+          open={isFormOpen}
+          onOpenChange={setIsFormOpen}
+          onSubmit={handleSubmitForm}
+          initialData={selectedObituary}
+          isSubmitting={isSubmitting}
+        />
+
+        {/* Modal de confirmation de suppression */}
+        <Dialog open={!!obituaryToDelete} onOpenChange={(open) => !open && setObituaryToDelete(null)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Confirmer la suppression</DialogTitle>
+              <DialogDescription>
+                Êtes-vous sûr de vouloir supprimer l'avis de décès de {obituaryToDelete?.prenom} {obituaryToDelete?.nom} ?
+                Cette action est irréversible.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setObituaryToDelete(null)}>Annuler</Button>
+              <Button variant="destructive" onClick={handleConfirmDelete}>Supprimer</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </MainLayout>
   );
 }

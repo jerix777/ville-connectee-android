@@ -84,7 +84,7 @@ export default function AlertesPage() {
             </div>
             <Button 
               type="submit" 
-              variant="ville" 
+              variant="secondary" 
               className="md:w-auto w-full"
               disabled={loading}
             >
@@ -122,7 +122,7 @@ export default function AlertesPage() {
                     <TableCell>{alerte.email}</TableCell>
                     <TableCell className="text-right">
                       <Button
-                        variant="ghost"
+                        variant="destructive"
                         size="sm"
                         className="text-red-500 hover:text-red-700 hover:bg-red-50"
                         onClick={() => handleDelete(alerte.id)}

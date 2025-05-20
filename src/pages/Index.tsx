@@ -31,7 +31,7 @@ const featuresSection1 = [
   {
     title: "Annuaire",
     icon: LinkIcon,
-    to: "/annuaire", 
+    to: "/annuaire",
     description: "Retrouvez les contacts locaux"
   },
   {
@@ -88,10 +88,10 @@ export default function Index() {
       <section className="mb-10">
         <div className="rounded-xl bg-gradient-to-r from-ville-DEFAULT to-ville-dark p-8 text-black">
           <h1 className="text-3xl md:text-4xl font-bold mb-4 text-black">
-            Bienvenue sur Ville Connectée
+            Bienvenue à Ouéllé
           </h1>
           <p className="text-lg opacity-90 mb-6 text-black">
-            Votre application Android pour tous les services de votre ville
+            la cité de l'innovation et du développement durable
           </p>
           <div className="flex space-x-4">
             <button className="bg-white text-ville-DEFAULT px-6 py-3 rounded-md font-medium hover:bg-opacity-90 transition-all text-black">

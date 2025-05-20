@@ -155,7 +155,7 @@ export function CommuneSelector({ onClose }: CommuneSelectorProps) {
           onClick={handleSubmit} 
           disabled={!selectedCommune || isSubmitting || isLoading} 
           className="w-full"
-          variant="ville"
+          variant="secondary"
         >
           {isSubmitting ? (
             <>

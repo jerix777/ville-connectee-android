@@ -61,7 +61,7 @@ export function AddNewsForm({ onAdded }: { onAdded?: () => void }) {
         <Textarea id="contenu" {...register("contenu", { required: true })} rows={5} />
       </div>
       {error && <div className="text-red-500">{error}</div>}
-      <Button type="submit" variant="ville" disabled={isSubmitting}>
+      <Button type="submit" variant="secondary" disabled={isSubmitting}>
         Publier
       </Button>
     </form>

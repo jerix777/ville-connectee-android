@@ -49,7 +49,7 @@ export function AddOffreForm({ onAdded }: AddOffreFormProps) {
         <Input name="localisation" placeholder="Localisation" value={form.localisation} onChange={handleChange} required />
       </div>
       <Textarea className="mt-2" name="description" placeholder="Description du poste" value={form.description} onChange={handleChange} required />
-      <Button type="submit" className="mt-2" variant="ville" disabled={loading}>
+      <Button type="submit" className="mt-2" variant="secondary" disabled={loading}>
         {loading ? "Ajout..." : "Ajouter l'offre"}
       </Button>
     </form>

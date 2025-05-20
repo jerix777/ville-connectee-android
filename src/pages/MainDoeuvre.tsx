@@ -83,7 +83,7 @@ export default function MainDoeuvrePage() {
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant="ville">
+            <Button variant="secondary">
               <Plus size={16} className="mr-2" />
               Je m'inscris
             </Button>

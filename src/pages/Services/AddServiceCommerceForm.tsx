@@ -320,7 +320,7 @@ export function AddServiceCommerceForm() {
             type="submit"
             disabled={isSubmitting}
             className="w-full"
-            variant="ville"
+            variant="secondary"
           >
             {isSubmitting ? "Ajout en cours..." : "Ajouter le service ou commerce"}
           </Button>

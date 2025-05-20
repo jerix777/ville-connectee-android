@@ -129,7 +129,7 @@ export function AddWorkerForm({ onClose }: AddWorkerFormProps) {
       <DialogFooter>
         <Button 
           type="submit" 
-          variant="ville"
+          variant="secondary"
           disabled={addWorkerMutation.isPending}
         >
           {addWorkerMutation.isPending ? "Inscription en cours..." : "Je m'inscris"}

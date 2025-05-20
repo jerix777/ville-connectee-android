@@ -83,7 +83,7 @@ export function ServiceCommerceCard({ service }: ServiceCommerceCardProps) {
       </CardContent>
       <CardFooter className="pt-2">
         <Button 
-          variant="ville" 
+          variant="secondary" 
           className="w-full" 
           onClick={handleContact}
         >

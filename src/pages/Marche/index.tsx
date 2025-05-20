@@ -57,7 +57,7 @@ export default function MarchePage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <Dialog open={sellDialogOpen} onOpenChange={setSellDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-ville-DEFAULT hover:bg-ville-dark flex items-center justify-center gap-2 py-6">
+            <Button className=" hover:bg-ville-dark flex items-center justify-center gap-2 py-6">
               <ShoppingBag size={20} />
               <span className="text-lg">Je vends</span>
             </Button>

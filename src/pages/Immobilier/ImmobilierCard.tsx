@@ -50,7 +50,7 @@ export function ImmobilierCard({ bien }: ImmobilierCardProps) {
         contact={bien.contact}
       />
       <div className="p-4 pt-0">
-        <Button variant="ville" className="w-full" onClick={handleContact}>
+        <Button variant="secondary" className="w-full" onClick={handleContact}>
           <Phone className="h-4 w-4 mr-1" />
           Contacter le vendeur
         </Button>

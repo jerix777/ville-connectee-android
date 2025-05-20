@@ -18,7 +18,7 @@ interface HeaderProps {
 
 export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
-  const [communeName, setCommuneName] = useState<string>("Ville Connectée");
+  const [communeName, setCommuneName] = useState<string>("Commune");
   const [loading, setLoading] = useState(true);
   const [showCommuneSelector, setShowCommuneSelector] = useState(false);
   const { communeId } = useAuth();
@@ -41,7 +41,7 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
       setLoading(true);
       try {
         const commune = await getCommune(communeId);
-        setCommuneName(commune?.nom || "Ville Connectée");
+        setCommuneName(commune?.nom || "Commune");
       } catch (error) {
         console.error("Erreur lors du chargement de la commune:", error);
         toast({

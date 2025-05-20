@@ -185,7 +185,7 @@ export function AddEventForm({ onClose }: AddEventFormProps) {
         <DialogFooter>
           <Button 
             type="submit" 
-            variant="ville"
+            variant="secondary"
             disabled={addEventMutation.isPending}
           >
             {addEventMutation.isPending ? "Enregistrement..." : "Enregistrer l'événement"}

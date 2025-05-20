@@ -93,7 +93,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           )}
         />
         
-        <Button type="submit" className="w-full" disabled={isSubmitting} variant="ville">
+        <Button type="submit" className="w-full" disabled={isSubmitting} variant="secondary">
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
