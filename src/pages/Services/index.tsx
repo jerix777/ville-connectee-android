@@ -11,6 +11,8 @@ import { Building, Plus, Search } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { usePagination } from "@/hooks/usePagination";
+import { PaginationControls } from "@/components/ui/pagination-controls";
 
 export default function ServicesPage() {
   const [activeTab, setActiveTab] = useState<string>("liste");
@@ -31,6 +33,18 @@ export default function ServicesPage() {
       service.description.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesCategory && matchesSearch;
+  });
+
+  const {
+    currentPage,
+    totalPages,
+    paginatedData: paginatedServices,
+    goToPage,
+    canGoNext,
+    canGoPrevious,
+  } = usePagination({
+    data: filteredServices,
+    itemsPerPage: 9,
   });
 
   return (
@@ -56,79 +70,86 @@ export default function ServicesPage() {
               <TabsTrigger value="liste">Liste</TabsTrigger>
               <TabsTrigger value="ajouter">Ajouter</TabsTrigger>
             </TabsList>
-          
-            <div className="mt-4">
-              {activeTab === "liste" && (
-                <div className="space-y-6">
-                  <div className="flex flex-col md:flex-row gap-4">
-                    <div className="relative flex-grow">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                      <Input
-                        placeholder="Rechercher un service ou commerce..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setActiveTab("ajouter");
-                      }}
-                      className="whitespace-nowrap"
-                    >
-                      <Plus className="mr-2 h-4 w-4" />
-                      Ajouter
-                    </Button>
-                  </div>
-
-                  <CategoryFilter
-                    categories={categories}
-                    selectedCategory={selectedCategory}
-                    onCategorySelect={setSelectedCategory}
-                  />
-
-                  {isLoading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {Array.from({ length: 6 }).map((_, i) => (
-                        <div key={i} className="border rounded-lg p-4 space-y-4">
-                          <Skeleton className="h-40 w-full" />
-                          <Skeleton className="h-6 w-3/4" />
-                          <Skeleton className="h-4 w-full" />
-                          <Skeleton className="h-4 w-full" />
-                          <Skeleton className="h-10 w-full" />
-                        </div>
-                      ))}
-                    </div>
-                  ) : filteredServices.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {filteredServices.map((service) => (
-                        <ServiceCommerceCard key={service.id} service={service} />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-10">
-                      <p className="text-gray-500">Aucun service ou commerce trouvé.</p>
-                      <Button 
-                        variant="link" 
-                        onClick={() => {
-                          setSelectedCategory(null);
-                          setSearchQuery("");
-                        }}
-                      >
-                        Réinitialiser les filtres
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              )}
-              
-              {activeTab === "ajouter" && (
-                <AddServiceCommerceForm />
-              )}
-            </div>
           </Tabs>
         </div>
+
+        {activeTab === "liste" && (
+          <div className="space-y-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-grow">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Input
+                  placeholder="Rechercher un service ou commerce..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setActiveTab("ajouter");
+                }}
+                className="whitespace-nowrap"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Ajouter
+              </Button>
+            </div>
+
+            <CategoryFilter
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onCategorySelect={setSelectedCategory}
+            />
+
+            {isLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="border rounded-lg p-4 space-y-4">
+                    <Skeleton className="h-40 w-full" />
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                  </div>
+                ))}
+              </div>
+            ) : filteredServices.length > 0 ? (
+              <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {paginatedServices.map((service) => (
+                    <ServiceCommerceCard key={service.id} service={service} />
+                  ))}
+                </div>
+                <PaginationControls
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={goToPage}
+                  canGoNext={canGoNext}
+                  canGoPrevious={canGoPrevious}
+                />
+              </div>
+            ) : (
+              <div className="text-center py-10">
+                <p className="text-gray-500">Aucun service ou commerce trouvé.</p>
+                <Button 
+                  variant="link" 
+                  onClick={() => {
+                    setSelectedCategory(null);
+                    setSearchQuery("");
+                  }}
+                >
+                  Réinitialiser les filtres
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+        
+        {activeTab === "ajouter" && (
+          <AddServiceCommerceForm />
+        )}
       </div>
     </MainLayout>
   );

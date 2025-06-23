@@ -17,6 +17,8 @@ import { AddSuggestionForm } from "./AddSuggestionForm";
 import { fetchSuggestions } from "@/services/suggestionService";
 import { Spinner } from "@/components/ui/spinner";
 import { MessageSquare, Plus, Search } from "lucide-react";
+import { usePagination } from "@/hooks/usePagination";
+import { PaginationControls } from "@/components/ui/pagination-controls";
 
 export default function SuggestionsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,7 +36,19 @@ export default function SuggestionsPage() {
       suggestion.auteur.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (suggestion.quartiers?.nom &&
         suggestion.quartiers.nom.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  ) || [];
+
+  const {
+    currentPage,
+    totalPages,
+    paginatedData: paginatedSuggestions,
+    goToPage,
+    canGoNext,
+    canGoPrevious,
+  } = usePagination({
+    data: filteredSuggestions,
+    itemsPerPage: 5,
+  });
 
   return (
     <MainLayout>
@@ -79,17 +93,26 @@ export default function SuggestionsPage() {
           <div className="flex justify-center items-center py-12">
             <Spinner size="xl" />
           </div>
-        ) : filteredSuggestions?.length === 0 ? (
+        ) : filteredSuggestions.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-lg text-gray-500">
               Aucune suggestion trouvée. Soyez le premier à proposer une idée !
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-6">
-            {filteredSuggestions?.map((suggestion) => (
-              <SuggestionCard key={suggestion.id} suggestion={suggestion} />
-            ))}
+          <div>
+            <div className="grid grid-cols-1 gap-6">
+              {paginatedSuggestions.map((suggestion) => (
+                <SuggestionCard key={suggestion.id} suggestion={suggestion} />
+              ))}
+            </div>
+            <PaginationControls
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={goToPage}
+              canGoNext={canGoNext}
+              canGoPrevious={canGoPrevious}
+            />
           </div>
         )}
       </div>

@@ -10,6 +10,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getMetiers, getProfessionals, Metier, Professional } from "@/services/professionalService";
 import { WorkerCard } from "./MainDoeuvre/WorkerCard";
 import { AddWorkerForm } from "./MainDoeuvre/AddWorkerForm";
+import { usePagination } from "@/hooks/usePagination";
+import { PaginationControls } from "@/components/ui/pagination-controls";
 
 export default function MainDoeuvrePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -47,6 +49,19 @@ export default function MainDoeuvrePage() {
     }
     return acc;
   }, {} as Record<string, { metier: Metier, workers: Professional[] }>);
+
+  // Pagination for filtered results
+  const {
+    currentPage,
+    totalPages,
+    paginatedData: paginatedWorkers,
+    goToPage,
+    canGoNext,
+    canGoPrevious,
+  } = usePagination({
+    data: filteredWorkers,
+    itemsPerPage: 6,
+  });
 
   return (
     <MainLayout>
@@ -116,22 +131,31 @@ export default function MainDoeuvrePage() {
           <p className="text-sm">Essayez de modifier vos filtres ou inscrivez-vous</p>
         </div>
       ) : domainFilter && domainFilter !== "all" ? (
-        // Show filtered results for a specific domain
+        // Show paginated results for a specific domain
         <div>
-          {filteredWorkers.map(worker => (
+          {paginatedWorkers.map(worker => (
             <WorkerCard key={worker.id} worker={worker} />
           ))}
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={goToPage}
+            canGoNext={canGoNext}
+            canGoPrevious={canGoPrevious}
+          />
         </div>
       ) : (
         // Group by domain when no specific domain is selected or "all"
-        Object.entries(workersByDomain).map(([domainId, { metier, workers }]) => (
-          <div key={domainId} className="mb-8">
-            <h2 className="text-xl font-semibold mb-4 text-ville-dark">{metier.nom}</h2>
-            {workers.map(worker => (
-              <WorkerCard key={worker.id} worker={worker} />
-            ))}
-          </div>
-        ))
+        <div>
+          {Object.entries(workersByDomain).map(([domainId, { metier, workers }]) => (
+            <div key={domainId} className="mb-8">
+              <h2 className="text-xl font-semibold mb-4 text-ville-dark">{metier.nom}</h2>
+              {workers.map(worker => (
+                <WorkerCard key={worker.id} worker={worker} />
+              ))}
+            </div>
+          ))}
+        </div>
       )}
     </MainLayout>
   );

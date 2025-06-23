@@ -17,6 +17,8 @@ import { AddTribuneForm } from "./AddTribuneForm";
 import { fetchTribunes } from "@/services/tribuneService";
 import { Spinner } from "@/components/ui/spinner";
 import { MessageSquare, Plus, Search } from "lucide-react";
+import { usePagination } from "@/hooks/usePagination";
+import { PaginationControls } from "@/components/ui/pagination-controls";
 
 export default function TribunePage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,7 +36,19 @@ export default function TribunePage() {
       tribune.auteur.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (tribune.quartiers?.nom &&
         tribune.quartiers.nom.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  ) || [];
+
+  const {
+    currentPage,
+    totalPages,
+    paginatedData: paginatedTribunes,
+    goToPage,
+    canGoNext,
+    canGoPrevious,
+  } = usePagination({
+    data: filteredTribunes,
+    itemsPerPage: 5,
+  });
 
   return (
     <MainLayout>
@@ -76,17 +90,26 @@ export default function TribunePage() {
           <div className="flex justify-center items-center py-12">
             <Spinner size="xl" />
           </div>
-        ) : filteredTribunes?.length === 0 ? (
+        ) : filteredTribunes.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-lg text-gray-500">
               Aucune tribune trouvée. Soyez le premier à partager votre opinion !
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-6">
-            {filteredTribunes?.map((tribune) => (
-              <TribuneCard key={tribune.id} tribune={tribune} />
-            ))}
+          <div>
+            <div className="grid grid-cols-1 gap-6">
+              {paginatedTribunes.map((tribune) => (
+                <TribuneCard key={tribune.id} tribune={tribune} />
+              ))}
+            </div>
+            <PaginationControls
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={goToPage}
+              canGoNext={canGoNext}
+              canGoPrevious={canGoPrevious}
+            />
           </div>
         )}
       </div>

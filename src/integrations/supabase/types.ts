@@ -91,26 +91,26 @@ export type Database = {
       commune: {
         Row: {
           created_at: string
-          denomination: string
           id: string
           latitude: number | null
           longitude: number | null
+          nom: string
           superficie: number | null
         }
         Insert: {
           created_at?: string
-          denomination: string
           id?: string
           latitude?: number | null
           longitude?: number | null
+          nom: string
           superficie?: number | null
         }
         Update: {
           created_at?: string
-          denomination?: string
           id?: string
           latitude?: number | null
           longitude?: number | null
+          nom?: string
           superficie?: number | null
         }
         Relationships: []
@@ -139,7 +139,7 @@ export type Database = {
             foreignKeyName: "commune_preferences_commune_id_fkey"
             columns: ["commune_id"]
             isOneToOne: false
-            referencedRelation: "villages"
+            referencedRelation: "commune"
             referencedColumns: ["id"]
           },
         ]
@@ -771,7 +771,15 @@ export type Database = {
           nom?: string
           population?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "villages_commune_id_fkey"
+            columns: ["commune_id"]
+            isOneToOne: false
+            referencedRelation: "commune"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

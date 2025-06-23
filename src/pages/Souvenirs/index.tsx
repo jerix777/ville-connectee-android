@@ -17,6 +17,8 @@ import { AddSouvenirForm } from "./AddSouvenirForm";
 import { fetchSouvenirs } from "@/services/souvenirService";
 import { Spinner } from "@/components/ui/spinner";
 import { BookmarkCheck, Plus, Search } from "lucide-react";
+import { usePagination } from "@/hooks/usePagination";
+import { PaginationControls } from "@/components/ui/pagination-controls";
 
 export default function SouvenirsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,7 +36,19 @@ export default function SouvenirsPage() {
       souvenir.auteur.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (souvenir.quartiers?.nom &&
         souvenir.quartiers.nom.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  ) || [];
+
+  const {
+    currentPage,
+    totalPages,
+    paginatedData: paginatedSouvenirs,
+    goToPage,
+    canGoNext,
+    canGoPrevious,
+  } = usePagination({
+    data: filteredSouvenirs,
+    itemsPerPage: 9,
+  });
 
   return (
     <MainLayout>
@@ -76,17 +90,26 @@ export default function SouvenirsPage() {
           <div className="flex justify-center items-center py-12">
             <Spinner size="xl" />
           </div>
-        ) : filteredSouvenirs?.length === 0 ? (
+        ) : filteredSouvenirs.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-lg text-gray-500">
               Aucun souvenir trouvé. Ajoutez le premier !
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredSouvenirs?.map((souvenir) => (
-              <SouvenirCard key={souvenir.id} souvenir={souvenir} />
-            ))}
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {paginatedSouvenirs.map((souvenir) => (
+                <SouvenirCard key={souvenir.id} souvenir={souvenir} />
+              ))}
+            </div>
+            <PaginationControls
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={goToPage}
+              canGoNext={canGoNext}
+              canGoPrevious={canGoPrevious}
+            />
           </div>
         )}
       </div>
