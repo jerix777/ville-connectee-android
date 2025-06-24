@@ -59,49 +59,67 @@ export function PaginationControls({
   const visiblePages = getVisiblePages();
 
   return (
-    <Pagination className="mt-6">
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              if (canGoPrevious) onPageChange(currentPage - 1);
-            }}
-            className={!canGoPrevious ? "pointer-events-none opacity-50" : ""}
-          />
-        </PaginationItem>
-
-        {visiblePages.map((page, index) => (
-          <PaginationItem key={index}>
-            {page === '...' ? (
-              <PaginationEllipsis />
-            ) : (
-              <PaginationLink
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onPageChange(page as number);
-                }}
-                isActive={currentPage === page}
-              >
-                {page}
-              </PaginationLink>
-            )}
+    <div className="flex justify-center mt-8">
+      <Pagination className="bg-white rounded-2xl shadow-soft border border-expo-gray-200 p-2">
+        <PaginationContent className="gap-1">
+          <PaginationItem>
+            <PaginationPrevious
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (canGoPrevious) onPageChange(currentPage - 1);
+              }}
+              className={cn(
+                "rounded-xl transition-all duration-200",
+                !canGoPrevious 
+                  ? "pointer-events-none opacity-50" 
+                  : "hover:bg-expo-accent hover:text-white"
+              )}
+            />
           </PaginationItem>
-        ))}
 
-        <PaginationItem>
-          <PaginationNext
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              if (canGoNext) onPageChange(currentPage + 1);
-            }}
-            className={!canGoNext ? "pointer-events-none opacity-50" : ""}
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
+          {visiblePages.map((page, index) => (
+            <PaginationItem key={index}>
+              {page === '...' ? (
+                <PaginationEllipsis className="text-expo-gray-400" />
+              ) : (
+                <PaginationLink
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onPageChange(page as number);
+                  }}
+                  className={cn(
+                    "rounded-xl transition-all duration-200 min-w-[40px] h-10",
+                    currentPage === page
+                      ? "bg-expo-accent text-white shadow-medium"
+                      : "hover:bg-expo-gray-100 text-expo-gray-600"
+                  )}
+                  isActive={currentPage === page}
+                >
+                  {page}
+                </PaginationLink>
+              )}
+            </PaginationItem>
+          ))}
+
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (canGoNext) onPageChange(currentPage + 1);
+              }}
+              className={cn(
+                "rounded-xl transition-all duration-200",
+                !canGoNext 
+                  ? "pointer-events-none opacity-50" 
+                  : "hover:bg-expo-accent hover:text-white"
+              )}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
   );
 }
