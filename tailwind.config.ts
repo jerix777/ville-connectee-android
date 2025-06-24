@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -53,14 +52,14 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				// Couleurs modernes inspirées d'Expo Starter
+				// Couleurs modernes avec orange professionnel
 				expo: {
 					DEFAULT: '#000020', // Bleu marine très foncé
-					light: '#E8F4FD', // Bleu très clair
+					light: '#FFF4E6', // Orange très clair
 					dark: '#000014', // Presque noir
 					accent: '#246BFD', // Bleu électrique
 					success: '#00D4AA', // Vert turquoise
-					warning: '#FFB800', // Orange doré
+					warning: '#FF8A50', // Orange professionnel moderne
 					error: '#FF4757', // Rouge moderne
 					gray: {
 						50: '#F8FAFC',
@@ -77,10 +76,22 @@ export default {
 				},
 				ville: {
 					DEFAULT: '#246BFD', // Bleu électrique moderne
-					light: '#E8F4FD', // Bleu très clair
+					light: '#FFF4E6', // Orange très clair
 					dark: '#000020', // Bleu marine foncé
 					hover: '#1E5BF0', // Bleu hover
-					foreground: '#FFFFFF' // Blanc
+					foreground: '#FFFFFF', // Blanc
+					orange: {
+						50: '#FFF7ED',
+						100: '#FFEDD5',
+						200: '#FED7AA',
+						300: '#FDBA74',
+						400: '#FB923C',
+						500: '#F97316', // Orange principal
+						600: '#EA580C',
+						700: '#C2410C',
+						800: '#9A3412',
+						900: '#7C2D12'
+					}
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',

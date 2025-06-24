@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
@@ -24,8 +23,8 @@
     --muted: 241 245 249;
     --muted-foreground: 100 116 139;
 
-    --accent: 232 244 253;
-    --accent-foreground: 30 41 59;
+    --accent: 255 138 80;
+    --accent-foreground: 255 255 255;
 
     --destructive: 255 71 87;
     --destructive-foreground: 248 250 252;
@@ -65,7 +64,7 @@
     --muted: 30 41 59;
     --muted-foreground: 148 163 184;
 
-    --accent: 30 41 59;
+    --accent: 251 146 60;
     --accent-foreground: 248 250 252;
 
     --destructive: 255 71 87;
@@ -121,7 +120,7 @@
   }
 
   .text-gradient {
-    @apply bg-gradient-to-r from-expo-accent to-expo-success bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-ville-orange-500 to-expo-success bg-clip-text text-transparent;
   }
 }
 
@@ -139,7 +138,7 @@
   }
 
   .input-modern {
-    @apply flex h-12 w-full rounded-xl border border-expo-gray-200 bg-white px-4 py-3 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-expo-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-expo-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply flex h-12 w-full rounded-xl border border-expo-gray-200 bg-white px-4 py-3 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-expo-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ville-orange-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .sidebar-modern {

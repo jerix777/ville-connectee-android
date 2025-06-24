@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -10,15 +9,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-expo-accent text-white hover:bg-expo-accent/90 shadow-soft hover:shadow-medium",
+        default: "bg-ville-orange-500 text-white hover:bg-ville-orange-600 shadow-soft hover:shadow-medium",
         destructive: "bg-expo-error text-white hover:bg-expo-error/90 shadow-soft hover:shadow-medium",
-        outline: "border-2 border-expo-gray-200 bg-white hover:bg-expo-gray-50 text-expo-DEFAULT hover:border-expo-accent",
+        outline: "border-2 border-expo-gray-200 bg-white hover:bg-ville-orange-50 text-expo-DEFAULT hover:border-ville-orange-500",
         secondary: "bg-expo-gray-100 text-expo-gray-700 hover:bg-expo-gray-200",
-        ghost: "hover:bg-expo-gray-100 hover:text-expo-DEFAULT",
-        link: "text-expo-accent underline-offset-4 hover:underline",
-        ville: "bg-gradient-to-r from-expo-accent to-expo-success text-white hover:from-expo-accent/90 hover:to-expo-success/90 shadow-medium hover:shadow-strong",
+        ghost: "hover:bg-ville-orange-100 hover:text-ville-orange-700",
+        link: "text-ville-orange-500 underline-offset-4 hover:underline",
+        ville: "bg-gradient-to-r from-ville-orange-500 to-expo-success text-white hover:from-ville-orange-600 hover:to-expo-success/90 shadow-medium hover:shadow-strong",
         success: "bg-expo-success text-white hover:bg-expo-success/90 shadow-soft hover:shadow-medium",
-        warning: "bg-expo-warning text-white hover:bg-expo-warning/90 shadow-soft hover:shadow-medium",
+        warning: "bg-ville-orange-500 text-white hover:bg-ville-orange-600 shadow-soft hover:shadow-medium",
       },
       size: {
         default: "h-12 px-6 py-3 text-sm",
