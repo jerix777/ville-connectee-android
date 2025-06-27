@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
@@ -24,7 +23,7 @@
     --muted: 241 245 249;
     --muted-foreground: 100 116 139;
 
-    --accent: 249 115 22;
+    --accent: 36 107 253;
     --accent-foreground: 255 255 255;
 
     --destructive: 255 71 87;
@@ -65,7 +64,7 @@
     --muted: 30 41 59;
     --muted-foreground: 148 163 184;
 
-    --accent: 251 146 60;
+    --accent: 36 107 253;
     --accent-foreground: 248 250 252;
 
     --destructive: 255 71 87;
