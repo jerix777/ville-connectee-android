@@ -16,7 +16,6 @@ import { PaginationControls } from "@/components/ui/pagination-controls";
 export default function MainDoeuvrePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [domainFilter, setDomainFilter] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data: metiers = [] } = useQuery({
     queryKey: ['metiers'],
@@ -96,23 +95,7 @@ export default function MainDoeuvrePage() {
           </SelectContent>
         </Select>
         
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button variant="secondary">
-              <Plus size={16} className="mr-2" />
-              Je m'inscris
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
-            <DialogHeader>
-              <DialogTitle>Inscription comme professionnel</DialogTitle>
-              <DialogDescription>
-                Inscrivez-vous comme professionnel pour proposer vos services
-              </DialogDescription>
-            </DialogHeader>
-            <AddWorkerForm onClose={() => setIsDialogOpen(false)} />
-          </DialogContent>
-        </Dialog>
+        <AddWorkerForm />
       </div>
       
       {/* Results section */}
