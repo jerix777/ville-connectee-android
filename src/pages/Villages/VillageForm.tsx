@@ -3,9 +3,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
-import { X } from "lucide-react";
+import { Plus } from "lucide-react";
 import type { Village } from "@/services/villageService";
 
 interface VillageFormProps {
@@ -21,6 +21,7 @@ export default function VillageForm({ village, onSubmit, onCancel }: VillageForm
   const [codePostal, setCodePostal] = useState(village?.code_postal || "");
   const [imageUrl, setImageUrl] = useState(village?.image_url || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +50,9 @@ export default function VillageForm({ village, onSubmit, onCancel }: VillageForm
         title: "Succès",
         description: village ? "Village mis à jour" : "Village ajouté"
       });
+      
+      setIsOpen(false);
+      onCancel();
     } catch (error) {
       toast({
         title: "Erreur",
@@ -62,17 +66,18 @@ export default function VillageForm({ village, onSubmit, onCancel }: VillageForm
   };
 
   return (
-    <Card className="w-full mb-6">
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle>{village ? "Modifier le village" : "Ajouter un village"}</CardTitle>
-          <Button variant="ghost" size="icon" onClick={onCancel}>
-            <X className="h-4 w-4" />
-          </Button>
-        </div>
-      </CardHeader>
-      <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="default" size="lg">
+          <Plus className="mr-2 h-5 w-5" />
+          {village ? "Modifier le village" : "Ajouter un village"}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>{village ? "Modifier le village" : "Ajouter un village"}</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="nom" className="block text-sm font-medium mb-1">
               Nom du village *
@@ -137,17 +142,17 @@ export default function VillageForm({ village, onSubmit, onCancel }: VillageForm
               placeholder="URL de l'image du village"
             />
           </div>
-        </CardContent>
-        
-        <CardFooter className="flex justify-between">
-          <Button type="button" variant="outline" onClick={onCancel}>
-            Annuler
-          </Button>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "En cours..." : village ? "Mettre à jour" : "Ajouter"}
-          </Button>
-        </CardFooter>
-      </form>
-    </Card>
+          
+          <div className="flex justify-end space-x-2 pt-4">
+            <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+              Annuler
+            </Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "En cours..." : village ? "Mettre à jour" : "Ajouter"}
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

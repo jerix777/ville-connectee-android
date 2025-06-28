@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { TribuneInput, addTribune, uploadTribuneImage } from "@/services/tribuneService";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -18,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Spinner } from "@/components/ui/spinner";
+import { Plus } from "lucide-react";
 
 // Schéma de validation pour le formulaire
 const tribuneSchema = z.object({
@@ -36,6 +38,7 @@ interface AddTribuneFormProps {
 export function AddTribuneForm({ onSuccess }: AddTribuneFormProps) {
   const [image, setImage] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const form = useForm<TribuneFormValues>({
@@ -80,6 +83,7 @@ export function AddTribuneForm({ onSuccess }: AddTribuneFormProps) {
         queryClient.invalidateQueries({ queryKey: ["tribunes"] });
         form.reset();
         setImage(null);
+        setIsOpen(false);
         onSuccess();
       }
     } catch (error) {
@@ -90,81 +94,97 @@ export function AddTribuneForm({ onSuccess }: AddTribuneFormProps) {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="titre"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Titre</FormLabel>
-              <FormControl>
-                <Input placeholder="Titre de votre tribune" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="default" size="lg">
+          <Plus className="mr-2 h-5 w-5" />
+          Publier une tribune
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Publier une tribune</DialogTitle>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="titre"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Titre</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Titre de votre tribune" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="contenu"
-          render={({ field }) => (
+            <FormField
+              control={form.control}
+              name="contenu"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contenu</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Partagez votre opinion..."
+                      className="h-32"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="auteur"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Votre nom</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Votre nom" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormItem>
-              <FormLabel>Contenu</FormLabel>
+              <FormLabel>Image (optionnel)</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Partagez votre opinion..."
-                  className="h-32"
-                  {...field}
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="cursor-pointer"
                 />
               </FormControl>
-              <FormMessage />
+              <FormDescription>
+                Vous pouvez ajouter une image à votre tribune
+              </FormDescription>
             </FormItem>
-          )}
-        />
 
-        <FormField
-          control={form.control}
-          name="auteur"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Votre nom</FormLabel>
-              <FormControl>
-                <Input placeholder="Votre nom" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormItem>
-          <FormLabel>Image (optionnel)</FormLabel>
-          <FormControl>
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="cursor-pointer"
-            />
-          </FormControl>
-          <FormDescription>
-            Vous pouvez ajouter une image à votre tribune
-          </FormDescription>
-        </FormItem>
-
-        <div className="flex justify-end">
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <Spinner size="sm" className="mr-2" /> Envoi en cours...
-              </>
-            ) : (
-              "Publier la tribune"
-            )}
-          </Button>
-        </div>
-      </form>
-    </Form>
+            <div className="flex justify-end space-x-2 pt-4">
+              <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+                Annuler
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <Spinner size="sm" className="mr-2" /> Envoi en cours...
+                  </>
+                ) : (
+                  "Publier la tribune"
+                )}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }
