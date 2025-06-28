@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
@@ -14,7 +15,7 @@
     --popover: 255 255 255;
     --popover-foreground: 15 23 42;
 
-    --primary: 36 107 253;
+    --primary: 247 115 23;
     --primary-foreground: 248 250 252;
 
     --secondary: 241 245 249;
@@ -23,7 +24,7 @@
     --muted: 241 245 249;
     --muted-foreground: 100 116 139;
 
-    --accent: 36 107 253;
+    --accent: 247 115 23;
     --accent-foreground: 255 255 255;
 
     --destructive: 255 71 87;
@@ -31,18 +32,18 @@
 
     --border: 226 232 240;
     --input: 226 232 240;
-    --ring: 36 107 253;
+    --ring: 247 115 23;
 
     --radius: 0.75rem;
 
     --sidebar-background: 255 255 255;
     --sidebar-foreground: 51 65 85;
-    --sidebar-primary: 36 107 253;
+    --sidebar-primary: 247 115 23;
     --sidebar-primary-foreground: 248 250 252;
     --sidebar-accent: 241 245 249;
     --sidebar-accent-foreground: 51 65 85;
     --sidebar-border: 226 232 240;
-    --sidebar-ring: 36 107 253;
+    --sidebar-ring: 247 115 23;
   }
 
   .dark {
@@ -55,7 +56,7 @@
     --popover: 15 23 42;
     --popover-foreground: 248 250 252;
 
-    --primary: 36 107 253;
+    --primary: 247 115 23;
     --primary-foreground: 0 0 20;
 
     --secondary: 30 41 59;
@@ -64,7 +65,7 @@
     --muted: 30 41 59;
     --muted-foreground: 148 163 184;
 
-    --accent: 36 107 253;
+    --accent: 247 115 23;
     --accent-foreground: 248 250 252;
 
     --destructive: 255 71 87;
@@ -72,16 +73,16 @@
 
     --border: 30 41 59;
     --input: 30 41 59;
-    --ring: 36 107 253;
+    --ring: 247 115 23;
 
     --sidebar-background: 0 0 20;
     --sidebar-foreground: 248 250 252;
-    --sidebar-primary: 36 107 253;
+    --sidebar-primary: 247 115 23;
     --sidebar-primary-foreground: 248 250 252;
     --sidebar-accent: 30 41 59;
     --sidebar-accent-foreground: 248 250 252;
     --sidebar-border: 30 41 59;
-    --sidebar-ring: 36 107 253;
+    --sidebar-ring: 247 115 23;
   }
 }
 
@@ -120,7 +121,7 @@
   }
 
   .text-gradient {
-    @apply bg-gradient-to-r from-ville-orange-500 to-expo-success bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent;
   }
 }
 
@@ -130,7 +131,7 @@
   }
 
   .card-modern {
-    @apply bg-white rounded-2xl shadow-soft border border-expo-gray-200 transition-all duration-200 hover:shadow-medium hover:scale-[1.02];
+    @apply bg-white rounded-2xl shadow-soft border border-gray-200 transition-all duration-200 hover:shadow-medium hover:scale-[1.02];
   }
 
   .btn-modern {
@@ -138,11 +139,11 @@
   }
 
   .input-modern {
-    @apply flex h-12 w-full rounded-xl border border-expo-gray-200 bg-white px-4 py-3 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-expo-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ville-orange-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply flex h-12 w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .sidebar-modern {
-    @apply fixed left-0 top-0 z-40 h-screen w-64 transform bg-white/95 backdrop-blur-lg border-r border-expo-gray-200 transition-transform duration-300 ease-in-out;
+    @apply fixed left-0 top-0 z-40 h-screen w-64 transform bg-white/95 backdrop-blur-lg border-r border-gray-200 transition-transform duration-300 ease-in-out;
   }
 }
 
