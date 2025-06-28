@@ -16,28 +16,26 @@ export function MainLayout({ children }: MainLayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-expo-gray-50 via-white to-expo-light">
+    <div className="min-h-screen bg-gray-50">
       <Header toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
       <Sidebar isOpen={sidebarOpen} />
       
-      {/* Overlay moderne avec blur */}
+      {/* Overlay to close sidebar on mobile */}
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 bg-expo-DEFAULT/20 backdrop-blur-sm z-30 md:hidden transition-all duration-300" 
+          className="fixed inset-0 bg-black/20 z-30 md:hidden" 
           onClick={() => setSidebarOpen(false)}
         />
       )}
       
       <main 
         className={cn(
-          "pt-20 min-h-screen transition-all duration-300",
+          "pt-16 min-h-screen transition-all duration-300",
           sidebarOpen ? "md:ml-64" : "ml-0"
         )}
       >
-        <div className="container mx-auto px-6 py-8">
-          <div className="animate-fade-in">
-            {children}
-          </div>
+        <div className="container mx-auto px-4 py-6 animate-fade-in">
+          {children}
         </div>
       </main>
     </div>

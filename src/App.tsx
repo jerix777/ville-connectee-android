@@ -1,59 +1,65 @@
 
-import { Routes, Route } from "react-router-dom";
-import { AppProviders } from "@/providers/AppProviders";
-import { ROUTES } from "@/config/constants";
+import React from "react";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
+import Index from "./pages/Index";
+import NotFound from "./pages/NotFound";
+import EvenementsPage from "./pages/Evenements";
+import MainDoeuvrePage from "./pages/MainDoeuvre";
+import MarchePage from "./pages/Marche";
+import ActualitesPage from "./pages/Actualites";
+import EmploisPage from "./pages/Emplois";
+import AnnuairePage from "./pages/Annuaire";
+import AssociationsPage from "./pages/Associations";
+import ImmobilierPage from "./pages/Immobilier";
+import AlertesPage from "./pages/Alertes";
+import AnnoncesPage from "./pages/Annonces";
+import VillagesPage from "./pages/Villages";
+import NecrologiePage from "./pages/Necrologie";
+import SouvenirsPage from "./pages/Souvenirs";
+import TribunePage from "./pages/Tribune";
+import SuggestionsPage from "./pages/Suggestions";
+import ServicesPage from "./pages/Services";
+import AuthPage from "./pages/Auth";
 
-// Pages
-import IndexPage from "@/pages/Index";
-import AuthPage from "@/pages/Auth";
-import ActualitesPage from "@/pages/Actualites";
-import EvenementsPage from "@/pages/Evenements";
-import MainDoeuvrePage from "@/pages/MainDoeuvre";
-import MarchePage from "@/pages/Marche";
-import EmploisPage from "@/pages/Emplois";
-import AnnuairePage from "@/pages/Annuaire";
-import AssociationsPage from "@/pages/Associations";
-import ImmobilierPage from "@/pages/Immobilier";
-import AlertesPage from "@/pages/Alertes";
-import AnnoncesPage from "@/pages/Annonces";
-import ServicesPage from "@/pages/Services";
-import VillagesPage from "@/pages/Villages";
-import NecrologiePage from "@/pages/Necrologie";
-import SouvenirsPage from "@/pages/Souvenirs";
-import TribunePage from "@/pages/Tribune";
-import SuggestionsPage from "@/pages/Suggestions";
-import NotFoundPage from "@/pages/NotFound";
+const queryClient = new QueryClient();
 
-function AppRoutes() {
-  return (
-    <Routes>
-      <Route path={ROUTES.HOME} element={<IndexPage />} />
-      <Route path={ROUTES.AUTH} element={<AuthPage />} />
-      <Route path={ROUTES.ACTUALITES} element={<ActualitesPage />} />
-      <Route path={ROUTES.EVENEMENTS} element={<EvenementsPage />} />
-      <Route path={ROUTES.MAIN_DOEUVRE} element={<MainDoeuvrePage />} />
-      <Route path={ROUTES.MARCHE} element={<MarchePage />} />
-      <Route path={ROUTES.EMPLOIS} element={<EmploisPage />} />
-      <Route path={ROUTES.ANNUAIRE} element={<AnnuairePage />} />
-      <Route path={ROUTES.ASSOCIATIONS} element={<AssociationsPage />} />
-      <Route path={ROUTES.IMMOBILIER} element={<ImmobilierPage />} />
-      <Route path={ROUTES.ALERTES} element={<AlertesPage />} />
-      <Route path={ROUTES.ANNONCES} element={<AnnoncesPage />} />
-      <Route path={ROUTES.SERVICES} element={<ServicesPage />} />
-      <Route path={ROUTES.VILLAGES} element={<VillagesPage />} />
-      <Route path={ROUTES.NECROLOGIE} element={<NecrologiePage />} />
-      <Route path={ROUTES.SOUVENIRS} element={<SouvenirsPage />} />
-      <Route path={ROUTES.TRIBUNE} element={<TribunePage />} />
-      <Route path={ROUTES.SUGGESTIONS} element={<SuggestionsPage />} />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
-  );
-}
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/actualites" element={<ActualitesPage />} />
+            <Route path="/evenements" element={<EvenementsPage />} />
+            <Route path="/main-doeuvre" element={<MainDoeuvrePage />} />
+            <Route path="/marche" element={<MarchePage />} />
+            <Route path="/emplois" element={<EmploisPage />} />
+            <Route path="/annuaire" element={<AnnuairePage />} />
+            <Route path="/associations" element={<AssociationsPage />} />
+            <Route path="/immobilier" element={<ImmobilierPage />} />
+            <Route path="/alertes" element={<AlertesPage />} />
+            <Route path="/annonces" element={<AnnoncesPage />} />
+            <Route path="/villages" element={<VillagesPage />} />
+            <Route path="/necrologie" element={<NecrologiePage />} />
+            <Route path="/souvenirs" element={<SouvenirsPage />} />
+            <Route path="/tribune" element={<TribunePage />} />
+            <Route path="/suggestions" element={<SuggestionsPage />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
+  </QueryClientProvider>
+);
 
-export default function App() {
-  return (
-    <AppProviders>
-      <AppRoutes />
-    </AppProviders>
-  );
-}
+export default App;

@@ -39,18 +39,16 @@ const navItems = [
 
 function NavItem({ to, icon: Icon, label, isActive, onClick }: NavItemProps) {
   return (
-    <li className="mb-1">
+    <li>
       <Link to={to} onClick={onClick}>
         <Button
-          variant="ghost"
+          variant={isActive ? "secondary" : "ghost"}
           className={cn(
-            "w-full justify-start gap-3 font-medium rounded-xl h-12 transition-all duration-200",
-            isActive 
-              ? "bg-expo-accent text-white shadow-medium" 
-              : "text-expo-gray-600 hover:bg-expo-gray-100 hover:text-expo-DEFAULT"
+            "w-full justify-start gap-2 font-normal",
+            isActive ? "bg-ville-light text-ville-dark" : "text-gray-700"
           )}
         >
-          <Icon size={20} />
+          <Icon size={18} />
           <span>{label}</span>
         </Button>
       </Link>
@@ -63,9 +61,8 @@ export function Sidebar({ isOpen }: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const sidebarClasses = cn(
-    "sidebar-modern",
-    isOpen ? "translate-x-0" : "-translate-x-full",
-    "pt-20"
+    "fixed top-0 left-0 bottom-0 z-40 w-64 bg-white shadow-lg transition-transform duration-300 pt-16 overflow-y-auto",
+    isOpen ? "translate-x-0" : "-translate-x-full"
   );
 
   const filteredNavItems = searchQuery
@@ -76,36 +73,31 @@ export function Sidebar({ isOpen }: SidebarProps) {
 
   return (
     <aside className={sidebarClasses}>
-      <div className="p-6 h-full overflow-y-auto">
-        <div className="relative mb-6">
-          <Search size={18} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-expo-gray-400" />
+      <div className="p-4">
+        <div className="relative mb-4">
+          <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             placeholder="Rechercher..."
-            className="input-modern pl-12"
+            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-ville-DEFAULT"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
         <nav>
-          <div className="mb-4">
-            <h3 className="text-xs font-semibold text-expo-gray-400 uppercase tracking-wider px-3 mb-3">
-              Navigation
-            </h3>
-            <ul className="space-y-1">
-              {filteredNavItems.map((item) => (
-                <NavItem
-                  key={item.path}
-                  to={item.path}
-                  icon={item.icon}
-                  label={item.label}
-                  isActive={pathname === item.path}
-                  onClick={() => {}}
-                />
-              ))}
-            </ul>
-          </div>
+          <ul className="space-y-1">
+            {filteredNavItems.map((item) => (
+              <NavItem
+                key={item.path}
+                to={item.path}
+                icon={item.icon}
+                label={item.label}
+                isActive={pathname === item.path}
+                onClick={() => {}}
+              />
+            ))}
+          </ul>
         </nav>
       </div>
     </aside>

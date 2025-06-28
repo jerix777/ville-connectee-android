@@ -4,9 +4,7 @@ import { addOffreEmploi } from "@/services/offresEmploiService";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
-import { Plus } from "lucide-react";
 
 interface AddOffreFormProps {
   onAdded: () => void;
@@ -14,7 +12,6 @@ interface AddOffreFormProps {
 
 export function AddOffreForm({ onAdded }: AddOffreFormProps) {
   const { toast } = useToast();
-  const [isOpen, setIsOpen] = useState(false);
 
   const [form, setForm] = useState({
     titre: "",
@@ -37,7 +34,6 @@ export function AddOffreForm({ onAdded }: AddOffreFormProps) {
     if (added) {
       toast({ title: "Offre ajoutée avec succès" });
       setForm({ titre: "", description: "", employeur: "", type_contrat: "", localisation: "" });
-      setIsOpen(false);
       onAdded();
     } else {
       toast({ title: "Erreur", description: "Impossible d'ajouter l'offre", variant: "destructive" });
@@ -45,35 +41,17 @@ export function AddOffreForm({ onAdded }: AddOffreFormProps) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="default" size="lg">
-          <Plus className="mr-2 h-5 w-5" />
-          Publier une offre d'emploi
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>Publier une offre d'emploi</DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-            <Input name="titre" placeholder="Titre du poste" value={form.titre} onChange={handleChange} required />
-            <Input name="employeur" placeholder="Employeur" value={form.employeur} onChange={handleChange} required />
-            <Input name="type_contrat" placeholder="Type de contrat" value={form.type_contrat} onChange={handleChange} required />
-            <Input name="localisation" placeholder="Localisation" value={form.localisation} onChange={handleChange} required />
-          </div>
-          <Textarea name="description" placeholder="Description du poste" value={form.description} onChange={handleChange} required />
-          <div className="flex justify-end space-x-2 pt-4">
-            <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
-              Annuler
-            </Button>
-            <Button type="submit" variant="default" disabled={loading}>
-              {loading ? "Ajout..." : "Ajouter l'offre"}
-            </Button>
-          </div>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <form className="mb-6 p-4 bg-white rounded shadow" onSubmit={handleSubmit}>
+      <div className="grid gap-2 grid-cols-1 md:grid-cols-2">
+        <Input name="titre" placeholder="Titre du poste" value={form.titre} onChange={handleChange} required />
+        <Input name="employeur" placeholder="Employeur" value={form.employeur} onChange={handleChange} required />
+        <Input name="type_contrat" placeholder="Type de contrat" value={form.type_contrat} onChange={handleChange} required />
+        <Input name="localisation" placeholder="Localisation" value={form.localisation} onChange={handleChange} required />
+      </div>
+      <Textarea className="mt-2" name="description" placeholder="Description du poste" value={form.description} onChange={handleChange} required />
+      <Button type="submit" className="mt-2" variant="secondary" disabled={loading}>
+        {loading ? "Ajout..." : "Ajouter l'offre"}
+      </Button>
+    </form>
   );
 }
