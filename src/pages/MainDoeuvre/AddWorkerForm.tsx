@@ -7,15 +7,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Plus } from "lucide-react";
 
-interface AddWorkerFormProps {
-  onClose: () => void;
-}
-
-export function AddWorkerForm({ onClose }: AddWorkerFormProps) {
+export function AddWorkerForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     nom: "",
     surnom: "",
@@ -38,7 +42,15 @@ export function AddWorkerForm({ onClose }: AddWorkerFormProps) {
         title: "Professionnel ajouté",
         description: "Le professionnel a été ajouté avec succès",
       });
-      onClose();
+      setFormData({
+        nom: "",
+        surnom: "",
+        metier_id: "",
+        contact1: "",
+        contact2: "",
+        base: ""
+      });
+      setIsOpen(false);
     },
     onError: (error) => {
       toast({
@@ -65,76 +77,92 @@ export function AddWorkerForm({ onClose }: AddWorkerFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="metier_id">Domaine d'activité</Label>
-          <Select onValueChange={handleSelectChange} value={formData.metier_id}>
-            <SelectTrigger>
-              <SelectValue placeholder="Sélectionner un domaine" />
-            </SelectTrigger>
-            <SelectContent>
-              {metiers.map(metier => (
-                <SelectItem key={metier.id} value={metier.id}>{metier.nom}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="nom">Nom et prénoms</Label>
-          <Input
-            id="nom"
-            name="nom"
-            value={formData.nom}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="surnom">Surnom (optionnel)</Label>
-          <Input
-            id="surnom"
-            name="surnom"
-            value={formData.surnom}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="contact1">Contact 1</Label>
-          <Input
-            id="contact1"
-            name="contact1"
-            value={formData.contact1}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="contact2">Contact 2 (optionnel)</Label>
-          <Input
-            id="contact2"
-            name="contact2"
-            value={formData.contact2}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="base">Base (quartier/zone)</Label>
-          <Input
-            id="base"
-            name="base"
-            value={formData.base}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
-      <DialogFooter>
-        <Button 
-          type="submit" 
-          variant="secondary"
-          disabled={addWorkerMutation.isPending}
-        >
-          {addWorkerMutation.isPending ? "Inscription en cours..." : "Je m'inscris"}
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          <Plus className="h-4 w-4 mr-2" />
+          S'inscrire comme professionnel
         </Button>
-      </DialogFooter>
-    </form>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>S'inscrire comme professionnel</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="metier_id">Domaine d'activité</Label>
+              <Select onValueChange={handleSelectChange} value={formData.metier_id}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Sélectionner un domaine" />
+                </SelectTrigger>
+                <SelectContent>
+                  {metiers.map(metier => (
+                    <SelectItem key={metier.id} value={metier.id}>{metier.nom}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="nom">Nom et prénoms</Label>
+              <Input
+                id="nom"
+                name="nom"
+                value={formData.nom}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="surnom">Surnom (optionnel)</Label>
+              <Input
+                id="surnom"
+                name="surnom"
+                value={formData.surnom}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="contact1">Contact 1</Label>
+              <Input
+                id="contact1"
+                name="contact1"
+                value={formData.contact1}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="contact2">Contact 2 (optionnel)</Label>
+              <Input
+                id="contact2"
+                name="contact2"
+                value={formData.contact2}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="base">Base (quartier/zone)</Label>
+              <Input
+                id="base"
+                name="base"
+                value={formData.base}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+              Annuler
+            </Button>
+            <Button 
+              type="submit" 
+              variant="secondary"
+              disabled={addWorkerMutation.isPending}
+            >
+              {addWorkerMutation.isPending ? "Inscription en cours..." : "Je m'inscris"}
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

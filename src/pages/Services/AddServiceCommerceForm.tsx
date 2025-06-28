@@ -22,10 +22,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { ServiceCommerceInput, addServiceCommerce, uploadServiceImage } from "@/services/serviceCommerceService";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { Building, Upload } from "lucide-react";
+import { Building, Plus } from "lucide-react";
 
 const formSchema = z.object({
   nom: z.string().min(2, {
@@ -48,6 +55,7 @@ const formSchema = z.object({
 });
 
 export function AddServiceCommerceForm() {
+  const [isOpen, setIsOpen] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -116,6 +124,7 @@ export function AddServiceCommerceForm() {
         form.reset();
         setImageFile(null);
         setImagePreview(null);
+        setIsOpen(false);
       }
     } catch (error) {
       console.error("Erreur lors de la soumission:", error);
@@ -138,194 +147,208 @@ export function AddServiceCommerceForm() {
   ];
 
   return (
-    <div className="bg-white p-6 rounded-lg border">
-      <h2 className="text-xl font-semibold mb-6 flex items-center">
-        <Building className="mr-2 h-5 w-5" />
-        Ajouter un service ou commerce
-      </h2>
-      
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          <Plus className="h-4 w-4 mr-2" />
+          Ajouter un service
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="flex items-center">
+            <Building className="mr-2 h-5 w-5" />
+            Ajouter un service ou commerce
+          </DialogTitle>
+        </DialogHeader>
+        
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="nom"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nom</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Nom du service ou commerce" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="categorie"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Catégorie</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionner une catégorie" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            
             <FormField
               control={form.control}
-              name="nom"
+              name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nom</FormLabel>
+                  <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nom du service ou commerce" {...field} />
+                    <Textarea
+                      placeholder="Description du service ou commerce"
+                      {...field}
+                      rows={4}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             
-            <FormField
-              control={form.control}
-              name="categorie"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Catégorie</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="adresse"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Adresse</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Sélectionner une catégorie" />
-                      </SelectTrigger>
+                      <Input placeholder="Adresse complète" {...field} />
                     </FormControl>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Description du service ou commerce"
-                    {...field}
-                    rows={4}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="contact"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Contact</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Numéro de téléphone" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="horaires"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Horaires</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Horaires d'ouverture" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Ex: Lun-Ven: 8h-18h, Sam: 9h-16h
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="quartier_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Quartier</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionner un quartier" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {quartiers.map((quartier) => (
+                          <SelectItem key={quartier.id} value={quartier.id}>
+                            {quartier.nom}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>Optionnel</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <FormLabel>Image</FormLabel>
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center gap-2">
+                  <Input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="flex-1"
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="adresse"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Adresse</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Adresse complète" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="contact"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contact</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Numéro de téléphone" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="horaires"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Horaires</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Horaires d'ouverture" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Ex: Lun-Ven: 8h-18h, Sam: 9h-16h
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="quartier_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Quartier</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Sélectionner un quartier" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {quartiers.map((quartier) => (
-                        <SelectItem key={quartier.id} value={quartier.id}>
-                          {quartier.nom}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>Optionnel</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <FormLabel>Image</FormLabel>
-            <div className="flex flex-col space-y-2">
-              <div className="flex items-center gap-2">
-                <Input
-                  id="image"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="flex-1"
-                />
+                  {imagePreview && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setImageFile(null);
+                        setImagePreview(null);
+                      }}
+                    >
+                      Supprimer
+                    </Button>
+                  )}
+                </div>
                 {imagePreview && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => {
-                      setImageFile(null);
-                      setImagePreview(null);
-                    }}
-                  >
-                    Supprimer
-                  </Button>
+                  <div className="mt-2 h-40 w-full overflow-hidden rounded-md border">
+                    <img
+                      src={imagePreview}
+                      alt="Aperçu"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
                 )}
               </div>
-              {imagePreview && (
-                <div className="mt-2 h-40 w-full overflow-hidden rounded-md border">
-                  <img
-                    src={imagePreview}
-                    alt="Aperçu"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              )}
             </div>
-          </div>
-          
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full"
-            variant="secondary"
-          >
-            {isSubmitting ? "Ajout en cours..." : "Ajouter le service ou commerce"}
-          </Button>
-        </form>
-      </Form>
-    </div>
+            
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+                Annuler
+              </Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                variant="secondary"
+              >
+                {isSubmitting ? "Ajout en cours..." : "Ajouter le service"}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }
