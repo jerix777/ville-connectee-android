@@ -7,6 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { addNews, NewsType } from "@/services/newsService";
+import { Plus } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface FormValues {
   titre: string;
@@ -21,6 +29,7 @@ export function AddNewsForm({ onAdded }: { onAdded?: () => void }) {
     defaultValues: { type: "actualité" }
   });
   const [error, setError] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const onSubmit = async (data: FormValues) => {
     setError(null);
@@ -32,38 +41,57 @@ export function AddNewsForm({ onAdded }: { onAdded?: () => void }) {
     }
     toast({ title: "Succès", description: "Actualité ajoutée !" });
     reset();
+    setIsOpen(false);
     onAdded?.();
   };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded shadow p-6 mb-8 space-y-4">
-      <h2 className="text-xl font-bold">Nouvelle actualité</h2>
-      <div>
-        <Label htmlFor="titre">Titre</Label>
-        <Input id="titre" {...register("titre", { required: true })}/>
-      </div>
-      <div>
-        <Label htmlFor="type">Type</Label>
-        <select id="type" {...register("type", { required: true })} className="border rounded p-2">
-          <option value="actualité">Actualité</option>
-          <option value="communiqué">Communiqué</option>
-        </select>
-      </div>
-      <div>
-        <Label htmlFor="auteur">Auteur (optionnel)</Label>
-        <Input id="auteur" {...register("auteur")} />
-      </div>
-      <div>
-        <Label htmlFor="image_url">Image (URL, optionnel)</Label>
-        <Input id="image_url" {...register("image_url")} />
-      </div>
-      <div>
-        <Label htmlFor="contenu">Contenu</Label>
-        <Textarea id="contenu" {...register("contenu", { required: true })} rows={5} />
-      </div>
-      {error && <div className="text-red-500">{error}</div>}
-      <Button type="submit" variant="secondary" disabled={isSubmitting}>
-        Publier
-      </Button>
-    </form>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          <Plus className="h-4 w-4 mr-2" />
+          Nouvelle actualité
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Nouvelle actualité</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <Label htmlFor="titre">Titre</Label>
+            <Input id="titre" {...register("titre", { required: true })}/>
+          </div>
+          <div>
+            <Label htmlFor="type">Type</Label>
+            <select id="type" {...register("type", { required: true })} className="w-full border rounded p-2">
+              <option value="actualité">Actualité</option>
+              <option value="communiqué">Communiqué</option>
+            </select>
+          </div>
+          <div>
+            <Label htmlFor="auteur">Auteur (optionnel)</Label>
+            <Input id="auteur" {...register("auteur")} />
+          </div>
+          <div>
+            <Label htmlFor="image_url">Image (URL, optionnel)</Label>
+            <Input id="image_url" {...register("image_url")} />
+          </div>
+          <div>
+            <Label htmlFor="contenu">Contenu</Label>
+            <Textarea id="contenu" {...register("contenu", { required: true })} rows={5} />
+          </div>
+          {error && <div className="text-red-500">{error}</div>}
+          <div className="flex justify-end gap-2">
+            <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+              Annuler
+            </Button>
+            <Button type="submit" variant="secondary" disabled={isSubmitting}>
+              Publier
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

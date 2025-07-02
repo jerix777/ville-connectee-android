@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { usePropertyForm } from "./hooks/usePropertyForm";
@@ -10,9 +10,17 @@ import { PropertyMetricsFields } from "./components/PropertyMetricsFields";
 import { RoomsFields } from "./components/RoomsFields";
 import { ContactFields } from "./components/ContactFields";
 import { toast } from "@/components/ui/sonner";
-import { Bell } from "lucide-react";
+import { Plus } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export function AddImmobilierForm() {
+  const [isOpen, setIsOpen] = useState(false);
   const { form, onSubmit } = usePropertyForm();
 
   const handleFormSubmit = async (values: any) => {
@@ -25,38 +33,54 @@ export function AddImmobilierForm() {
           onClick: () => document.getElementById("alert-trigger")?.click(),
         },
       });
+      setIsOpen(false);
     }
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg border">
-      <h2 className="text-xl font-semibold mb-6">Publier une annonce immobilière</h2>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
-          <PropertyDetailsFields form={form} />
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          <Plus className="h-4 w-4 mr-2" />
+          Publier une annonce
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Publier une annonce immobilière</DialogTitle>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
+            <PropertyDetailsFields form={form} />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <PropertyTypeSelect form={form} />
-            <ListingTypeSwitch form={form} />
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <PropertyTypeSelect form={form} />
+              <ListingTypeSwitch form={form} />
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <PropertyMetricsFields form={form} />
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <PropertyMetricsFields form={form} />
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <RoomsFields form={form} />
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <RoomsFields form={form} />
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <ContactFields form={form} />
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ContactFields form={form} />
+            </div>
 
-          <Button type="submit" variant="secondary" className="w-full">
-            Publier l'annonce
-          </Button>
-        </form>
-      </Form>
-    </div>
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+                Annuler
+              </Button>
+              <Button type="submit" variant="secondary">
+                Publier l'annonce
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }
