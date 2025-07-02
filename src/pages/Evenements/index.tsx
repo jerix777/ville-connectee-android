@@ -3,15 +3,12 @@ import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar, Plus } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getEvents } from "@/services/eventService";
 import { EventCard } from "./EventCard";
 import { AddEventForm } from "./AddEventForm";
 
 export default function EvenementsPage() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { data: events = [], isLoading, error } = useQuery({
     queryKey: ['events'],
     queryFn: getEvents
@@ -32,24 +29,7 @@ export default function EvenementsPage() {
       
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold">Liste des événements</h2>
-        
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-secondary hover:bg-ville-dark">
-              <Plus size={16} className="mr-2" />
-              Ajouter un événement
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
-            <DialogHeader>
-              <DialogTitle>Ajouter un événement</DialogTitle>
-              <DialogDescription>
-                Remplissez les détails pour ajouter un nouvel événement
-              </DialogDescription>
-            </DialogHeader>
-            <AddEventForm onClose={() => setIsDialogOpen(false)} />
-          </DialogContent>
-        </Dialog>
+        <AddEventForm />
       </div>
       
       {isLoading ? (
