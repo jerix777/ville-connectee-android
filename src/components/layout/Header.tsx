@@ -1,7 +1,7 @@
 
 import { Bell, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { getCommune } from "@/services/communeService";
 import { UserProfileMenu } from "@/components/UserProfileMenu";
@@ -9,21 +9,35 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { CommuneSelector } from "@/components/CommuneSelector";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
-import { useEffect } from "react";
 
 interface HeaderProps {
   toggleSidebar: () => void;
   isSidebarOpen: boolean;
 }
 
-export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
+function HeaderComponent({ toggleSidebar, isSidebarOpen }: HeaderProps) {
   const [communeName, setCommuneName] = useState<string>("Commune");
   const [loading, setLoading] = useState(true);
   const [showCommuneSelector, setShowCommuneSelector] = useState(false);
   const { communeId } = useAuth();
 
-  // Effet pour charger le nom de la commune
+  // Mémoriser les callbacks pour éviter les re-renders
+  const handleCommuneSelectorClose = useCallback(() => {
+    setShowCommuneSelector(false);
+  }, []);
+
+  const handleCommuneNameClick = useCallback(() => {
+    setShowCommuneSelector(true);
+  }, []);
+
+  // Effet pour charger le nom de la commune - optimisé
   useEffect(() => {
+    if (!communeId) {
+      setCommuneName("Commune");
+      setLoading(false);
+      return;
+    }
+
     const loadCommune = async () => {
       setLoading(true);
       try {
@@ -60,7 +74,7 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
         
         <h1 
           className="text-xl font-bold cursor-pointer hover:underline"
-          onClick={() => setShowCommuneSelector(true)}
+          onClick={handleCommuneNameClick}
         >
           {loading ? (
             <Skeleton className="h-6 w-32" />
@@ -87,9 +101,12 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
           <DialogHeader>
             <DialogTitle>Sélectionner votre commune</DialogTitle>
           </DialogHeader>
-          <CommuneSelector onClose={() => setShowCommuneSelector(false)} />
+          <CommuneSelector onClose={handleCommuneSelectorClose} />
         </DialogContent>
       </Dialog>
     </header>
   );
 }
+
+// Mémoriser le Header pour éviter les re-renders inutiles
+export const Header = memo(HeaderComponent);
