@@ -1,8 +1,7 @@
 
 import { Bell, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { getCommune } from "@/services/communeService";
 import { UserProfileMenu } from "@/components/UserProfileMenu";
@@ -10,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { CommuneSelector } from "@/components/CommuneSelector";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -17,23 +17,10 @@ interface HeaderProps {
 }
 
 export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
-  const [scrolled, setScrolled] = useState(false);
   const [communeName, setCommuneName] = useState<string>("Commune");
   const [loading, setLoading] = useState(true);
   const [showCommuneSelector, setShowCommuneSelector] = useState(false);
   const { communeId } = useAuth();
-
-  // Effet pour détecter le défilement
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-    
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   // Effet pour charger le nom de la commune
   useEffect(() => {
@@ -59,31 +46,20 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
 
   return (
     <header 
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 flex items-center justify-between py-3 px-4 transition-all duration-300",
-        scrolled 
-          ? "bg-ville-DEFAULT shadow-md text-white" 
-          : "bg-ville-light text-ville-DEFAULT"
-      )}
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between py-3 px-4 bg-ville-DEFAULT shadow-md text-white"
     >
       <div className="flex items-center">
         <Button 
           variant="ghost" 
           size="icon" 
           onClick={toggleSidebar}
-          className={cn(
-            "text-current mr-2",
-            scrolled ? "hover:bg-ville-hover" : "hover:bg-ville-light"
-          )}
+          className="text-current mr-2 hover:bg-ville-hover"
         >
           <Menu size={24} />
         </Button>
         
         <h1 
-          className={cn(
-            "text-xl font-bold cursor-pointer",
-            "hover:underline"
-          )}
+          className="text-xl font-bold cursor-pointer hover:underline"
           onClick={() => setShowCommuneSelector(true)}
         >
           {loading ? (
@@ -98,10 +74,7 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
         <Button 
           variant="ghost" 
           size="icon" 
-          className={cn(
-            "text-current",
-            scrolled ? "hover:bg-ville-hover" : "hover:bg-ville-light"
-          )}
+          className="text-current hover:bg-ville-hover"
         >
           <Bell size={20} />
         </Button>
