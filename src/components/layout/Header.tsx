@@ -1,7 +1,7 @@
 
 import { Bell, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect, useCallback, memo } from "react";
+import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { getCommune } from "@/services/communeService";
 import { UserProfileMenu } from "@/components/UserProfileMenu";
@@ -9,35 +9,21 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { CommuneSelector } from "@/components/CommuneSelector";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
 interface HeaderProps {
   toggleSidebar: () => void;
   isSidebarOpen: boolean;
 }
 
-function HeaderComponent({ toggleSidebar, isSidebarOpen }: HeaderProps) {
+export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
   const [communeName, setCommuneName] = useState<string>("Commune");
   const [loading, setLoading] = useState(true);
   const [showCommuneSelector, setShowCommuneSelector] = useState(false);
   const { communeId } = useAuth();
 
-  // Mémoriser les callbacks pour éviter les re-renders
-  const handleCommuneSelectorClose = useCallback(() => {
-    setShowCommuneSelector(false);
-  }, []);
-
-  const handleCommuneNameClick = useCallback(() => {
-    setShowCommuneSelector(true);
-  }, []);
-
-  // Effet pour charger le nom de la commune - optimisé
+  // Effet pour charger le nom de la commune
   useEffect(() => {
-    if (!communeId) {
-      setCommuneName("Commune");
-      setLoading(false);
-      return;
-    }
-
     const loadCommune = async () => {
       setLoading(true);
       try {
@@ -60,7 +46,7 @@ function HeaderComponent({ toggleSidebar, isSidebarOpen }: HeaderProps) {
 
   return (
     <header 
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between py-3 px-4 bg-ville-DEFAULT shadow-md text-white opacity-100"
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between py-3 px-4 bg-ville-DEFAULT shadow-md text-white"
     >
       <div className="flex items-center">
         <Button 
@@ -74,7 +60,7 @@ function HeaderComponent({ toggleSidebar, isSidebarOpen }: HeaderProps) {
         
         <h1 
           className="text-xl font-bold cursor-pointer hover:underline"
-          onClick={handleCommuneNameClick}
+          onClick={() => setShowCommuneSelector(true)}
         >
           {loading ? (
             <Skeleton className="h-6 w-32" />
@@ -101,12 +87,9 @@ function HeaderComponent({ toggleSidebar, isSidebarOpen }: HeaderProps) {
           <DialogHeader>
             <DialogTitle>Sélectionner votre commune</DialogTitle>
           </DialogHeader>
-          <CommuneSelector onClose={handleCommuneSelectorClose} />
+          <CommuneSelector onClose={() => setShowCommuneSelector(false)} />
         </DialogContent>
       </Dialog>
     </header>
   );
 }
-
-// Mémoriser le Header pour éviter les re-renders inutiles
-export const Header = memo(HeaderComponent);
