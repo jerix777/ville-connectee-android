@@ -1,24 +1,16 @@
 
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/components/ui/use-toast";
-import { useState } from "react";
+import { toast } from "@/components/ui/sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { addEvent, getEventTypes } from "@/services/eventService";
-import { Plus, Calendar } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Calendar } from "lucide-react";
 
 export function AddEventForm() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { toast } = useToast();
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     titre: "",
@@ -42,11 +34,9 @@ export function AddEventForm() {
     mutationFn: addEvent,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
-      toast({
-        title: "Événement ajouté",
-        description: "L'événement a été ajouté avec succès",
+      toast("Événement ajouté avec succès", {
+        description: "L'événement a été ajouté et est maintenant visible par tous les utilisateurs.",
       });
-      setIsOpen(false);
       setFormData({
         titre: "",
         type_id: "",
@@ -61,10 +51,8 @@ export function AddEventForm() {
       });
     },
     onError: (error) => {
-      toast({
-        title: "Erreur",
+      toast("Erreur lors de l'ajout de l'événement", {
         description: "Une erreur est survenue lors de l'ajout de l'événement",
-        variant: "destructive"
       });
       console.error("Error adding event:", error);
     }
@@ -85,21 +73,14 @@ export function AddEventForm() {
   };
   
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Calendar className="h-5 w-5" />
           Nouvel événement
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center">
-            <Calendar className="mr-2 h-5 w-5" />
-            Nouvel événement
-          </DialogTitle>
-        </DialogHeader>
-        
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -224,10 +205,7 @@ export function AddEventForm() {
             </div>
           </div>
           
-          <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
-              Annuler
-            </Button>
+          <div className="flex justify-end">
             <Button 
               type="submit" 
               variant="secondary"
@@ -237,7 +215,7 @@ export function AddEventForm() {
             </Button>
           </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+    </Card>
   );
 }
