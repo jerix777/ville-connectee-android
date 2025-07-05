@@ -1,164 +1,99 @@
-
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
-import { getVillages, addVillage, updateVillage, deleteVillage, Village } from "@/services/villageService";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useQuery } from "@tanstack/react-query";
+import { getVillages, Village } from "@/services/villageService";
 import { VillageCard } from "./VillageCard";
-import VillageForm from "./VillageForm";
+import { AddVillageForm } from "./AddVillageForm";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, MapPin } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { toast } from "@/hooks/use-toast";
-import { Toaster } from "@/components/ui/toaster";
+import { Building, Plus, X } from "lucide-react";
 
 export default function VillagesPage() {
-  const [villages, setVillages] = useState<Village[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
-  const [editingVillage, setEditingVillage] = useState<Village | null>(null);
-  const [villageToDelete, setVillageToDelete] = useState<Village | null>(null);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>("tous");
 
-  const fetchVillages = async () => {
-    setLoading(true);
-    const data = await getVillages();
-    setVillages(data);
-    setLoading(false);
-  };
+  const { data: villages, isLoading, error } = useQuery({
+    queryKey: ["villages"],
+    queryFn: getVillages
+  });
 
-  useEffect(() => {
-    fetchVillages();
-  }, []);
-
-  const handleAddVillage = async (villageData: Omit<Village, "id" | "created_at">) => {
-    const result = await addVillage(villageData);
-    if (result) {
-      await fetchVillages();
-      setShowForm(false);
+  const renderVillages = (villagesList: Village[]) => {
+    if (villagesList.length === 0) {
+      return (
+        <div className="text-center py-10 text-muted-foreground">
+          Aucun village disponible dans cette catégorie.
+        </div>
+      );
     }
-  };
 
-  const handleUpdateVillage = async (villageData: Omit<Village, "id" | "created_at">) => {
-    if (!editingVillage) return;
-    
-    const result = await updateVillage(editingVillage.id, villageData);
-    if (result) {
-      await fetchVillages();
-      setEditingVillage(null);
-    }
-  };
-
-  const confirmDelete = async () => {
-    if (!villageToDelete) return;
-    
-    const success = await deleteVillage(villageToDelete.id);
-    if (success) {
-      toast({
-        title: "Village supprimé",
-        description: `Le village "${villageToDelete.nom}" a été supprimé`
-      });
-      setVillageToDelete(null);
-      await fetchVillages();
-    } else {
-      toast({
-        title: "Erreur",
-        description: "Impossible de supprimer le village",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleEdit = (village: Village) => {
-    setEditingVillage(village);
-    setShowForm(false);
-  };
-
-  const handleDelete = (village: Village) => {
-    setVillageToDelete(village);
-  };
-
-  const handleCancelForm = () => {
-    setShowForm(false);
-    setEditingVillage(null);
+    return (
+      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {villagesList.map((village) => (
+          <VillageCard key={village.id} village={village} />
+        ))}
+      </div>
+    );
   };
 
   return (
     <MainLayout>
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-center gap-2 mb-4">
-          <MapPin className="h-6 w-6 text-blue-600" />
-          <h1 className="text-2xl font-bold">Villages de la commune</h1>
+      <div className="container mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <Building className="text-ville-DEFAULT" />
+            Villages
+          </h1>
+
+          <div className="flex items-center gap-2">
+            <Button 
+              onClick={() => setShowAddForm(!showAddForm)} 
+              variant={showAddForm ? "outline" : "ville"}
+            >
+              {showAddForm ? (
+                <>
+                  <X size={16} /> Annuler
+                </>
+              ) : (
+                <>
+                  <Plus size={16} /> Ajouter un village
+                </>
+              )}
+            </Button>
+          </div>
         </div>
 
-        {!showForm && !editingVillage && (
-          <Button
-            onClick={() => setShowForm(true)}
-            className="mb-6"
-          >
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Ajouter un village
-          </Button>
-        )}
-
-        {showForm && (
-          <VillageForm
-            onSubmit={handleAddVillage}
-            onCancel={handleCancelForm}
-          />
-        )}
-
-        {editingVillage && (
-          <VillageForm
-            village={editingVillage}
-            onSubmit={handleUpdateVillage}
-            onCancel={handleCancelForm}
-          />
-        )}
-
-        {loading && <div className="py-4">Chargement...</div>}
-        {!loading && villages.length === 0 && (
-          <div className="text-gray-600 py-8 text-center">
-            Aucun village n'a été ajouté pour le moment.
+        {showAddForm && (
+          <div className="mb-8">
+            <AddVillageForm />
           </div>
         )}
-        
-        <div className="mt-6 space-y-6">
-          {villages.map((village) => (
-            <VillageCard 
-              key={village.id} 
-              village={village} 
-              onEdit={handleEdit} 
-              onDelete={handleDelete} 
-            />
-          ))}
-        </div>
 
-        {/* Confirmation dialog for delete */}
-        <AlertDialog open={!!villageToDelete} onOpenChange={(open) => !open && setVillageToDelete(null)}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Êtes-vous sûr?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Cette action va supprimer définitivement le village "{villageToDelete?.nom}".
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Annuler</AlertDialogCancel>
-              <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
-                Supprimer
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        {isLoading && (
+          <div className="text-center py-10">
+            <p className="text-muted-foreground">Chargement des villages...</p>
+          </div>
+        )}
+
+        {error && (
+          <div className="text-center py-10 text-red-500">
+            <p>Erreur lors du chargement des villages.</p>
+          </div>
+        )}
+
+        {!isLoading && !error && (
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="mb-6">
+              <TabsTrigger value="tous">
+                Tous les villages ({villages?.length || 0})
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="tous">
+              {renderVillages(villages || [])}
+            </TabsContent>
+          </Tabs>
+        )}
       </div>
-      <Toaster />
     </MainLayout>
   );
 }
