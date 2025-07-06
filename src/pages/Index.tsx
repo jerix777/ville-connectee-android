@@ -88,7 +88,7 @@ export default function Index() {
       <section className="mb-10">
         <div className="rounded-xl bg-gradient-to-r from-ville-DEFAULT to-ville-dark p-8 text-black">
           <h1 className="text-3xl md:text-4xl font-bold mb-4 text-black">
-            Bienvenue à Ouéllé
+            Bienvenue à Ouellé
           </h1>
           <p className="text-lg opacity-90 mb-6 text-black">
             la cité de l'innovation et du développement durable
