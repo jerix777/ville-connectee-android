@@ -25,6 +25,7 @@ import TribunePage from "./pages/Tribune";
 import SuggestionsPage from "./pages/Suggestions";
 import ServicesPage from "./pages/Services";
 import AuthPage from "./pages/Auth";
+import SettingsPage from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,7 @@ const App = () => (
             <Route path="/suggestions" element={<SuggestionsPage />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
