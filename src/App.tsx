@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { useUpdateChecker } from "@/hooks/useUpdateChecker";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import EvenementsPage from "./pages/Evenements";
@@ -29,36 +30,46 @@ import SettingsPage from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
+const AppContent = () => {
+  useUpdateChecker();
+  
+  return (
+    <>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/actualites" element={<ActualitesPage />} />
+          <Route path="/evenements" element={<EvenementsPage />} />
+          <Route path="/main-doeuvre" element={<MainDoeuvrePage />} />
+          <Route path="/marche" element={<MarchePage />} />
+          <Route path="/emplois" element={<EmploisPage />} />
+          <Route path="/annuaire" element={<AnnuairePage />} />
+          <Route path="/associations" element={<AssociationsPage />} />
+          <Route path="/immobilier" element={<ImmobilierPage />} />
+          <Route path="/alertes" element={<AlertesPage />} />
+          <Route path="/annonces" element={<AnnoncesPage />} />
+          <Route path="/villages" element={<VillagesPage />} />
+          <Route path="/necrologie" element={<NecrologiePage />} />
+          <Route path="/souvenirs" element={<SouvenirsPage />} />
+          <Route path="/tribune" element={<TribunePage />} />
+          <Route path="/suggestions" element={<SuggestionsPage />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/actualites" element={<ActualitesPage />} />
-            <Route path="/evenements" element={<EvenementsPage />} />
-            <Route path="/main-doeuvre" element={<MainDoeuvrePage />} />
-            <Route path="/marche" element={<MarchePage />} />
-            <Route path="/emplois" element={<EmploisPage />} />
-            <Route path="/annuaire" element={<AnnuairePage />} />
-            <Route path="/associations" element={<AssociationsPage />} />
-            <Route path="/immobilier" element={<ImmobilierPage />} />
-            <Route path="/alertes" element={<AlertesPage />} />
-            <Route path="/annonces" element={<AnnoncesPage />} />
-            <Route path="/villages" element={<VillagesPage />} />
-            <Route path="/necrologie" element={<NecrologiePage />} />
-            <Route path="/souvenirs" element={<SouvenirsPage />} />
-            <Route path="/tribune" element={<TribunePage />} />
-            <Route path="/suggestions" element={<SuggestionsPage />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/auth" element={<AuthPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <AppContent />
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>
