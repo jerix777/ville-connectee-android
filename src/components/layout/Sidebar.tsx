@@ -21,6 +21,7 @@ const navItems = [
   { path: "/", label: "Accueil", icon: Home },
   { path: "/actualites", label: "Actualités", icon: BookmarkCheck },
   { path: "/evenements", label: "Événements", icon: Calendar },
+  { path: "/messages", label: "Messages", icon: MessageSquare },
   { path: "/main-doeuvre", label: "Main d'œuvre", icon: Users },
   { path: "/marche", label: "Marché", icon: Star },
   { path: "/emplois", label: "Offres d'emploi", icon: BriefcaseBusiness },

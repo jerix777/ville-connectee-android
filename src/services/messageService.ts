@@ -1,0 +1,113 @@
+import { supabase } from "@/integrations/supabase/client";
+import { Tables, TablesInsert } from "@/integrations/supabase/types";
+
+export type Conversation = Tables<'conversations'>;
+export type Message = Tables<'messages'>;
+export type NewMessage = TablesInsert<'messages'>;
+
+export const messageService = {
+  // Get all conversations for current user
+  async getConversations() {
+    const { data, error } = await supabase
+      .from('conversations')
+      .select(`
+        *,
+        messages!messages_conversation_id_fkey (
+          content,
+          created_at,
+          sender_id
+        )
+      `)
+      .order('updated_at', { ascending: false })
+      .limit(1, { referencedTable: 'messages' });
+
+    if (error) throw error;
+    return data;
+  },
+
+  // Get messages for a specific conversation
+  async getMessages(conversationId: string) {
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('conversation_id', conversationId)
+      .order('created_at', { ascending: true });
+
+    if (error) throw error;
+    return data;
+  },
+
+  // Create or get existing conversation between two users
+  async getOrCreateConversation(otherUserId: string) {
+    const currentUserId = (await supabase.auth.getUser()).data.user?.id;
+    if (!currentUserId) throw new Error('User not authenticated');
+
+    // Try to find existing conversation
+    const { data: existing } = await supabase
+      .from('conversations')
+      .select('*')
+      .or(`and(participant1_id.eq.${currentUserId},participant2_id.eq.${otherUserId}),and(participant1_id.eq.${otherUserId},participant2_id.eq.${currentUserId})`)
+      .single();
+
+    if (existing) return existing;
+
+    // Create new conversation
+    const { data, error } = await supabase
+      .from('conversations')
+      .insert({
+        participant1_id: currentUserId,
+        participant2_id: otherUserId
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  // Send a message
+  async sendMessage(conversationId: string, content: string) {
+    const currentUserId = (await supabase.auth.getUser()).data.user?.id;
+    if (!currentUserId) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase
+      .from('messages')
+      .insert({
+        conversation_id: conversationId,
+        sender_id: currentUserId,
+        content
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  // Mark message as read
+  async markAsRead(messageId: string) {
+    const { error } = await supabase
+      .from('messages')
+      .update({ read_at: new Date().toISOString() })
+      .eq('id', messageId);
+
+    if (error) throw error;
+  },
+
+  // Subscribe to new messages in a conversation
+  subscribeToMessages(conversationId: string, onMessage: (message: Message) => void) {
+    return supabase
+      .channel(`messages:${conversationId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+          filter: `conversation_id=eq.${conversationId}`
+        },
+        (payload) => onMessage(payload.new as Message)
+      )
+      .subscribe();
+  }
+};
