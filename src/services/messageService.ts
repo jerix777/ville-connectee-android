@@ -94,6 +94,51 @@ export const messageService = {
     if (error) throw error;
   },
 
+  // Delete a message
+  async deleteMessage(messageId: string) {
+    const currentUserId = (await supabase.auth.getUser()).data.user?.id;
+    if (!currentUserId) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('messages')
+      .delete()
+      .eq('id', messageId)
+      .eq('sender_id', currentUserId); // Only allow users to delete their own messages
+
+    if (error) throw error;
+  },
+
+  // Edit a message
+  async editMessage(messageId: string, newContent: string) {
+    const currentUserId = (await supabase.auth.getUser()).data.user?.id;
+    if (!currentUserId) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase
+      .from('messages')
+      .update({ content: newContent })
+      .eq('id', messageId)
+      .eq('sender_id', currentUserId) // Only allow users to edit their own messages
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  // Delete a conversation
+  async deleteConversation(conversationId: string) {
+    const currentUserId = (await supabase.auth.getUser()).data.user?.id;
+    if (!currentUserId) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('conversations')
+      .delete()
+      .eq('id', conversationId)
+      .or(`participant1_id.eq.${currentUserId},participant2_id.eq.${currentUserId}`);
+
+    if (error) throw error;
+  },
+
   // Subscribe to new messages in a conversation
   subscribeToMessages(conversationId: string, onMessage: (message: Message) => void) {
     return supabase

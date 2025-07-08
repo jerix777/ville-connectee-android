@@ -4,12 +4,15 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { messageService, Message } from '@/services/messageService';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { toast } from '@/hooks/use-toast';
+import { Edit, Trash, MoreVertical } from 'lucide-react';
 
 interface MessageViewProps {
   conversationId: string;
@@ -18,6 +21,8 @@ interface MessageViewProps {
 export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
   const { user } = useAuth();
   const [newMessage, setNewMessage] = useState('');
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [editingContent, setEditingContent] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
 
@@ -38,6 +43,46 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
       toast({
         title: "Erreur",
         description: "Impossible d'envoyer le message",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const deleteMessageMutation = useMutation({
+    mutationFn: (messageId: string) => messageService.deleteMessage(messageId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['messages', conversationId] });
+      queryClient.invalidateQueries({ queryKey: ['conversations'] });
+      toast({
+        title: "Message supprimé",
+        description: "Le message a été supprimé avec succès"
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer le message",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const editMessageMutation = useMutation({
+    mutationFn: ({ messageId, content }: { messageId: string; content: string }) => 
+      messageService.editMessage(messageId, content),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['messages', conversationId] });
+      setEditingMessageId(null);
+      setEditingContent('');
+      toast({
+        title: "Message modifié",
+        description: "Le message a été modifié avec succès"
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Erreur",
+        description: "Impossible de modifier le message",
         variant: "destructive"
       });
     }
@@ -78,6 +123,25 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
     }
   };
 
+  const handleEditMessage = (message: Message) => {
+    setEditingMessageId(message.id);
+    setEditingContent(message.content);
+  };
+
+  const handleSaveEdit = () => {
+    if (!editingMessageId || !editingContent.trim()) return;
+    editMessageMutation.mutate({ messageId: editingMessageId, content: editingContent.trim() });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingMessageId(null);
+    setEditingContent('');
+  };
+
+  const handleDeleteMessage = (messageId: string) => {
+    deleteMessageMutation.mutate(messageId);
+  };
+
   return (
     <Card className="h-full flex flex-col">
       {/* Header */}
@@ -108,34 +172,112 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
         ) : (
           messages?.map((message) => {
             const isOwnMessage = message.sender_id === user?.id;
+            const isEditing = editingMessageId === message.id;
             
             return (
               <div
                 key={message.id}
                 className={cn(
-                  "flex",
+                  "flex group",
                   isOwnMessage ? "justify-end" : "justify-start"
                 )}
               >
                 <div
                   className={cn(
-                    "max-w-[70%] rounded-lg px-4 py-2",
+                    "max-w-[70%] rounded-lg px-4 py-2 relative",
                     isOwnMessage
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted"
                   )}
                 >
-                  <p className="text-sm">{message.content}</p>
-                  <p
-                    className={cn(
-                      "text-xs mt-1",
-                      isOwnMessage
-                        ? "text-primary-foreground/70"
-                        : "text-muted-foreground"
-                    )}
-                  >
-                    {format(new Date(message.created_at), 'HH:mm', { locale: fr })}
-                  </p>
+                  {isEditing ? (
+                    <div className="space-y-2">
+                      <Input
+                        value={editingContent}
+                        onChange={(e) => setEditingContent(e.target.value)}
+                        className="text-sm"
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleSaveEdit();
+                          } else if (e.key === 'Escape') {
+                            handleCancelEdit();
+                          }
+                        }}
+                      />
+                      <div className="flex space-x-2">
+                        <Button size="sm" onClick={handleSaveEdit} disabled={editMessageMutation.isPending}>
+                          Sauvegarder
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={handleCancelEdit}>
+                          Annuler
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="text-sm">{message.content}</p>
+                      <p
+                        className={cn(
+                          "text-xs mt-1",
+                          isOwnMessage
+                            ? "text-primary-foreground/70"
+                            : "text-muted-foreground"
+                        )}
+                      >
+                        {format(new Date(message.created_at), 'HH:mm', { locale: fr })}
+                      </p>
+                    </>
+                  )}
+
+                  {/* Menu d'actions pour les messages de l'utilisateur */}
+                  {isOwnMessage && !isEditing && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className={cn(
+                            "absolute -top-2 -right-2 h-6 w-6 p-0 opacity-0 group-hover:opacity-100",
+                            isOwnMessage ? "text-primary-foreground hover:bg-primary-foreground/20" : ""
+                          )}
+                        >
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleEditMessage(message)}>
+                          <Edit className="h-4 w-4 mr-2" />
+                          Modifier
+                        </DropdownMenuItem>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                              <Trash className="h-4 w-4 mr-2" />
+                              Supprimer
+                            </DropdownMenuItem>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Supprimer le message</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Êtes-vous sûr de vouloir supprimer ce message ? Cette action est irréversible.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Annuler</AlertDialogCancel>
+                              <AlertDialogAction 
+                                onClick={() => handleDeleteMessage(message.id)}
+                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                              >
+                                Supprimer
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
                 </div>
               </div>
             );

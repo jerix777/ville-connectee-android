@@ -1,21 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { ConversationList } from './ConversationList';
 import { MessageView } from './MessageView';
 import { messageService } from '@/services/messageService';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card } from '@/components/ui/card';
+import { toast } from '@/hooks/use-toast';
 
 const MessagesPage = () => {
   const { user } = useAuth();
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   const { data: conversations, isLoading } = useQuery({
     queryKey: ['conversations'],
     queryFn: messageService.getConversations,
     enabled: !!user
   });
+
+  const deleteConversationMutation = useMutation({
+    mutationFn: (conversationId: string) => messageService.deleteConversation(conversationId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['conversations'] });
+      if (selectedConversationId) {
+        setSelectedConversationId(null);
+      }
+      toast({
+        title: "Conversation supprimée",
+        description: "La conversation a été supprimée avec succès"
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer la conversation",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const handleDeleteConversation = (conversationId: string) => {
+    deleteConversationMutation.mutate(conversationId);
+  };
 
   if (!user) {
     return (
@@ -50,6 +77,7 @@ const MessagesPage = () => {
               isLoading={isLoading}
               selectedConversationId={selectedConversationId}
               onSelectConversation={setSelectedConversationId}
+              onDeleteConversation={handleDeleteConversation}
             />
           </div>
 
