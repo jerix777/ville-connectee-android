@@ -7,11 +7,16 @@ import { getEvents, Event } from "@/services/eventService";
 import { EventCard } from "./EventCard";
 import { AddEventForm } from "./AddEventForm";
 import { Button } from "@/components/ui/button";
-import { Calendar, Plus, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Calendar, Plus, Search } from "lucide-react";
+import { usePagination } from "@/hooks/usePagination";
+import { PaginationControls } from "@/components/ui/pagination-controls";
 
 export default function EvenementsPage() {
-  const [showAddForm, setShowAddForm] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("tous");
+  const [activeViewTab, setActiveViewTab] = useState<string>("liste");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const { data: events, isLoading, error } = useQuery({
     queryKey: ["events"],
@@ -19,97 +24,199 @@ export default function EvenementsPage() {
   });
 
   const today = new Date().toISOString().split('T')[0];
-  const eventsToday = events?.filter(event => event.date_debut === today) || [];
-  const upcomingEvents = events?.filter(event => event.date_debut > today) || [];
+  
+  const filteredEvents = (events || []).filter((event) => {
+    const matchesSearch = !searchQuery || 
+      event.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      event.lieu.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      event.organisateur.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    return matchesSearch;
+  });
 
-  const renderEvents = (eventsList: Event[]) => {
-    if (eventsList.length === 0) {
-      return (
-        <div className="text-center py-10 text-muted-foreground">
-          <Calendar size={48} className="mx-auto mb-4 text-muted-foreground" />
-          <p>Aucun événement disponible dans cette catégorie.</p>
-        </div>
-      );
+  const eventsToday = filteredEvents.filter(event => event.date_debut === today);
+  const upcomingEvents = filteredEvents.filter(event => event.date_debut > today);
+
+  const getTabData = () => {
+    switch (activeTab) {
+      case "aujourd-hui": return eventsToday;
+      case "a-venir": return upcomingEvents;
+      default: return filteredEvents;
     }
-
-    return (
-      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {eventsList.map((event) => (
-          <EventCard key={event.id} event={event} />
-        ))}
-      </div>
-    );
   };
+
+  const {
+    currentPage,
+    totalPages,
+    paginatedData: paginatedEvents,
+    goToPage,
+    canGoNext,
+    canGoPrevious,
+  } = usePagination({
+    data: getTabData(),
+    itemsPerPage: 9,
+  });
 
   return (
     <MainLayout>
-      <div className="container mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Calendar className="text-ville-DEFAULT" />
-            Événements
-          </h1>
-
-          <div className="flex items-center gap-2">
-            <Button 
-              onClick={() => setShowAddForm(!showAddForm)} 
-              variant={showAddForm ? "outline" : "ville"}
-            >
-              {showAddForm ? (
-                <>
-                  <X size={16} /> Annuler
-                </>
-              ) : (
-                <>
-                  <Plus size={16} /> Nouvel événement
-                </>
-              )}
-            </Button>
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center">
+              <Calendar className="mr-2" />
+              Événements
+            </h1>
+            <p className="text-gray-500 mt-1">
+              Découvrez et participez aux événements de la communauté
+            </p>
           </div>
+          
+          <Tabs 
+            value={activeViewTab} 
+            onValueChange={setActiveViewTab}
+            className="w-full md:w-auto"
+          >
+            <TabsList className="grid w-full md:w-auto grid-cols-2">
+              <TabsTrigger value="liste">Liste</TabsTrigger>
+              <TabsTrigger value="ajouter">Ajouter</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
 
-        {showAddForm && (
-          <div className="mb-8">
-            <AddEventForm />
+        {activeViewTab === "liste" && (
+          <div className="space-y-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-grow">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Input
+                  placeholder="Rechercher un événement..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setActiveViewTab("ajouter");
+                }}
+                className="whitespace-nowrap"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Ajouter
+              </Button>
+            </div>
+
+            {isLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="border rounded-lg p-4 space-y-4">
+                    <Skeleton className="h-40 w-full" />
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-2/3" />
+                  </div>
+                ))}
+              </div>
+            ) : error ? (
+              <div className="text-center py-10 text-red-500">
+                <p>Erreur lors du chargement des événements.</p>
+              </div>
+            ) : (
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <TabsList className="mb-6">
+                  <TabsTrigger value="tous">
+                    Tous ({filteredEvents.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="aujourd-hui">
+                    Aujourd'hui ({eventsToday.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="a-venir">
+                    À venir ({upcomingEvents.length})
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="tous">
+                  {filteredEvents.length === 0 ? (
+                    <div className="text-center py-10">
+                      <p className="text-gray-500">Aucun événement trouvé.</p>
+                      <Button 
+                        variant="link" 
+                        onClick={() => setSearchQuery("")}
+                      >
+                        Réinitialiser les filtres
+                      </Button>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        {paginatedEvents.map((event) => (
+                          <EventCard key={event.id} event={event} />
+                        ))}
+                      </div>
+                      <PaginationControls
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={goToPage}
+                        canGoNext={canGoNext}
+                        canGoPrevious={canGoPrevious}
+                      />
+                    </div>
+                  )}
+                </TabsContent>
+                
+                <TabsContent value="aujourd-hui">
+                  {eventsToday.length === 0 ? (
+                    <div className="text-center py-10">
+                      <p className="text-gray-500">Aucun événement aujourd'hui.</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        {paginatedEvents.map((event) => (
+                          <EventCard key={event.id} event={event} />
+                        ))}
+                      </div>
+                      <PaginationControls
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={goToPage}
+                        canGoNext={canGoNext}
+                        canGoPrevious={canGoPrevious}
+                      />
+                    </div>
+                  )}
+                </TabsContent>
+                
+                <TabsContent value="a-venir">
+                  {upcomingEvents.length === 0 ? (
+                    <div className="text-center py-10">
+                      <p className="text-gray-500">Aucun événement à venir.</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        {paginatedEvents.map((event) => (
+                          <EventCard key={event.id} event={event} />
+                        ))}
+                      </div>
+                      <PaginationControls
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={goToPage}
+                        canGoNext={canGoNext}
+                        canGoPrevious={canGoPrevious}
+                      />
+                    </div>
+                  )}
+                </TabsContent>
+              </Tabs>
+            )}
           </div>
         )}
-
-        {isLoading && (
-          <div className="text-center py-10">
-            <p className="text-muted-foreground">Chargement des événements...</p>
-          </div>
-        )}
-
-        {error && (
-          <div className="text-center py-10 text-red-500">
-            <p>Erreur lors du chargement des événements.</p>
-          </div>
-        )}
-
-        {!isLoading && !error && (
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="mb-6">
-              <TabsTrigger value="tous">
-                Tous les événements ({events?.length || 0})
-              </TabsTrigger>
-              <TabsTrigger value="aujourd-hui">
-                Aujourd'hui ({eventsToday.length})
-              </TabsTrigger>
-              <TabsTrigger value="a-venir">
-                À venir ({upcomingEvents.length})
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="tous">
-              {renderEvents(events || [])}
-            </TabsContent>
-            <TabsContent value="aujourd-hui">
-              {renderEvents(eventsToday)}
-            </TabsContent>
-            <TabsContent value="a-venir">
-              {renderEvents(upcomingEvents)}
-            </TabsContent>
-          </Tabs>
+        
+        {activeViewTab === "ajouter" && (
+          <AddEventForm />
         )}
       </div>
     </MainLayout>
