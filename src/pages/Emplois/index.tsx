@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { AddOffreForm } from "./AddOffreForm";
@@ -24,7 +23,7 @@ export default function EmploisPage() {
     <MainLayout>
       <div className="max-w-3xl mx-auto">
         <AddOffreForm onAdded={refresh} />
-        <h1 className="text-2xl font-bold mb-6 mt-3">Offres d’emploi</h1>
+        <h1 className="text-xl font-bold mb-6 mt-3">Offres d'emploi</h1>
         {loading && <div>Chargement...</div>}
         {!loading && offres.length === 0 && <div className="text-gray-600">Aucune offre pour le moment.</div>}
         <div>

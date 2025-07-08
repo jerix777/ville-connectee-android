@@ -62,7 +62,7 @@ export default function MarchePage() {
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold flex items-center">
+            <h1 className="text-2xl font-bold flex items-center">
               <ShoppingBag className="mr-2" />
               Marché
             </h1>

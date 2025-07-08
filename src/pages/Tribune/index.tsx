@@ -59,7 +59,7 @@ export default function TribunePage() {
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold flex items-center">
+            <h1 className="text-2xl font-bold flex items-center">
               <MessageSquare className="mr-2" />
               Tribune Libre
             </h1>
@@ -170,7 +170,7 @@ export default function TribunePage() {
         {activeTab === "ajouter" && (
           <div className="max-w-lg mx-auto">
             <div className="mb-6">
-              <h2 className="text-2xl font-semibold mb-2">Ajouter une tribune</h2>
+              <h2 className="text-xl font-semibold mb-2">Ajouter une tribune</h2>
               <p className="text-gray-600">
                 Partagez votre opinion avec la communauté. Les tribunes doivent être approuvées avant d'être visibles par tous.
               </p>
