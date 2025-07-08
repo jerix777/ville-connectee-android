@@ -510,33 +510,48 @@ export type Database = {
           contact1: string
           contact2: string | null
           created_at: string | null
+          email: string | null
           id: string
+          is_verified: boolean | null
           metier_id: string
           nom: string
+          phone: string | null
           quartier_id: string | null
           surnom: string | null
+          user_id: string | null
+          verification_method: string | null
         }
         Insert: {
           base: string
           contact1: string
           contact2?: string | null
           created_at?: string | null
+          email?: string | null
           id?: string
+          is_verified?: boolean | null
           metier_id: string
           nom: string
+          phone?: string | null
           quartier_id?: string | null
           surnom?: string | null
+          user_id?: string | null
+          verification_method?: string | null
         }
         Update: {
           base?: string
           contact1?: string
           contact2?: string | null
           created_at?: string | null
+          email?: string | null
           id?: string
+          is_verified?: boolean | null
           metier_id?: string
           nom?: string
+          phone?: string | null
           quartier_id?: string | null
           surnom?: string | null
+          user_id?: string | null
+          verification_method?: string | null
         }
         Relationships: [
           {
@@ -856,7 +871,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      request_professional_verification: {
+        Args: { professional_id: string; method: string }
+        Returns: Json
+      }
+      verify_professional: {
+        Args: { professional_id: string; verification_code: string }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never

@@ -15,6 +15,7 @@ import MarchePage from "./pages/Marche";
 import ActualitesPage from "./pages/Actualites";
 import EmploisPage from "./pages/Emplois";
 import AnnuairePage from "./pages/Annuaire";
+import MyProfilePage from "./pages/Annuaire/MyProfile";
 import AssociationsPage from "./pages/Associations";
 import ImmobilierPage from "./pages/Immobilier";
 import AlertesPage from "./pages/Alertes";
@@ -47,6 +48,7 @@ const AppContent = () => {
           <Route path="/marche" element={<MarchePage />} />
           <Route path="/emplois" element={<EmploisPage />} />
           <Route path="/annuaire" element={<AnnuairePage />} />
+          <Route path="/annuaire/mon-profil" element={<MyProfilePage />} />
           <Route path="/associations" element={<AssociationsPage />} />
           <Route path="/immobilier" element={<ImmobilierPage />} />
           <Route path="/alertes" element={<AlertesPage />} />

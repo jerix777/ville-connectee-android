@@ -5,9 +5,15 @@ import { MainLayout } from "@/components/layout/MainLayout";
 import { DirectoryCard } from "./DirectoryCard";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Search, UserPlus } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function AnnuairePage() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  
   const { data: metiers = [] } = useQuery({
     queryKey: ['metiers'],
     queryFn: getMetiers
@@ -40,8 +46,18 @@ export default function AnnuairePage() {
   return (
     <MainLayout>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2 text-dark-purple">Annuaire</h1>
-        <p className="text-gray-600">Trouvez les professionnels, artisans et contacts utiles de la ville regroupés par domaine.</p>
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h1 className="text-3xl font-bold mb-2 text-dark-purple">Annuaire</h1>
+            <p className="text-gray-600">Trouvez les professionnels, artisans et contacts utiles de la ville regroupés par domaine.</p>
+          </div>
+          {user && (
+            <Button onClick={() => navigate('/annuaire/mon-profil')} className="flex items-center space-x-2">
+              <UserPlus className="h-4 w-4" />
+              <span>Mon profil professionnel</span>
+            </Button>
+          )}
+        </div>
       </div>
       <div className="mb-6 max-w-xl">
         <div className="relative">
