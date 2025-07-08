@@ -11,17 +11,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { SuggestionCard } from "./SuggestionCard";
 import { AddSuggestionForm } from "./AddSuggestionForm";
 import { fetchSuggestions } from "@/services/suggestionService";
-import { Spinner } from "@/components/ui/spinner";
-import { MessageSquare, Plus, Search } from "lucide-react";
+import { Lightbulb, Plus, Search } from "lucide-react";
 import { usePagination } from "@/hooks/usePagination";
 import { PaginationControls } from "@/components/ui/pagination-controls";
 
 export default function SuggestionsPage() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState<string>("liste");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data: suggestions, isLoading, refetch } = useQuery({
@@ -29,14 +31,16 @@ export default function SuggestionsPage() {
     queryFn: fetchSuggestions,
   });
 
-  const filteredSuggestions = suggestions?.filter(
-    (suggestion) =>
-      suggestion.titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      suggestion.contenu.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      suggestion.auteur.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredSuggestions = (suggestions || []).filter((suggestion) => {
+    const matchesSearch = !searchQuery || 
+      suggestion.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      suggestion.contenu.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      suggestion.auteur.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (suggestion.quartiers?.nom &&
-        suggestion.quartiers.nom.toLowerCase().includes(searchTerm.toLowerCase()))
-  ) || [];
+        suggestion.quartiers.nom.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    return matchesSearch;
+  });
 
   const {
     currentPage,
@@ -52,67 +56,130 @@ export default function SuggestionsPage() {
 
   return (
     <MainLayout>
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center">
-            <MessageSquare className="h-8 w-8 mr-2 text-ville-DEFAULT" />
-            <h1 className="text-3xl font-bold text-gray-800">Suggestions</h1>
-          </div>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="flex items-center">
-                <Plus className="mr-2 h-4 w-4" />
-                Faire une suggestion
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-lg">
-              <DialogHeader>
-                <DialogTitle>Nouvelle suggestion</DialogTitle>
-                <DialogDescription>
-                  Proposez vos idées pour améliorer la communauté. Les suggestions sont examinées par l'équipe municipale.
-                </DialogDescription>
-              </DialogHeader>
-              <AddSuggestionForm onSuccess={() => {
-                setIsDialogOpen(false);
-                refetch();
-              }} />
-            </DialogContent>
-          </Dialog>
-        </div>
-        <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <Input
-            type="text"
-            placeholder="Rechercher une suggestion..."
-            className="pl-10 pr-4"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        {isLoading ? (
-          <div className="flex justify-center items-center py-12">
-            <Spinner size="xl" />
-          </div>
-        ) : filteredSuggestions.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-lg text-gray-500">
-              Aucune suggestion trouvée. Soyez le premier à proposer une idée !
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center">
+              <Lightbulb className="mr-2" />
+              Suggestions
+            </h1>
+            <p className="text-gray-500 mt-1">
+              Proposez vos idées pour améliorer la communauté
             </p>
           </div>
-        ) : (
-          <div>
-            <div className="grid grid-cols-1 gap-6">
-              {paginatedSuggestions.map((suggestion) => (
-                <SuggestionCard key={suggestion.id} suggestion={suggestion} />
-              ))}
+          
+          <Tabs 
+            value={activeTab} 
+            onValueChange={setActiveTab}
+            className="w-full md:w-auto"
+          >
+            <TabsList className="grid w-full md:w-auto grid-cols-2">
+              <TabsTrigger value="liste">Liste</TabsTrigger>
+              <TabsTrigger value="ajouter">Ajouter</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+
+        {activeTab === "liste" && (
+          <div className="space-y-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-grow">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Input
+                  placeholder="Rechercher une suggestion par titre, contenu, auteur..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setActiveTab("ajouter");
+                }}
+                className="whitespace-nowrap"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Ajouter
+              </Button>
             </div>
-            <PaginationControls
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={goToPage}
-              canGoNext={canGoNext}
-              canGoPrevious={canGoPrevious}
-            />
+
+            {isLoading ? (
+              <div className="space-y-6">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="border rounded-lg p-6 space-y-4">
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="h-8 w-8 rounded-full" />
+                      <Skeleton className="h-6 w-32" />
+                      <Skeleton className="h-6 w-20 ml-auto" />
+                    </div>
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-2/3" />
+                  </div>
+                ))}
+              </div>
+            ) : filteredSuggestions.length === 0 ? (
+              <div className="text-center py-10">
+                <Lightbulb className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                <p className="text-gray-500 mb-4">
+                  {searchQuery ? "Aucune suggestion trouvée avec ces critères." : "Aucune suggestion soumise pour le moment."}
+                </p>
+                {searchQuery ? (
+                  <Button 
+                    variant="link" 
+                    onClick={() => setSearchQuery("")}
+                  >
+                    Réinitialiser les filtres
+                  </Button>
+                ) : (
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setActiveTab("ajouter")}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Faire la première suggestion
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <div>
+                <div className="mb-4">
+                  <p className="text-sm text-gray-600">
+                    {filteredSuggestions.length} suggestion{filteredSuggestions.length > 1 ? 's' : ''} trouvée{filteredSuggestions.length > 1 ? 's' : ''}
+                    {searchQuery && ` pour "${searchQuery}"`}
+                  </p>
+                </div>
+                <div className="space-y-6">
+                  {paginatedSuggestions.map((suggestion) => (
+                    <SuggestionCard key={suggestion.id} suggestion={suggestion} />
+                  ))}
+                </div>
+                <PaginationControls
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={goToPage}
+                  canGoNext={canGoNext}
+                  canGoPrevious={canGoPrevious}
+                />
+              </div>
+            )}
+          </div>
+        )}
+        
+        {activeTab === "ajouter" && (
+          <div className="max-w-lg mx-auto">
+            <div className="mb-6">
+              <h2 className="text-2xl font-semibold mb-2">Nouvelle suggestion</h2>
+              <p className="text-gray-600">
+                Proposez vos idées pour améliorer la communauté. Les suggestions sont examinées par l'équipe municipale.
+              </p>
+            </div>
+            <AddSuggestionForm onSuccess={() => {
+              setActiveTab("liste");
+              refetch();
+            }} />
           </div>
         )}
       </div>
