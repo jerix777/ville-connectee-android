@@ -143,24 +143,32 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
   };
 
   return (
-    <Card className="h-full flex flex-col">
+    <div className="h-full flex flex-col bg-background">
       {/* Header */}
-      <div className="p-4 border-b">
+      <div className="p-4 border-b bg-background">
         <div className="flex items-center space-x-3">
-          <Avatar className="h-8 w-8">
-            <div className="w-full h-full bg-primary/10 flex items-center justify-center">
-              <span className="text-sm font-medium">U</span>
+          <Avatar className="h-10 w-10">
+            <div className="w-full h-full bg-emerald-500 flex items-center justify-center">
+              <span className="text-white font-semibold">J</span>
             </div>
           </Avatar>
-          <div>
-            <h3 className="font-medium">Utilisateur</h3>
-            <p className="text-xs text-muted-foreground">En ligne</p>
+          <div className="flex-1">
+            <h3 className="font-semibold">Jacquie.orange</h3>
+            <p className="text-sm text-muted-foreground">+225 07 09 56 5823</p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button variant="ghost" size="sm">
+              <span className="text-xl">📞</span>
+            </Button>
+            <Button variant="ghost" size="sm">
+              <span className="text-xl">ℹ️</span>
+            </Button>
           </div>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-muted/5">
         {isLoading ? (
           <div className="text-center py-8">
             <p className="text-muted-foreground">Chargement des messages...</p>
@@ -178,16 +186,16 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
               <div
                 key={message.id}
                 className={cn(
-                  "flex group",
+                  "flex group mb-2",
                   isOwnMessage ? "justify-end" : "justify-start"
                 )}
               >
                 <div
                   className={cn(
-                    "max-w-[70%] rounded-lg px-4 py-2 relative",
+                    "max-w-[70%] rounded-2xl px-4 py-3 relative shadow-sm",
                     isOwnMessage
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
+                      ? "bg-purple-500 text-white rounded-br-md"
+                      : "bg-white border rounded-bl-md"
                   )}
                 >
                   {isEditing ? (
@@ -216,16 +224,8 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
                     </div>
                   ) : (
                     <>
-                      <p className="text-sm">{message.content}</p>
-                      <p
-                        className={cn(
-                          "text-xs mt-1",
-                          isOwnMessage
-                            ? "text-primary-foreground/70"
-                            : "text-muted-foreground"
-                        )}
-                      >
-                        {format(new Date(message.created_at), 'HH:mm', { locale: fr })}
+                      <p className={cn("text-sm", isOwnMessage ? "text-white" : "text-gray-800")}>
+                        {message.content}
                       </p>
                     </>
                   )}
@@ -237,10 +237,7 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className={cn(
-                            "absolute -top-2 -right-2 h-6 w-6 p-0 opacity-0 group-hover:opacity-100",
-                            isOwnMessage ? "text-primary-foreground hover:bg-primary-foreground/20" : ""
-                          )}
+                          className="absolute -top-2 -right-2 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 text-white hover:bg-white/20"
                         >
                           <MoreVertical className="h-4 w-4" />
                         </Button>
@@ -287,24 +284,36 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
       </div>
 
       {/* Message input */}
-      <div className="p-4 border-t">
-        <form onSubmit={handleSendMessage} className="flex space-x-2">
+      <div className="p-4 border-t bg-background">
+        <form onSubmit={handleSendMessage} className="flex items-center space-x-3">
+          <Button variant="ghost" size="sm" type="button">
+            <span className="text-xl">😊</span>
+          </Button>
+          <Button variant="ghost" size="sm" type="button">
+            <span className="text-xl">📎</span>
+          </Button>
+          <Button variant="ghost" size="sm" type="button">
+            <span className="text-xl">🖼️</span>
+          </Button>
           <Input
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Tapez votre message..."
+            placeholder="Saisir un message"
             disabled={sendMessageMutation.isPending}
-            className="flex-1"
+            className="flex-1 rounded-full bg-muted/30 border-0 focus-visible:ring-1"
           />
           <Button
             type="submit"
             disabled={!newMessage.trim() || sendMessageMutation.isPending}
+            variant="ghost"
+            size="sm"
+            className="rounded-full"
           >
-            Envoyer
+            <span className="text-xl">➤</span>
           </Button>
         </form>
       </div>
-    </Card>
+    </div>
   );
 };

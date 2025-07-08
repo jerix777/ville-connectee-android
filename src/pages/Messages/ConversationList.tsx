@@ -29,6 +29,7 @@ interface ConversationListProps {
   selectedConversationId: string | null;
   onSelectConversation: (id: string) => void;
   onDeleteConversation: (id: string) => void;
+  searchTerm?: string;
 }
 
 export const ConversationList: React.FC<ConversationListProps> = ({
@@ -36,16 +37,25 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   isLoading,
   selectedConversationId,
   onSelectConversation,
-  onDeleteConversation
+  onDeleteConversation,
+  searchTerm = ''
 }) => {
+  // Filtrer les conversations selon le terme de recherche
+  const filteredConversations = conversations.filter(conversation => {
+    const lastMessage = conversation.messages?.[0];
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      !searchTerm ||
+      (lastMessage && lastMessage.content.toLowerCase().includes(searchLower))
+    );
+  });
   if (isLoading) {
     return (
-      <Card className="h-full p-4">
-        <h2 className="text-lg font-semibold mb-4">Conversations</h2>
+      <div className="h-full p-4">
         <div className="space-y-3">
-          {[...Array(5)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <div key={i} className="flex items-center space-x-3 p-3 rounded-lg">
-              <Skeleton className="h-10 w-10 rounded-full" />
+              <Skeleton className="h-12 w-12 rounded-full" />
               <div className="flex-1 space-y-2">
                 <Skeleton className="h-4 w-3/4" />
                 <Skeleton className="h-3 w-1/2" />
@@ -53,49 +63,64 @@ export const ConversationList: React.FC<ConversationListProps> = ({
             </div>
           ))}
         </div>
-      </Card>
+      </div>
     );
   }
 
+  // Créer un tableau d'avatars colorés pour chaque conversation
+  const getAvatarColor = (conversationId: string) => {
+    const colors = [
+      'bg-emerald-500', 'bg-blue-500', 'bg-purple-500', 'bg-pink-500', 
+      'bg-orange-500', 'bg-cyan-500', 'bg-indigo-500', 'bg-red-500'
+    ];
+    const index = conversationId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return colors[index % colors.length];
+  };
+
   return (
-    <Card className="h-full">
+    <div className="h-full flex flex-col">
+      {/* Section Récent */}
       <div className="p-4 border-b">
-        <h2 className="text-lg font-semibold">Conversations</h2>
+        <h3 className="text-sm font-medium text-muted-foreground flex items-center">
+          <span className="mr-2">▼</span> Récent
+        </h3>
       </div>
       
-      <div className="p-2 space-y-1 overflow-y-auto">
-        {conversations.length === 0 ? (
+      <div className="flex-1 overflow-y-auto">
+        {filteredConversations.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-muted-foreground">Aucune conversation</p>
+            <p className="text-muted-foreground">
+              {searchTerm ? 'Aucune conversation trouvée' : 'Aucune conversation'}
+            </p>
           </div>
         ) : (
-          conversations.map((conversation) => {
+          filteredConversations.map((conversation) => {
             const lastMessage = conversation.messages?.[0];
             const isSelected = selectedConversationId === conversation.id;
+            const avatarColor = getAvatarColor(conversation.id);
             
             return (
               <div
                 key={conversation.id}
                 className={cn(
-                  "flex items-center space-x-3 p-3 rounded-lg transition-colors group",
-                  "hover:bg-accent",
-                  isSelected && "bg-accent"
+                  "flex items-center p-3 hover:bg-accent/50 transition-colors group border-l-4 border-transparent",
+                  isSelected && "bg-accent border-l-primary"
                 )}
               >
                 <div 
                   className="flex items-center space-x-3 flex-1 cursor-pointer"
                   onClick={() => onSelectConversation(conversation.id)}
                 >
-                  <Avatar className="h-10 w-10">
-                    <div className="w-full h-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-sm font-medium">U</span>
+                  <Avatar className="h-12 w-12">
+                    <div className={cn("w-full h-full flex items-center justify-center text-white", avatarColor)}>
+                      <span className="text-lg font-semibold">J</span>
                     </div>
                   </Avatar>
                   
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium truncate">
-                        Utilisateur
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-sm font-semibold truncate">
+                        Jacquie.orange
                       </p>
                       {lastMessage && (
                         <span className="text-xs text-muted-foreground">
@@ -112,13 +137,6 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                         {lastMessage.content}
                       </p>
                     )}
-                  </div>
-                  
-                  {/* Badge pour les messages non lus (à implémenter plus tard) */}
-                  <div className="flex-shrink-0">
-                    <Badge variant="secondary" className="h-5 w-5 p-0 flex items-center justify-center text-xs">
-                      2
-                    </Badge>
                   </div>
                 </div>
 
@@ -166,6 +184,6 @@ export const ConversationList: React.FC<ConversationListProps> = ({
           })
         )}
       </div>
-    </Card>
+    </div>
   );
 };
