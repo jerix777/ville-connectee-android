@@ -1,0 +1,83 @@
+import React, { useRef, useEffect } from 'react';
+import { Message } from '@/services/messageService';
+import { MessageBubble } from './MessageBubble';
+
+interface MessageListProps {
+  messages: Message[] | undefined;
+  isLoading: boolean;
+  currentUserId: string | undefined;
+  editingMessageId: string | null;
+  editingContent: string;
+  setEditingContent: (content: string) => void;
+  onEditMessage: (message: Message) => void;
+  onSaveEdit: () => void;
+  onCancelEdit: () => void;
+  onDeleteMessage: (messageId: string) => void;
+  editMessagePending: boolean;
+}
+
+export const MessageList: React.FC<MessageListProps> = ({
+  messages,
+  isLoading,
+  currentUserId,
+  editingMessageId,
+  editingContent,
+  setEditingContent,
+  onEditMessage,
+  onSaveEdit,
+  onCancelEdit,
+  onDeleteMessage,
+  editMessagePending
+}) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-muted/5">
+        <div className="text-center py-8">
+          <p className="text-muted-foreground">Chargement des messages...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!messages || messages.length === 0) {
+    return (
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-muted/5">
+        <div className="text-center py-8">
+          <p className="text-muted-foreground">Aucun message dans cette conversation</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-muted/5">
+      {messages.map((message) => {
+        const isOwnMessage = message.sender_id === currentUserId;
+        const isEditing = editingMessageId === message.id;
+        
+        return (
+          <MessageBubble
+            key={message.id}
+            message={message}
+            isOwnMessage={isOwnMessage}
+            isEditing={isEditing}
+            editingContent={editingContent}
+            setEditingContent={setEditingContent}
+            onEditMessage={onEditMessage}
+            onSaveEdit={onSaveEdit}
+            onCancelEdit={onCancelEdit}
+            onDeleteMessage={onDeleteMessage}
+            editMessagePending={editMessagePending}
+          />
+        );
+      })}
+      <div ref={messagesEndRef} />
+    </div>
+  );
+};
