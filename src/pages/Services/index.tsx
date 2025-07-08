@@ -52,7 +52,7 @@ export default function ServicesPage() {
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold flex items-center">
+            <h1 className="text-xl font-bold flex items-center">
               <Building className="mr-2" />
               Services et commerces
             </h1>

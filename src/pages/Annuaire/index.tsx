@@ -48,7 +48,7 @@ export default function AnnuairePage() {
       <div className="mb-6">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h1 className="text-2xl font-bold mb-2 text-dark-purple">Annuaire</h1>
+            <h1 className="text-xl font-bold mb-2 text-dark-purple">Annuaire</h1>
             <p className="text-gray-600">Trouvez les professionnels, artisans et contacts utiles de la ville regroupés par domaine.</p>
           </div>
           {user && (
@@ -81,7 +81,7 @@ export default function AnnuairePage() {
       ) : (
         Object.entries(professionalsByMetier).map(([metierId, { metier, list }]) => (
           <div key={metierId} className="mb-10">
-            <h2 className="text-xl font-semibold mb-3 text-primary-purple">{metier.nom}</h2>
+            <h2 className="text-lg font-semibold mb-3 text-primary-purple">{metier.nom}</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {list.map(professional => (
                 <DirectoryCard key={professional.id} professional={professional} />

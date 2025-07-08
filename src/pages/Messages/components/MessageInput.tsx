@@ -21,13 +21,13 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     <div className="p-4 border-t bg-background">
       <form onSubmit={onSendMessage} className="flex items-center space-x-3">
         <Button variant="ghost" size="sm" type="button">
-          <span className="text-xl">😊</span>
+          <span className="text-lg">😊</span>
         </Button>
         <Button variant="ghost" size="sm" type="button">
-          <span className="text-xl">📎</span>
+          <span className="text-lg">📎</span>
         </Button>
         <Button variant="ghost" size="sm" type="button">
-          <span className="text-xl">🖼️</span>
+          <span className="text-lg">🖼️</span>
         </Button>
         <Input
           value={newMessage}
@@ -44,7 +44,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           size="sm"
           className="rounded-full"
         >
-          <span className="text-xl">➤</span>
+          <span className="text-lg">➤</span>
         </Button>
       </form>
     </div>

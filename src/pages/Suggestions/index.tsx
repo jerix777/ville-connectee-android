@@ -59,7 +59,7 @@ export default function SuggestionsPage() {
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold flex items-center">
+            <h1 className="text-xl font-bold flex items-center">
               <Lightbulb className="mr-2" />
               Suggestions
             </h1>
@@ -171,7 +171,7 @@ export default function SuggestionsPage() {
         {activeTab === "ajouter" && (
           <div className="max-w-lg mx-auto">
             <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Nouvelle suggestion</h2>
+              <h2 className="text-lg font-semibold mb-2">Nouvelle suggestion</h2>
               <p className="text-gray-600">
                 Proposez vos idées pour améliorer la communauté. Les suggestions sont examinées par l'équipe municipale.
               </p>

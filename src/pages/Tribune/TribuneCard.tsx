@@ -33,7 +33,7 @@ export function TribuneCard({ tribune }: TribuneCardProps) {
       )}
       <CardHeader className="pb-2">
         <div className="space-y-1">
-          <h3 className="text-xl font-bold leading-tight text-gray-800">
+          <h3 className="text-lg font-bold leading-tight text-gray-800">
             {tribune.titre}
           </h3>
           {tribune.quartiers && (

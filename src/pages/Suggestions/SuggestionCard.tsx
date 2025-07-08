@@ -43,7 +43,7 @@ export function SuggestionCard({ suggestion }: SuggestionCardProps) {
       <CardHeader className="pb-2">
         <div className="space-y-1">
           <div className="flex items-start justify-between">
-            <h3 className="text-xl font-bold leading-tight text-gray-800">
+            <h3 className="text-lg font-bold leading-tight text-gray-800">
               {suggestion.titre}
             </h3>
             <Badge className={statusColor}>{suggestion.status}</Badge>

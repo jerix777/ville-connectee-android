@@ -68,10 +68,10 @@ export const MessageHeader: React.FC<MessageHeaderProps> = ({ conversationId }) 
         </div>
         <div className="flex items-center space-x-2">
           <Button variant="ghost" size="sm">
-            <span className="text-xl">📞</span>
+            <span className="text-lg">📞</span>
           </Button>
           <Button variant="ghost" size="sm">
-            <span className="text-xl">ℹ️</span>
+            <span className="text-lg">ℹ️</span>
           </Button>
         </div>
       </div>

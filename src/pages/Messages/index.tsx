@@ -87,7 +87,7 @@ const MessagesPage = () => {
       <MainLayout>
         <div className="container mx-auto px-4 py-8">
           <Card className="p-6 text-center">
-            <h2 className="text-xl font-semibold mb-2">Connexion requise</h2>
+            <h2 className="text-lg font-semibold mb-2">Connexion requise</h2>
             <p className="text-muted-foreground">
               Veuillez vous connecter pour accéder à vos messages.
             </p>
@@ -103,7 +103,7 @@ const MessagesPage = () => {
         {/* Header avec titre et barre de recherche - Desktop uniquement */}
         <div className={`flex-shrink-0 p-4 border-b ${selectedConversationId ? 'hidden md:block' : 'block'}`}>
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl font-bold">Messages</h1>
+            <h1 className="text-lg font-bold">Messages</h1>
             <Button 
               variant="outline" 
               size="sm"

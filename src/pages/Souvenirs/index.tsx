@@ -59,7 +59,7 @@ export default function SouvenirsPage() {
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold flex items-center">
+            <h1 className="text-xl font-bold flex items-center">
               <BookmarkCheck className="mr-2" />
               Souvenirs
             </h1>
@@ -166,7 +166,7 @@ export default function SouvenirsPage() {
         {activeTab === "ajouter" && (
           <div className="max-w-lg mx-auto">
             <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Ajouter un souvenir</h2>
+              <h2 className="text-lg font-semibold mb-2">Ajouter un souvenir</h2>
               <p className="text-gray-600">
                 Partagez un souvenir avec la communauté. Les souvenirs sont des moments précieux qui contribuent à la mémoire collective.
               </p>

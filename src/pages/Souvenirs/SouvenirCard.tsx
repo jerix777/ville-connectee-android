@@ -40,7 +40,7 @@ export const SouvenirCard = ({ souvenir }: SouvenirCardProps) => {
         </div>
       )}
       <CardHeader className="p-4">
-        <CardTitle className="text-xl">{souvenir.titre}</CardTitle>
+        <CardTitle className="text-lg">{souvenir.titre}</CardTitle>
       </CardHeader>
       <CardContent className="p-4 pt-0">
         <p className="text-muted-foreground line-clamp-3 mb-4">

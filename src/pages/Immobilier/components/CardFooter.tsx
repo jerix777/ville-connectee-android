@@ -14,7 +14,7 @@ export function CardFooter({ prix, isForSale, vendeur, contact }: CardFooterProp
   return (
     <UICardFooter className="flex flex-col items-start border-t pt-3">
       <div className="flex justify-between w-full">
-        <div className="text-ville-DEFAULT font-bold text-xl">
+        <div className="text-ville-DEFAULT font-bold text-lg">
           {formatPrice(prix)}
           {!isForSale && <span className="text-sm font-normal">/mois</span>}
         </div>

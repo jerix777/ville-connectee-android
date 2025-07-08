@@ -73,7 +73,7 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
         
         <h1 
           className={cn(
-            "text-xl font-bold cursor-pointer",
+            "text-lg font-bold cursor-pointer",
             "hover:underline"
           )}
           onClick={() => setShowCommuneSelector(true)}

@@ -50,7 +50,7 @@ export function ServiceCommerceCard({ service }: ServiceCommerceCardProps) {
       <CardHeader className="pb-2">
         <div className="space-y-1">
           <div className="flex items-start justify-between">
-            <h3 className="text-xl font-bold leading-tight text-gray-800">
+            <h3 className="text-lg font-bold leading-tight text-gray-800">
               {service.nom}
             </h3>
             <Badge className={categoryColor}>{service.categorie}</Badge>

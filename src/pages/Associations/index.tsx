@@ -30,7 +30,7 @@ export default function AssociationsPage() {
   return (
     <MainLayout>
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-xl font-bold mb-6 flex items-center gap-2">
+        <h1 className="text-lg font-bold mb-6 flex items-center gap-2">
           {/* Icône retirée pour homogénéité, mais peut être ajoutée si tu veux */}
           Associations de la ville
         </h1>

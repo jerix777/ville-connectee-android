@@ -65,7 +65,7 @@ export default function MainDoeuvrePage() {
   return (
     <MainLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-2">Main d'œuvre</h1>
+        <h1 className="text-xl font-bold mb-2">Main d'œuvre</h1>
         <p className="text-gray-600">
           Trouvez des professionnels qualifiés dans votre zone
         </p>
@@ -132,7 +132,7 @@ export default function MainDoeuvrePage() {
         <div>
           {Object.entries(workersByDomain).map(([domainId, { metier, workers }]) => (
             <div key={domainId} className="mb-8">
-              <h2 className="text-xl font-semibold mb-4 text-ville-dark">{metier.nom}</h2>
+              <h2 className="text-lg font-semibold mb-4 text-ville-dark">{metier.nom}</h2>
               {workers.map(worker => (
                 <WorkerCard key={worker.id} worker={worker} />
               ))}

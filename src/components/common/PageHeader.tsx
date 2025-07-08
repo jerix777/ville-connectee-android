@@ -11,7 +11,7 @@ interface PageHeaderProps {
 export function PageHeader({ title, description, icon: Icon, iconClassName }: PageHeaderProps) {
   return (
     <div>
-      <h1 className="text-2xl font-bold flex items-center">
+      <h1 className="text-xl font-bold flex items-center">
         <Icon className={`mr-2 ${iconClassName || ''}`} />
         {title}
       </h1>

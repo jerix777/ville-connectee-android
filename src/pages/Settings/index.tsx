@@ -71,7 +71,7 @@ export default function SettingsPage() {
       <div className="container mx-auto max-w-4xl">
         <div className="flex items-center gap-2 mb-6">
           <Settings className="text-ville-DEFAULT" />
-          <h1 className="text-xl font-bold">Paramètres</h1>
+          <h1 className="text-lg font-bold">Paramètres</h1>
         </div>
 
         <Tabs defaultValue="profile" className="w-full">

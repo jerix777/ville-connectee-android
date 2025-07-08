@@ -20,7 +20,7 @@ export default function MyProfilePage() {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Retour à l'annuaire
           </Button>
-          <h1 className="text-2xl font-bold text-dark-purple">Mon Profil Professionnel</h1>
+          <h1 className="text-xl font-bold text-dark-purple">Mon Profil Professionnel</h1>
           <p className="text-gray-600 mt-2">
             Gérez votre présence dans l'annuaire des professionnels
           </p>
