@@ -10,7 +10,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
-import { Search, Edit } from 'lucide-react';
+import { Search, Edit, ArrowLeft } from 'lucide-react';
 
 const MessagesPage = () => {
   const { user } = useAuth();
@@ -93,8 +93,8 @@ const MessagesPage = () => {
   return (
     <MainLayout>
       <div className="h-screen flex flex-col bg-background">
-        {/* Header avec titre et barre de recherche */}
-        <div className="flex-shrink-0 p-4 border-b">
+        {/* Header avec titre et barre de recherche - Desktop uniquement */}
+        <div className={`flex-shrink-0 p-4 border-b ${selectedConversationId ? 'hidden md:block' : 'block'}`}>
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold">Messages</h1>
             <Button variant="outline" size="sm">
@@ -113,10 +113,27 @@ const MessagesPage = () => {
           </div>
         </div>
 
+        {/* Header mobile pour conversation */}
+        {selectedConversationId && (
+          <div className="md:hidden flex-shrink-0 p-4 border-b bg-background">
+            <div className="flex items-center space-x-3">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setSelectedConversationId(null)}
+                className="p-2"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <h1 className="text-lg font-semibold">Conversation</h1>
+            </div>
+          </div>
+        )}
+
         {/* Contenu principal */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Liste des conversations */}
-          <div className="w-80 border-r bg-background">
+          {/* Liste des conversations - Masquée sur mobile quand une conversation est sélectionnée */}
+          <div className={`w-full md:w-80 border-r bg-background ${selectedConversationId ? 'hidden md:block' : 'block'}`}>
             <ConversationList
               conversations={conversations || []}
               isLoading={isLoading}
@@ -127,8 +144,8 @@ const MessagesPage = () => {
             />
           </div>
 
-          {/* Vue des messages */}
-          <div className="flex-1">
+          {/* Vue des messages - Plein écran sur mobile */}
+          <div className={`flex-1 ${selectedConversationId ? 'block' : 'hidden md:block'}`}>
             {selectedConversationId ? (
               <MessageView conversationId={selectedConversationId} />
             ) : (
