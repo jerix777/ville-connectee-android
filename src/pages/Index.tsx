@@ -74,7 +74,7 @@ const featuresSection2 = [
     description: "Mémoire collective"
   },
   {
-    title: "Tribune & Suggestions",
+    title: "Suggestions",
     icon: MessageSquare,
     to: "/tribune",
     description: "Votre espace d'expression"
