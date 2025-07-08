@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { ConversationList } from './ConversationList';
 import { MessageView } from './MessageView';
+import { NewConversationModal } from './components/NewConversationModal';
 import { messageService } from '@/services/messageService';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card } from '@/components/ui/card';
@@ -17,6 +18,7 @@ const MessagesPage = () => {
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
+  const [showNewConversationModal, setShowNewConversationModal] = useState(false);
   const queryClient = useQueryClient();
 
   // Gérer la création d'une nouvelle conversation depuis l'annuaire
@@ -75,6 +77,11 @@ const MessagesPage = () => {
     deleteConversationMutation.mutate(conversationId);
   };
 
+  const handleConversationCreated = (conversationId: string) => {
+    queryClient.invalidateQueries({ queryKey: ['conversations'] });
+    setSelectedConversationId(conversationId);
+  };
+
   if (!user) {
     return (
       <MainLayout>
@@ -97,7 +104,11 @@ const MessagesPage = () => {
         <div className={`flex-shrink-0 p-4 border-b ${selectedConversationId ? 'hidden md:block' : 'block'}`}>
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold">Messages</h1>
-            <Button variant="outline" size="sm">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => setShowNewConversationModal(true)}
+            >
               <Edit className="h-4 w-4 mr-2" />
               Nouveau
             </Button>
@@ -160,6 +171,13 @@ const MessagesPage = () => {
             )}
           </div>
         </div>
+
+        {/* Modal de création de nouvelle conversation */}
+        <NewConversationModal
+          open={showNewConversationModal}
+          onOpenChange={setShowNewConversationModal}
+          onConversationCreated={handleConversationCreated}
+        />
       </div>
     </MainLayout>
   );
