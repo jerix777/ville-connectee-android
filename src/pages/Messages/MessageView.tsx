@@ -131,7 +131,7 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
 
   return (
     <div className="h-full flex flex-col bg-background">
-      <MessageHeader />
+      <MessageHeader conversationId={conversationId} />
       
       <MessageList
         messages={messages}
