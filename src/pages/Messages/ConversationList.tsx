@@ -10,6 +10,9 @@ import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { MoreVertical, Trash } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Conversation {
   id: string;
@@ -40,15 +43,60 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   onDeleteConversation,
   searchTerm = ''
 }) => {
+  const { user } = useAuth();
+
+  // Get user profiles for conversations
+  const { data: userProfiles } = useQuery({
+    queryKey: ['conversation-profiles', conversations.map(c => c.id)],
+    queryFn: async () => {
+      if (!conversations.length || !user) return {};
+      
+      const otherUserIds = conversations.map(conv => 
+        conv.participant1_id === user.id ? conv.participant2_id : conv.participant1_id
+      ).filter(Boolean);
+      
+      const { data, error } = await supabase
+        .from('users_profiles')
+        .select('user_id, nom, prenom')
+        .in('user_id', otherUserIds);
+      
+      if (error) throw error;
+      
+      return data.reduce((acc, profile) => {
+        acc[profile.user_id] = profile;
+        return acc;
+      }, {} as Record<string, any>);
+    },
+    enabled: !!conversations.length && !!user
+  });
+
   // Filtrer les conversations selon le terme de recherche
   const filteredConversations = conversations.filter(conversation => {
     const lastMessage = conversation.messages?.[0];
+    const otherUserId = conversation.participant1_id === user?.id 
+      ? conversation.participant2_id 
+      : conversation.participant1_id;
+    const profile = userProfiles?.[otherUserId];
+    const displayName = profile ? `${profile.prenom || ''} ${profile.nom || ''}`.trim() : 'Utilisateur';
+    
     const searchLower = searchTerm.toLowerCase();
     return (
       !searchTerm ||
+      displayName.toLowerCase().includes(searchLower) ||
       (lastMessage && lastMessage.content.toLowerCase().includes(searchLower))
     );
   });
+
+  // Créer un tableau d'avatars colorés pour chaque conversation
+  const getAvatarColor = (conversationId: string) => {
+    const colors = [
+      'bg-primary', 'bg-blue-500', 'bg-purple-500', 'bg-pink-500', 
+      'bg-orange-500', 'bg-cyan-500', 'bg-indigo-500', 'bg-red-500'
+    ];
+    const index = conversationId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return colors[index % colors.length];
+  };
+
   if (isLoading) {
     return (
       <div className="h-full p-4">
@@ -66,16 +114,6 @@ export const ConversationList: React.FC<ConversationListProps> = ({
       </div>
     );
   }
-
-  // Créer un tableau d'avatars colorés pour chaque conversation
-  const getAvatarColor = (conversationId: string) => {
-    const colors = [
-      'bg-emerald-500', 'bg-blue-500', 'bg-purple-500', 'bg-pink-500', 
-      'bg-orange-500', 'bg-cyan-500', 'bg-indigo-500', 'bg-red-500'
-    ];
-    const index = conversationId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    return colors[index % colors.length];
-  };
 
   return (
     <div className="h-full flex flex-col">
@@ -99,6 +137,15 @@ export const ConversationList: React.FC<ConversationListProps> = ({
             const isSelected = selectedConversationId === conversation.id;
             const avatarColor = getAvatarColor(conversation.id);
             
+            const otherUserId = conversation.participant1_id === user?.id 
+              ? conversation.participant2_id 
+              : conversation.participant1_id;
+            const profile = userProfiles?.[otherUserId];
+            const displayName = profile ? `${profile.prenom || ''} ${profile.nom || ''}`.trim() || 'Utilisateur' : 'Utilisateur';
+            const initials = profile 
+              ? `${profile.prenom?.[0] || ''}${profile.nom?.[0] || ''}`.toUpperCase() || 'U'
+              : 'U';
+            
             return (
               <div
                 key={conversation.id}
@@ -113,14 +160,14 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                 >
                   <Avatar className="h-12 w-12">
                     <div className={cn("w-full h-full flex items-center justify-center text-white", avatarColor)}>
-                      <span className="text-lg font-semibold">J</span>
+                      <span className="text-lg font-semibold">{initials}</span>
                     </div>
                   </Avatar>
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
                       <p className="text-sm font-semibold truncate">
-                        Jacquie.orange
+                        {displayName}
                       </p>
                       {lastMessage && (
                         <span className="text-xs text-muted-foreground">
