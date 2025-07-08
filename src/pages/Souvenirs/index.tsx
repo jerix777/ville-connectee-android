@@ -11,17 +11,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { SouvenirCard } from "./SouvenirCard";
 import { AddSouvenirForm } from "./AddSouvenirForm";
 import { fetchSouvenirs } from "@/services/souvenirService";
-import { Spinner } from "@/components/ui/spinner";
 import { BookmarkCheck, Plus, Search } from "lucide-react";
 import { usePagination } from "@/hooks/usePagination";
 import { PaginationControls } from "@/components/ui/pagination-controls";
 
 export default function SouvenirsPage() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState<string>("liste");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data: souvenirs, isLoading } = useQuery({
@@ -29,14 +31,16 @@ export default function SouvenirsPage() {
     queryFn: fetchSouvenirs,
   });
 
-  const filteredSouvenirs = souvenirs?.filter(
-    (souvenir) =>
-      souvenir.titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      souvenir.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      souvenir.auteur.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredSouvenirs = (souvenirs || []).filter((souvenir) => {
+    const matchesSearch = !searchQuery || 
+      souvenir.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      souvenir.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      souvenir.auteur.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (souvenir.quartiers?.nom &&
-        souvenir.quartiers.nom.toLowerCase().includes(searchTerm.toLowerCase()))
-  ) || [];
+        souvenir.quartiers.nom.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    return matchesSearch;
+  });
 
   const {
     currentPage,
@@ -52,64 +56,122 @@ export default function SouvenirsPage() {
 
   return (
     <MainLayout>
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center">
-            <BookmarkCheck className="h-8 w-8 mr-2 text-ville-DEFAULT" />
-            <h1 className="text-3xl font-bold text-gray-800">Souvenirs</h1>
-          </div>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="flex items-center">
-                <Plus className="mr-2 h-4 w-4" />
-                Ajouter un souvenir
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-lg">
-              <DialogHeader>
-                <DialogTitle>Ajouter un souvenir</DialogTitle>
-                <DialogDescription>
-                  Partagez un souvenir avec la communauté. Les souvenirs sont des moments précieux qui contribuent à la mémoire collective.
-                </DialogDescription>
-              </DialogHeader>
-              <AddSouvenirForm onSuccess={() => setIsDialogOpen(false)} />
-            </DialogContent>
-          </Dialog>
-        </div>
-        <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <Input
-            type="text"
-            placeholder="Rechercher un souvenir..."
-            className="pl-10 pr-4"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        {isLoading ? (
-          <div className="flex justify-center items-center py-12">
-            <Spinner size="xl" />
-          </div>
-        ) : filteredSouvenirs.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-lg text-gray-500">
-              Aucun souvenir trouvé. Ajoutez le premier !
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center">
+              <BookmarkCheck className="mr-2" />
+              Souvenirs
+            </h1>
+            <p className="text-gray-500 mt-1">
+              Partagez et découvrez les moments précieux de la communauté
             </p>
           </div>
-        ) : (
-          <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {paginatedSouvenirs.map((souvenir) => (
-                <SouvenirCard key={souvenir.id} souvenir={souvenir} />
-              ))}
+          
+          <Tabs 
+            value={activeTab} 
+            onValueChange={setActiveTab}
+            className="w-full md:w-auto"
+          >
+            <TabsList className="grid w-full md:w-auto grid-cols-2">
+              <TabsTrigger value="liste">Liste</TabsTrigger>
+              <TabsTrigger value="ajouter">Ajouter</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+
+        {activeTab === "liste" && (
+          <div className="space-y-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-grow">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Input
+                  placeholder="Rechercher un souvenir par titre, description, auteur..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setActiveTab("ajouter");
+                }}
+                className="whitespace-nowrap"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Ajouter
+              </Button>
             </div>
-            <PaginationControls
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={goToPage}
-              canGoNext={canGoNext}
-              canGoPrevious={canGoPrevious}
-            />
+
+            {isLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="border rounded-lg p-4 space-y-4">
+                    <Skeleton className="h-40 w-full" />
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-2/3" />
+                  </div>
+                ))}
+              </div>
+            ) : filteredSouvenirs.length === 0 ? (
+              <div className="text-center py-10">
+                <BookmarkCheck className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                <p className="text-gray-500 mb-4">
+                  {searchQuery ? "Aucun souvenir trouvé avec ces critères." : "Aucun souvenir partagé pour le moment."}
+                </p>
+                {searchQuery ? (
+                  <Button 
+                    variant="link" 
+                    onClick={() => setSearchQuery("")}
+                  >
+                    Réinitialiser les filtres
+                  </Button>
+                ) : (
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setActiveTab("ajouter")}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Partager le premier souvenir
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <div>
+                <div className="mb-4">
+                  <p className="text-sm text-gray-600">
+                    {filteredSouvenirs.length} souvenir{filteredSouvenirs.length > 1 ? 's' : ''} trouvé{filteredSouvenirs.length > 1 ? 's' : ''}
+                    {searchQuery && ` pour "${searchQuery}"`}
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {paginatedSouvenirs.map((souvenir) => (
+                    <SouvenirCard key={souvenir.id} souvenir={souvenir} />
+                  ))}
+                </div>
+                <PaginationControls
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={goToPage}
+                  canGoNext={canGoNext}
+                  canGoPrevious={canGoPrevious}
+                />
+              </div>
+            )}
+          </div>
+        )}
+        
+        {activeTab === "ajouter" && (
+          <div className="max-w-lg mx-auto">
+            <div className="mb-6">
+              <h2 className="text-2xl font-semibold mb-2">Ajouter un souvenir</h2>
+              <p className="text-gray-600">
+                Partagez un souvenir avec la communauté. Les souvenirs sont des moments précieux qui contribuent à la mémoire collective.
+              </p>
+            </div>
+            <AddSouvenirForm onSuccess={() => setActiveTab("liste")} />
           </div>
         )}
       </div>
