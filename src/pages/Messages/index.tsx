@@ -103,7 +103,7 @@ const MessagesPage = () => {
         {/* Header avec titre et barre de recherche - Desktop uniquement */}
         <div className={`flex-shrink-0 p-4 border-b ${selectedConversationId ? 'hidden md:block' : 'block'}`}>
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-lg font-bold">Messages</h1>
+            <h1 className="text-lg font-bold">Messageries</h1>
             <Button 
               variant="outline" 
               size="sm"
