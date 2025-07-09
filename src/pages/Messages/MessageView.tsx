@@ -129,6 +129,41 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
     deleteMessageMutation.mutate(messageId);
   };
 
+  const handleFileAttach = (file: File, type: 'image' | 'document') => {
+    // Pour l'instant, on simule l'envoi de fichier en tant que message texte
+    const fileName = file.name;
+    const fileSize = (file.size / 1024).toFixed(1) + 'KB';
+    const message = `📎 Fichier: ${fileName} (${fileSize})`;
+    sendMessageMutation.mutate(message);
+    
+    toast({
+      title: "Fichier envoyé",
+      description: `${fileName} a été envoyé`
+    });
+  };
+
+  const handleVoiceMessage = (audioBlob: Blob) => {
+    // Pour l'instant, on simule l'envoi d'un message vocal
+    const message = "🎤 Message vocal (" + (audioBlob.size / 1024).toFixed(1) + "KB)";
+    sendMessageMutation.mutate(message);
+    
+    toast({
+      title: "Message vocal envoyé",
+      description: "Votre enregistrement a été envoyé"
+    });
+  };
+
+  const handlePhotoCapture = (photoBlob: Blob) => {
+    // Pour l'instant, on simule l'envoi d'une photo
+    const message = "📷 Photo (" + (photoBlob.size / 1024).toFixed(1) + "KB)";
+    sendMessageMutation.mutate(message);
+    
+    toast({
+      title: "Photo envoyée",
+      description: "Votre photo a été envoyée"
+    });
+  };
+
   return (
     <div className="h-full flex flex-col bg-background">
       <MessageHeader conversationId={conversationId} />
@@ -153,6 +188,9 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
         onSendMessage={handleSendMessage}
         onKeyPress={handleKeyPress}
         sendMessagePending={sendMessageMutation.isPending}
+        onFileAttach={handleFileAttach}
+        onVoiceMessage={handleVoiceMessage}
+        onPhotoCapture={handlePhotoCapture}
       />
     </div>
   );
