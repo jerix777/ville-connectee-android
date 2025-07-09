@@ -55,22 +55,25 @@ export const MessageHeader: React.FC<MessageHeaderProps> = ({ conversationId }) 
     : 'U';
 
   return (
-    <div className="p-4 border-b bg-background">
+    <div className="px-4 py-3 border-b border-[#e8eaed] bg-white shadow-sm">
       <div className="flex items-center space-x-3">
         <Avatar className="h-10 w-10">
-          <div className="w-full h-full bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-semibold">{initials}</span>
+          <div className="w-full h-full bg-[#1976d2] flex items-center justify-center">
+            <span className="text-white font-medium text-sm">{initials}</span>
           </div>
         </Avatar>
         <div className="flex-1">
-          <h3 className="font-semibold">{displayName}</h3>
-          <p className="text-sm text-muted-foreground">En ligne</p>
+          <h3 className="text-[16px] font-medium text-[#202124]">{displayName}</h3>
+          <p className="text-[12px] text-[#5f6368]">Actif maintenant</p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="sm">
+        <div className="flex items-center space-x-1">
+          <Button variant="ghost" size="sm" className="h-10 w-10 p-0 text-[#5f6368] hover:bg-[#f8f9fa] rounded-full">
             <span className="text-lg">📞</span>
           </Button>
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" className="h-10 w-10 p-0 text-[#5f6368] hover:bg-[#f8f9fa] rounded-full">
+            <span className="text-lg">📹</span>
+          </Button>
+          <Button variant="ghost" size="sm" className="h-10 w-10 p-0 text-[#5f6368] hover:bg-[#f8f9fa] rounded-full">
             <span className="text-lg">ℹ️</span>
           </Button>
         </div>

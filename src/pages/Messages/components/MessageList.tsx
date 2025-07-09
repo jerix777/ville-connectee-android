@@ -37,9 +37,9 @@ export const MessageList: React.FC<MessageListProps> = ({
 
   if (isLoading) {
     return (
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-muted/5">
+      <div className="flex-1 overflow-y-auto py-2 bg-white">
         <div className="text-center py-8">
-          <p className="text-muted-foreground">Chargement des messages...</p>
+          <p className="text-[#5f6368]">Chargement des messages...</p>
         </div>
       </div>
     );
@@ -47,16 +47,16 @@ export const MessageList: React.FC<MessageListProps> = ({
 
   if (!messages || messages.length === 0) {
     return (
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-muted/5">
+      <div className="flex-1 overflow-y-auto py-2 bg-white">
         <div className="text-center py-8">
-          <p className="text-muted-foreground">Aucun message dans cette conversation</p>
+          <p className="text-[#5f6368]">Aucun message dans cette conversation</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-muted/5">
+    <div className="flex-1 overflow-y-auto py-2 bg-white">
       {messages.map((message) => {
         const isOwnMessage = message.sender_id === currentUserId;
         const isEditing = editingMessageId === message.id;

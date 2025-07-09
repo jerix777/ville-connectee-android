@@ -116,18 +116,18 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col bg-white">
       {/* Section Récent */}
-      <div className="p-4 border-b">
-        <h3 className="text-sm font-medium text-muted-foreground flex items-center">
-          <span className="mr-2">▼</span> Récent
+      <div className="px-4 py-2 bg-white border-b border-[#e8eaed]">
+        <h3 className="text-[14px] font-medium text-[#5f6368]">
+          Messages
         </h3>
       </div>
       
       <div className="flex-1 overflow-y-auto">
         {filteredConversations.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-muted-foreground">
+            <p className="text-[#5f6368]">
               {searchTerm ? 'Aucune conversation trouvée' : 'Aucune conversation'}
             </p>
           </div>
@@ -150,37 +150,35 @@ export const ConversationList: React.FC<ConversationListProps> = ({
               <div
                 key={conversation.id}
                 className={cn(
-                  "flex items-center p-3 hover:bg-accent/50 transition-colors group border-l-4 border-transparent",
-                  isSelected && "bg-accent border-l-primary"
+                  "flex items-center p-4 hover:bg-[#f8f9fa] transition-colors group cursor-pointer",
+                  isSelected && "bg-[#e3f2fd]"
                 )}
+                onClick={() => onSelectConversation(conversation.id)}
               >
-                <div 
-                  className="flex items-center space-x-3 flex-1 cursor-pointer"
-                  onClick={() => onSelectConversation(conversation.id)}
-                >
-                  <Avatar className="h-12 w-12">
-                    <div className={cn("w-full h-full flex items-center justify-center text-white", avatarColor)}>
-                      <span className="text-lg font-semibold">{initials}</span>
+                <div className="flex items-center space-x-3 flex-1">
+                  <Avatar className="h-11 w-11">
+                    <div className="w-full h-full flex items-center justify-center bg-[#1976d2] text-white">
+                      <span className="text-sm font-medium">{initials}</span>
                     </div>
                   </Avatar>
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <p className="text-sm font-semibold truncate">
+                      <p className="text-[16px] font-medium text-[#202124] truncate">
                         {displayName}
                       </p>
                       {lastMessage && (
-                        <span className="text-xs text-muted-foreground">
-                          {formatDistanceToNow(new Date(lastMessage.created_at), {
-                            addSuffix: true,
-                            locale: fr
+                        <span className="text-[12px] text-[#5f6368] ml-2">
+                          {new Date(lastMessage.created_at).toLocaleTimeString('fr-FR', { 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
                           })}
                         </span>
                       )}
                     </div>
                     
                     {lastMessage && (
-                      <p className="text-sm text-muted-foreground truncate">
+                      <p className="text-[14px] text-[#5f6368] truncate">
                         {lastMessage.content}
                       </p>
                     )}

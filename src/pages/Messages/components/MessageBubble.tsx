@@ -35,16 +35,16 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   return (
     <div
       className={cn(
-        "flex group mb-2",
+        "flex group mb-1 px-2",
         isOwnMessage ? "justify-end" : "justify-start"
       )}
     >
       <div
         className={cn(
-          "max-w-[70%] rounded-2xl px-4 py-3 relative shadow-sm",
+          "max-w-[80%] rounded-[18px] px-4 py-2 relative",
           isOwnMessage
-            ? "bg-purple-500 text-white rounded-br-md"
-            : "bg-white border rounded-bl-md"
+            ? "bg-[#1976d2] text-white rounded-br-[4px] ml-8"
+            : "bg-[#f1f3f4] text-[#202124] rounded-bl-[4px] mr-8"
         )}
       >
         {isEditing ? (
@@ -72,9 +72,21 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
             </div>
           </div>
         ) : (
-          <p className={cn("text-sm", isOwnMessage ? "text-white" : "text-gray-800")}>
-            {message.content}
-          </p>
+          <>
+            <p className={cn("text-[14px] leading-[20px]", isOwnMessage ? "text-white" : "text-[#202124]")}>
+              {message.content}
+            </p>
+            {/* Timestamp */}
+            <div className={cn(
+              "text-[11px] mt-1 opacity-70",
+              isOwnMessage ? "text-right text-white" : "text-left text-[#5f6368]"
+            )}>
+              {new Date(message.created_at).toLocaleTimeString('fr-FR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+              })}
+            </div>
+          </>
         )}
 
         {/* Menu d'actions pour les messages de l'utilisateur */}
