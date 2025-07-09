@@ -118,16 +118,16 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   return (
     <div className="h-full flex flex-col bg-white">
       {/* Section Récent */}
-      <div className="px-4 py-2 bg-white border-b border-[#e8eaed]">
-        <h3 className="text-[14px] font-medium text-[#5f6368]">
+      <div className="px-3 sm:px-4 py-2 bg-white border-b border-[#e8eaed]">
+        <h3 className="text-sm font-medium text-[#5f6368]">
           Messages
         </h3>
       </div>
       
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
         {filteredConversations.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-[#5f6368]">
+          <div className="text-center py-6 sm:py-8 px-4">
+            <p className="text-sm sm:text-base text-[#5f6368]">
               {searchTerm ? 'Aucune conversation trouvée' : 'Aucune conversation'}
             </p>
           </div>
@@ -150,13 +150,13 @@ export const ConversationList: React.FC<ConversationListProps> = ({
               <div
                 key={conversation.id}
                 className={cn(
-                  "flex items-center p-4 hover:bg-[#f8f9fa] transition-colors group cursor-pointer",
+                  "flex items-center p-3 sm:p-4 hover:bg-[#f8f9fa] transition-colors group cursor-pointer touch-manipulation",
                   isSelected && "bg-[#e3f2fd]"
                 )}
                 onClick={() => onSelectConversation(conversation.id)}
               >
-                <div className="flex items-center space-x-3 flex-1">
-                  <Avatar className="h-11 w-11">
+                <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
+                  <Avatar className="h-10 w-10 sm:h-11 sm:w-11 flex-shrink-0">
                     <div className="w-full h-full flex items-center justify-center bg-[#1976d2] text-white">
                       <span className="text-sm font-medium">{initials}</span>
                     </div>
@@ -164,11 +164,11 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <p className="text-[16px] font-medium text-[#202124] truncate">
+                      <p className="text-sm sm:text-base font-medium text-[#202124] truncate pr-2">
                         {displayName}
                       </p>
                       {lastMessage && (
-                        <span className="text-[12px] text-[#5f6368] ml-2">
+                        <span className="text-xs text-[#5f6368] flex-shrink-0">
                           {new Date(lastMessage.created_at).toLocaleTimeString('fr-FR', { 
                             hour: '2-digit', 
                             minute: '2-digit' 
@@ -178,7 +178,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                     </div>
                     
                     {lastMessage && (
-                      <p className="text-[14px] text-[#5f6368] truncate">
+                      <p className="text-xs sm:text-sm text-[#5f6368] truncate">
                         {lastMessage.content}
                       </p>
                     )}
@@ -191,7 +191,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100"
+                      className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 sm:opacity-0 flex-shrink-0 ml-1"
                     >
                       <MoreVertical className="h-4 w-4" />
                     </Button>

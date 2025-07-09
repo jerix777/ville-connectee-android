@@ -100,17 +100,19 @@ const MessagesPage = () => {
   return (
     <MainLayout>
       <div className="h-screen flex flex-col bg-background">
-        {/* Header avec titre et barre de recherche - Desktop uniquement */}
-        <div className={`flex-shrink-0 p-4 border-b ${selectedConversationId ? 'hidden md:block' : 'block'}`}>
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-lg font-bold">Messageries</h1>
+        {/* Header avec titre et barre de recherche - Desktop et tablette */}
+        <div className={`flex-shrink-0 p-3 sm:p-4 border-b ${selectedConversationId ? 'hidden lg:block' : 'block'}`}>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
+            <h1 className="text-lg sm:text-xl font-bold">Messageries</h1>
             <Button 
               variant="outline" 
               size="sm"
               onClick={() => setShowNewConversationModal(true)}
+              className="w-full sm:w-auto"
             >
               <Edit className="h-4 w-4 mr-2" />
-              Nouveau
+              <span className="hidden sm:inline">Nouveau</span>
+              <span className="sm:hidden">Nouvelle conversation</span>
             </Button>
           </div>
           <div className="relative">
@@ -119,32 +121,34 @@ const MessagesPage = () => {
               placeholder="Rechercher des messages"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-muted/30"
+              className="pl-10 bg-muted/30 h-10 sm:h-9"
             />
           </div>
         </div>
 
         {/* Header mobile pour conversation */}
         {selectedConversationId && (
-          <div className="md:hidden flex-shrink-0 p-4 border-b bg-background">
+          <div className="lg:hidden flex-shrink-0 p-3 sm:p-4 border-b bg-background">
             <div className="flex items-center space-x-3">
               <Button 
                 variant="ghost" 
                 size="sm" 
                 onClick={() => setSelectedConversationId(null)}
-                className="p-2"
+                className="p-2 hover:bg-muted"
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-lg font-semibold">Conversation</h1>
+              <h1 className="text-base sm:text-lg font-semibold truncate">Conversation</h1>
             </div>
           </div>
         )}
 
         {/* Contenu principal */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Liste des conversations - Masquée sur mobile quand une conversation est sélectionnée */}
-          <div className={`w-full md:w-80 border-r bg-background ${selectedConversationId ? 'hidden md:block' : 'block'}`}>
+          {/* Liste des conversations - Responsive selon la taille d'écran */}
+          <div className={`w-full sm:w-80 lg:w-96 xl:w-80 border-r bg-background transition-all duration-200 ${
+            selectedConversationId ? 'hidden lg:block' : 'block'
+          }`}>
             <ConversationList
               conversations={conversations || []}
               isLoading={isLoading}
@@ -155,15 +159,17 @@ const MessagesPage = () => {
             />
           </div>
 
-          {/* Vue des messages - Plein écran sur mobile */}
-          <div className={`flex-1 ${selectedConversationId ? 'block' : 'hidden md:block'}`}>
+          {/* Vue des messages - Responsive avec transitions */}
+          <div className={`flex-1 transition-all duration-200 ${
+            selectedConversationId ? 'block' : 'hidden lg:block'
+          }`}>
             {selectedConversationId ? (
               <MessageView conversationId={selectedConversationId} />
             ) : (
-              <div className="h-full flex items-center justify-center bg-muted/5">
-                <div className="text-center">
-                  <h3 className="text-lg font-medium mb-2">Sélectionnez une conversation</h3>
-                  <p className="text-muted-foreground">
+              <div className="h-full flex items-center justify-center bg-muted/5 p-4">
+                <div className="text-center max-w-md">
+                  <h3 className="text-base sm:text-lg font-medium mb-2">Sélectionnez une conversation</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground">
                     Choisissez une conversation dans la liste pour commencer à échanger.
                   </p>
                 </div>
