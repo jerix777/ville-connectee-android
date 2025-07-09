@@ -93,6 +93,36 @@ export type Database = {
           },
         ]
       }
+      autorite_zones: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          user_id: string
+          zone_id: string | null
+          zone_nom: string
+          zone_type: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          user_id: string
+          zone_id?: string | null
+          zone_nom: string
+          zone_type: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          user_id?: string
+          zone_id?: string | null
+          zone_nom?: string
+          zone_type?: string
+        }
+        Relationships: []
+      }
       commune: {
         Row: {
           created_at: string
@@ -504,6 +534,39 @@ export type Database = {
           },
         ]
       }
+      professionnel_competences: {
+        Row: {
+          certifications: string[] | null
+          created_at: string | null
+          description: string | null
+          domaine_competence: string
+          experience_annees: number | null
+          id: string
+          niveau_competence: string | null
+          user_id: string
+        }
+        Insert: {
+          certifications?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          domaine_competence: string
+          experience_annees?: number | null
+          id?: string
+          niveau_competence?: string | null
+          user_id: string
+        }
+        Update: {
+          certifications?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          domaine_competence?: string
+          experience_annees?: number | null
+          id?: string
+          niveau_competence?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       professionnels: {
         Row: {
           base: string
@@ -817,29 +880,51 @@ export type Database = {
       users_profiles: {
         Row: {
           commune_id: string | null
+          contact_telephone: string | null
           created_at: string | null
+          date_naissance: string | null
           id: string
+          lieu_naissance: string | null
+          lieu_residence: string | null
           nom: string | null
           prenom: string | null
           user_id: string
+          village_origine_id: string | null
         }
         Insert: {
           commune_id?: string | null
+          contact_telephone?: string | null
           created_at?: string | null
+          date_naissance?: string | null
           id?: string
+          lieu_naissance?: string | null
+          lieu_residence?: string | null
           nom?: string | null
           prenom?: string | null
           user_id: string
+          village_origine_id?: string | null
         }
         Update: {
           commune_id?: string | null
+          contact_telephone?: string | null
           created_at?: string | null
+          date_naissance?: string | null
           id?: string
+          lieu_naissance?: string | null
+          lieu_residence?: string | null
           nom?: string | null
           prenom?: string | null
           user_id?: string
+          village_origine_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "fk_village_origine"
+            columns: ["village_origine_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "users_profiles_commune_id_fkey"
             columns: ["commune_id"]
