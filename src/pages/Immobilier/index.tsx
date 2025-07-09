@@ -13,6 +13,7 @@ import { Building, Plus, Search, Bell } from "lucide-react";
 import { AlertSubscription } from "./components/AlertSubscription";
 import { usePagination } from "@/hooks/usePagination";
 import { PaginationControls } from "@/components/ui/pagination-controls";
+import { AuthGuard } from "@/components/auth/AuthGuard";
 
 export default function ImmobilierPage() {
   const [activeTab, setActiveTab] = useState<string>("tous");
@@ -232,7 +233,9 @@ export default function ImmobilierPage() {
         )}
         
         {activeViewTab === "ajouter" && (
-          <AddImmobilierForm />
+          <AuthGuard>
+            <AddImmobilierForm />
+          </AuthGuard>
         )}
       </div>
     </MainLayout>

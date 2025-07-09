@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getMetiers, getProfessionals, Metier, Professional } from "@/services/professionalService";
 import { WorkerCard } from "./MainDoeuvre/WorkerCard";
 import { AddWorkerForm } from "./MainDoeuvre/AddWorkerForm";
+import { AuthGuard } from "@/components/auth/AuthGuard";
 import { usePagination } from "@/hooks/usePagination";
 import { PaginationControls } from "@/components/ui/pagination-controls";
 
@@ -95,7 +96,9 @@ export default function MainDoeuvrePage() {
           </SelectContent>
         </Select>
         
-        <AddWorkerForm />
+        <AuthGuard>
+          <AddWorkerForm />
+        </AuthGuard>
       </div>
       
       {/* Results section */}

@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, Plus, Search } from "lucide-react";
 import { usePagination } from "@/hooks/usePagination";
 import { PaginationControls } from "@/components/ui/pagination-controls";
+import { AuthGuard } from "@/components/auth/AuthGuard";
 
 export default function EvenementsPage() {
   const [activeTab, setActiveTab] = useState<string>("tous");
@@ -216,7 +217,9 @@ export default function EvenementsPage() {
         )}
         
         {activeViewTab === "ajouter" && (
-          <AddEventForm />
+          <AuthGuard>
+            <AddEventForm />
+          </AuthGuard>
         )}
       </div>
     </MainLayout>

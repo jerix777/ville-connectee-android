@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePagination } from "@/hooks/usePagination";
 import { PaginationControls } from "@/components/ui/pagination-controls";
+import { AuthGuard } from "@/components/auth/AuthGuard";
 
 export default function ServicesPage() {
   const [activeTab, setActiveTab] = useState<string>("liste");
@@ -148,7 +149,9 @@ export default function ServicesPage() {
         )}
         
         {activeTab === "ajouter" && (
-          <AddServiceCommerceForm />
+          <AuthGuard>
+            <AddServiceCommerceForm />
+          </AuthGuard>
         )}
       </div>
     </MainLayout>

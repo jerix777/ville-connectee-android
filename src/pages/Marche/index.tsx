@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Search, ShoppingBag, ShoppingCart, Plus } from "lucide-react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AuthDialog } from "@/components/auth/AuthDialog";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -83,41 +83,35 @@ export default function MarchePage() {
             />
           </div>
           <div className="flex gap-2">
-            <Dialog open={sellDialogOpen} onOpenChange={setSellDialogOpen}>
-              <DialogTrigger asChild>
+            <AuthDialog 
+              open={sellDialogOpen} 
+              onOpenChange={setSellDialogOpen}
+              title="Publier une annonce de vente"
+              description="Remplissez les détails pour mettre en vente votre article"
+              trigger={
                 <Button className="whitespace-nowrap">
                   <ShoppingBag className="mr-2 h-4 w-4" />
                   Je vends
                 </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[600px]">
-                <DialogHeader>
-                  <DialogTitle>Publier une annonce de vente</DialogTitle>
-                  <DialogDescription>
-                    Remplissez les détails pour mettre en vente votre article
-                  </DialogDescription>
-                </DialogHeader>
-                <SellForm onClose={() => setSellDialogOpen(false)} />
-              </DialogContent>
-            </Dialog>
+              }
+            >
+              <SellForm onClose={() => setSellDialogOpen(false)} />
+            </AuthDialog>
             
-            <Dialog open={buyDialogOpen} onOpenChange={setBuyDialogOpen}>
-              <DialogTrigger asChild>
+            <AuthDialog 
+              open={buyDialogOpen} 
+              onOpenChange={setBuyDialogOpen}
+              title="Publier une demande d'achat"
+              description="Décrivez l'article que vous recherchez"
+              trigger={
                 <Button variant="outline" className="whitespace-nowrap">
                   <ShoppingCart className="mr-2 h-4 w-4" />
                   J'achète
                 </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[600px]">
-                <DialogHeader>
-                  <DialogTitle>Publier une demande d'achat</DialogTitle>
-                  <DialogDescription>
-                    Décrivez l'article que vous recherchez
-                  </DialogDescription>
-                </DialogHeader>
-                <BuyForm onClose={() => setBuyDialogOpen(false)} />
-              </DialogContent>
-            </Dialog>
+              }
+            >
+              <BuyForm onClose={() => setBuyDialogOpen(false)} />
+            </AuthDialog>
           </div>
         </div>
         

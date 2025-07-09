@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Building, Plus, Search, MapPin } from "lucide-react";
 import { usePagination } from "@/hooks/usePagination";
 import { PaginationControls } from "@/components/ui/pagination-controls";
+import { AuthGuard } from "@/components/auth/AuthGuard";
 
 export default function VillagesPage() {
   const [activeTab, setActiveTab] = useState<string>("liste");
@@ -156,7 +157,9 @@ export default function VillagesPage() {
         )}
         
         {activeTab === "ajouter" && (
-          <AddVillageForm />
+          <AuthGuard>
+            <AddVillageForm />
+          </AuthGuard>
         )}
       </div>
     </MainLayout>

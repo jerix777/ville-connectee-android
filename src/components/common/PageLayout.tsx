@@ -6,6 +6,7 @@ import { SearchBar } from "./SearchBar";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { EmptyState } from "./EmptyState";
 import { ContentWrapper } from "./ContentWrapper";
+import { AuthGuard } from "@/components/auth/AuthGuard";
 import { LucideIcon } from 'lucide-react';
 
 interface PageLayoutProps {
@@ -160,7 +161,11 @@ export function PageLayout({
           </div>
         )}
         
-        {activeTab === "ajouter" && addContent}
+        {activeTab === "ajouter" && (
+          <AuthGuard>
+            {addContent}
+          </AuthGuard>
+        )}
       </div>
     </MainLayout>
   );
