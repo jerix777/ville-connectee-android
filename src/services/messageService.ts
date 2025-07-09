@@ -18,7 +18,8 @@ export const messageService = {
         messages!messages_conversation_id_fkey (
           content,
           created_at,
-          sender_id
+          sender_id,
+          read_at
         )
       `)
       .or(`participant1_id.eq.${currentUserId},participant2_id.eq.${currentUserId}`)
@@ -27,6 +28,38 @@ export const messageService = {
 
     if (error) throw error;
     return data;
+  },
+
+  // Get count of unread messages for current user
+  async getUnreadCount() {
+    const currentUserId = (await supabase.auth.getUser()).data.user?.id;
+    if (!currentUserId) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase
+      .from('messages')
+      .select(`
+        id,
+        conversation_id,
+        conversations!messages_conversation_id_fkey (
+          participant1_id,
+          participant2_id
+        )
+      `)
+      .is('read_at', null)
+      .neq('sender_id', currentUserId);
+
+    if (error) throw error;
+
+    // Filter messages from conversations where user participates
+    const unreadMessages = data?.filter(message => {
+      const conversation = message.conversations;
+      return conversation && (
+        conversation.participant1_id === currentUserId || 
+        conversation.participant2_id === currentUserId
+      );
+    }) || [];
+
+    return unreadMessages.length;
   },
 
   // Get messages for a specific conversation
@@ -94,6 +127,21 @@ export const messageService = {
       .from('messages')
       .update({ read_at: new Date().toISOString() })
       .eq('id', messageId);
+
+    if (error) throw error;
+  },
+
+  // Mark all messages in a conversation as read for current user
+  async markConversationAsRead(conversationId: string) {
+    const currentUserId = (await supabase.auth.getUser()).data.user?.id;
+    if (!currentUserId) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('messages')
+      .update({ read_at: new Date().toISOString() })
+      .eq('conversation_id', conversationId)
+      .neq('sender_id', currentUserId)
+      .is('read_at', null);
 
     if (error) throw error;
   },

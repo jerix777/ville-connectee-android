@@ -24,6 +24,28 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
     enabled: !!conversationId
   });
 
+  // Mark conversation as read when viewing it
+  const markAsReadMutation = useMutation({
+    mutationFn: () => messageService.markConversationAsRead(conversationId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['unread-messages'] });
+      queryClient.invalidateQueries({ queryKey: ['conversations'] });
+    }
+  });
+
+  // Mark messages as read when conversation is opened
+  useEffect(() => {
+    if (conversationId && messages && messages.length > 0) {
+      const unreadMessages = messages.filter(msg => 
+        !msg.read_at && msg.sender_id !== user?.id
+      );
+      
+      if (unreadMessages.length > 0) {
+        markAsReadMutation.mutate();
+      }
+    }
+  }, [conversationId, messages, user?.id]);
+
   const sendMessageMutation = useMutation({
     mutationFn: (content: string) => messageService.sendMessage(conversationId, content),
     onSuccess: () => {

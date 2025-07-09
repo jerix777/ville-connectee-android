@@ -1,5 +1,5 @@
 
-import { Bell, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { CommuneSelector } from "@/components/CommuneSelector";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
+import { NotificationBell } from "./NotificationBell";
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -87,14 +88,7 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
       </div>
       
       <div className="flex items-center gap-3">
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="text-current hover:bg-ville-hover"
-        >
-          <Bell size={20} />
-        </Button>
-        
+        <NotificationBell />
         <UserProfileMenu />
       </div>
       
