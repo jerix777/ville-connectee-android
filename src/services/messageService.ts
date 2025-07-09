@@ -8,6 +8,9 @@ export type NewMessage = TablesInsert<'messages'>;
 export const messageService = {
   // Get all conversations for current user
   async getConversations() {
+    const currentUserId = (await supabase.auth.getUser()).data.user?.id;
+    if (!currentUserId) throw new Error('User not authenticated');
+
     const { data, error } = await supabase
       .from('conversations')
       .select(`
@@ -18,6 +21,7 @@ export const messageService = {
           sender_id
         )
       `)
+      .or(`participant1_id.eq.${currentUserId},participant2_id.eq.${currentUserId}`)
       .order('updated_at', { ascending: false })
       .limit(1, { referencedTable: 'messages' });
 
