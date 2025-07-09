@@ -8,10 +8,12 @@ import {
   getSessionCommune, 
   getLocalCommuneId 
 } from "@/services/authService";
+import { getUserRole, UserRole } from "@/services/userRoleService";
 import { toast } from "@/hooks/use-toast";
 
 interface AuthContextType extends AuthState {
   refreshProfile: () => Promise<void>;
+  userRole: UserRole | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -25,18 +27,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     communeId: null,
     sessionId: getOrCreateSessionId(),
   });
+  
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
 
   // Récupérer le profil utilisateur actuel
   const refreshProfile = async () => {
     if (!state.user) return;
     
-    const profile = await getUserProfile(state.user.id);
+    const [profile, role] = await Promise.all([
+      getUserProfile(state.user.id),
+      getUserRole(state.user.id)
+    ]);
     
     setState((current) => ({
       ...current,
       profile,
       communeId: profile?.commune_id || current.communeId,
     }));
+    
+    setUserRole(role);
   };
 
   // Initialisation: vérifier la session et configurer l'écouteur de changements d'authentification
@@ -104,7 +113,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           // L'utilisateur vient de se connecter ou sa session a été mise à jour
           // Important: Utiliser un timeout pour éviter les deadlocks
           setTimeout(async () => {
-            const profile = await getUserProfile(session.user.id);
+            const [profile, role] = await Promise.all([
+              getUserProfile(session.user.id),
+              getUserRole(session.user.id)
+            ]);
             
             setState({
               user: session.user,
@@ -114,6 +126,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               communeId: profile?.commune_id || getLocalCommuneId(),
               sessionId: getOrCreateSessionId(),
             });
+            
+            setUserRole(role);
             
             if (event === 'SIGNED_IN') {
               toast({
@@ -133,6 +147,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             sessionId: getOrCreateSessionId(),
           });
           
+          setUserRole(null);
+          
           toast({
             title: "Déconnecté",
             description: "Vous avez été déconnecté",
@@ -151,7 +167,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ ...state, refreshProfile }}>
+    <AuthContext.Provider value={{ ...state, refreshProfile, userRole }}>
       {children}
     </AuthContext.Provider>
   );
