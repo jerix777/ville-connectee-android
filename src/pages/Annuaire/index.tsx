@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Search, UserPlus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { LinkToProfessional } from "@/components/professional/LinkToProfessional";
 
 export default function AnnuairePage() {
   const { user } = useAuth();
@@ -19,7 +20,7 @@ export default function AnnuairePage() {
     queryFn: getMetiers
   });
 
-  const { data: professionals = [], isLoading, error } = useQuery({
+  const { data: professionals = [], isLoading, error, refetch } = useQuery({
     queryKey: ['professionals'],
     queryFn: getProfessionals
   });
@@ -52,10 +53,16 @@ export default function AnnuairePage() {
             <p className="text-gray-600">Trouvez les professionnels, artisans et contacts utiles de la ville regroupés par domaine.</p>
           </div>
           {user && (
-            <Button onClick={() => navigate('/annuaire/mon-profil')} className="flex items-center space-x-2">
-              <UserPlus className="h-4 w-4" />
-              <span>Mon profil professionnel</span>
-            </Button>
+            <div className="flex space-x-3">
+              <LinkToProfessional 
+                professionals={professionals} 
+                onLinked={() => refetch()} 
+              />
+              <Button onClick={() => navigate('/annuaire/mon-profil')} className="flex items-center space-x-2">
+                <UserPlus className="h-4 w-4" />
+                <span>Mon profil professionnel</span>
+              </Button>
+            </div>
           )}
         </div>
       </div>

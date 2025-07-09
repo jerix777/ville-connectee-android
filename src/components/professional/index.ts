@@ -1,0 +1,1 @@
+export { LinkToProfessional } from './LinkToProfessional';

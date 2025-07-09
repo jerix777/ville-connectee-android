@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Phone, User, MessageCircle, CheckCircle, Mail } from "lucide-react";
+import { Phone, User, MessageCircle, CheckCircle, Mail, UserPlus } from "lucide-react";
 import { Professional } from "@/services/professionalService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
@@ -39,6 +39,12 @@ export function DirectoryCard({ professional }: { professional: Professional }) 
                 <Badge variant="default" className="text-xs">
                   <CheckCircle className="h-3 w-3 mr-1" />
                   Vérifié
+                </Badge>
+              )}
+              {!professional.user_id && (
+                <Badge variant="secondary" className="text-xs">
+                  <UserPlus className="h-3 w-3 mr-1" />
+                  Peut se connecter
                 </Badge>
               )}
             </div>

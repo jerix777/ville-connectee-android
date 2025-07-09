@@ -155,3 +155,23 @@ export const getMyProfessionalProfile = async (): Promise<Professional | null> =
     verification_method: data.verification_method as 'email' | 'phone' | undefined
   } : null;
 };
+
+// Fonction pour lier un professionnel existant à l'utilisateur connecté
+export const linkProfessionalToUser = async (
+  professionalId: string,
+  email: string,
+  phone?: string
+): Promise<{ success: boolean; message?: string; error?: string }> => {
+  const { data, error } = await supabase.rpc('link_professional_to_user', {
+    professional_id: professionalId,
+    user_email: email,
+    user_phone: phone
+  });
+
+  if (error) {
+    console.error("Error linking professional to user:", error);
+    return { success: false, error: error.message };
+  }
+
+  return data as { success: boolean; message?: string; error?: string };
+};

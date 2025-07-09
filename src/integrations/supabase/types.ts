@@ -871,6 +871,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      link_professional_to_user: {
+        Args: {
+          professional_id: string
+          user_email: string
+          user_phone?: string
+        }
+        Returns: Json
+      }
       request_professional_verification: {
         Args: { professional_id: string; method: string }
         Returns: Json
