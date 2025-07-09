@@ -1,8 +1,9 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getMetiers, addProfessional } from "@/services/professionalService";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,6 +20,7 @@ import { Plus } from "lucide-react";
 export function AddWorkerForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user, profile } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     nom: "",
@@ -28,6 +30,22 @@ export function AddWorkerForm() {
     contact2: "",
     base: ""
   });
+
+  // Pré-remplir le formulaire avec les données de l'utilisateur connecté
+  useEffect(() => {
+    if (user && profile) {
+      const fullName = profile.nom && profile.prenom 
+        ? `${profile.nom} ${profile.prenom}`
+        : profile.nom || profile.prenom || "";
+      
+      setFormData(prev => ({
+        ...prev,
+        nom: fullName,
+        contact1: profile.contact_telephone || "",
+        base: profile.lieu_residence || ""
+      }));
+    }
+  }, [user, profile]);
 
   const { data: metiers = [] } = useQuery({
     queryKey: ['metiers'],
@@ -110,6 +128,8 @@ export function AddWorkerForm() {
                 name="nom"
                 value={formData.nom}
                 onChange={handleChange}
+                placeholder={user ? "Déjà rempli à partir de votre profil" : "Votre nom complet"}
+                disabled={!!user && !!profile?.nom}
               />
             </div>
             <div className="space-y-2">
@@ -128,6 +148,7 @@ export function AddWorkerForm() {
                 name="contact1"
                 value={formData.contact1}
                 onChange={handleChange}
+                placeholder={user ? "Déjà rempli à partir de votre profil" : "Votre numéro de téléphone"}
               />
             </div>
             <div className="space-y-2">
@@ -140,12 +161,13 @@ export function AddWorkerForm() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="base">Base (quartier/zone)</Label>
+              <Label htmlFor="base">Zone de couverture</Label>
               <Input
                 id="base"
                 name="base"
                 value={formData.base}
                 onChange={handleChange}
+                placeholder={user ? "Lieu de résidence ou zone de travail" : "Votre zone de couverture"}
               />
             </div>
           </div>

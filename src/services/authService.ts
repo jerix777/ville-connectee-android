@@ -9,7 +9,12 @@ export interface UserProfile {
   user_id: string;
   nom: string | null;
   prenom: string | null;
+  date_naissance: string | null;
+  lieu_naissance: string | null;
+  lieu_residence: string | null;
+  contact_telephone: string | null;
   commune_id: string | null;
+  village_origine_id: string | null;
   created_at?: string | null;
 }
 
