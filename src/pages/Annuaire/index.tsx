@@ -47,20 +47,21 @@ export default function AnnuairePage() {
   return (
     <MainLayout>
       <div className="mb-6">
-        <div className="flex justify-between items-start mb-4">
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 mb-4">
           <div>
             <h1 className="text-xl font-bold mb-2 text-dark-purple">Annuaire</h1>
             <p className="text-gray-600">Trouvez les professionnels, artisans et contacts utiles de la ville regroupés par domaine.</p>
           </div>
           {user && (
-            <div className="flex space-x-3">
+            <div className="flex flex-col sm:flex-row gap-3 sm:space-x-3 lg:flex-shrink-0">
               <LinkToProfessional 
                 professionals={professionals} 
                 onLinked={() => refetch()} 
               />
-              <Button onClick={() => navigate('/annuaire/mon-profil')} className="flex items-center space-x-2">
+              <Button onClick={() => navigate('/annuaire/mon-profil')} className="flex items-center justify-center space-x-2 whitespace-nowrap">
                 <UserPlus className="h-4 w-4" />
-                <span>Mon profil professionnel</span>
+                <span className="hidden sm:inline">Mon profil professionnel</span>
+                <span className="sm:hidden">Mon profil</span>
               </Button>
             </div>
           )}
