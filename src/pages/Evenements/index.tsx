@@ -25,13 +25,13 @@ export default function EvenementsPage() {
   });
 
   const today = new Date().toISOString().split('T')[0];
-  
+
   const filteredEvents = (events || []).filter((event) => {
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       event.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.lieu.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.organisateur.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     return matchesSearch;
   });
 
@@ -71,9 +71,9 @@ export default function EvenementsPage() {
               Découvrez et participez aux événements de la communauté
             </p>
           </div>
-          
-          <Tabs 
-            value={activeViewTab} 
+
+          <Tabs
+            value={activeViewTab}
             onValueChange={setActiveViewTab}
             className="w-full md:w-auto"
           >
@@ -96,13 +96,7 @@ export default function EvenementsPage() {
                   className="pl-10"
                 />
               </div>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setActiveViewTab("ajouter");
-                }}
-                className="whitespace-nowrap"
-              >
+              <Button variant="outline" onClick={() => { setActiveViewTab("ajouter"); }} className="whitespace-nowrap" >
                 <Plus className="mr-2 h-4 w-4" />
                 Ajouter
               </Button>
@@ -141,8 +135,8 @@ export default function EvenementsPage() {
                   {filteredEvents.length === 0 ? (
                     <div className="text-center py-10">
                       <p className="text-gray-500">Aucun événement trouvé.</p>
-                      <Button 
-                        variant="link" 
+                      <Button
+                        variant="link"
                         onClick={() => setSearchQuery("")}
                       >
                         Réinitialiser les filtres
@@ -165,7 +159,7 @@ export default function EvenementsPage() {
                     </div>
                   )}
                 </TabsContent>
-                
+
                 <TabsContent value="aujourd-hui">
                   {eventsToday.length === 0 ? (
                     <div className="text-center py-10">
@@ -188,7 +182,7 @@ export default function EvenementsPage() {
                     </div>
                   )}
                 </TabsContent>
-                
+
                 <TabsContent value="a-venir">
                   {upcomingEvents.length === 0 ? (
                     <div className="text-center py-10">
@@ -215,7 +209,7 @@ export default function EvenementsPage() {
             )}
           </div>
         )}
-        
+
         {activeViewTab === "ajouter" && (
           <AuthGuard>
             <AddEventForm />
