@@ -136,86 +136,82 @@ export function PageLayout({
 
   return (
     <MainLayout>
-      {/* Fixed header section */}
-      <div className="fixed top-16 left-0 right-0 bg-background border-b border-border z-40 px-4 lg:px-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Title and tabs section */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 py-4">
-            <PageHeader
-              title={title}
-              description={description}
-              icon={icon}
-              iconClassName={iconClassName}
-            />
-            
-            <div 
-              id="page-header-tabs" 
-              className={`transition-all duration-300 ${showOptions ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
-            >
-              <ListViewTabs
-                value={activeTab}
-                onValueChange={onTabChange}
+      <div className="h-screen flex flex-col">
+        {/* Fixed header section */}
+        <div className="bg-background border-b border-border flex-shrink-0">
+          <div className="max-w-7xl mx-auto px-4 lg:px-6">
+            {/* Title and tabs section */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 py-4">
+              <PageHeader
+                title={title}
+                description={description}
+                icon={icon}
+                iconClassName={iconClassName}
               />
+              
+              <div 
+                id="page-header-tabs" 
+                className={`transition-all duration-300 ${showOptions ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
+              >
+                <ListViewTabs
+                  value={activeTab}
+                  onValueChange={onTabChange}
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Toggle bar */}
-          <div 
-            onClick={toggleOptions}
-            className="flex items-center justify-center gap-2 py-2 cursor-pointer hover:bg-muted/50 transition-colors duration-200 rounded-md -mx-2"
-          >
-            <span className="text-sm text-muted-foreground">
-              {showOptions ? "Masquer les options" : "Afficher les options"}
-            </span>
-            {showOptions ? (
-              <ChevronUp className="h-4 w-4 text-muted-foreground" />
-            ) : (
-              <ChevronDown className="h-4 w-4 text-muted-foreground" />
-            )}
-          </div>
-
-          {/* Options section */}
-          {activeTab === "liste" && (
+            {/* Toggle bar */}
             <div 
-              id="page-options"
-              className={`transition-all duration-300 overflow-hidden ${
-                showOptions 
-                  ? 'max-h-96 opacity-100 pb-4' 
-                  : 'max-h-0 opacity-0 pb-0'
-              }`}
+              onClick={toggleOptions}
+              className="flex items-center justify-center gap-2 py-2 cursor-pointer hover:bg-muted/50 transition-colors duration-200 rounded-md -mx-2"
             >
-              {onSearchChange && (
-                <div id="page-search-bar">
-                  <SearchBar
-                    value={searchQuery}
-                    onChange={onSearchChange}
-                    placeholder={searchPlaceholder}
-                    onAddClick={handleAddClick}
-                    addButtonText={addButtonText}
-                  />
-                </div>
+              <span className="text-sm text-muted-foreground">
+                {showOptions ? "Masquer les options" : "Afficher les options"}
+              </span>
+              {showOptions ? (
+                <ChevronUp className="h-4 w-4 text-muted-foreground" />
+              ) : (
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
               )}
             </div>
-          )}
-        </div>
-      </div>
 
-      {/* Scrollable content area */}
-      <div className="pt-32 pb-6">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6">
-          {activeTab === "liste" && (
-            <div className="min-h-[calc(100vh-12rem)] overflow-y-auto">
-              {renderListView()}
-            </div>
-          )}
-          
-          {activeTab === "ajouter" && (
-            <AuthGuard>
-              <div className="min-h-[calc(100vh-12rem)]">
-                {addContent}
+            {/* Options section */}
+            {activeTab === "liste" && (
+              <div 
+                id="page-options"
+                className={`transition-all duration-300 overflow-hidden ${
+                  showOptions 
+                    ? 'max-h-96 opacity-100 pb-4' 
+                    : 'max-h-0 opacity-0 pb-0'
+                }`}
+              >
+                {onSearchChange && (
+                  <div id="page-search-bar">
+                    <SearchBar
+                      value={searchQuery}
+                      onChange={onSearchChange}
+                      placeholder={searchPlaceholder}
+                      onAddClick={handleAddClick}
+                      addButtonText={addButtonText}
+                    />
+                  </div>
+                )}
               </div>
-            </AuthGuard>
-          )}
+            )}
+          </div>
+        </div>
+
+        {/* Scrollable content area */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
+            {activeTab === "liste" && renderListView()}
+            
+            {activeTab === "ajouter" && (
+              <AuthGuard>
+                {addContent}
+              </AuthGuard>
+            )}
+          </div>
         </div>
       </div>
     </MainLayout>
