@@ -34,7 +34,7 @@ export function MainLayout({ children }: MainLayoutProps) {
           sidebarOpen ? "md:ml-64" : "ml-0"
         )}
       >
-        <div className="container mx-auto px-4 py-6 animate-fade-in">
+        <div className="container mx-auto px-4 pb-6 animate-fade-in">
           {children}
         </div>
       </main>
