@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MainLayout } from "@/components/layout/MainLayout";
 import { PageHeader } from "./PageHeader";
 import { ListViewTabs } from "./ListViewTabs";
@@ -7,7 +7,7 @@ import { LoadingSkeleton } from "./LoadingSkeleton";
 import { EmptyState } from "./EmptyState";
 import { ContentWrapper } from "./ContentWrapper";
 import { AuthGuard } from "@/components/auth/AuthGuard";
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, ChevronUp, ChevronDown } from 'lucide-react';
 
 interface PageLayoutProps {
   // Header props
@@ -85,12 +85,18 @@ export function PageLayout({
   skeletonCount = 3,
   showResultCount = true
 }: PageLayoutProps) {
+  const [showOptions, setShowOptions] = useState(true);
+
   const handleAddClick = () => {
     if (onAddClick) {
       onAddClick();
     } else {
       onTabChange("ajouter");
     }
+  };
+
+  const toggleOptions = () => {
+    setShowOptions(!showOptions);
   };
 
   const renderListView = () => {
@@ -130,42 +136,87 @@ export function PageLayout({
 
   return (
     <MainLayout>
-      <div className="space-y-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <PageHeader
-            title={title}
-            description={description}
-            icon={icon}
-            iconClassName={iconClassName}
-          />
-          
-          <ListViewTabs
-            value={activeTab}
-            onValueChange={onTabChange}
-          />
-        </div>
-
-        {activeTab === "liste" && (
-          <div className="space-y-6">
-            {onSearchChange && (
-              <SearchBar
-                value={searchQuery}
-                onChange={onSearchChange}
-                placeholder={searchPlaceholder}
-                onAddClick={handleAddClick}
-                addButtonText={addButtonText}
-              />
-            )}
+      {/* Fixed header section */}
+      <div className="fixed top-16 left-0 right-0 bg-background border-b border-border z-40 px-4 lg:px-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Title and tabs section */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 py-4">
+            <PageHeader
+              title={title}
+              description={description}
+              icon={icon}
+              iconClassName={iconClassName}
+            />
             
-            {renderListView()}
+            <div 
+              id="page-header-tabs" 
+              className={`transition-all duration-300 ${showOptions ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
+            >
+              <ListViewTabs
+                value={activeTab}
+                onValueChange={onTabChange}
+              />
+            </div>
           </div>
-        )}
-        
-        {activeTab === "ajouter" && (
-          <AuthGuard>
-            {addContent}
-          </AuthGuard>
-        )}
+
+          {/* Toggle bar */}
+          <div 
+            onClick={toggleOptions}
+            className="flex items-center justify-center gap-2 py-2 cursor-pointer hover:bg-muted/50 transition-colors duration-200 rounded-md -mx-2"
+          >
+            <span className="text-sm text-muted-foreground">
+              {showOptions ? "Masquer les options" : "Afficher les options"}
+            </span>
+            {showOptions ? (
+              <ChevronUp className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            )}
+          </div>
+
+          {/* Options section */}
+          {activeTab === "liste" && (
+            <div 
+              id="page-options"
+              className={`transition-all duration-300 overflow-hidden ${
+                showOptions 
+                  ? 'max-h-96 opacity-100 pb-4' 
+                  : 'max-h-0 opacity-0 pb-0'
+              }`}
+            >
+              {onSearchChange && (
+                <div id="page-search-bar">
+                  <SearchBar
+                    value={searchQuery}
+                    onChange={onSearchChange}
+                    placeholder={searchPlaceholder}
+                    onAddClick={handleAddClick}
+                    addButtonText={addButtonText}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Scrollable content area */}
+      <div className="pt-32 pb-6">
+        <div className="max-w-7xl mx-auto px-4 lg:px-6">
+          {activeTab === "liste" && (
+            <div className="min-h-[calc(100vh-12rem)] overflow-y-auto">
+              {renderListView()}
+            </div>
+          )}
+          
+          {activeTab === "ajouter" && (
+            <AuthGuard>
+              <div className="min-h-[calc(100vh-12rem)]">
+                {addContent}
+              </div>
+            </AuthGuard>
+          )}
+        </div>
       </div>
     </MainLayout>
   );
