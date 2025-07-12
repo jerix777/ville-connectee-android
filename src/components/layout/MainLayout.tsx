@@ -16,7 +16,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
       <Sidebar isOpen={sidebarOpen} />
       
@@ -30,11 +30,13 @@ export function MainLayout({ children }: MainLayoutProps) {
       
       <main 
         className={cn(
-          "pt-16 h-screen transition-all duration-300 overflow-hidden",
+          "pt-16 h-screen transition-all duration-300 overflow-y-auto",
           sidebarOpen ? "md:ml-64" : "ml-0"
         )}
       >
-        {children}
+        <div className="min-h-full py-6">
+          {children}
+        </div>
       </main>
     </div>
   );

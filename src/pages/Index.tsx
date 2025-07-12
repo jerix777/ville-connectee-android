@@ -85,19 +85,19 @@ export default function Index() {
   return (
     <MainLayout>
       {/* Hero Section */}
-      <section className="mb-10">
-        <div className="rounded-xl bg-gradient-to-r from-ville-DEFAULT to-ville-dark p-8 text-black">
-          <h1 className="text-xl md:text-2xl font-bold mb-4 text-black">
+      <section className="mb-10 px-4">
+        <div className="rounded-xl bg-gradient-to-r from-primary to-secondary p-8 text-primary-foreground">
+          <h1 className="text-xl md:text-2xl font-bold mb-4">
             Bienvenue à Ouellé
           </h1>
-          <p className="text-lg opacity-90 mb-6 text-black">
+          <p className="text-lg opacity-90 mb-6">
             la cité de l'innovation et du développement durable
           </p>
-          <div className="flex space-x-4">
-            <button className="bg-white text-ville-DEFAULT px-6 py-3 rounded-md font-medium hover:bg-opacity-90 transition-all text-black">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button className="bg-background text-foreground px-6 py-3 rounded-md font-medium hover:bg-muted transition-colors">
               Découvrir
             </button>
-            <button className="bg-transparent border border-ville-DEFAULT text-ville-DEFAULT px-6 py-3 rounded-md font-medium hover:bg-ville-light transition-all text-black">
+            <button className="bg-transparent border border-primary-foreground text-primary-foreground px-6 py-3 rounded-md font-medium hover:bg-primary-foreground/10 transition-colors">
               En savoir plus
             </button>
           </div>
@@ -105,12 +105,12 @@ export default function Index() {
       </section>
 
       {/* Features Section 1 - Actualités */}
-      <section className="mb-10">
+      <section className="mb-10 px-4">
         <div className="flex justify-between items-center mb-6">
-           <h2 className="text-lg font-bold text-gray-800">
+           <h2 className="text-lg font-bold text-foreground">
             Actualités
           </h2>
-          <a href="/actualites" className="text-ville-DEFAULT hover:underline">
+          <a href="/actualites" className="text-primary hover:underline">
             Voir tout
           </a>
         </div>
@@ -128,12 +128,12 @@ export default function Index() {
       </section>
 
       {/* Features Section 2 - Espace Immobilier */}
-      <section>
+      <section className="px-4">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-lg font-bold text-gray-800">
+          <h2 className="text-lg font-bold text-foreground">
             Espace Immobilier
           </h2>
-          <a href="/immobilier" className="text-ville-DEFAULT hover:underline">
+          <a href="/immobilier" className="text-primary hover:underline">
             Voir tout
           </a>
         </div>
