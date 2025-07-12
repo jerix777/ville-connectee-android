@@ -19,7 +19,7 @@ export function SearchBar({
   addButtonText = "Ajouter" 
 }: SearchBarProps) {
   return (
-    <div className="flex flex-col md:flex-row gap-4">
+    <div className="flex gap-4">
       <div className="relative flex-grow">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
         <Input
