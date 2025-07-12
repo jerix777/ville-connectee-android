@@ -1,18 +1,14 @@
 
 import React, { useState, useEffect } from "react";
-import { MainLayout } from "@/components/layout/MainLayout";
+import { PageLayout } from "@/components/common/PageLayout";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Plus, Search, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import { Obituary, getObituaries, addObituary, updateObituary, deleteObituary } from "@/services/necrologieService";
 import { ObituaryCard } from "./ObituaryCard";
 import { ObituaryForm, ObituaryFormData } from "./ObituaryForm";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { usePagination } from "@/hooks/usePagination";
-import { PaginationControls } from "@/components/ui/pagination-controls";
 
 export default function NecrologiePage() {
   const [obituaries, setObituaries] = useState<Obituary[]>([]);
@@ -137,158 +133,116 @@ export default function NecrologiePage() {
     itemsPerPage: 6,
   });
 
-  return (
-    <MainLayout>
-      <div className="space-y-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <h1 className="text-xl font-bold flex items-center">
-              <Heart className="mr-2" />
-              Nécrologie
-            </h1>
-            <p className="text-gray-500 mt-1">
-              Hommages et mémoire de nos proches disparus
-            </p>
-          </div>
-          
-          <Tabs 
-            value={activeTab} 
-            onValueChange={setActiveTab}
-            className="w-full md:w-auto"
-          >
-            <TabsList className="grid w-full md:w-auto grid-cols-2">
-              <TabsTrigger value="liste">Liste</TabsTrigger>
-              <TabsTrigger value="ajouter">Ajouter</TabsTrigger>
-            </TabsList>
-          </Tabs>
+  const renderListContent = () => {
+    if (filteredObituaries.length === 0 && !searchQuery) {
+      return (
+        <div className="text-center py-10">
+          <Heart className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+          <p className="text-gray-500 mb-4">Aucun avis de décès pour le moment.</p>
         </div>
+      );
+    }
 
-        {activeTab === "liste" && (
-          <div className="space-y-6">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="relative flex-grow">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                <Input
-                  placeholder="Rechercher par nom, message ou lieu..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSelectedObituary(undefined);
-                  setActiveTab("ajouter");
-                }}
-                className="whitespace-nowrap"
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Ajouter
-              </Button>
-            </div>
-
-            {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="border rounded-lg p-6 space-y-4">
-                    <div className="flex gap-4">
-                      <Skeleton className="h-16 w-16 rounded-full" />
-                      <div className="flex-1 space-y-2">
-                        <Skeleton className="h-6 w-3/4" />
-                        <Skeleton className="h-4 w-1/2" />
-                      </div>
-                    </div>
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-2/3" />
-                  </div>
-                ))}
-              </div>
-            ) : filteredObituaries.length === 0 ? (
-              <div className="text-center py-10">
-                <Heart className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                <p className="text-gray-500 mb-4">
-                  {searchQuery ? "Aucun avis de décès trouvé avec ces critères." : "Aucun avis de décès pour le moment."}
-                </p>
-                {searchQuery ? (
-                  <Button 
-                    variant="link" 
-                    onClick={() => setSearchQuery("")}
-                  >
-                    Réinitialiser les filtres
-                  </Button>
-                ) : (
-                  <Button 
-                    variant="outline" 
-                    onClick={() => {
-                      setSelectedObituary(undefined);
-                      setActiveTab("ajouter");
-                    }}
-                  >
-                    <Plus className="mr-2 h-4 w-4" />
-                    Ajouter le premier avis
-                  </Button>
-                )}
-              </div>
-            ) : (
-              <div>
-                <div className="mb-4">
-                  <p className="text-sm text-gray-600">
-                    {filteredObituaries.length} avis de décès
-                    {searchQuery && ` trouvé${filteredObituaries.length > 1 ? 's' : ''} pour "${searchQuery}"`}
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {paginatedObituaries.map((obituary) => (
-                    <ObituaryCard
-                      key={obituary.id}
-                      obituary={obituary}
-                      onEdit={handleEditObituary}
-                      onDelete={handleDeleteClick}
-                    />
-                  ))}
-                </div>
-                <PaginationControls
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={goToPage}
-                  canGoNext={canGoNext}
-                  canGoPrevious={canGoPrevious}
-                />
-              </div>
-            )}
-          </div>
-        )}
-        
-        {activeTab === "ajouter" && (
-          <div className="max-w-2xl mx-auto">
-            <ObituaryForm
-              open={true}
-              onOpenChange={(open) => !open && setActiveTab("liste")}
-              onSubmit={handleSubmitForm}
-              initialData={selectedObituary}
-              isSubmitting={isSubmitting}
+    return (
+      <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {paginatedObituaries.map((obituary) => (
+            <ObituaryCard
+              key={obituary.id}
+              obituary={obituary}
+              onEdit={handleEditObituary}
+              onDelete={handleDeleteClick}
             />
+          ))}
+        </div>
+        {filteredObituaries.length > 0 && (
+          <div className="mt-6">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-sm text-gray-600">
+                {filteredObituaries.length} avis de décès
+                {searchQuery && ` trouvé${filteredObituaries.length > 1 ? 's' : ''} pour "${searchQuery}"`}
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <div className="inline-flex">
+                <Button
+                  variant="outline"
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={!canGoPrevious}
+                >
+                  Précédent
+                </Button>
+                <span className="px-4 py-2 text-sm">
+                  {currentPage} / {totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={!canGoNext}
+                >
+                  Suivant
+                </Button>
+              </div>
+            </div>
           </div>
         )}
-
-        {/* Modal de confirmation de suppression */}
-        <Dialog open={!!obituaryToDelete} onOpenChange={(open) => !open && setObituaryToDelete(null)}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Confirmer la suppression</DialogTitle>
-              <DialogDescription>
-                Êtes-vous sûr de vouloir supprimer l'avis de décès de {obituaryToDelete?.prenom} {obituaryToDelete?.nom} ?
-                Cette action est irréversible.
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setObituaryToDelete(null)}>Annuler</Button>
-              <Button variant="destructive" onClick={handleConfirmDelete}>Supprimer</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
       </div>
-    </MainLayout>
+    );
+  };
+
+  const renderAddContent = () => (
+    <div className="max-w-2xl mx-auto">
+      <ObituaryForm
+        open={true}
+        onOpenChange={(open) => !open && setActiveTab("liste")}
+        onSubmit={handleSubmitForm}
+        initialData={selectedObituary}
+        isSubmitting={isSubmitting}
+      />
+    </div>
+  );
+
+  return (
+    <>
+      <PageLayout
+        title="Nécrologie"
+        description="Hommages et mémoire de nos proches disparus"
+        icon={Heart}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        listContent={renderListContent()}
+        addContent={renderAddContent()}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        searchPlaceholder="Rechercher par nom, message ou lieu..."
+        loading={isLoading}
+        hasData={filteredObituaries.length > 0}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={goToPage}
+        canGoNext={canGoNext}
+        canGoPrevious={canGoPrevious}
+        resultCount={filteredObituaries.length}
+        skeletonType="grid"
+        skeletonCount={4}
+      />
+
+      {/* Modal de confirmation de suppression */}
+      <Dialog open={!!obituaryToDelete} onOpenChange={(open) => !open && setObituaryToDelete(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirmer la suppression</DialogTitle>
+            <DialogDescription>
+              Êtes-vous sûr de vouloir supprimer l'avis de décès de {obituaryToDelete?.prenom} {obituaryToDelete?.nom} ?
+              Cette action est irréversible.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setObituaryToDelete(null)}>Annuler</Button>
+            <Button variant="destructive" onClick={handleConfirmDelete}>Supprimer</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
