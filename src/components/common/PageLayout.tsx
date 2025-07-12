@@ -19,6 +19,7 @@ interface PageLayoutProps {
   // Tab management
   activeTab: string;
   onTabChange: (tab: string) => void;
+  customTabs?: { value: string; label: string }[];
   
   // Content rendering
   listContent?: React.ReactNode;
@@ -30,6 +31,7 @@ interface PageLayoutProps {
   searchPlaceholder?: string;
   onAddClick?: () => void;
   addButtonText?: string;
+  showSearchOnAllTabs?: boolean;
   
   // Loading and empty states
   loading?: boolean;
@@ -63,11 +65,13 @@ export function PageLayout({
   onTabChange,
   listContent,
   addContent,
+  customTabs,
   searchQuery = "",
   onSearchChange,
   searchPlaceholder = "Rechercher...",
   onAddClick,
   addButtonText = "Ajouter",
+  showSearchOnAllTabs = false,
   loading = false,
   hasData = false,
   emptyStateIcon,
@@ -166,7 +170,7 @@ export function PageLayout({
             </div>
 
             {/* Options section */}
-            {activeTab === "liste" && (
+            {(activeTab === "liste" || showSearchOnAllTabs) && (
               <div 
                 id="page-options"
                 className={`transition-all duration-300 overflow-hidden ${

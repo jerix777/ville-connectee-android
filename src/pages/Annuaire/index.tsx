@@ -1,10 +1,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getMetiers, getProfessionals, Metier, Professional } from "@/services/professionalService";
-import { MainLayout } from "@/components/layout/MainLayout";
+import { PageLayout } from "@/components/common/PageLayout";
 import { DirectoryCard } from "./DirectoryCard";
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, UserPlus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -44,60 +43,66 @@ export default function AnnuairePage() {
     }
   });
 
-  return (
-    <MainLayout>
-      <div className="mb-6">
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 mb-4">
-          <div>
-            <h1 className="text-xl font-bold mb-2 text-dark-purple">Annuaire</h1>
-            <p className="text-gray-600">Trouvez les professionnels, artisans et contacts utiles de la ville regroupés par domaine.</p>
-          </div>
-          {user && (
-            <div className="flex flex-col sm:flex-row gap-3 sm:space-x-3 lg:flex-shrink-0">
-              <LinkToProfessional 
-                professionals={professionals} 
-                onLinked={() => refetch()} 
-              />
-              <Button onClick={() => navigate('/annuaire/mon-profil')} className="flex items-center justify-center space-x-2 whitespace-nowrap">
-                <UserPlus className="h-4 w-4" />
-                <span className="hidden sm:inline">Mon profil professionnel</span>
-                <span className="sm:hidden">Mon profil</span>
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
-      <div className="mb-6 max-w-xl">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-          <Input 
-            className="pl-10"
-            placeholder="Rechercher un professionnel, un domaine, une base..." 
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-        </div>
-      </div>
-      {isLoading ? (
-        <div className="text-center py-10">Chargement de l'annuaire...</div>
-      ) : error ? (
-        <div className="text-center py-10 text-red-500">Erreur de chargement de l'annuaire</div>
-      ) : Object.keys(professionalsByMetier).length === 0 ? (
+  const renderContent = () => {
+    if (isLoading) {
+      return <div className="text-center py-10">Chargement de l'annuaire...</div>;
+    }
+    
+    if (error) {
+      return <div className="text-center py-10 text-red-500">Erreur de chargement de l'annuaire</div>;
+    }
+    
+    if (Object.keys(professionalsByMetier).length === 0) {
+      return (
         <div className="text-center py-10 text-gray-500">
           <p>Aucun professionnel trouvé</p>
         </div>
-      ) : (
-        Object.entries(professionalsByMetier).map(([metierId, { metier, list }]) => (
-          <div key={metierId} className="mb-10">
-            <h2 className="text-lg font-semibold mb-3 text-primary-purple">{metier.nom}</h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {list.map(professional => (
-                <DirectoryCard key={professional.id} professional={professional} />
-              ))}
-            </div>
-          </div>
-        ))
+      );
+    }
+    
+    return Object.entries(professionalsByMetier).map(([metierId, { metier, list }]) => (
+      <div key={metierId} className="mb-10">
+        <h2 className="text-lg font-semibold mb-3 text-primary-purple">{metier.nom}</h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {list.map(professional => (
+            <DirectoryCard key={professional.id} professional={professional} />
+          ))}
+        </div>
+      </div>
+    ));
+  };
+
+  const renderAddContent = () => (
+    <div className="space-y-6">
+      {user && (
+        <div className="flex flex-col sm:flex-row gap-3">
+          <LinkToProfessional 
+            professionals={professionals} 
+            onLinked={() => refetch()} 
+          />
+          <Button onClick={() => navigate('/annuaire/mon-profil')} className="flex items-center justify-center space-x-2 whitespace-nowrap">
+            <UserPlus className="h-4 w-4" />
+            <span>Mon profil professionnel</span>
+          </Button>
+        </div>
       )}
-    </MainLayout>
+    </div>
+  );
+
+  return (
+    <PageLayout
+      title="Annuaire"
+      description="Trouvez les professionnels, artisans et contacts utiles de la ville regroupés par domaine."
+      icon={Search}
+      activeTab="liste"
+      onTabChange={() => {}}
+      listContent={renderContent()}
+      addContent={renderAddContent()}
+      searchQuery={search}
+      onSearchChange={setSearch}
+      searchPlaceholder="Rechercher un professionnel, un domaine, une base..."
+      loading={isLoading}
+      hasData={Object.keys(professionalsByMetier).length > 0}
+    />
   );
 }
