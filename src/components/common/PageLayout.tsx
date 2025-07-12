@@ -89,7 +89,7 @@ export function PageLayout({
   skeletonCount = 3,
   showResultCount = true
 }: PageLayoutProps) {
-  const [showOptions, setShowOptions] = useState(true);
+  const [showOptions, setShowOptions] = useState(false);
 
   const handleAddClick = () => {
     if (onAddClick) {
