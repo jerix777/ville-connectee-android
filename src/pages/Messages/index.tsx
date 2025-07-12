@@ -15,7 +15,7 @@ import { PageLayout } from '@/components/common/PageLayout';
 const MessagesPage = () => {
   const { user } = useAuth();
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
   const [showNewConversationModal, setShowNewConversationModal] = useState(false);
   const [activeTab, setActiveTab] = useState('liste');
@@ -31,12 +31,15 @@ const MessagesPage = () => {
       messageService.getOrCreateConversation(userId)
         .then((conversation) => {
           setSelectedConversationId(conversation.id);
+          // Nettoyer les paramètres URL
+          setSearchParams({});
           toast({
             title: "Conversation ouverte",
             description: `Conversation avec ${decodeURIComponent(userName)}`
           });
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error('Erreur création conversation:', error);
           toast({
             title: "Erreur",
             description: "Impossible d'ouvrir la conversation",
@@ -44,12 +47,14 @@ const MessagesPage = () => {
           });
         });
     }
-  }, [searchParams, user]);
+  }, [searchParams, user, setSearchParams]);
 
-  const { data: conversations, isLoading } = useQuery({
+  const { data: conversations = [], isLoading, error } = useQuery({
     queryKey: ['conversations'],
     queryFn: messageService.getConversations,
-    enabled: !!user
+    enabled: !!user,
+    retry: 3,
+    staleTime: 30000, // 30 secondes
   });
 
   const deleteConversationMutation = useMutation({
@@ -64,7 +69,8 @@ const MessagesPage = () => {
         description: "La conversation a été supprimée avec succès"
       });
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Erreur suppression conversation:', error);
       toast({
         title: "Erreur",
         description: "Impossible de supprimer la conversation",
@@ -80,7 +86,15 @@ const MessagesPage = () => {
   const handleConversationCreated = (conversationId: string) => {
     queryClient.invalidateQueries({ queryKey: ['conversations'] });
     setSelectedConversationId(conversationId);
+    setShowNewConversationModal(false);
   };
+
+  // Filtrer les conversations
+  const filteredConversations = conversations.filter(conversation => {
+    if (!searchTerm) return true;
+    const lastMessage = conversation.messages?.[0];
+    return lastMessage?.content.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   if (!user) {
     return (
@@ -104,6 +118,30 @@ const MessagesPage = () => {
     );
   }
 
+  if (error) {
+    return (
+      <PageLayout
+        title="Messageries"
+        description="Gérez vos conversations et échangez avec d'autres utilisateurs"
+        icon={MessageCircle}
+        activeTab="liste"
+        onTabChange={() => {}}
+        listContent={
+          <Card className="p-6 text-center">
+            <h2 className="text-lg font-semibold mb-2 text-destructive">Erreur de chargement</h2>
+            <p className="text-muted-foreground mb-4">
+              Impossible de charger vos conversations.
+            </p>
+            <Button onClick={() => queryClient.invalidateQueries({ queryKey: ['conversations'] })}>
+              Réessayer
+            </Button>
+          </Card>
+        }
+        addContent={<div />}
+      />
+    );
+  }
+
   if (selectedConversationId) {
     return (
       <div>
@@ -113,9 +151,10 @@ const MessagesPage = () => {
           icon={MessageCircle}
           activeTab="conversation"
           onTabChange={setActiveTab}
+          showSearchOnAllTabs={false}
           listContent={
             <div className="h-[calc(100vh-12rem)] flex overflow-hidden bg-background rounded-lg border">
-              {/* Liste des conversations - Mobile: masquée, Desktop: visible */}
+              {/* Liste des conversations - Desktop seulement */}
               <div className="hidden lg:block w-80 border-r">
                 <div className="p-4 border-b">
                   <div className="flex items-center justify-between mb-3">
@@ -132,12 +171,12 @@ const MessagesPage = () => {
                 </div>
                 <div className="h-[calc(100%-5rem)] overflow-y-auto">
                   <ConversationList
-                    conversations={conversations || []}
+                    conversations={conversations}
                     isLoading={isLoading}
                     selectedConversationId={selectedConversationId}
                     onSelectConversation={setSelectedConversationId}
                     onDeleteConversation={handleDeleteConversation}
-                    searchTerm={searchTerm}
+                    searchTerm=""
                   />
                 </div>
               </div>
@@ -158,7 +197,6 @@ const MessagesPage = () => {
                   </div>
                 </div>
                 
-                {/* Contenu du message */}
                 <div className="flex-1">
                   <MessageView conversationId={selectedConversationId} />
                 </div>
@@ -189,7 +227,7 @@ const MessagesPage = () => {
         onSearchChange={setSearchTerm}
         searchPlaceholder="Rechercher des conversations..."
         loading={isLoading}
-        hasData={(conversations?.length || 0) > 0}
+        hasData={conversations.length > 0}
         emptyStateIcon={MessageCircle}
         emptyStateTitle="Aucune conversation"
         emptyStateDescription="Commencez une nouvelle conversation"
@@ -210,7 +248,7 @@ const MessagesPage = () => {
             
             <div className="space-y-2">
               <ConversationList
-                conversations={conversations || []}
+                conversations={filteredConversations}
                 isLoading={isLoading}
                 selectedConversationId={selectedConversationId}
                 onSelectConversation={setSelectedConversationId}
@@ -221,7 +259,7 @@ const MessagesPage = () => {
           </div>
         }
         addContent={<div />}
-        resultCount={conversations?.length || 0}
+        resultCount={filteredConversations.length}
       />
       
       <NewConversationModal
