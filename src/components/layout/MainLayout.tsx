@@ -30,13 +30,11 @@ export function MainLayout({ children }: MainLayoutProps) {
       
       <main 
         className={cn(
-          "pt-16 h-screen transition-all duration-300 overflow-y-auto",
+          "pt-16 h-screen transition-all duration-300 overflow-hidden flex flex-col",
           sidebarOpen ? "md:ml-64" : "ml-0"
         )}
       >
-        <div className="min-h-full py-6">
-          {children}
-        </div>
+        {children}
       </main>
     </div>
   );
