@@ -140,24 +140,14 @@ export function PageLayout({
         {/* Fixed header section */}
         <div className="bg-background border-b border-border flex-shrink-0">
           <div className="max-w-7xl mx-auto px-4 lg:px-6">
-            {/* Title and tabs section */}
-            <div className={`flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all duration-300 ${showOptions ? 'py-4' : 'py-2 md:py-2 pb-0'}`}>
+            {/* Title section */}
+            <div className={`transition-all duration-300 ${showOptions ? 'py-4' : 'py-2 md:py-2 pb-0'}`}>
               <PageHeader
                 title={title}
                 description={description}
                 icon={icon}
                 iconClassName={iconClassName}
               />
-              
-              <div 
-                id="page-header-tabs" 
-                className={`transition-all duration-300 ${showOptions ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
-              >
-                <ListViewTabs
-                  value={activeTab}
-                  onValueChange={onTabChange}
-                />
-              </div>
             </div>
 
             {/* Toggle bar */}
