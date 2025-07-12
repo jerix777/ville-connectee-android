@@ -18,10 +18,19 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
   const [editingContent, setEditingContent] = useState('');
   const queryClient = useQueryClient();
 
-  const { data: messages, isLoading } = useQuery({
+  console.log('MessageView: conversationId=', conversationId, 'user=', user?.id);
+
+  const { data: messages, isLoading, error } = useQuery({
     queryKey: ['messages', conversationId],
-    queryFn: () => messageService.getMessages(conversationId),
-    enabled: !!conversationId
+    queryFn: async () => {
+      console.log('Fetching messages for conversation:', conversationId);
+      const result = await messageService.getMessages(conversationId);
+      console.log('Messages fetched:', result);
+      return result;
+    },
+    enabled: !!conversationId && !!user,
+    retry: 3,
+    staleTime: 0, // Toujours refetch pour avoir les derniers messages
   });
 
   // Mark conversation as read when viewing it
@@ -185,6 +194,26 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
       description: "Votre photo a été envoyée"
     });
   };
+
+  if (error) {
+    console.error('Erreur chargement messages:', error);
+    return (
+      <div className="h-full flex flex-col bg-background">
+        <MessageHeader conversationId={conversationId} />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-destructive mb-2">Erreur de chargement des messages</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="text-primary underline"
+            >
+              Réessayer
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full flex flex-col bg-background">

@@ -64,14 +64,22 @@ export const messageService = {
 
   // Get messages for a specific conversation
   async getMessages(conversationId: string) {
+    const currentUserId = (await supabase.auth.getUser()).data.user?.id;
+    if (!currentUserId) throw new Error('User not authenticated');
+
     const { data, error } = await supabase
       .from('messages')
       .select('*')
       .eq('conversation_id', conversationId)
       .order('created_at', { ascending: true });
 
-    if (error) throw error;
-    return data;
+    if (error) {
+      console.error('Erreur récupération messages:', error);
+      throw error;
+    }
+    
+    console.log('Messages récupérés pour conversation', conversationId, ':', data);
+    return data || [];
   },
 
   // Create or get existing conversation between two users

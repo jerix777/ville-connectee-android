@@ -35,6 +35,8 @@ export const MessageList: React.FC<MessageListProps> = ({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  console.log('MessageList: messages=', messages, 'isLoading=', isLoading);
+
   if (isLoading) {
     return (
       <div className="flex-1 overflow-y-auto py-2 bg-white">
