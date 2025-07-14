@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { MainLayout } from "@/components/layout/MainLayout";
-import { PageHeader } from "./PageHeader";
-import { ListViewTabs } from "./ListViewTabs";
-import { SearchBar } from "./SearchBar";
-import { LoadingSkeleton } from "./LoadingSkeleton";
-import { EmptyState } from "./EmptyState";
-import { ContentWrapper } from "./ContentWrapper";
-import { AuthGuard } from "@/components/auth/AuthGuard";
-import { LucideIcon, ChevronUp, ChevronDown } from 'lucide-react';
+import { PageTitle } from "./PageTitle";
+import { PageOptions } from "./PageOptions";
+import { PageFilters } from "./PageFilters";
+import { PageContent } from "./PageContent";
+import { LucideIcon } from 'lucide-react';
 
 interface PageLayoutProps {
   // Header props
@@ -103,116 +100,57 @@ export function PageLayout({
     setShowOptions(!showOptions);
   };
 
-  const renderListView = () => {
-    if (loading) {
-      return <LoadingSkeleton type={skeletonType} count={skeletonCount} />;
-    }
-
-    if (!hasData) {
-      return (
-        <EmptyState
-          icon={emptyStateIcon}
-          title={emptyStateTitle}
-          description={emptyStateDescription}
-          hasSearchQuery={!!searchQuery}
-          onResetSearch={onSearchChange ? () => onSearchChange("") : undefined}
-          onAddFirst={onAddFirst}
-          addFirstText={addFirstText}
-        />
-      );
-    }
-
-    return (
-      <ContentWrapper
-        hasData={hasData}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={onPageChange}
-        canGoNext={canGoNext}
-        canGoPrevious={canGoPrevious}
-        resultCount={showResultCount ? resultCount : undefined}
-        searchQuery={searchQuery}
-      >
-        {listContent}
-      </ContentWrapper>
-    );
-  };
-
   return (
     <MainLayout>
       <div className="h-screen flex flex-col">
         {/* Zone 1: Titre de la page (non scrollable) */}
-        <div className="bg-background border-b border-border flex-shrink-0">
-          <div className="max-w-7xl mx-auto px-4 lg:px-6 py-4">
-            <PageHeader
-              title={title}
-              description={description}
-              icon={icon}
-              iconClassName={iconClassName}
-            />
-          </div>
-        </div>
+        <PageTitle
+          title={title}
+          description={description}
+          icon={icon}
+          iconClassName={iconClassName}
+        />
 
         {/* Zone 2: Options de la page (non scrollable) */}
-        <div className="bg-background border-b border-border flex-shrink-0">
-          <div className="max-w-7xl mx-auto px-4 lg:px-6">
-            <div 
-              onClick={toggleOptions}
-              className="flex items-center justify-center gap-2 py-2 cursor-pointer hover:bg-muted/50 transition-colors duration-200 rounded-md -mx-2"
-            >
-              <span className="text-sm text-muted-foreground">
-                {showOptions ? "Masquer les options" : "Afficher les options"}
-              </span>
-              {showOptions ? (
-                <ChevronUp className="h-4 w-4 text-muted-foreground" />
-              ) : (
-                <ChevronDown className="h-4 w-4 text-muted-foreground" />
-              )}
-            </div>
-            
-            <div 
-              className={`transition-all duration-300 overflow-hidden ${
-                showOptions 
-                  ? 'max-h-96 opacity-100 pb-4' 
-                  : 'max-h-0 opacity-0 pb-0'
-              }`}
-            >
-              {/* Contenu des options de la page */}
-              <div className="py-2">
-                {/* Barre de recherche et bouton d'ajout */}
-                {(activeTab === "liste" || showSearchOnAllTabs) && onSearchChange && (
-                  <SearchBar
-                    value={searchQuery}
-                    onChange={onSearchChange}
-                    placeholder={searchPlaceholder}
-                    onAddClick={handleAddClick}
-                    addButtonText={addButtonText}
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+        <PageOptions
+          showOptions={showOptions}
+          onToggleOptions={toggleOptions}
+          activeTab={activeTab}
+          searchQuery={searchQuery}
+          onSearchChange={onSearchChange}
+          searchPlaceholder={searchPlaceholder}
+          onAddClick={handleAddClick}
+          addButtonText={addButtonText}
+          showSearchOnAllTabs={showSearchOnAllTabs}
+        />
 
         {/* Zone 3: Filtres (non scrollable) */}
-        <div className="bg-background border-b border-border flex-shrink-0">
-          <div className="max-w-7xl mx-auto px-4 lg:px-6 py-4">
-            <p className="text-sm text-muted-foreground">Zone réservée aux filtres spécifiques</p>
-          </div>
-        </div>
+        <PageFilters />
 
         {/* Zone 4: Données scrollables et paginées */}
-        <div className="flex-1 overflow-y-auto bg-muted/30">
-          <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
-            {activeTab === "liste" && renderListView()}
-            
-            {activeTab === "ajouter" && (
-              <AuthGuard>
-                {addContent}
-              </AuthGuard>
-            )}
-          </div>
-        </div>
+        <PageContent
+          activeTab={activeTab}
+          loading={loading}
+          hasData={hasData}
+          listContent={listContent}
+          addContent={addContent}
+          searchQuery={searchQuery}
+          onSearchChange={onSearchChange}
+          emptyStateIcon={emptyStateIcon}
+          emptyStateTitle={emptyStateTitle}
+          emptyStateDescription={emptyStateDescription}
+          onAddFirst={onAddFirst}
+          addFirstText={addFirstText}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+          canGoNext={canGoNext}
+          canGoPrevious={canGoPrevious}
+          resultCount={resultCount}
+          skeletonType={skeletonType}
+          skeletonCount={skeletonCount}
+          showResultCount={showResultCount}
+        />
       </div>
     </MainLayout>
   );
