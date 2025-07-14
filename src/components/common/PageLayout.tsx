@@ -179,28 +179,27 @@ export function PageLayout({
             >
               {/* Contenu des options de la page */}
               <div className="py-2">
-                <p className="text-sm text-muted-foreground">Options de la page (à développer selon les besoins)</p>
+                {/* Barre de recherche et bouton d'ajout */}
+                {(activeTab === "liste" || showSearchOnAllTabs) && onSearchChange && (
+                  <SearchBar
+                    value={searchQuery}
+                    onChange={onSearchChange}
+                    placeholder={searchPlaceholder}
+                    onAddClick={handleAddClick}
+                    addButtonText={addButtonText}
+                  />
+                )}
               </div>
             </div>
           </div>
         </div>
 
         {/* Zone 3: Filtres (non scrollable) */}
-        {(activeTab === "liste" || showSearchOnAllTabs) && (
-          <div className="bg-background border-b border-border flex-shrink-0">
-            <div className="max-w-7xl mx-auto px-4 lg:px-6 py-4">
-              {onSearchChange && (
-                <SearchBar
-                  value={searchQuery}
-                  onChange={onSearchChange}
-                  placeholder={searchPlaceholder}
-                  onAddClick={handleAddClick}
-                  addButtonText={addButtonText}
-                />
-              )}
-            </div>
+        <div className="bg-background border-b border-border flex-shrink-0">
+          <div className="max-w-7xl mx-auto px-4 lg:px-6 py-4">
+            <p className="text-sm text-muted-foreground">Zone réservée aux filtres spécifiques</p>
           </div>
-        )}
+        </div>
 
         {/* Zone 4: Données scrollables et paginées */}
         <div className="flex-1 overflow-y-auto bg-muted/30">
