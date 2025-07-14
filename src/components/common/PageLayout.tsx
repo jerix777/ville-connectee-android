@@ -141,20 +141,21 @@ export function PageLayout({
   return (
     <MainLayout>
       <div className="h-screen flex flex-col">
-        {/* Fixed header section */}
+        {/* Zone 1: Titre de la page (non scrollable) */}
+        <div className="bg-background border-b border-border flex-shrink-0">
+          <div className="max-w-7xl mx-auto px-4 lg:px-6 py-4">
+            <PageHeader
+              title={title}
+              description={description}
+              icon={icon}
+              iconClassName={iconClassName}
+            />
+          </div>
+        </div>
+
+        {/* Zone 2: Options de la page (non scrollable) */}
         <div className="bg-background border-b border-border flex-shrink-0">
           <div className="max-w-7xl mx-auto px-4 lg:px-6">
-            {/* Title section */}
-            <div className={`transition-all duration-300 ${showOptions ? 'py-4' : 'pt-2 pb-0'}`}>
-              <PageHeader
-                title={title}
-                description={description}
-                icon={icon}
-                iconClassName={iconClassName}
-              />
-            </div>
-
-            {/* Toggle bar */}
             <div 
               onClick={toggleOptions}
               className="flex items-center justify-center gap-2 py-2 cursor-pointer hover:bg-muted/50 transition-colors duration-200 rounded-md -mx-2"
@@ -168,35 +169,41 @@ export function PageLayout({
                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
               )}
             </div>
-
-            {/* Options section */}
-            {(activeTab === "liste" || showSearchOnAllTabs) && (
-              <div 
-                id="page-options"
-                className={`transition-all duration-300 overflow-hidden ${
-                  showOptions 
-                    ? 'max-h-96 opacity-100 pb-4' 
-                    : 'max-h-0 opacity-0 pb-0'
-                }`}
-              >
-                {onSearchChange && (
-                  <div id="page-search-bar">
-                    <SearchBar
-                      value={searchQuery}
-                      onChange={onSearchChange}
-                      placeholder={searchPlaceholder}
-                      onAddClick={handleAddClick}
-                      addButtonText={addButtonText}
-                    />
-                  </div>
-                )}
+            
+            <div 
+              className={`transition-all duration-300 overflow-hidden ${
+                showOptions 
+                  ? 'max-h-96 opacity-100 pb-4' 
+                  : 'max-h-0 opacity-0 pb-0'
+              }`}
+            >
+              {/* Contenu des options de la page */}
+              <div className="py-2">
+                <p className="text-sm text-muted-foreground">Options de la page (à développer selon les besoins)</p>
               </div>
-            )}
+            </div>
           </div>
         </div>
 
-        {/* Scrollable content area */}
-        <div className="flex-1 overflow-y-auto">
+        {/* Zone 3: Filtres (non scrollable) */}
+        {(activeTab === "liste" || showSearchOnAllTabs) && (
+          <div className="bg-background border-b border-border flex-shrink-0">
+            <div className="max-w-7xl mx-auto px-4 lg:px-6 py-4">
+              {onSearchChange && (
+                <SearchBar
+                  value={searchQuery}
+                  onChange={onSearchChange}
+                  placeholder={searchPlaceholder}
+                  onAddClick={handleAddClick}
+                  addButtonText={addButtonText}
+                />
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Zone 4: Données scrollables et paginées */}
+        <div className="flex-1 overflow-y-auto bg-muted/30">
           <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
             {activeTab === "liste" && renderListView()}
             
