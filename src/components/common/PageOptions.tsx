@@ -13,6 +13,7 @@ interface PageOptionsProps {
   onAddClick?: () => void;
   addButtonText?: string;
   showSearchOnAllTabs?: boolean;
+  additionalOptions?: React.ReactNode;
 }
 
 export function PageOptions({
@@ -24,7 +25,8 @@ export function PageOptions({
   searchPlaceholder = "Rechercher...",
   onAddClick,
   addButtonText = "Ajouter",
-  showSearchOnAllTabs = false
+  showSearchOnAllTabs = false,
+  additionalOptions
 }: PageOptionsProps) {
   return (
     <div className="bg-background border-b border-border flex-shrink-0">
@@ -51,7 +53,7 @@ export function PageOptions({
           }`}
         >
           {/* Contenu des options de la page */}
-          <div className="py-2">
+          <div className="py-2 space-y-4">
             {/* Barre de recherche et bouton d'ajout */}
             {(activeTab === "liste" || showSearchOnAllTabs) && onSearchChange && (
               <SearchBar
@@ -61,6 +63,13 @@ export function PageOptions({
                 onAddClick={onAddClick!}
                 addButtonText={addButtonText}
               />
+            )}
+            
+            {/* Options additionnelles */}
+            {additionalOptions && (
+              <div className="flex gap-2">
+                {additionalOptions}
+              </div>
             )}
           </div>
         </div>

@@ -85,11 +85,9 @@ export default function ImmobilierPage() {
       customTabs={customTabs}
       skeletonType="grid"
       skeletonCount={6}
+      additionalOptions={<AlertSubscription />}
       listContent={
         <div className="space-y-6">
-          <div className="flex gap-2">
-            <AlertSubscription />
-          </div>
           
           {error ? (
             <div className="text-center py-10 text-red-500">
