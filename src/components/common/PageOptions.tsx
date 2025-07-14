@@ -53,24 +53,29 @@ export function PageOptions({
           }`}
         >
           {/* Contenu des options de la page */}
-          <div className="py-2 space-y-4">
-            {/* Barre de recherche et bouton d'ajout */}
-            {(activeTab === "liste" || showSearchOnAllTabs) && onSearchChange && (
-              <SearchBar
-                value={searchQuery}
-                onChange={onSearchChange}
-                placeholder={searchPlaceholder}
-                onAddClick={onAddClick!}
-                addButtonText={addButtonText}
-              />
-            )}
-            
-            {/* Options additionnelles */}
-            {additionalOptions && (
-              <div className="flex gap-2">
-                {additionalOptions}
-              </div>
-            )}
+          <div className="py-2">
+            {/* Disposition responsive : ligne unique sur grand écran, séparée sur petit écran */}
+            <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+              {/* Barre de recherche et bouton d'ajout */}
+              {(activeTab === "liste" || showSearchOnAllTabs) && onSearchChange && (
+                <div className="flex-1">
+                  <SearchBar
+                    value={searchQuery}
+                    onChange={onSearchChange}
+                    placeholder={searchPlaceholder}
+                    onAddClick={onAddClick!}
+                    addButtonText={addButtonText}
+                  />
+                </div>
+              )}
+              
+              {/* Options additionnelles */}
+              {additionalOptions && (
+                <div className="flex gap-2 lg:flex-shrink-0">
+                  {additionalOptions}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
