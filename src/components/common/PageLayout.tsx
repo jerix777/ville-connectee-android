@@ -124,8 +124,6 @@ export function PageLayout({
           showSearchOnAllTabs={showSearchOnAllTabs}
         />
 
-        {/* Zone 3: Filtres (non scrollable) */}
-        <PageFilters />
 
         {/* Zone 4: Données scrollables et paginées */}
         <PageContent
