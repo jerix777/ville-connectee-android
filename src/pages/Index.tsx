@@ -104,52 +104,55 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Features Section 1 - Actualités */}
-      <section className="mb-10 px-4">
-        <div className="flex justify-between items-center mb-6">
-           <h2 className="text-lg font-bold text-foreground">
-            Actualités
-          </h2>
-          <a href="/actualites" className="text-primary hover:underline">
-            Voir tout
-          </a>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {featuresSection1.map((feature) => (
-            <FeatureCard
-              key={feature.title}
-              title={feature.title}
-              description={feature.description}
-              icon={feature.icon}
-              to={feature.to}
-            />
-          ))}
-        </div>
-      </section>
+      {/* Contenu défilable pour les sections de fonctionnalités */}
+      <div className="flex-1 overflow-y-auto px-4 pb-4">
+        {/* Features Section 1 - Actualités */}
+        <section className="mb-10">
+          <div className="flex justify-between items-center mb-6">
+             <h2 className="text-lg font-bold text-foreground">
+              Actualités
+            </h2>
+            <a href="/actualites" className="text-primary hover:underline">
+              Voir tout
+            </a>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {featuresSection1.map((feature) => (
+              <FeatureCard
+                key={feature.title}
+                title={feature.title}
+                description={feature.description}
+                icon={feature.icon}
+                to={feature.to}
+              />
+            ))}
+          </div>
+        </section>
 
-      {/* Features Section 2 - Espace Immobilier */}
-      <section className="px-4">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-lg font-bold text-foreground">
-            Espace Immobilier
-          </h2>
-          <a href="/immobilier" className="text-primary hover:underline">
-            Voir tout
-          </a>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {featuresSection2.map((feature) => (
-            <FeatureCard
-              key={feature.title}
-              title={feature.title}
-              description={feature.description}
-              icon={feature.icon}
-              to={feature.to}
-              variant="outline"
-            />
-          ))}
-        </div>
-      </section>
+        {/* Features Section 2 - Espace Immobilier */}
+        <section>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-lg font-bold text-foreground">
+              Espace Immobilier
+            </h2>
+            <a href="/immobilier" className="text-primary hover:underline">
+              Voir tout
+            </a>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {featuresSection2.map((feature) => (
+              <FeatureCard
+                key={feature.title}
+                title={feature.title}
+                description={feature.description}
+                icon={feature.icon}
+                to={feature.to}
+                variant="outline"
+              />
+            ))}
+          </div>
+        </section>
+      </div>
     </MainLayout>
   );
 }
