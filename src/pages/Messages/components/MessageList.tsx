@@ -35,7 +35,7 @@ export const MessageList: React.FC<MessageListProps> = ({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  console.log('MessageList: messages=', messages, 'isLoading=', isLoading);
+  console.log('MessageList: messages=', messages, 'isLoading=', isLoading, 'messages.length=', messages?.length);
 
   if (isLoading) {
     return (

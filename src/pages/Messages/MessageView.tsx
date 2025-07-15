@@ -24,9 +24,14 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
     queryKey: ['messages', conversationId],
     queryFn: async () => {
       console.log('Fetching messages for conversation:', conversationId);
-      const result = await messageService.getMessages(conversationId);
-      console.log('Messages fetched:', result);
-      return result;
+      try {
+        const result = await messageService.getMessages(conversationId);
+        console.log('Messages fetched successfully:', result);
+        return result;
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+        throw error;
+      }
     },
     enabled: !!conversationId && !!user,
     retry: 3,
