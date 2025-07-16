@@ -233,29 +233,28 @@ const MessagesPage = () => {
         emptyStateDescription="Commencez une nouvelle conversation"
         onAddFirst={() => setShowNewConversationModal(true)}
         addFirstText="Nouvelle conversation"
+        onAddClick={() => setShowNewConversationModal(true)}
+        addButtonText="Nouvelle conversation"
+        additionalOptions={
+          <Button 
+            variant="outline"
+            onClick={() => setShowNewConversationModal(true)}
+            size="sm"
+          >
+            <Edit className="h-4 w-4 mr-2" />
+            Nouvelle conversation
+          </Button>
+        }
         listContent={
-          <div>
-            <div className="mb-4">
-              <Button 
-                variant="outline"
-                onClick={() => setShowNewConversationModal(true)}
-                className="w-full sm:w-auto"
-              >
-                <Edit className="h-4 w-4 mr-2" />
-                Nouvelle conversation
-              </Button>
-            </div>
-            
-            <div className="space-y-2">
-              <ConversationList
-                conversations={filteredConversations}
-                isLoading={isLoading}
-                selectedConversationId={selectedConversationId}
-                onSelectConversation={setSelectedConversationId}
-                onDeleteConversation={handleDeleteConversation}
-                searchTerm={searchTerm}
-              />
-            </div>
+          <div className="space-y-2">
+            <ConversationList
+              conversations={filteredConversations}
+              isLoading={isLoading}
+              selectedConversationId={selectedConversationId}
+              onSelectConversation={setSelectedConversationId}
+              onDeleteConversation={handleDeleteConversation}
+              searchTerm={searchTerm}
+            />
           </div>
         }
         addContent={<div />}
