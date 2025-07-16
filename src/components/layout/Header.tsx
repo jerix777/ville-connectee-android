@@ -11,6 +11,7 @@ import { CommuneSelector } from "@/components/CommuneSelector";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
 import { NotificationBell } from "./NotificationBell";
+import { BackButton } from "@/components/common/BackButton";
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -71,6 +72,8 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
         >
           <Menu size={24} />
         </Button>
+        
+        <BackButton className="mr-2" />
         
         <h1 
           className={cn(
