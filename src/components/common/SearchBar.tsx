@@ -7,8 +7,9 @@ interface SearchBarProps {
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
-  onAddClick: () => void;
+  onAddClick?: () => void;
   addButtonText?: string;
+  showAddButton?: boolean;
 }
 
 export function SearchBar({ 
@@ -16,7 +17,8 @@ export function SearchBar({
   onChange, 
   placeholder, 
   onAddClick, 
-  addButtonText = "Ajouter" 
+  addButtonText = "Ajouter",
+  showAddButton = true
 }: SearchBarProps) {
   return (
     <div className="flex gap-4">
@@ -29,14 +31,16 @@ export function SearchBar({
           className="pl-10"
         />
       </div>
-      <Button
-        variant="outline"
-        onClick={onAddClick}
-        className="whitespace-nowrap"
-      >
-        <Plus className="mr-2 h-4 w-4" />
-        {addButtonText}
-      </Button>
+      {showAddButton && onAddClick && (
+        <Button
+          variant="outline"
+          onClick={onAddClick}
+          className="whitespace-nowrap"
+        >
+          <Plus className="mr-2 h-4 w-4" />
+          {addButtonText}
+        </Button>
+      )}
     </div>
   );
 }

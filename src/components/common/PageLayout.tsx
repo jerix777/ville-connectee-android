@@ -51,7 +51,9 @@ interface PageLayoutProps {
   skeletonType?: 'list' | 'grid';
   skeletonCount?: number;
   showResultCount?: boolean;
-  additionalOptions?: React.ReactNode;
+  additionalOptions?: React.ReactNode | React.ReactNode[];
+  optionsLayout?: 'default' | 'search-first' | 'options-first';
+  showAddButton?: boolean;
 }
 
 export function PageLayout({
@@ -86,7 +88,9 @@ export function PageLayout({
   skeletonType = 'list',
   skeletonCount = 3,
   showResultCount = true,
-  additionalOptions
+  additionalOptions,
+  optionsLayout = 'default',
+  showAddButton = true
 }: PageLayoutProps) {
   const [showOptions, setShowOptions] = useState(false);
 
@@ -125,6 +129,8 @@ export function PageLayout({
           addButtonText={addButtonText}
           showSearchOnAllTabs={showSearchOnAllTabs}
           additionalOptions={additionalOptions}
+          optionsLayout={optionsLayout}
+          showAddButton={showAddButton}
         />
 
 
