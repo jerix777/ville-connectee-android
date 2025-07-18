@@ -29,6 +29,7 @@ import ServicesPage from "./pages/Services";
 import AuthPage from "./pages/Auth";
 import SettingsPage from "./pages/Settings";
 import MessagesPage from "./pages/Messages";
+import { JukeboxPage } from "./pages/Jukebox";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,7 @@ const AppContent = () => {
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/messages" element={<MessagesPage />} />
+          <Route path="/jukebox" element={<JukeboxPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

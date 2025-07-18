@@ -1,7 +1,7 @@
 
 import { MainLayout } from "@/components/layout/MainLayout";
 import { FeatureCard } from "@/components/ui/feature-card";
-import { BookmarkCheck, Building, Calendar, Bell, Info, MapPin, Users, MessageSquare, Star, Link as LinkIcon } from "lucide-react";
+import { BookmarkCheck, Building, Calendar, Bell, Info, MapPin, Users, MessageSquare, Star, Link as LinkIcon, Music } from "lucide-react";
 
 const featuresSection1 = [
   {
@@ -39,6 +39,12 @@ const featuresSection1 = [
     icon: Users,
     to: "/associations",
     description: "Découvrez les associations"
+  },
+  {
+    title: "Jukebox",
+    icon: Music,
+    to: "/jukebox",
+    description: "Écoutez et partagez de la musique"
   },
 ];
 

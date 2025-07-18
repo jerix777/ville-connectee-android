@@ -343,6 +343,63 @@ export type Database = {
           },
         ]
       }
+      jukebox_sessions: {
+        Row: {
+          created_at: string
+          current_musique_id: string | null
+          current_position: number | null
+          description: string | null
+          host_user_id: string
+          id: string
+          is_active: boolean | null
+          is_playing: boolean | null
+          nom: string
+          quartier_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_musique_id?: string | null
+          current_position?: number | null
+          description?: string | null
+          host_user_id: string
+          id?: string
+          is_active?: boolean | null
+          is_playing?: boolean | null
+          nom: string
+          quartier_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_musique_id?: string | null
+          current_position?: number | null
+          description?: string | null
+          host_user_id?: string
+          id?: string
+          is_active?: boolean | null
+          is_playing?: boolean | null
+          nom?: string
+          quartier_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jukebox_sessions_current_musique_id_fkey"
+            columns: ["current_musique_id"]
+            isOneToOne: false
+            referencedRelation: "musiques"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jukebox_sessions_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       marche: {
         Row: {
           contact1: string
@@ -443,6 +500,62 @@ export type Database = {
         }
         Relationships: []
       }
+      musiques: {
+        Row: {
+          album: string | null
+          annee: number | null
+          artiste: string
+          cover_url: string | null
+          created_at: string
+          duree: number | null
+          file_url: string
+          genre: string | null
+          id: string
+          quartier_id: string | null
+          titre: string
+          updated_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          album?: string | null
+          annee?: number | null
+          artiste: string
+          cover_url?: string | null
+          created_at?: string
+          duree?: number | null
+          file_url: string
+          genre?: string | null
+          id?: string
+          quartier_id?: string | null
+          titre: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          album?: string | null
+          annee?: number | null
+          artiste?: string
+          cover_url?: string | null
+          created_at?: string
+          duree?: number | null
+          file_url?: string
+          genre?: string | null
+          id?: string
+          quartier_id?: string | null
+          titre?: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "musiques_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       necrologie: {
         Row: {
           created_at: string | null
@@ -527,6 +640,86 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "offres_emploi_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      playlist_musiques: {
+        Row: {
+          added_at: string
+          id: string
+          musique_id: string
+          playlist_id: string
+          position: number
+        }
+        Insert: {
+          added_at?: string
+          id?: string
+          musique_id: string
+          playlist_id: string
+          position?: number
+        }
+        Update: {
+          added_at?: string
+          id?: string
+          musique_id?: string
+          playlist_id?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playlist_musiques_musique_id_fkey"
+            columns: ["musique_id"]
+            isOneToOne: false
+            referencedRelation: "musiques"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_musiques_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      playlists: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          is_public: boolean
+          nom: string
+          quartier_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          nom: string
+          quartier_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          nom?: string
+          quartier_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playlists_quartier_id_fkey"
             columns: ["quartier_id"]
             isOneToOne: false
             referencedRelation: "quartiers"
@@ -720,6 +913,80 @@ export type Database = {
             columns: ["quartier_id"]
             isOneToOne: false
             referencedRelation: "quartiers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_participants: {
+        Row: {
+          id: string
+          joined_at: string
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_participants_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "jukebox_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_queue: {
+        Row: {
+          added_at: string
+          added_by: string
+          id: string
+          musique_id: string
+          played: boolean | null
+          position: number
+          session_id: string
+        }
+        Insert: {
+          added_at?: string
+          added_by: string
+          id?: string
+          musique_id: string
+          played?: boolean | null
+          position: number
+          session_id: string
+        }
+        Update: {
+          added_at?: string
+          added_by?: string
+          id?: string
+          musique_id?: string
+          played?: boolean | null
+          position?: number
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_queue_musique_id_fkey"
+            columns: ["musique_id"]
+            isOneToOne: false
+            referencedRelation: "musiques"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_queue_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "jukebox_sessions"
             referencedColumns: ["id"]
           },
         ]
