@@ -29,7 +29,7 @@ import ServicesPage from "./pages/Services";
 import AuthPage from "./pages/Auth";
 import SettingsPage from "./pages/Settings";
 import MessagesPage from "./pages/Messages";
-import JukeboxPage from "./pages/Jukebox";
+import { JukeboxPage } from "./pages/Jukebox";
 
 const queryClient = new QueryClient();
 
