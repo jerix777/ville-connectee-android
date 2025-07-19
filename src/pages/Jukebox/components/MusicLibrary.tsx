@@ -99,7 +99,7 @@ export function MusicLibrary({ musiques, loading, onRefresh, currentSession }: M
       </Card>
 
       {/* Music List */}
-      <div className="space-y-3">
+      <div className="space-y-3 max-h-96 overflow-y-auto">
         {filteredMusiques.length === 0 ? (
           <EmptyState
             icon={Album}
