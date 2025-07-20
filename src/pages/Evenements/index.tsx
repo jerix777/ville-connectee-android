@@ -18,6 +18,7 @@ export default function EvenementsPage() {
   const [activeTab, setActiveTab] = useState<string>("tous");
   const [activeViewTab, setActiveViewTab] = useState<string>("liste");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [showActions, setShowActions] = useState<boolean>(true); // <-- Ajouté
 
   const { data: events, isLoading, error } = useQuery({
     queryKey: ["events"],
