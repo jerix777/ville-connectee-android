@@ -16,7 +16,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
       <Sidebar isOpen={sidebarOpen} />
       
@@ -30,13 +30,11 @@ export function MainLayout({ children }: MainLayoutProps) {
       
       <main 
         className={cn(
-          "pt-16 min-h-screen transition-all duration-300",
+          "pt-16 h-screen transition-all duration-300 overflow-hidden flex flex-col",
           sidebarOpen ? "md:ml-64" : "ml-0"
         )}
       >
-        <div className="container mx-auto px-4 py-6 animate-fade-in">
-          {children}
-        </div>
+        {children}
       </main>
     </div>
   );

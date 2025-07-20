@@ -1,22 +1,18 @@
 
-import { MainLayout } from "@/components/layout/MainLayout";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
-import { Search, User, Plus } from "lucide-react";
+import { User } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getMetiers, getProfessionals, Metier, Professional } from "@/services/professionalService";
 import { WorkerCard } from "./MainDoeuvre/WorkerCard";
 import { AddWorkerForm } from "./MainDoeuvre/AddWorkerForm";
-import { AuthGuard } from "@/components/auth/AuthGuard";
 import { usePagination } from "@/hooks/usePagination";
-import { PaginationControls } from "@/components/ui/pagination-controls";
+import { PageLayout } from "@/components/common/PageLayout";
 
 export default function MainDoeuvrePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [domainFilter, setDomainFilter] = useState("");
+  const [activeTab, setActiveTab] = useState("liste");
 
   const { data: metiers = [] } = useQuery({
     queryKey: ['metiers'],
@@ -64,85 +60,65 @@ export default function MainDoeuvrePage() {
   });
 
   return (
-    <MainLayout>
-      <div className="mb-6">
-        <h1 className="text-xl font-bold mb-2">Main d'œuvre</h1>
-        <p className="text-gray-600">
-          Trouvez des professionnels qualifiés dans votre zone
-        </p>
-      </div>
-      
-      {/* Search and filter section */}
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-          <Input
-            placeholder="Rechercher un professionnel..."
-            className="pl-10"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        
-        <Select value={domainFilter} onValueChange={setDomainFilter}>
-          <SelectTrigger className="w-full md:w-[200px]">
-            <SelectValue placeholder="Tous les domaines" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Tous les domaines</SelectItem>
-            {metiers.map(metier => (
-              <SelectItem key={metier.id} value={metier.id}>{metier.nom}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        
-        <AuthGuard>
-          <AddWorkerForm />
-        </AuthGuard>
-      </div>
-      
-      {/* Results section */}
-      {isLoading ? (
-        <div className="text-center py-10">
-          <p>Chargement des professionnels...</p>
-        </div>
-      ) : error ? (
-        <div className="text-center py-10 text-red-500">
-          <p>Une erreur est survenue lors du chargement des professionnels</p>
-        </div>
-      ) : filteredWorkers.length === 0 ? (
-        <div className="text-center py-10 text-gray-500">
-          <User size={48} className="mx-auto mb-4 text-gray-400" />
-          <p>Aucun professionnel trouvé</p>
-          <p className="text-sm">Essayez de modifier vos filtres ou inscrivez-vous</p>
-        </div>
-      ) : domainFilter && domainFilter !== "all" ? (
-        // Show paginated results for a specific domain
-        <div>
-          {paginatedWorkers.map(worker => (
-            <WorkerCard key={worker.id} worker={worker} />
-          ))}
-          <PaginationControls
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={goToPage}
-            canGoNext={canGoNext}
-            canGoPrevious={canGoPrevious}
-          />
-        </div>
-      ) : (
-        // Group by domain when no specific domain is selected or "all"
-        <div>
-          {Object.entries(workersByDomain).map(([domainId, { metier, workers }]) => (
-            <div key={domainId} className="mb-8">
-              <h2 className="text-lg font-semibold mb-4 text-ville-dark">{metier.nom}</h2>
-              {workers.map(worker => (
+    <PageLayout
+      title="Main d'œuvre"
+      description="Trouvez des professionnels qualifiés dans votre zone"
+      icon={User}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      searchPlaceholder="Rechercher un professionnel..."
+      addContent={<AddWorkerForm />}
+      loading={isLoading}
+      hasData={filteredWorkers.length > 0}
+      emptyStateIcon={User}
+      emptyStateTitle="Aucun professionnel trouvé"
+      emptyStateDescription="Essayez de modifier vos filtres ou inscrivez-vous"
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={goToPage}
+      canGoNext={canGoNext}
+      canGoPrevious={canGoPrevious}
+      resultCount={filteredWorkers.length}
+      listContent={
+        <div className="space-y-6">
+          <div className="flex gap-4 mb-6">
+            <Select value={domainFilter} onValueChange={setDomainFilter}>
+              <SelectTrigger className="w-full md:w-[200px]">
+                <SelectValue placeholder="Tous les domaines" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tous les domaines</SelectItem>
+                {metiers.map(metier => (
+                  <SelectItem key={metier.id} value={metier.id}>{metier.nom}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          {domainFilter && domainFilter !== "all" ? (
+            <div className="space-y-4">
+              {paginatedWorkers.map(worker => (
                 <WorkerCard key={worker.id} worker={worker} />
               ))}
             </div>
-          ))}
+          ) : (
+            <div>
+              {Object.entries(workersByDomain).map(([domainId, { metier, workers }]) => (
+                <div key={domainId} className="mb-8">
+                  <h2 className="text-lg font-semibold mb-4 text-ville-dark">{metier.nom}</h2>
+                  <div className="space-y-4">
+                    {workers.map(worker => (
+                      <WorkerCard key={worker.id} worker={worker} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      )}
-    </MainLayout>
+      }
+    />
   );
 }

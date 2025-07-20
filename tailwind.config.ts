@@ -53,11 +53,11 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				ville: {
-					DEFAULT: '#9b87f5', // primary purple
-					light: '#E5DEFF', // soft purple
-					dark: '#6E59A5', // tertiary purple
-					hover: '#7E69AB', // secondary purple
-					foreground: '#FFFFFF' // white text
+					DEFAULT: 'hsl(var(--primary))',
+					light: 'hsl(var(--accent))',
+					dark: 'hsl(var(--secondary))',
+					hover: 'hsl(var(--secondary))',
+					foreground: 'hsl(var(--primary-foreground))'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',

@@ -1,12 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MainLayout } from "@/components/layout/MainLayout";
-import { PageHeader } from "./PageHeader";
-import { ListViewTabs } from "./ListViewTabs";
-import { SearchBar } from "./SearchBar";
-import { LoadingSkeleton } from "./LoadingSkeleton";
-import { EmptyState } from "./EmptyState";
-import { ContentWrapper } from "./ContentWrapper";
-import { AuthGuard } from "@/components/auth/AuthGuard";
+import { PageTitle } from "./PageTitle";
+import { PageOptions } from "./PageOptions";
+import { PageFilters } from "./PageFilters";
+import { PageContent } from "./PageContent";
 import { LucideIcon } from 'lucide-react';
 
 interface PageLayoutProps {
@@ -19,6 +16,7 @@ interface PageLayoutProps {
   // Tab management
   activeTab: string;
   onTabChange: (tab: string) => void;
+  customTabs?: { value: string; label: string }[];
   
   // Content rendering
   listContent?: React.ReactNode;
@@ -30,6 +28,7 @@ interface PageLayoutProps {
   searchPlaceholder?: string;
   onAddClick?: () => void;
   addButtonText?: string;
+  showSearchOnAllTabs?: boolean;
   
   // Loading and empty states
   loading?: boolean;
@@ -52,6 +51,9 @@ interface PageLayoutProps {
   skeletonType?: 'list' | 'grid';
   skeletonCount?: number;
   showResultCount?: boolean;
+  additionalOptions?: React.ReactNode | React.ReactNode[];
+  optionsLayout?: 'default' | 'search-first' | 'options-first';
+  showAddButton?: boolean;
 }
 
 export function PageLayout({
@@ -63,11 +65,13 @@ export function PageLayout({
   onTabChange,
   listContent,
   addContent,
+  customTabs,
   searchQuery = "",
   onSearchChange,
   searchPlaceholder = "Rechercher...",
   onAddClick,
   addButtonText = "Ajouter",
+  showSearchOnAllTabs = false,
   loading = false,
   hasData = false,
   emptyStateIcon,
@@ -83,8 +87,13 @@ export function PageLayout({
   resultCount,
   skeletonType = 'list',
   skeletonCount = 3,
-  showResultCount = true
+  showResultCount = true,
+  additionalOptions,
+  optionsLayout = 'default',
+  showAddButton = true
 }: PageLayoutProps) {
+  const [showOptions, setShowOptions] = useState(false);
+
   const handleAddClick = () => {
     if (onAddClick) {
       onAddClick();
@@ -93,79 +102,62 @@ export function PageLayout({
     }
   };
 
-  const renderListView = () => {
-    if (loading) {
-      return <LoadingSkeleton type={skeletonType} count={skeletonCount} />;
-    }
-
-    if (!hasData) {
-      return (
-        <EmptyState
-          icon={emptyStateIcon}
-          title={emptyStateTitle}
-          description={emptyStateDescription}
-          hasSearchQuery={!!searchQuery}
-          onResetSearch={onSearchChange ? () => onSearchChange("") : undefined}
-          onAddFirst={onAddFirst}
-          addFirstText={addFirstText}
-        />
-      );
-    }
-
-    return (
-      <ContentWrapper
-        hasData={hasData}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={onPageChange}
-        canGoNext={canGoNext}
-        canGoPrevious={canGoPrevious}
-        resultCount={showResultCount ? resultCount : undefined}
-        searchQuery={searchQuery}
-      >
-        {listContent}
-      </ContentWrapper>
-    );
+  const toggleOptions = () => {
+    setShowOptions(!showOptions);
   };
 
   return (
     <MainLayout>
-      <div className="space-y-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <PageHeader
-            title={title}
-            description={description}
-            icon={icon}
-            iconClassName={iconClassName}
-          />
-          
-          <ListViewTabs
-            value={activeTab}
-            onValueChange={onTabChange}
-          />
-        </div>
+      <div className="h-screen flex flex-col">
+        {/* Zone 1: Titre de la page (non scrollable) */}
+        <PageTitle
+          title={title}
+          description={description}
+          icon={icon}
+          iconClassName={iconClassName}
+        />
 
-        {activeTab === "liste" && (
-          <div className="space-y-6">
-            {onSearchChange && (
-              <SearchBar
-                value={searchQuery}
-                onChange={onSearchChange}
-                placeholder={searchPlaceholder}
-                onAddClick={handleAddClick}
-                addButtonText={addButtonText}
-              />
-            )}
-            
-            {renderListView()}
-          </div>
-        )}
-        
-        {activeTab === "ajouter" && (
-          <AuthGuard>
-            {addContent}
-          </AuthGuard>
-        )}
+        {/* Zone 2: Options de la page (non scrollable) */}
+        <PageOptions
+          showOptions={showOptions}
+          onToggleOptions={toggleOptions}
+          activeTab={activeTab}
+          searchQuery={searchQuery}
+          onSearchChange={onSearchChange}
+          searchPlaceholder={searchPlaceholder}
+          onAddClick={handleAddClick}
+          addButtonText={addButtonText}
+          showSearchOnAllTabs={showSearchOnAllTabs}
+          additionalOptions={additionalOptions}
+          optionsLayout={optionsLayout}
+          showAddButton={showAddButton}
+        />
+
+
+        {/* Zone 4: Données scrollables et paginées */}
+        <PageContent
+          activeTab={activeTab}
+          loading={loading}
+          hasData={hasData}
+          listContent={listContent}
+          addContent={addContent}
+          searchQuery={searchQuery}
+          onSearchChange={onSearchChange}
+          emptyStateIcon={emptyStateIcon}
+          emptyStateTitle={emptyStateTitle}
+          emptyStateDescription={emptyStateDescription}
+          onAddFirst={onAddFirst}
+          addFirstText={addFirstText}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+          canGoNext={canGoNext}
+          canGoPrevious={canGoPrevious}
+          resultCount={resultCount}
+          skeletonType={skeletonType}
+          skeletonCount={skeletonCount}
+          showResultCount={showResultCount}
+        />
       </div>
     </MainLayout>
   );

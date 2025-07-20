@@ -1,7 +1,7 @@
 
 import { MainLayout } from "@/components/layout/MainLayout";
 import { FeatureCard } from "@/components/ui/feature-card";
-import { BookmarkCheck, Building, Calendar, Bell, Info, MapPin, Users, MessageSquare, Star, Link as LinkIcon } from "lucide-react";
+import { BookmarkCheck, Building, Calendar, Bell, Info, MapPin, Users, MessageSquare, Star, Link as LinkIcon, Music } from "lucide-react";
 
 const featuresSection1 = [
   {
@@ -39,6 +39,12 @@ const featuresSection1 = [
     icon: Users,
     to: "/associations",
     description: "Découvrez les associations"
+  },
+  {
+    title: "Jukebox",
+    icon: Music,
+    to: "/jukebox",
+    description: "Écoutez et partagez de la musique"
   },
 ];
 
@@ -85,71 +91,74 @@ export default function Index() {
   return (
     <MainLayout>
       {/* Hero Section */}
-      <section className="mb-10">
-        <div className="rounded-xl bg-gradient-to-r from-ville-DEFAULT to-ville-dark p-8 text-black">
-          <h1 className="text-xl md:text-2xl font-bold mb-4 text-black">
+      <section className="mb-10 px-4">
+        <div className="rounded-xl bg-gradient-to-r from-primary to-secondary p-8 text-primary-foreground">
+          <h1 className="text-xl md:text-2xl font-bold mb-4">
             Bienvenue à Ouellé
           </h1>
-          <p className="text-lg opacity-90 mb-6 text-black">
+          <p className="text-lg opacity-90 mb-6">
             la cité de l'innovation et du développement durable
           </p>
-          <div className="flex space-x-4">
-            <button className="bg-white text-ville-DEFAULT px-6 py-3 rounded-md font-medium hover:bg-opacity-90 transition-all text-black">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button className="bg-background text-foreground px-6 py-3 rounded-md font-medium hover:bg-muted transition-colors">
               Découvrir
             </button>
-            <button className="bg-transparent border border-ville-DEFAULT text-ville-DEFAULT px-6 py-3 rounded-md font-medium hover:bg-ville-light transition-all text-black">
+            <button className="bg-transparent border border-primary-foreground text-primary-foreground px-6 py-3 rounded-md font-medium hover:bg-primary-foreground/10 transition-colors">
               En savoir plus
             </button>
           </div>
         </div>
       </section>
 
-      {/* Features Section 1 - Actualités */}
-      <section className="mb-10">
-        <div className="flex justify-between items-center mb-6">
-           <h2 className="text-lg font-bold text-gray-800">
-            Actualités
-          </h2>
-          <a href="/actualites" className="text-ville-DEFAULT hover:underline">
-            Voir tout
-          </a>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {featuresSection1.map((feature) => (
-            <FeatureCard
-              key={feature.title}
-              title={feature.title}
-              description={feature.description}
-              icon={feature.icon}
-              to={feature.to}
-            />
-          ))}
-        </div>
-      </section>
+      {/* Contenu défilable pour les sections de fonctionnalités */}
+      <div className="flex-1 overflow-y-auto px-4 pb-4">
+        {/* Features Section 1 - Actualités */}
+        <section className="mb-10">
+          <div className="flex justify-between items-center mb-6">
+             <h2 className="text-lg font-bold text-foreground">
+              Actualités
+            </h2>
+            <a href="/actualites" className="text-primary hover:underline">
+              Voir tout
+            </a>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {featuresSection1.map((feature) => (
+              <FeatureCard
+                key={feature.title}
+                title={feature.title}
+                description={feature.description}
+                icon={feature.icon}
+                to={feature.to}
+              />
+            ))}
+          </div>
+        </section>
 
-      {/* Features Section 2 - Espace Immobilier */}
-      <section>
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-lg font-bold text-gray-800">
-            Espace Immobilier
-          </h2>
-          <a href="/immobilier" className="text-ville-DEFAULT hover:underline">
-            Voir tout
-          </a>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {featuresSection2.map((feature) => (
-            <FeatureCard
-              key={feature.title}
-              title={feature.title}
-              description={feature.description}
-              icon={feature.icon}
-              to={feature.to}
-              variant="outline"
-            />
-          ))}
-        </div>
-      </section>
+        {/* Features Section 2 - Espace Immobilier */}
+        <section>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-lg font-bold text-foreground">
+              Espace Immobilier
+            </h2>
+            <a href="/immobilier" className="text-primary hover:underline">
+              Voir tout
+            </a>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {featuresSection2.map((feature) => (
+              <FeatureCard
+                key={feature.title}
+                title={feature.title}
+                description={feature.description}
+                icon={feature.icon}
+                to={feature.to}
+                variant="outline"
+              />
+            ))}
+          </div>
+        </section>
+      </div>
     </MainLayout>
   );
 }
