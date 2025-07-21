@@ -64,9 +64,43 @@ export const messageService = {
 
   // Get messages for a specific conversation
   async getMessages(conversationId: string) {
+    console.log('📥 [messageService] Getting messages for conversation:', conversationId);
+    
     const currentUserId = (await supabase.auth.getUser()).data.user?.id;
-    if (!currentUserId) throw new Error('User not authenticated');
+    console.log('👤 [messageService] Current user ID:', currentUserId);
+    
+    if (!currentUserId) {
+      console.error('❌ [messageService] User not authenticated');
+      throw new Error('User not authenticated');
+    }
 
+    // First, check if user has access to this conversation
+    console.log('🔍 [messageService] Checking conversation access...');
+    const { data: conversation, error: convError } = await supabase
+      .from('conversations')
+      .select('participant1_id, participant2_id')
+      .eq('id', conversationId)
+      .single();
+
+    if (convError) {
+      console.error('❌ [messageService] Error checking conversation:', convError);
+      throw convError;
+    }
+
+    if (!conversation) {
+      console.error('❌ [messageService] Conversation not found');
+      throw new Error('Conversation not found');
+    }
+
+    const hasAccess = conversation.participant1_id === currentUserId || conversation.participant2_id === currentUserId;
+    console.log('🔐 [messageService] User access to conversation:', hasAccess, 'participants:', conversation.participant1_id, conversation.participant2_id);
+
+    if (!hasAccess) {
+      console.error('❌ [messageService] User does not have access to this conversation');
+      throw new Error('Access denied');
+    }
+
+    console.log('🔍 [messageService] Querying messages table...');
     const { data, error } = await supabase
       .from('messages')
       .select('*')
@@ -74,11 +108,12 @@ export const messageService = {
       .order('created_at', { ascending: true });
 
     if (error) {
-      console.error('Erreur récupération messages:', error);
+      console.error('❌ [messageService] Error fetching messages:', error);
       throw error;
     }
     
-    console.log('Messages récupérés pour conversation', conversationId, ':', data);
+    console.log('✅ [messageService] Messages fetched successfully for conversation', conversationId, ':', data?.length, 'messages');
+    console.log('📋 [messageService] Messages data:', data);
     return data || [];
   },
 

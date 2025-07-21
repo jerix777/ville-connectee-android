@@ -23,13 +23,13 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
   const { data: messages, isLoading, error } = useQuery({
     queryKey: ['messages', conversationId],
     queryFn: async () => {
-      console.log('Fetching messages for conversation:', conversationId);
+      console.log('🔍 [MessageView] Fetching messages for conversation:', conversationId);
       try {
         const result = await messageService.getMessages(conversationId);
-        console.log('Messages fetched successfully:', result);
+        console.log('✅ [MessageView] Messages fetched successfully:', result?.length, 'messages');
         return result;
       } catch (error) {
-        console.error('Error fetching messages:', error);
+        console.error('❌ [MessageView] Error fetching messages:', error);
         throw error;
       }
     },
