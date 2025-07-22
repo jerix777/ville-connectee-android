@@ -62,10 +62,10 @@ export const ConversationList: React.FC<ConversationListProps> = ({
       
       if (error) throw error;
       
-      return data.reduce((acc, profile) => {
+      return data.reduce((acc: Record<string, { user_id: string; nom: string; prenom: string; }>, profile) => {
         acc[profile.user_id] = profile;
         return acc;
-      }, {} as Record<string, any>);
+      }, {});
     },
     enabled: !!conversations.length && !!user
   });

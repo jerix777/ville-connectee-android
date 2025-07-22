@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Bell, BookmarkCheck, Building, Calendar, Home, Info, Link as LinkIcon, MapPin, MessageSquare, Music, Search, Star, Users, BriefcaseBusiness } from "lucide-react";
+import { Bell, BookmarkCheck, Building, Calendar, Home, Info, Link as LinkIcon, MapPin, MessageSquare, Music, Search, Star, Users, BriefcaseBusiness, LucideProps } from "lucide-react";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -11,7 +11,7 @@ interface SidebarProps {
 
 interface NavItemProps {
   to: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<LucideProps>;
   label: string;
   isActive: boolean;
   onClick?: () => void;

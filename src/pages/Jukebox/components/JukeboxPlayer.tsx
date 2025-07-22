@@ -9,6 +9,15 @@ import { formatDuration } from '@/lib/formatters';
 import { toast } from '@/hooks/use-toast';
 import type { JukeboxSession, Musique } from '@/services/jukeboxService';
 
+interface QueueItem {
+  id: string;
+  musiques: Musique;
+  users_profiles: {
+    nom: string;
+    prenom: string;
+  } | null | { error: boolean };
+}
+
 interface JukeboxPlayerProps {
   session: JukeboxSession | null;
   musiques: Musique[];
@@ -16,17 +25,10 @@ interface JukeboxPlayerProps {
 }
 
 export function JukeboxPlayer({ session, musiques, onSessionUpdate }: JukeboxPlayerProps) {
-  const [queue, setQueue] = useState<any[]>([]);
+  const [queue, setQueue] = useState<QueueItem[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (session) {
-      loadQueue();
-      setIsPlaying(session.is_playing || false);
-    }
-  }, [session]);
 
   const loadQueue = async () => {
     if (!session) return;
@@ -34,13 +36,20 @@ export function JukeboxPlayer({ session, musiques, onSessionUpdate }: JukeboxPla
     try {
       setLoading(true);
       const queueData = await getSessionQueue(session.id);
-      setQueue(queueData);
+      setQueue(queueData as unknown as QueueItem[]);
     } catch (error) {
       console.error('Erreur lors du chargement de la queue:', error);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (session) {
+      loadQueue();
+      setIsPlaying(session.is_playing || false);
+    }
+  }, [session]);
 
   const handlePlayPause = async () => {
     if (!session) return;
@@ -70,7 +79,7 @@ export function JukeboxPlayer({ session, musiques, onSessionUpdate }: JukeboxPla
     try {
       const nextTrack = queue[0];
       await updateSessionState(session.id, { 
-        current_musique_id: nextTrack.musique_id,
+        current_musique_id: nextTrack.musiques.id,
         current_position: 0
       });
       
@@ -214,7 +223,7 @@ export function JukeboxPlayer({ session, musiques, onSessionUpdate }: JukeboxPla
                   
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Users className="w-3 h-3" />
-                    {item.users_profiles?.nom || 'Utilisateur'} {item.users_profiles?.prenom || ''}
+                    {item.users_profiles && 'nom' in item.users_profiles ? `${item.users_profiles.nom} ${item.users_profiles.prenom}` : 'Utilisateur'}
                   </div>
                 </div>
               ))}

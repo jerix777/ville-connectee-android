@@ -15,7 +15,7 @@ import MarchePage from "./pages/Marche";
 import ActualitesPage from "./pages/Actualites";
 import EmploisPage from "./pages/Emplois";
 import AnnuairePage from "./pages/Annuaire";
-import MyProfilePage from "./pages/Annuaire/MyProfile";
+import MyProfilePage from "./pages/Annuaire/MyProfile.tsx";
 import AssociationsPage from "./pages/Associations";
 import ImmobilierPage from "./pages/Immobilier";
 import AlertesPage from "./pages/Alertes";

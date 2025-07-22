@@ -82,7 +82,7 @@ const featuresSection2 = [
   {
     title: "Suggestions",
     icon: MessageSquare,
-    to: "/tribune",
+    to: "/suggestions",
     description: "Votre espace d'expression"
   },
 ];

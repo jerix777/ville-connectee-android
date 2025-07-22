@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { ConversationList } from './ConversationList';
-import { MessageView } from './MessageView';
 import { NewConversationModal } from './components/NewConversationModal';
+import { ConversationModal } from './components/ConversationModal';
 import { messageService } from '@/services/messageService';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
-import { MessageCircle, Edit, ArrowLeft } from 'lucide-react';
+import { MessageCircle, Edit } from 'lucide-react';
 import { PageLayout } from '@/components/common/PageLayout';
 
 const MessagesPage = () => {
@@ -142,79 +142,6 @@ const MessagesPage = () => {
     );
   }
 
-  if (selectedConversationId) {
-    return (
-      <div>
-        <PageLayout
-          title="Messageries"
-          description="Gérez vos conversations et échangez avec d'autres utilisateurs"
-          icon={MessageCircle}
-          activeTab="conversation"
-          onTabChange={setActiveTab}
-          showSearchOnAllTabs={false}
-          listContent={
-            <div className="h-[calc(100vh-12rem)] flex overflow-hidden bg-background rounded-lg border">
-              {/* Liste des conversations - Desktop seulement */}
-              <div className="hidden lg:block w-80 border-r">
-                <div className="p-4 border-b">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold">Conversations</h3>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => setShowNewConversationModal(true)}
-                    >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Nouveau
-                    </Button>
-                  </div>
-                </div>
-                <div className="h-[calc(100%-5rem)] overflow-y-auto">
-                  <ConversationList
-                    conversations={conversations}
-                    isLoading={isLoading}
-                    selectedConversationId={selectedConversationId}
-                    onSelectConversation={setSelectedConversationId}
-                    onDeleteConversation={handleDeleteConversation}
-                    searchTerm=""
-                  />
-                </div>
-              </div>
-
-              {/* Vue des messages */}
-              <div className="flex-1 flex flex-col">
-                {/* Header mobile pour retour */}
-                <div className="lg:hidden p-3 border-b">
-                  <div className="flex items-center space-x-3">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={() => setSelectedConversationId(null)}
-                    >
-                      <ArrowLeft className="h-5 w-5" />
-                    </Button>
-                    <h3 className="font-semibold">Conversation</h3>
-                  </div>
-                </div>
-                
-                <div className="flex-1">
-                  <MessageView conversationId={selectedConversationId} />
-                </div>
-              </div>
-            </div>
-          }
-          addContent={<div />}
-        />
-        
-        <NewConversationModal
-          open={showNewConversationModal}
-          onOpenChange={setShowNewConversationModal}
-          onConversationCreated={handleConversationCreated}
-        />
-      </div>
-    );
-  }
-
   return (
     <div>
       <PageLayout
@@ -265,6 +192,11 @@ const MessagesPage = () => {
         open={showNewConversationModal}
         onOpenChange={setShowNewConversationModal}
         onConversationCreated={handleConversationCreated}
+      />
+
+      <ConversationModal
+        conversationId={selectedConversationId}
+        onClose={() => setSelectedConversationId(null)}
       />
     </div>
   );

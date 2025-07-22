@@ -4,7 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LoadingSkeleton, EmptyState } from '@/components/common';
 import { List, Plus, Music, User } from 'lucide-react';
-import type { Playlist, Musique } from '@/services/jukeboxService';
+import type { Playlist as BasePlaylist, Musique } from '@/services/jukeboxService';
+
+interface Playlist extends BasePlaylist {
+  playlist_musiques: {
+    position: number;
+    musiques: Musique;
+  }[];
+}
 
 interface PlaylistManagerProps {
   playlists: Playlist[];
@@ -52,7 +59,7 @@ export function PlaylistManager({ playlists, musiques, loading, onRefresh }: Pla
                   <div className="flex items-center gap-2">
                     <Badge variant="secondary">
                       <Music className="w-3 h-3 mr-1" />
-                      {(playlist as any).playlist_musiques?.length || 0} musiques
+                      {playlist.playlist_musiques?.length || 0} musiques
                     </Badge>
                     <Badge variant={playlist.is_public ? "default" : "outline"}>
                       {playlist.is_public ? "Publique" : "Privée"}

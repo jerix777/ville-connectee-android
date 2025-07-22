@@ -164,7 +164,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
     setCompetences(competences.filter((_, i) => i !== index));
   };
 
-  const updateCompetence = (index: number, field: string, value: any) => {
+  const updateCompetence = (index: number, field: string, value: string | number) => {
     const newCompetences = [...competences];
     newCompetences[index] = { ...newCompetences[index], [field]: value };
     setCompetences(newCompetences);

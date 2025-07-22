@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { usePropertyForm } from "./hooks/usePropertyForm";
+import { FormValues as PropertyFormValues } from "./types";
 import { PropertyTypeSelect } from "./components/PropertyTypeSelect";
 import { ListingTypeSwitch } from "./components/ListingTypeSwitch";
 import { PropertyDetailsFields } from "./components/PropertyDetailsFields";
@@ -23,7 +24,7 @@ export function AddImmobilierForm() {
   const [isOpen, setIsOpen] = useState(false);
   const { form, onSubmit } = usePropertyForm();
 
-  const handleFormSubmit = async (values: any) => {
+  const handleFormSubmit = async (values: PropertyFormValues) => {
     const result = await onSubmit(values);
     if (result) {
       toast("Annonce publiée avec succès", {

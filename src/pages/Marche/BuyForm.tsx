@@ -7,7 +7,7 @@ import { DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { addMarketItem } from "@/services/marketService";
+import { addMarketItem, MarketItem } from "@/services/marketService";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface BuyFormProps {
@@ -21,18 +21,15 @@ export function BuyForm({ onClose }: BuyFormProps) {
     vendeur: "",
     titre: "",
     description: "",
-    prix: "",
+    prix: 0,
     contact1: "",
     contact2: "",
     is_for_sale: false
   });
   
   const addItemMutation = useMutation({
-    mutationFn: (data: any) => {
-      return addMarketItem({
-        ...data,
-        prix: parseFloat(data.prix)
-      });
+    mutationFn: (data: Omit<MarketItem, "id">) => {
+      return addMarketItem(data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['marketItems'] });
@@ -54,7 +51,7 @@ export function BuyForm({ onClose }: BuyFormProps) {
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: name === 'prix' ? parseFloat(value) : value }));
   };
   
   const handleSubmit = (e: React.FormEvent) => {

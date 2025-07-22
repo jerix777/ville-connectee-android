@@ -6,6 +6,9 @@ import './index.css';
 import { initDefaultData } from './services/setupService.ts';
 
 // Initialiser les données par défaut
-initDefaultData();
+const initializeApp = async () => {
+  await initDefaultData();
+  createRoot(document.getElementById("root")!).render(<App />);
+};
 
-createRoot(document.getElementById("root")!).render(<App />);
+initializeApp();

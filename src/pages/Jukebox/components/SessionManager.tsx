@@ -6,7 +6,12 @@ import { LoadingSkeleton, EmptyState } from '@/components/common';
 import { Users, Radio, Play, Pause } from 'lucide-react';
 import { joinSession } from '@/services/jukeboxService';
 import { toast } from '@/hooks/use-toast';
-import type { JukeboxSession } from '@/services/jukeboxService';
+import type { JukeboxSession as BaseJukeboxSession, Musique } from '@/services/jukeboxService';
+
+interface JukeboxSession extends BaseJukeboxSession {
+  session_participants: { count: number }[];
+  musiques: Musique | null;
+}
 
 interface SessionManagerProps {
   sessions: JukeboxSession[];
@@ -67,7 +72,7 @@ export function SessionManager({ sessions, loading, onRefresh, onJoinSession }: 
                   <div className="flex items-center gap-4">
                     <Badge variant="outline" className="flex items-center gap-1">
                       <Users className="w-3 h-3" />
-                      {(session as any).session_participants?.[0]?.count || 0} participants
+                      {session.session_participants?.[0]?.count || 0} participants
                     </Badge>
                     
                     <Badge variant={session.is_playing ? "default" : "secondary"}>
@@ -84,9 +89,9 @@ export function SessionManager({ sessions, loading, onRefresh, onJoinSession }: 
                       )}
                     </Badge>
 
-                    {(session as any).musiques && (
+                    {session.musiques && (
                       <Badge variant="outline">
-                        🎵 {(session as any).musiques.titre}
+                        🎵 {session.musiques.titre}
                       </Badge>
                     )}
                   </div>
