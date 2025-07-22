@@ -9,6 +9,7 @@ import { PropertyDescription } from "./components/PropertyDescription";
 import { CardFooter } from "./components/CardFooter";
 import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 
 interface ImmobilierCardProps {
@@ -16,7 +17,10 @@ interface ImmobilierCardProps {
 }
 
 export function ImmobilierCard({ bien }: ImmobilierCardProps) {
-  const handleContact = () => {
+  const navigate = useNavigate();
+
+  const handleContact = (e: React.MouseEvent) => {
+    e.stopPropagation();
     // Copier le numéro dans le presse-papier
     navigator.clipboard.writeText(bien.contact);
     
@@ -27,8 +31,12 @@ export function ImmobilierCard({ bien }: ImmobilierCardProps) {
     });
   };
 
+  const handleClick = () => {
+    navigate(`/immobilier/${bien.id}`);
+  };
+
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full flex flex-col cursor-pointer hover:shadow-lg transition-shadow" onClick={handleClick}>
       <CardHeader 
         titre={bien.titre} 
         isForSale={bien.is_for_sale} 

@@ -3,10 +3,14 @@ import { Phone } from "lucide-react";
 import { MarketItem } from "@/services/marketService";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 
 export function MarketItemCard({ item }: { item: MarketItem }) {
-  const handleContact = () => {
+  const navigate = useNavigate();
+
+  const handleContact = (e: React.MouseEvent) => {
+    e.stopPropagation();
     // Copier le numéro dans le presse-papier
     navigator.clipboard.writeText(item.contact1);
     
@@ -17,8 +21,12 @@ export function MarketItemCard({ item }: { item: MarketItem }) {
     });
   };
 
+  const handleClick = () => {
+    navigate(`/marche/${item.id}`);
+  };
+
   return (
-    <Card className="mb-4">
+    <Card className="mb-4 cursor-pointer hover:shadow-lg transition-shadow" onClick={handleClick}>
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>

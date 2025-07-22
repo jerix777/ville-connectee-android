@@ -2,14 +2,21 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 import type { News } from "@/services/newsService";
 
 interface NewsCardProps {
   news: News;
 }
 export function NewsCard({ news }: NewsCardProps) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/actualites/${news.id}`);
+  };
+
   return (
-    <Card className="mb-4">
+    <Card className="mb-4 cursor-pointer hover:shadow-lg transition-shadow" onClick={handleClick}>
       <CardHeader>
         <CardTitle className="flex flex-col md:flex-row md:justify-between">
           <span>{news.titre}</span>

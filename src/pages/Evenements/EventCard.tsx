@@ -4,18 +4,26 @@ import { Clock, MapPin, Phone, Info, User } from "lucide-react";
 import { Event } from "@/services/eventService";
 import { formatDate } from "@/services/eventService";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
 
 export function EventCard({ event }: { event: Event }) {
-  const handleContact = () => {
+  const navigate = useNavigate();
+
+  const handleContact = (e: React.MouseEvent) => {
+    e.stopPropagation();
     navigator.clipboard.writeText(event.contact1);
     toast("Contact copié!", {
       description: `Le contact de l'organisateur a été copié dans le presse-papier.`,
     });
   };
 
+  const handleClick = () => {
+    navigate(`/evenements/${event.id}`);
+  };
+
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full flex flex-col cursor-pointer hover:shadow-lg transition-shadow" onClick={handleClick}>
       <CardHeader>
         <div className="flex justify-between items-start">
           <div className="flex-1">

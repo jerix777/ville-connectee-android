@@ -30,6 +30,11 @@ import AuthPage from "./pages/Auth";
 import SettingsPage from "./pages/Settings";
 import MessagesPage from "./pages/Messages";
 import { JukeboxPage } from "./pages/Jukebox";
+import NewsDetailPage from "./pages/Actualites/NewsDetailPage";
+import EventDetailPage from "./pages/Evenements/EventDetailPage";
+import ImmobilierDetailPage from "./pages/Immobilier/ImmobilierDetailPage";
+import ServiceDetailPage from "./pages/Services/ServiceDetailPage";
+import MarketItemDetailPage from "./pages/Marche/MarketItemDetailPage";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +69,11 @@ const AppContent = () => {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/messages" element={<MessagesPage />} />
           <Route path="/jukebox" element={<JukeboxPage />} />
+          <Route path="/actualites/:id" element={<NewsDetailPage />} />
+          <Route path="/evenements/:id" element={<EventDetailPage />} />
+          <Route path="/immobilier/:id" element={<ImmobilierDetailPage />} />
+          <Route path="/services/:id" element={<ServiceDetailPage />} />
+          <Route path="/marche/:id" element={<MarketItemDetailPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

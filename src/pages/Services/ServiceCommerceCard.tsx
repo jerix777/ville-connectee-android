@@ -6,6 +6,7 @@ import { fr } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Phone, Clock, Building } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
 
 interface ServiceCommerceCardProps {
@@ -13,12 +14,19 @@ interface ServiceCommerceCardProps {
 }
 
 export function ServiceCommerceCard({ service }: ServiceCommerceCardProps) {
-  const handleContact = () => {
+  const navigate = useNavigate();
+
+  const handleContact = (e: React.MouseEvent) => {
+    e.stopPropagation();
     navigator.clipboard.writeText(service.contact);
     
     toast("Numéro copié !", {
       description: `Le numéro de contact pour ${service.nom} a été copié dans le presse-papier.`,
     });
+  };
+
+  const handleClick = () => {
+    navigate(`/services/${service.id}`);
   };
 
   const categoryColorMap: Record<string, string> = {
@@ -37,7 +45,7 @@ export function ServiceCommerceCard({ service }: ServiceCommerceCardProps) {
   const categoryColor = categoryColorMap[service.categorie.toLowerCase()] || "bg-gray-100 text-gray-800";
 
   return (
-    <Card className="h-full flex flex-col overflow-hidden transition-all hover:shadow-md">
+    <Card className="h-full flex flex-col overflow-hidden transition-all hover:shadow-md cursor-pointer" onClick={handleClick}>
       {service.image_url && (
         <div className="w-full h-40">
           <img
