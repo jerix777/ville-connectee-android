@@ -13,7 +13,20 @@ import { SessionManager } from './components/SessionManager';
 import { UploadMusicForm } from './components/UploadMusicForm';
 import { CreateSessionForm } from './components/CreateSessionForm';
 import { getMusicList, getPlaylists, getActiveSessions } from '@/services/jukeboxService';
-import type { Musique, Playlist, JukeboxSession } from '@/services/jukeboxService';
+import type { Musique, Playlist as BasePlaylist, JukeboxSession as BaseJukeboxSession } from '@/services/jukeboxService';
+
+interface Playlist extends BasePlaylist {
+  playlist_musiques: {
+    id: string;
+    position: number;
+    musiques: Musique;
+  }[];
+}
+
+interface JukeboxSession extends BaseJukeboxSession {
+  session_participants: { count: number }[];
+  musiques: Musique | null;
+}
 
 export function JukeboxPage() {
   const [activeTab, setActiveTab] = useState("library");
@@ -38,9 +51,9 @@ export function JukeboxPage() {
         getActiveSessions()
       ]);
       
-      setMusiques(musicsData);
-      setPlaylists(playlistsData);
-      setSessions(sessionsData);
+      setMusiques(musicsData as Musique[]);
+      setPlaylists(playlistsData as unknown as Playlist[]);
+      setSessions(sessionsData as unknown as JukeboxSession[]);
     } catch (error) {
       console.error('Erreur lors du chargement:', error);
       toast({
@@ -84,7 +97,7 @@ export function JukeboxPage() {
 
   return (
     <MainLayout>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div className="flex items-center gap-3">
           <Music className="w-8 h-8" />
           <div>
@@ -92,20 +105,22 @@ export function JukeboxPage() {
             <p className="text-muted-foreground">Écoutez et partagez de la musique en communauté</p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full sm:w-auto">
           <Button
             onClick={() => setShowUploadForm(true)}
             size="sm"
             variant="outline"
+            className="flex-1 sm:flex-none"
           >
-            <Upload size={16} />
+            <Upload size={16} className="mr-2" />
             Ajouter Musique
           </Button>
           <Button
             onClick={() => setShowCreateSession(true)}
             size="sm"
+            className="flex-1 sm:flex-none"
           >
-            <Radio size={16} />
+            <Radio size={16} className="mr-2" />
             Créer Session
           </Button>
         </div>
@@ -159,9 +174,9 @@ export function JukeboxPage() {
           <TabsContent value="library" className="space-y-4">
             <MusicLibrary
               musiques={musiques}
+              playlists={playlists}
               loading={loading}
               onRefresh={loadData}
-              currentSession={currentSession}
             />
           </TabsContent>
 
@@ -171,6 +186,7 @@ export function JukeboxPage() {
               musiques={musiques}
               loading={loading}
               onRefresh={loadData}
+              currentSession={currentSession}
             />
           </TabsContent>
 

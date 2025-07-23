@@ -9,6 +9,10 @@ import { toast } from '@/hooks/use-toast';
 import type { JukeboxSession as BaseJukeboxSession, Musique } from '@/services/jukeboxService';
 
 interface JukeboxSession extends BaseJukeboxSession {
+  id: string;
+  nom: string;
+  description: string | null;
+  is_playing: boolean;
   session_participants: { count: number }[];
   musiques: Musique | null;
 }

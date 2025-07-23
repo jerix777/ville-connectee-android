@@ -30,6 +30,8 @@ import AuthPage from "./pages/Auth";
 import SettingsPage from "./pages/Settings";
 import MessagesPage from "./pages/Messages";
 import { JukeboxPage } from "./pages/Jukebox";
+import { CataloguePage } from "./pages/Catalogue";
+import { CategorieDetailsPage } from "./pages/Catalogue/CategorieDetailsPage";
 import NewsDetailPage from "./pages/Actualites/NewsDetailPage";
 import EventDetailPage from "./pages/Evenements/EventDetailPage";
 import ImmobilierDetailPage from "./pages/Immobilier/ImmobilierDetailPage";
@@ -69,6 +71,8 @@ const AppContent = () => {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/messages" element={<MessagesPage />} />
           <Route path="/jukebox" element={<JukeboxPage />} />
+          <Route path="/catalogue" element={<CataloguePage />} />
+          <Route path="/catalogue/:id" element={<CategorieDetailsPage />} />
           <Route path="/actualites/:id" element={<NewsDetailPage />} />
           <Route path="/evenements/:id" element={<EventDetailPage />} />
           <Route path="/immobilier/:id" element={<ImmobilierDetailPage />} />

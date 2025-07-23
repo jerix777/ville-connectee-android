@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +29,7 @@ export function JukeboxPlayer({ session, musiques, onSessionUpdate }: JukeboxPla
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [loading, setLoading] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const loadQueue = async () => {
     if (!session) return;
@@ -50,6 +51,16 @@ export function JukeboxPlayer({ session, musiques, onSessionUpdate }: JukeboxPla
       setIsPlaying(session.is_playing || false);
     }
   }, [session]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.play().catch(e => console.error("Erreur de lecture audio:", e));
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
 
   const handlePlayPause = async () => {
     if (!session) return;
@@ -170,12 +181,18 @@ export function JukeboxPlayer({ session, musiques, onSessionUpdate }: JukeboxPla
                 </Button>
               </div>
 
-              <audio 
-                controls 
-                className="w-full"
+              <audio
+                ref={audioRef}
                 src={currentTrack.file_url}
+                onEnded={handleNext}
+                onTimeUpdate={() => {
+                  if (audioRef.current) {
+                    setCurrentTime(audioRef.current.currentTime);
+                  }
+                }}
+                className="w-full"
               >
-                Votre navigateur ne supporte pas l'audio.
+                Votre navigateur ne supporte pas l'élément audio.
               </audio>
             </div>
           ) : (

@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { LoadingSkeleton, EmptyState } from '@/components/common';
-import { Play, Plus, Search, Clock, User, Album } from 'lucide-react';
+import { Plus, Search, Clock, User, Album } from 'lucide-react';
 import { formatDuration } from '@/lib/formatters';
-import { addToQueue } from '@/services/jukeboxService';
-import { toast } from '@/hooks/use-toast';
-import type { Musique, JukeboxSession } from '@/services/jukeboxService';
+import { AddToPlaylistDialog } from './AddToPlaylistDialog';
+import type { Musique, Playlist } from '@/services/jukeboxService';
 
 interface MusicLibraryProps {
   musiques: Musique[];
+  playlists: Playlist[];
   loading: boolean;
   onRefresh: () => void;
-  currentSession: JukeboxSession | null;
 }
 
-export function MusicLibrary({ musiques, loading, onRefresh, currentSession }: MusicLibraryProps) {
+export function MusicLibrary({ musiques, playlists, loading, onRefresh }: MusicLibraryProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGenre, setSelectedGenre] = useState<string>("");
+  const [selectedMusique, setSelectedMusique] = useState<Musique | null>(null);
 
   const filteredMusiques = musiques.filter(musique => {
     const matchesSearch = 
@@ -33,32 +33,6 @@ export function MusicLibrary({ musiques, loading, onRefresh, currentSession }: M
   });
 
   const genres = Array.from(new Set(musiques.map(m => m.genre).filter(Boolean)));
-
-  const handleAddToQueue = async (musique: Musique) => {
-    if (!currentSession) {
-      toast({
-        title: "Aucune session active",
-        description: "Rejoignez ou créez une session pour ajouter de la musique.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      await addToQueue(currentSession.id, musique.id);
-      toast({
-        title: "Musique ajoutée",
-        description: `"${musique.titre}" a été ajoutée à la file d'attente.`,
-      });
-    } catch (error) {
-      console.error('Erreur lors de l\'ajout à la queue:', error);
-      toast({
-        title: "Erreur",
-        description: "Impossible d'ajouter la musique à la file d'attente.",
-        variant: "destructive",
-      });
-    }
-  };
 
   if (loading) {
     return <LoadingSkeleton count={6} />;
@@ -147,21 +121,17 @@ export function MusicLibrary({ musiques, loading, onRefresh, currentSession }: M
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between">
-                      <audio controls className="flex-1 max-w-md">
-                        <source src={musique.file_url} type="audio/mpeg" />
-                        Votre navigateur ne supporte pas l'audio.
+                    <div className="flex items-center justify-between mt-2">
+                      <audio controls src={musique.file_url} className="w-full max-w-xs">
+                        Votre navigateur ne supporte pas l'élément audio.
                       </audio>
-                      
                       <Button
-                        onClick={() => handleAddToQueue(musique)}
-                        disabled={!currentSession}
+                        onClick={() => setSelectedMusique(musique)}
                         size="sm"
                         variant="outline"
-                        className="ml-4"
                       >
-                        <Plus size={16} />
-                        {currentSession ? "Ajouter à la queue" : "Aucune session"}
+                        <Plus size={16} className="mr-2" />
+                        Ajouter à une playlist
                       </Button>
                     </div>
                   </div>
@@ -171,6 +141,13 @@ export function MusicLibrary({ musiques, loading, onRefresh, currentSession }: M
           ))
         )}
       </div>
+      <AddToPlaylistDialog
+        musique={selectedMusique}
+        playlists={playlists}
+        open={!!selectedMusique}
+        onOpenChange={() => setSelectedMusique(null)}
+        onSuccess={onRefresh}
+      />
     </div>
   );
 }

@@ -24,6 +24,57 @@ export const getMusicList = async (quartier_id?: string) => {
   return data;
 };
 
+export const addPlaylistToQueue = async (playlistId: string, sessionId: string) => {
+  // Get all musiques from the playlist
+  const { data: playlistMusiques, error: playlistError } = await supabase
+    .from('playlist_musiques')
+    .select('musique_id')
+    .eq('playlist_id', playlistId);
+
+  if (playlistError) throw playlistError;
+  if (!playlistMusiques || playlistMusiques.length === 0) {
+    throw new Error('Playlist is empty or not found.');
+  }
+
+  const user = (await supabase.auth.getUser()).data.user;
+  if (!user) throw new Error('Utilisateur non connecté');
+
+  // Get current max position in queue
+  const { data: queueItems } = await supabase
+    .from('session_queue')
+    .select('position')
+    .eq('session_id', sessionId)
+    .order('position', { ascending: false })
+    .limit(1);
+
+  let nextPosition =
+    queueItems && queueItems.length > 0 ? queueItems[0].position + 1 : 1;
+
+  const newQueueItems = playlistMusiques.map((pm, index) => ({
+    session_id: sessionId,
+    musique_id: pm.musique_id,
+    added_by: user.id,
+    position: nextPosition + index,
+  }));
+
+  const { error: insertError } = await supabase
+    .from('session_queue')
+    .insert(newQueueItems);
+
+  if (insertError) throw insertError;
+
+  return { success: true, count: newQueueItems.length };
+};
+
+export const removeFromPlaylist = async (playlistMusiqueId: string) => {
+  const { error } = await supabase
+    .from("playlist_musiques")
+    .delete()
+    .eq("id", playlistMusiqueId);
+
+  if (error) throw error;
+};
+
 export const uploadMusic = async (musicData: MusiqueInsert, file: File) => {
   const user = (await supabase.auth.getUser()).data.user;
   if (!user) throw new Error("Utilisateur non connecté");
@@ -82,7 +133,7 @@ export const getPlaylists = async () => {
   return data;
 };
 
-export const createPlaylist = async (playlistData: PlaylistInsert) => {
+export const createPlaylist = async (playlistData: Omit<PlaylistInsert, 'created_by' | 'id' | 'created_at' | 'updated_at' | 'quartier_id'>) => {
   const user = (await supabase.auth.getUser()).data.user;
   if (!user) throw new Error("Utilisateur non connecté");
 
