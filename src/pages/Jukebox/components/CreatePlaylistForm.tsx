@@ -35,8 +35,14 @@ export function CreatePlaylistForm({ open, onOpenChange, onSuccess }: CreatePlay
   });
 
   const onSubmit = async (values: z.infer<typeof playlistSchema>) => {
+    if (!values.nom) return;
+    
     try {
-      const newPlaylist = await createPlaylist(values);
+      const newPlaylist = await createPlaylist({
+        nom: values.nom,
+        description: values.description,
+        is_public: values.is_public,
+      });
       toast({
         title: "Playlist créée",
         description: `La playlist "${newPlaylist.nom}" a été créée avec succès.`,

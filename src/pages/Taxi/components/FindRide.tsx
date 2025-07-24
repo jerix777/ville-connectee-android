@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { taxiService } from '@/services/taxiService';
+import { getAvailableDrivers } from '@/services/taxiService';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
@@ -12,15 +12,10 @@ export const FindRide = () => {
   const [endPoint, setEndPoint] = useState('');
   const [searchTriggered, setSearchTriggered] = useState(false);
 
-  const { data: lines } = useQuery({
-    queryKey: ['taxiLines'],
-    queryFn: taxiService.getTaxiLines,
-  });
-
   const { data: drivers, isLoading } = useQuery({
-    queryKey: ['drivers', startPoint, endPoint],
-    queryFn: () => taxiService.findDriversByLine(startPoint, endPoint),
-    enabled: searchTriggered && !!startPoint && !!endPoint,
+    queryKey: ['availableDrivers'],
+    queryFn: getAvailableDrivers,
+    enabled: searchTriggered,
   });
 
   const handleSearch = () => {
@@ -33,31 +28,10 @@ export const FindRide = () => {
         <CardTitle>Trouver un taximètre</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Select onValueChange={setStartPoint} value={startPoint}>
-            <SelectTrigger>
-              <SelectValue placeholder="Point de départ" />
-            </SelectTrigger>
-            <SelectContent>
-              {lines?.map((line) => (
-                <SelectItem key={line.id} value={line.start_point}>
-                  {line.start_point}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select onValueChange={setEndPoint} value={endPoint}>
-            <SelectTrigger>
-              <SelectValue placeholder="Point d'arrivée" />
-            </SelectTrigger>
-            <SelectContent>
-              {lines?.map((line) => (
-                <SelectItem key={line.id} value={line.end_point}>
-                  {line.end_point}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="text-center">
+          <p className="text-muted-foreground mb-4">
+            Rechercher les chauffeurs disponibles dans votre zone
+          </p>
         </div>
         <Button onClick={handleSearch} className="w-full">
           Rechercher
@@ -78,11 +52,16 @@ export const FindRide = () => {
             {drivers.length > 0 ? (
               <div className="space-y-4">
                 {drivers.map((driver) => (
-                  <DriverCard key={driver.id} driver={driver} />
+                  <div key={driver.id} className="p-4 border rounded">
+                    <p className="font-medium">Type: {driver.vehicle_type}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Disponible: {driver.is_available ? 'Oui' : 'Non'}
+                    </p>
+                  </div>
                 ))}
               </div>
             ) : (
-              <p>Aucun taximètre trouvé pour cette ligne.</p>
+              <p>Aucun taximètre trouvé.</p>
             )}
           </div>
         )}

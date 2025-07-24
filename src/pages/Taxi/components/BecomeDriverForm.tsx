@@ -17,15 +17,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { taxiService } from '@/services/taxiService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createDriverProfile } from '@/services/taxiService';
 import { useAuth } from '@/contexts/AuthContext';
-import { toast } from 'sonner';
+import { toast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const formSchema = z.object({
-  vehicle_type: z.enum(['moto', 'voiture']),
-  line_ids: z.array(z.string()).min(1, 'Veuillez sélectionner au moins une ligne.'),
+  vehicle_type: z.string().min(1, 'Le type de véhicule est requis'),
+  vehicle_model: z.string().optional(),
+  license_plate: z.string().optional(),
 });
 
 type BecomeDriverFormValues = z.infer<typeof formSchema>;
@@ -41,33 +42,42 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
   const form = useForm<BecomeDriverFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      vehicle_type: 'moto',
-      line_ids: [],
+      vehicle_type: '',
+      vehicle_model: '',
+      license_plate: '',
     },
-  });
-
-  const { data: lines } = useQuery({
-    queryKey: ['taxiLines'],
-    queryFn: taxiService.getTaxiLines,
   });
 
   const mutation = useMutation({
-    mutationFn: (data: BecomeDriverFormValues) => {
+    mutationFn: (data: { vehicle_type: string; vehicle_model?: string; license_plate?: string }) => {
       if (!user) throw new Error('User not authenticated');
-      return taxiService.createDriverProfile({ ...data, user_id: user.id });
+      return createDriverProfile(data);
     },
     onSuccess: () => {
-      toast.success('Vous êtes maintenant enregistré comme chauffeur !');
+      toast({
+        title: 'Succès',
+        description: 'Vous êtes maintenant enregistré comme chauffeur !',
+      });
       queryClient.invalidateQueries({ queryKey: ['driverProfile', user?.id] });
       onSuccess();
     },
     onError: (error) => {
-      toast.error(`Une erreur est survenue: ${error.message}`);
+      toast({
+        title: 'Erreur',
+        description: `Une erreur est survenue: ${error.message}`,
+        variant: 'destructive',
+      });
     },
   });
 
   const onSubmit = (data: BecomeDriverFormValues) => {
-    mutation.mutate(data);
+    if (!data.vehicle_type) return;
+    
+    mutation.mutate({
+      vehicle_type: data.vehicle_type as any,
+      vehicle_model: data.vehicle_model,
+      license_plate: data.license_plate,
+    });
   };
 
   return (
@@ -93,43 +103,10 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
                     <SelectContent>
                       <SelectItem value="moto">Moto</SelectItem>
                       <SelectItem value="voiture">Voiture</SelectItem>
+                      <SelectItem value="minibus">Minibus</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="line_ids"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Lignes désservies</FormLabel>
-                  <Select onValueChange={(value) => field.onChange([...field.value, value])}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Sélectionnez les lignes que vous désservez" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {lines?.map((line) => (
-                        <SelectItem key={line.id} value={line.id.toString()}>
-                          {line.name} ({line.start_point} - {line.end_point})
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                  <div className="mt-2">
-                    {field.value.map((lineId) => {
-                      const line = lines?.find((l) => l.id.toString() === lineId);
-                      return (
-                        <span key={lineId} className="mr-2 inline-block bg-gray-200 px-2 py-1 rounded">
-                          {line?.name}
-                        </span>
-                      );
-                    })}
-                  </div>
                 </FormItem>
               )}
             />

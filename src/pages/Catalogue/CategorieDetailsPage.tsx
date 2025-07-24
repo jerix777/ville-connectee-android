@@ -81,12 +81,12 @@ export function CategorieDetailsPage() {
           items.map((item) => (
             <Card key={item.id} className="overflow-hidden group">
               <img
-                src={item.image_url}
-                alt={item.titre}
+                src={item.image_url || '/placeholder.svg'}
+                alt={item.name}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
               />
               <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-                <h3 className="text-white font-bold text-lg">{item.titre}</h3>
+                <h3 className="text-white font-bold text-lg">{item.name}</h3>
                 <p className="text-white/80 text-sm">{item.description}</p>
               </div>
             </Card>

@@ -32,8 +32,13 @@ export function CreateCategoryForm({ open, onOpenChange, onSuccess }: CreateCate
   });
 
   const onSubmit = async (values: z.infer<typeof categorySchema>) => {
+    if (!values.nom) return;
+    
     try {
-      const newCategory = await createCatalogueCategory(values);
+      const newCategory = await createCatalogueCategory({
+        nom: values.nom,
+        description: values.description,
+      });
       toast({
         title: "Catégorie créée",
         description: `La catégorie "${newCategory.nom}" a été créée avec succès.`,

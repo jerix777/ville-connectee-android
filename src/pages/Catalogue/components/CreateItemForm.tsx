@@ -14,7 +14,6 @@ import type { CatalogueItem } from '@/services/catalogueService';
 const itemSchema = z.object({
   titre: z.string().min(3, "Le titre doit contenir au moins 3 caractères."),
   description: z.string().optional(),
-  image: z.instanceof(File).refine(file => file.size > 0, "L'image est requise."),
 });
 
 interface CreateItemFormProps {
@@ -31,7 +30,6 @@ export function CreateItemForm({ categoryId, open, onOpenChange, onSuccess }: Cr
     defaultValues: {
       titre: '',
       description: '',
-      image: undefined,
     },
   });
 
@@ -39,13 +37,14 @@ export function CreateItemForm({ categoryId, open, onOpenChange, onSuccess }: Cr
     setIsSubmitting(true);
     try {
       const newItem = await createCatalogueItem({
-        categorie_id: categoryId,
-        titre: values.titre,
+        category_id: categoryId,
+        name: values.titre,
         description: values.description,
-      }, values.image);
+        image_url: '/placeholder.svg', // Pour l'instant, pas d'upload d'image
+      });
       toast({
         title: "Élément créé",
-        description: `L'élément "${newItem.titre}" a été créé avec succès.`,
+        description: `L'élément "${newItem.name}" a été créé avec succès.`,
       });
       onSuccess(newItem);
       onOpenChange(false);
@@ -90,23 +89,6 @@ export function CreateItemForm({ categoryId, open, onOpenChange, onSuccess }: Cr
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Une brève description de l'élément..." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Image</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="file" 
-                      accept="image/*"
-                      onChange={(e) => field.onChange(e.target.files ? e.target.files[0] : null)}
-                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
