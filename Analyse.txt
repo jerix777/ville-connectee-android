@@ -1,0 +1,118 @@
+Voici l'analyse complète de ce projet sous forme de prompt pour une reproduction avec une autre IA :
+
+## Prompt d'analyse - Application Web "Ville Connectée" (Ouellé)
+
+### Description générale
+Créer une application web communautaire multifonctionnelle pour une ville appelée "Ouellé" - décrite comme "la cité de l'innovation et du développement durable". L'application sert de plateforme centrale pour connecter les habitants et gérer divers services municipaux.
+
+### Stack technique
+- **Frontend :** React 18.3.1 + TypeScript + Vite
+- **UI Framework :** shadcn/ui avec Radix UI components + Tailwind CSS
+- **Backend :** Supabase (base de données PostgreSQL + authentification + storage)
+- **Routing :** React Router DOM v6
+- **State Management :** TanStack Query (React Query) v5
+- **Formulaires :** React Hook Form + Zod validation
+- **Icons :** Lucide React
+- **Mobile :** Capacitor pour génération d'APK Android
+
+### Architecture de l'application
+
+#### Pages principales (17 fonctionnalités) :
+1. **Accueil (/)** - Dashboard avec navigation vers toutes les fonctionnalités
+2. **Actualités (/actualites)** - Système de news/articles
+3. **Événements (/evenements)** - Gestion d'événements locaux
+4. **Messages (/messages)** - Système de messagerie privée entre utilisateurs
+5. **Jukebox (/jukebox)** - Partage et écoute de musique collaborative
+6. **Main d'œuvre (/main-doeuvre)** - Annuaire de professionnels/artisans
+7. **Marché (/marche)** - Marketplace pour acheter/vendre des biens
+8. **Emplois (/emplois)** - Offres d'emploi locales
+9. **Annuaire (/annuaire)** - Répertoire des contacts/professionnels
+10. **Associations (/associations)** - Liste des associations locales
+11. **Immobilier (/immobilier)** - Annonces immobilières (vente/location)
+12. **Alertes (/alertes)** - Système d'alertes et signalements
+13. **Annonces (/annonces)** - Communiqués officiels
+14. **Services (/services)** - Services et commerces locaux
+15. **Villages (/villages)** - Informations sur les villages
+16. **Nécrologie (/necrologie)** - Avis de décès
+17. **Souvenirs (/souvenirs)** - Mémoire collective/archives
+18. **Tribune (/tribune)** - Espace d'expression libre
+19. **Suggestions (/suggestions)** - Boîte à suggestions pour la ville
+
+#### Architecture des composants :
+- **Layout principal :** Header + Sidebar collapsible + Main content
+- **Composants UI :** Utilise exclusivement shadcn/ui (Button, Card, Dialog, Form, etc.)
+- **Structure des pages :** Chaque page utilise le composant `PageLayout` réutilisable
+- **Services :** Couche d'abstraction pour toutes les interactions Supabase
+
+### Base de données Supabase
+
+#### Tables principales :
+- `actualites` - Articles/news
+- `evenements` + `event_types` - Événements et leurs types
+- `conversations` + `messages` - Système de messagerie
+- `musiques`, `playlists`, `jukebox_sessions` - Système jukebox
+- `professionnels` + `metiers` - Annuaire professionnel
+- `marche` - Marketplace
+- `offres_emploi` - Emplois
+- `associations` - Associations
+- `immobilier` - Annonces immobilières
+- `services_commerces` - Services/commerces
+- `commune`, `villages`, `quartiers` - Géographie
+- `necrologie` - Avis de décès
+- `souvenirs` - Archives/mémoire
+- `tribune`, `suggestions` - Expression/suggestions
+- `users_profiles`, `user_roles` - Gestion utilisateurs
+
+#### Fonctionnalités Supabase :
+- **Authentication :** Système d'auth complet
+- **RLS (Row Level Security) :** Politiques de sécurité sur toutes les tables
+- **Storage :** Buckets pour musique et souvenirs
+- **Realtime :** Mises à jour en temps réel pour les messages
+
+### Design système
+- **Couleurs :** Système de tokens sémantiques avec thème "ville" (ville-DEFAULT, ville-light, ville-dark)
+- **Components :** Design system basé sur shadcn/ui entièrement customisé
+- **Layout :** Responsive design avec sidebar collapsible
+- **Navigation :** Sidebar avec recherche + breadcrumbs
+- **Interactions :** Toasts pour feedback utilisateur
+
+### Fonctionnalités spécifiques remarquables :
+
+#### 1. Système Jukebox (unique) :
+- Upload de fichiers musicaux
+- Création de playlists collaboratives
+- Sessions d'écoute partagées en temps réel
+- Queue de lecture collaborative
+
+#### 2. Système de géolocalisation :
+- Structure hiérarchique : Commune > Villages > Quartiers
+- Filtrage géographique sur toutes les fonctionnalités
+
+#### 3. Gestion des rôles :
+- Système de rôles utilisateur (admin, modérateur, utilisateur)
+- Permissions granulaires par fonctionnalité
+
+#### 4. Capacitor pour mobile :
+- Configuration pour génération d'APK Android
+- Scripts PowerShell pour build automatisé
+
+### Instructions de reproduction :
+1. Initialiser projet Vite + React + TypeScript
+2. Installer toutes les dépendances listées
+3. Configurer Supabase avec toutes les tables et RLS policies
+4. Implémenter l'architecture de composants décrite
+5. Créer toutes les 19 pages avec leurs fonctionnalités
+6. Implémenter le design system avec tokens Tailwind
+7. Configurer Capacitor pour mobile
+8. Tester toutes les fonctionnalités end-to-end
+
+### Spécificités techniques importantes :
+- Utilisation exclusive de composants shadcn/ui
+- Système de services pour abstraire Supabase
+- Hook personnalisés pour gestion d'état
+- Validation Zod sur tous les formulaires
+- Gestion d'erreurs avec toasts
+- Pagination et filtres sur toutes les listes
+- Upload de fichiers vers Supabase Storage
+
+Ce projet représente une application communautaire complète avec 19 modules fonctionnels interconnectés, un système d'authentification robuste, et une architecture scalable.
