@@ -29,7 +29,7 @@ export default function SteveYobouetPage() {
                 <p className="text-xl font-semibold text-foreground mb-2">
                   Steve YOBOUET
                 </p>
-                <p className="text-lg text-muted-foreground">
+                <p className="text-lg font-semibold text-foreground mb-2">
                   Ouellé en mouvement
                 </p>
               </div>
