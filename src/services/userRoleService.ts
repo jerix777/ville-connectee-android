@@ -29,6 +29,20 @@ export async function setUserRole(
   subRole?: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    // Security check: only allow users to set their own role, or admin users to set others
+    const currentUser = await supabase.auth.getUser();
+    if (!currentUser.data.user) {
+      return { success: false, error: 'Utilisateur non authentifié' };
+    }
+
+    // Users can only modify their own role unless they are admin
+    if (currentUser.data.user.id !== userId) {
+      const currentUserRole = await getUserRole(currentUser.data.user.id);
+      if (!currentUserRole || currentUserRole.role !== 'autorite_administrative') {
+        return { success: false, error: 'Accès non autorisé' };
+      }
+    }
+
     const { error } = await supabase
       .from('user_roles')
       .upsert({

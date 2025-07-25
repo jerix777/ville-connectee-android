@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "@/hooks/use-toast";
+import { SecurityAudit } from "@/lib/auditLog";
+import { validateEmail, validatePassword } from "@/lib/security";
 
 export interface UserProfile {
   id: string;
@@ -232,18 +234,28 @@ export async function getSessionCommune(sessionId: string): Promise<string | nul
 // Connexion utilisateur
 export async function signIn(email: string, password: string): Promise<{ success: boolean; error?: string }> {
   try {
+    // Validate email format
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.isValid) {
+      await SecurityAudit.logLogin(false, email, emailValidation.error);
+      return { success: false, error: emailValidation.error };
+    }
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
     });
     
     if (error) {
+      await SecurityAudit.logLogin(false, email, error.message);
       return { success: false, error: error.message };
     }
     
+    await SecurityAudit.logLogin(true, email);
     return { success: true };
   } catch (err) {
     console.error("Erreur connexion:", err);
+    await SecurityAudit.logLogin(false, email, "Erreur système");
     return { success: false, error: "Une erreur s'est produite lors de la connexion" };
   }
 }
@@ -251,9 +263,24 @@ export async function signIn(email: string, password: string): Promise<{ success
 // Inscription utilisateur
 export async function signUp(email: string, password: string): Promise<{ success: boolean; error?: string }> {
   try {
+    // Validate email format
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.isValid) {
+      return { success: false, error: emailValidation.error };
+    }
+
+    // Validate password strength
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
+      return { success: false, error: passwordValidation.error };
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
-      password
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/`
+      }
     });
     
     if (error) {
