@@ -26,7 +26,7 @@ export default function SteveYobouetPage() {
               </p>
               
               <div className="text-right">
-                <p className="text-xl font-semibold text-primary mb-2">
+                <p className="text-xl font-semibold text-foreground mb-2">
                   Steve YOBOUET
                 </p>
                 <p className="text-lg text-muted-foreground italic">
