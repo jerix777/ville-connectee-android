@@ -79,8 +79,7 @@ export function CataloguePage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
-                    {/* @ts-ignore */}
-                    {categorie.catalogue_items[0]?.count || 0} éléments
+                    {(categorie as any).catalogue_items?.length || 0} éléments
                   </p>
                 </CardContent>
               </Card>

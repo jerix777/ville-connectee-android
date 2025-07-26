@@ -10,7 +10,10 @@ export type CatalogueItemInsert = TablesInsert<"catalogue_items">;
 export const getCatalogueCategories = async () => {
   const { data, error } = await supabase
     .from("catalogue_categories")
-    .select("*")
+    .select(`
+      *,
+      catalogue_items(count)
+    `)
     .order("nom", { ascending: true });
   
   if (error) throw error;
