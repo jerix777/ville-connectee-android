@@ -38,6 +38,7 @@ import ImmobilierDetailPage from "./pages/Immobilier/ImmobilierDetailPage";
 import ServiceDetailPage from "./pages/Services/ServiceDetailPage";
 import MarketItemDetailPage from "./pages/Marche/MarketItemDetailPage";
 import SteveYobouetPage from "./pages/SteveYobouet";
+import TaxiPage from "./pages/Taxi";
 
 const queryClient = new QueryClient();
 
@@ -80,6 +81,7 @@ const AppContent = () => {
           <Route path="/services/:id" element={<ServiceDetailPage />} />
           <Route path="/marche/:id" element={<MarketItemDetailPage />} />
           <Route path="/steve-yobouet" element={<SteveYobouetPage />} />
+          <Route path="/taxi" element={<TaxiPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

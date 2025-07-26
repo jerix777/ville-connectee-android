@@ -39,6 +39,7 @@ const navItems = [
   { path: "/tribune", label: "Tribune", icon: MessageSquare },
   { path: "/suggestions", label: "Suggestions", icon: MessageSquare },
   { path: "/steve-yobouet", label: "Steve Yobouet", icon: User },
+  { path: "/taxi", label: "Service Taxi", icon: BriefcaseBusiness },
 ];
 
 function NavItem({ to, icon: Icon, label, isActive, onClick }: NavItemProps) {
