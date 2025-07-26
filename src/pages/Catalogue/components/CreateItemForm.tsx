@@ -9,11 +9,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { createCatalogueItem } from '@/services/catalogueService';
 import { toast } from '@/hooks/use-toast';
+import { SecureFileUpload } from '@/components/common/SecureFileUpload';
+import { FILE_VALIDATION_OPTIONS } from '@/lib/security';
+import { supabase } from '@/integrations/supabase/client';
 import type { CatalogueItem } from '@/services/catalogueService';
 
 const itemSchema = z.object({
   titre: z.string().min(3, "Le titre doit contenir au moins 3 caractères."),
   description: z.string().optional(),
+  image: z.any().optional(),
 });
 
 interface CreateItemFormProps {
@@ -25,6 +29,7 @@ interface CreateItemFormProps {
 
 export function CreateItemForm({ categoryId, open, onOpenChange, onSuccess }: CreateItemFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const form = useForm<z.infer<typeof itemSchema>>({
     resolver: zodResolver(itemSchema),
     defaultValues: {
@@ -33,14 +38,40 @@ export function CreateItemForm({ categoryId, open, onOpenChange, onSuccess }: Cr
     },
   });
 
+  const uploadImage = async (file: File): Promise<string> => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const filePath = `catalogue/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('souvenirs')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    const { data } = supabase.storage
+      .from('souvenirs')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  };
+
   const onSubmit = async (values: z.infer<typeof itemSchema>) => {
     setIsSubmitting(true);
     try {
+      let imageUrl = '/placeholder.svg';
+      
+      if (imageFile) {
+        imageUrl = await uploadImage(imageFile);
+      }
+
       const newItem = await createCatalogueItem({
         category_id: categoryId,
         name: values.titre,
         description: values.description,
-        image_url: '/placeholder.svg', // Pour l'instant, pas d'upload d'image
+        image_url: imageUrl,
       });
       toast({
         title: "Élément créé",
@@ -48,6 +79,8 @@ export function CreateItemForm({ categoryId, open, onOpenChange, onSuccess }: Cr
       });
       onSuccess(newItem);
       onOpenChange(false);
+      form.reset();
+      setImageFile(null);
     } catch (error) {
       console.error("Erreur lors de la création de l'élément:", error);
       toast({
@@ -94,6 +127,15 @@ export function CreateItemForm({ categoryId, open, onOpenChange, onSuccess }: Cr
                 </FormItem>
               )}
             />
+            <FormItem>
+              <FormLabel>Image</FormLabel>
+              <SecureFileUpload
+                onFileSelect={setImageFile}
+                validationOptions={FILE_VALIDATION_OPTIONS.images}
+                maxFiles={1}
+                className="w-full"
+              />
+            </FormItem>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Annuler
