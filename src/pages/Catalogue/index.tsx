@@ -68,7 +68,7 @@ export function CataloguePage() {
           ))
         ) : (
           categories.map((categorie) => (
-            <Link to={`/catalogue/${categorie.id}`} key={categorie.id}>
+            <Link to={`/catalogue/category/${categorie.id}`} key={categorie.id}>
               <Card className="hover:shadow-lg transition-shadow duration-300">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
