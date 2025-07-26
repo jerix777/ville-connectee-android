@@ -31,6 +31,27 @@ export const createCatalogueCategory = async (category: CatalogueCategorieInsert
   return data;
 };
 
+export const updateCatalogueCategory = async (id: string, category: Partial<CatalogueCategorieInsert>) => {
+  const { data, error } = await supabase
+    .from("catalogue_categories")
+    .update(category)
+    .eq("id", id)
+    .select()
+    .single();
+  
+  if (error) throw error;
+  return data;
+};
+
+export const deleteCatalogueCategory = async (id: string) => {
+  const { error } = await supabase
+    .from("catalogue_categories")
+    .delete()
+    .eq("id", id);
+  
+  if (error) throw error;
+};
+
 // Items
 export const getCatalogueItems = async (categoryId?: string) => {
   let query = supabase
@@ -57,6 +78,18 @@ export const createCatalogueItem = async (item: CatalogueItemInsert) => {
       ...item,
       created_by: user.id,
     })
+    .select()
+    .single();
+  
+  if (error) throw error;
+  return data;
+};
+
+export const updateCatalogueItem = async (id: string, item: Partial<CatalogueItemInsert>) => {
+  const { data, error } = await supabase
+    .from("catalogue_items")
+    .update(item)
+    .eq("id", id)
     .select()
     .single();
   
