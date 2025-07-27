@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   });
   
   const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Récupérer le profil utilisateur actuel
   const refreshProfile = async () => {
@@ -90,12 +91,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             sessionId,
           });
         }
+        
+        setIsInitialized(true);
       } catch (error) {
         console.error("Erreur initialisation auth:", error);
         setState((current) => ({
           ...current,
           isLoading: false,
         }));
+        setIsInitialized(true);
         toast({
           title: "Erreur d'initialisation",
           description: "Impossible de récupérer votre session",
@@ -129,7 +133,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             
             setUserRole(role);
             
-            if (event === 'SIGNED_IN') {
+            // Afficher le toast seulement pour une vraie connexion, pas pour la restauration de session
+            if (event === 'SIGNED_IN' && isInitialized) {
               toast({
                 title: "Connecté",
                 description: "Vous êtes maintenant connecté",
