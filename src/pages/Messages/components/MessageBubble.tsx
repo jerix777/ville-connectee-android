@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Message } from '@/services/messageService';
 import { cn } from '@/lib/utils';
-import { Edit, Trash, MoreVertical } from 'lucide-react';
+import { Edit, Trash, MoreVertical, Copy } from 'lucide-react';
 
 interface MessageBubbleProps {
   message: Message;
@@ -32,6 +32,13 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   onDeleteMessage,
   editMessagePending
 }) => {
+  const handleCopyMessage = async () => {
+    try {
+      await navigator.clipboard.writeText(message.content);
+    } catch (error) {
+      console.error('Erreur lors de la copie:', error);
+    }
+  };
   return (
     <div
       className={cn(
@@ -73,7 +80,10 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
           </div>
         ) : (
           <>
-            <p className={cn("text-[14px] leading-[20px]", isOwnMessage ? "text-white" : "text-[#202124]")}>
+            <p className={cn(
+              "text-[14px] leading-[20px] break-words hyphens-auto overflow-wrap-anywhere",
+              isOwnMessage ? "text-white" : "text-[#202124]"
+            )}>
               {message.content}
             </p>
             {/* Timestamp */}
@@ -102,6 +112,10 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleCopyMessage}>
+                <Copy className="h-4 w-4 mr-2" />
+                Copier
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onEditMessage(message)}>
                 <Edit className="h-4 w-4 mr-2" />
                 Modifier
