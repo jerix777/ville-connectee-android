@@ -1,86 +1,105 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getAvailableCommunalDrivers } from '@/services/taxiCommunalService';
+import { getAvailableCommunalDrivers, TaxiCommunalDriver } from '@/services/taxiCommunalService';
 import { CommunalDriverCard } from './CommunalDriverCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { EmptyState } from '@/components/common/EmptyState';
+import { LoadingSkeleton } from '@/components/common/LoadingSkeleton';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Car, Search, MapPin } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-const CommunalFindRide: React.FC = () => {
+interface CommunalFindRideProps {
+  drivers: TaxiCommunalDriver[];
+  loading: boolean;
+  onRefresh: () => void;
+}
+
+export const CommunalFindRide = ({ drivers, loading, onRefresh }: CommunalFindRideProps) => {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<'moto' | 'brousse'>('moto');
-  const [searchTriggered, setSearchTriggered] = useState(false);
 
-  const { data: drivers, isLoading } = useQuery({
+  const { data: filteredDrivers, isLoading: searchLoading } = useQuery({
     queryKey: ['availableCommunalDrivers', category, search],
     queryFn: () => getAvailableCommunalDrivers(category, search),
-    enabled: searchTriggered,
+    enabled: !!search || category !== 'moto',
   });
 
-  const handleSearch = () => {
-    setSearchTriggered(true);
-  };
+  const displayDrivers = search || category !== 'moto' ? (filteredDrivers || []) : drivers;
+  const isLoadingData = loading || searchLoading;
+
+  if (isLoadingData) {
+    return <LoadingSkeleton type="grid" count={6} />;
+  }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Trouver un taxi communal</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center mb-2 gap-2">
-          <input
-            type="text"
-            placeholder="Rechercher un chauffeur communal"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="flex-1 border border-gray-300 rounded-l px-3 py-2 focus:outline-none"
-          />
-          <Button onClick={handleSearch} className="rounded-r" variant="default">
-            Rechercher
-          </Button>
-        </div>
-        <div className="flex gap-2 mb-2">
-          <Button
-            className={`flex-1 py-2 rounded font-semibold ${category === 'moto' ? 'bg-pink-300 text-white' : 'bg-pink-100 text-pink-700'}`}
-            variant={category === 'moto' ? 'default' : 'outline'}
-            onClick={() => setCategory('moto')}
-          >
-            Motos et tricycles
-          </Button>
-          <Button
-            className={`flex-1 py-2 rounded font-semibold ${category === 'brousse' ? 'bg-pink-300 text-white' : 'bg-pink-100 text-pink-700'}`}
-            variant={category === 'brousse' ? 'default' : 'outline'}
-            onClick={() => setCategory('brousse')}
-          >
-            Taxis brousse
-          </Button>
-        </div>
-        <div>
-          <h2 className="font-bold mb-2">
-            {category === 'moto' ? 'Liste des motos taxis jaunes et tricycles' : 'Liste des taxis brousse'}
-          </h2>
-          {isLoading && (
-            <div className="space-y-4">
-              <Skeleton className="h-24 w-full" />
-              <Skeleton className="h-24 w-full" />
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Car className="h-5 w-5" />
+            Trouver un taxi communal
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="search">Rechercher un chauffeur</Label>
+            <div className="flex gap-2">
+              <Input
+                id="search"
+                placeholder="Nom du chauffeur..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="flex-1"
+              />
+              <Button variant="outline" size="icon">
+                <Search className="h-4 w-4" />
+              </Button>
             </div>
-          )}
-          {searchTriggered && !isLoading && drivers && (
-            <div className="space-y-4">
-              {drivers.length > 0 ? (
-                drivers.map((driver: any) => (
-                  <CommunalDriverCard key={driver.id} driver={driver} />
-                ))
-              ) : (
-                <div className="text-gray-500 text-center py-8">Aucun chauffeur trouvé.</div>
-              )}
-            </div>
-          )}
+          </div>
+
+          <Tabs value={category} onValueChange={(value) => setCategory(value as 'moto' | 'brousse')}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="moto">Motos & Tricycles</TabsTrigger>
+              <TabsTrigger value="brousse">Taxis Brousse</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </CardContent>
+      </Card>
+
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">
+            {category === 'moto' ? 'Motos taxis et tricycles' : 'Taxis brousse'} disponibles
+          </h3>
+          <Badge variant="secondary">
+            {displayDrivers.length} chauffeur{displayDrivers.length > 1 ? 's' : ''}
+          </Badge>
         </div>
-      </CardContent>
-    </Card>
+
+        {displayDrivers.length === 0 ? (
+          <div className="text-center py-10">
+            <Car className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Aucun chauffeur disponible</h3>
+            <p className="text-muted-foreground mb-4">
+              Il n'y a actuellement aucun {category === 'moto' ? 'moto-taxi ou tricycle' : 'taxi brousse'} disponible dans votre zone.
+            </p>
+            <Button onClick={onRefresh} variant="outline">
+              Actualiser
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {displayDrivers.map((driver) => (
+              <CommunalDriverCard key={driver.id} driver={driver} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
-
-export default CommunalFindRide;

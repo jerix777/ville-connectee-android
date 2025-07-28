@@ -1,31 +1,75 @@
-import CommunalFindRide from './components/CommunalFindRide';
-import { BecomeCommunalDriverForm } from './components/BecomeCommunalDriverForm';
 import { useState } from 'react';
+import { PageLayout } from '@/components/common/PageLayout';
+import { useQuery } from '@tanstack/react-query';
+import { getAvailableCommunalDrivers } from '@/services/taxiCommunalService';
+import { CommunalFindRide } from './components/CommunalFindRide';
+import { BecomeCommunalDriverForm } from './components/BecomeCommunalDriverForm';
+import { CommunalDriverDashboard } from './components/CommunalDriverDashboard';
+import { useAuth } from '@/contexts/AuthContext';
+import { Car } from 'lucide-react';
+import { useDataManagement } from '@/hooks/useDataManagement';
 
 const TaxiCommunal: React.FC = () => {
-  const [showForm, setShowForm] = useState(false);
+  const { user } = useAuth();
+  const [isDriver, setIsDriver] = useState(false);
+
+  const {
+    data: drivers,
+    loading: driversLoading,
+    activeTab,
+    setActiveTab,
+    searchQuery,
+    setSearchQuery,
+    refresh: refreshDrivers,
+    pagination: driversPagination,
+    hasData: hasDrivers,
+    isEmpty: driversEmpty,
+    isFiltered: driversFiltered
+  } = useDataManagement({
+    fetchData: () => getAvailableCommunalDrivers('moto', searchQuery),
+    searchFields: ['id'],
+    itemsPerPage: 6,
+    enableRealTimeRefresh: true
+  });
+
+  const renderListContent = () => (
+    <CommunalFindRide 
+      drivers={(driversPagination.paginatedData || []) as any[]}
+      loading={driversLoading}
+      onRefresh={refreshDrivers}
+    />
+  );
+
+  const renderAddContent = () => (
+    isDriver ? (
+      <CommunalDriverDashboard />
+    ) : (
+      <BecomeCommunalDriverForm onSuccess={() => setIsDriver(true)} />
+    )
+  );
 
   return (
-    <div className="p-4 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold flex items-center mb-4">
-        <span className="material-icons mr-2">local_taxi</span>
-        Taxis Communaux
-      </h1>
-      <div className="mb-6 flex justify-end">
-        <button
-          className="bg-pink-300 hover:bg-pink-400 text-white font-bold px-4 py-2 rounded"
-          onClick={() => setShowForm((v) => !v)}
-        >
-          {showForm ? 'Fermer' : 'Devenir chauffeur communal'}
-        </button>
-      </div>
-      {showForm && (
-        <div className="mb-6">
-          <BecomeCommunalDriverForm onSuccess={() => setShowForm(false)} />
-        </div>
-      )}
-      <CommunalFindRide />
-    </div>
+    <PageLayout
+      title="Taxi Communal"
+      description="Service de transport communal local - motos, tricycles et taxis brousse"
+      icon={Car}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      listContent={renderListContent()}
+      addContent={renderAddContent()}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      searchPlaceholder="Rechercher un chauffeur..."
+      loading={driversLoading}
+      hasData={hasDrivers}
+      currentPage={driversPagination.currentPage}
+      totalPages={driversPagination.totalPages}
+      onPageChange={driversPagination.goToPage}
+      canGoNext={driversPagination.canGoNext}
+      canGoPrevious={driversPagination.canGoPrevious}
+      skeletonType="grid"
+      skeletonCount={6}
+    />
   );
 };
 
