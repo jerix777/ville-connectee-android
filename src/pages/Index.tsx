@@ -1,7 +1,6 @@
-
 import { MainLayout } from "@/components/layout/MainLayout";
 import { FeatureCard } from "@/components/ui/feature-card";
-import { BookmarkCheck, Building, Calendar, Bell, Info, MapPin, Users, MessageSquare, Star, Link as LinkIcon, Music } from "lucide-react";
+import { BookmarkCheck, Building, Calendar, Bell, Info, MapPin, Users, MessageSquare, Star, Link as LinkIcon, Music, Bus } from "lucide-react";
 
 const featuresSection1 = [
   {
@@ -46,6 +45,12 @@ const featuresSection1 = [
     to: "/jukebox",
     description: "Écoutez et partagez de la musique"
   },
+  {
+    title: "Taxi Communal",
+    icon: Bus,
+    to: "/taxi-communal",
+    description: "Trouvez ou proposez un taxi communal"
+  },
 ];
 
 const featuresSection2 = [
@@ -84,6 +89,12 @@ const featuresSection2 = [
     icon: MessageSquare,
     to: "/suggestions",
     description: "Votre espace d'expression"
+  },
+  {
+    title: "Taxi Communal",
+    icon: Bus,
+    to: "/taxi-communal",
+    description: "Transport local"
   },
 ];
 

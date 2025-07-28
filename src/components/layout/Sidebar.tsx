@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Bell, BookmarkCheck, Building, Calendar, Home, Info, Link as LinkIcon, MapPin, MessageSquare, Music, Search, Star, Users, BriefcaseBusiness, LucideProps, User } from "lucide-react";
+import { Bell, BookmarkCheck, Building, Calendar, Home, Info, Link as LinkIcon, MapPin, MessageSquare, Music, Search, Star, Users, BriefcaseBusiness, LucideProps, User, Bus } from "lucide-react";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -39,7 +38,8 @@ const navItems = [
   { path: "/tribune", label: "Tribune", icon: MessageSquare },
   { path: "/suggestions", label: "Suggestions", icon: MessageSquare },
   { path: "/steve-yobouet", label: "Steve Yobouet", icon: User },
-  { path: "/taxi", label: "Service Taxi", icon: BriefcaseBusiness },
+  { path: "/taxi", label: "Service Taxi", icon: Bus },
+  { path: "/taxi-communal", label: "Taxi Communal", icon: Bus },
 ];
 
 function NavItem({ to, icon: Icon, label, isActive, onClick }: NavItemProps) {
