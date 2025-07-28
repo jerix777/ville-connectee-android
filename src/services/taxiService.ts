@@ -1,7 +1,9 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Tables, TablesInsert } from "@/integrations/supabase/types";
 
-export type TaxiDriver = Tables<"taxi_drivers">;
+export type TaxiDriver = Tables<"taxi_drivers"> & {
+  vehicle_type: string;
+};
 export type TaxiDriverInsert = TablesInsert<"taxi_drivers">;
 export type TaxiBooking = Tables<"taxi_bookings">;
 export type TaxiBookingInsert = TablesInsert<"taxi_bookings">;
@@ -62,4 +64,16 @@ export const getUserBookings = async () => {
   
   if (error) throw error;
   return data || [];
+};
+
+export const updateBookingStatus = async (bookingId: string, status: string) => {
+  const { data, error } = await supabase
+    .from("taxi_bookings")
+    .update({ status })
+    .eq("id", bookingId)
+    .select()
+    .single();
+  
+  if (error) throw error;
+  return data;
 };

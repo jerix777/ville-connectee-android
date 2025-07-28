@@ -1,73 +1,95 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { TaxiDriver } from '@/services/taxiService';
+import { Car, Phone, MapPin } from 'lucide-react';
 
-// This type should be moved to a more central location (e.g., services/taxiService) later
-export type TaxiDriver = {
-  id: string;
-  user_id: string;
-  vehicle_type: 'moto' | 'voiture';
-  availability: 'disponible' | 'indisponible' | 'en_course';
-  profiles: {
-    full_name: string;
-    phone: string;
-  } | null;
-};
-
-type DriverCardProps = {
+interface DriverCardProps {
   driver: TaxiDriver;
-};
+  onSelect?: () => void;
+}
 
-export const DriverCard = ({ driver }: DriverCardProps) => {
-  if (!driver.profiles) {
-    return null;
-  }
-
-  const getAvailabilityLabel = (availability: string) => {
-    switch (availability) {
-      case 'disponible':
-        return 'Disponible';
-      case 'indisponible':
-        return 'Indisponible';
-      case 'en_course':
-        return 'En course';
+export const DriverCard = ({ driver, onSelect }: DriverCardProps) => {
+  const getVehicleIcon = (vehicleType: string) => {
+    switch (vehicleType) {
+      case 'moto':
+        return '🏍️';
+      case 'voiture':
+        return '🚗';
+      case 'minibus':
+        return '🚐';
       default:
-        return 'Inconnu';
+        return '🚕';
     }
   };
 
-  const getAvailabilityVariant = (availability: string) => {
-    switch (availability) {
-      case 'disponible':
-        return 'success';
-      case 'indisponible':
-        return 'destructive';
-      case 'en_course':
-        return 'secondary';
+  const getVehicleLabel = (vehicleType: string) => {
+    switch (vehicleType) {
+      case 'moto':
+        return 'Moto-taxi';
+      case 'voiture':
+        return 'Taxi voiture';
+      case 'minibus':
+        return 'Minibus';
       default:
-        return 'default';
+        return 'Véhicule';
     }
   };
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={onSelect}>
+      <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle>{driver.profiles.full_name}</CardTitle>
-          <Badge variant={getAvailabilityVariant(driver.availability)}>
-            {getAvailabilityLabel(driver.availability)}
+          <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-full">
+              <Car className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <CardTitle className="text-sm font-medium">
+                {getVehicleLabel(driver.vehicle_type)}
+              </CardTitle>
+              <p className="text-xs text-muted-foreground">
+                {getVehicleIcon(driver.vehicle_type)} {driver.vehicle_model || 'Véhicule standard'}
+              </p>
+            </div>
+          </div>
+          <Badge 
+            variant={driver.is_available ? "default" : "secondary"}
+            className={driver.is_available ? "bg-green-100 text-green-800" : ""}
+          >
+            {driver.is_available ? 'Disponible' : 'Occupé'}
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="space-y-2">
-        <p className="capitalize">Véhicule: {driver.vehicle_type}</p>
-        <div className="flex items-center justify-between">
-          <p className="flex items-center gap-2">
-            <Phone size={16} /> {driver.profiles.phone}
-          </p>
-          <Button asChild size="sm">
-            <a href={`tel:${driver.profiles.phone}`}>Appeler</a>
+      <CardContent className="pt-0">
+        {driver.license_plate && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+            <MapPin className="h-4 w-4" />
+            <span className="font-mono">{driver.license_plate}</span>
+          </div>
+        )}
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="flex-1"
+            onClick={(e) => {
+              e.stopPropagation();
+              // Logique pour contacter le chauffeur
+            }}
+          >
+            <Phone className="h-4 w-4 mr-1" />
+            Contacter
+          </Button>
+          <Button 
+            size="sm" 
+            className="flex-1"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect?.();
+            }}
+          >
+            Réserver
           </Button>
         </div>
       </CardContent>

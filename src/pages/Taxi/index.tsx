@@ -1,44 +1,84 @@
 import { useState } from 'react';
-import { MainLayout } from '@/components/layout/MainLayout';
-import { PageTitle } from '@/components/common';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PageLayout } from '@/components/common/PageLayout';
+import { useQuery } from '@tanstack/react-query';
+import { getAvailableDrivers, getUserBookings } from '@/services/taxiService';
 import { FindRide } from './components/FindRide';
 import { BecomeDriverForm } from './components/BecomeDriverForm';
 import { DriverDashboard } from './components/DriverDashboard';
 import { useAuth } from '@/contexts/AuthContext';
 import { Car } from 'lucide-react';
+import { useDataManagement } from '@/hooks/useDataManagement';
 
 const TaxiPage = () => {
   const { user } = useAuth();
   const [isDriver, setIsDriver] = useState(false);
 
+  const {
+    data: drivers,
+    loading: driversLoading,
+    activeTab,
+    setActiveTab,
+    searchQuery,
+    setSearchQuery,
+    refresh: refreshDrivers,
+    pagination: driversPagination,
+    hasData: hasDrivers,
+    isEmpty: driversEmpty,
+    isFiltered: driversFiltered
+  } = useDataManagement({
+    fetchData: getAvailableDrivers,
+    searchFields: ['vehicle_type'],
+    itemsPerPage: 6,
+    enableRealTimeRefresh: true
+  });
+
+  const { data: bookings = [], isLoading: bookingsLoading } = useQuery({
+    queryKey: ['userBookings', user?.id],
+    queryFn: getUserBookings,
+    enabled: !!user,
+  });
+
+  const renderListContent = () => (
+    <FindRide 
+      drivers={driversPagination.paginatedData}
+      loading={driversLoading}
+      onRefresh={refreshDrivers}
+    />
+  );
+
+  const renderAddContent = () => (
+    isDriver ? (
+      <DriverDashboard 
+        bookings={bookings}
+        loading={bookingsLoading}
+      />
+    ) : (
+      <BecomeDriverForm onSuccess={() => setIsDriver(true)} />
+    )
+  );
+
   return (
-    <MainLayout>
-      <div className="space-y-6">
-        <PageTitle
-          title="Service Taxi"
-          description="Transport local et déplacements"
-          icon={Car}
-        />
-        
-        <Tabs defaultValue="find-ride" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="find-ride">Trouver un taxi</TabsTrigger>
-            <TabsTrigger value="driver-section">Espace chauffeur</TabsTrigger>
-          </TabsList>
-          <TabsContent value="find-ride">
-            <FindRide />
-          </TabsContent>
-          <TabsContent value="driver-section">
-            {isDriver ? (
-              <DriverDashboard />
-            ) : (
-              <BecomeDriverForm onSuccess={() => setIsDriver(true)} />
-            )}
-          </TabsContent>
-        </Tabs>
-      </div>
-    </MainLayout>
+    <PageLayout
+      title="Taxi Communal"
+      description="Service de transport local et déplacements entre quartiers"
+      icon={Car}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      listContent={renderListContent()}
+      addContent={renderAddContent()}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      searchPlaceholder="Rechercher un type de véhicule..."
+      loading={driversLoading}
+      hasData={hasDrivers}
+      currentPage={driversPagination.currentPage}
+      totalPages={driversPagination.totalPages}
+      onPageChange={driversPagination.goToPage}
+      canGoNext={driversPagination.canGoNext}
+      canGoPrevious={driversPagination.canGoPrevious}
+      skeletonType="grid"
+      skeletonCount={6}
+    />
   );
 };
 
