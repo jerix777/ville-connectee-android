@@ -38,6 +38,7 @@ import ServiceDetailPage from "./pages/Services/ServiceDetailPage";
 import MarketItemDetailPage from "./pages/Marche/MarketItemDetailPage";
 import SteveYobouetPage from "./pages/SteveYobouet";
 import TaxiPage from "./pages/Taxi";
+import AssociationDashboard from "./pages/Associations/AssociationDashboard";
 import TaxiCommunalPage from "./pages/TaxiCommunal";
 
 const queryClient = new QueryClient();

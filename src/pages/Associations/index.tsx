@@ -1,94 +1,165 @@
 
-import React from "react";
-import { PageLayout } from "@/components/common/PageLayout";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Users } from "lucide-react";
-
-type Association = {
-  id: string;
-  nom: string;
-  description: string;
-  contact: string;
-  created_at?: string;
-};
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Users, Plus, Search, Building2, Calendar, DollarSign } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { PageLayout, SearchBar } from "@/components/common";
+import { useDataManagement } from "@/hooks";
+import { associationService, Association } from "@/services/associationService";
+import { AuthGuard } from "@/components/auth/AuthGuard";
+import { CreateAssociationForm } from "./CreateAssociationForm";
 
 export default function AssociationsPage() {
-  // Récupération des associations via Supabase
-  const { data: associations, isLoading, error } = useQuery({
-    queryKey: ["associations"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("associations")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data as Association[];
-    },
+  const navigate = useNavigate();
+  const [showCreateForm, setShowCreateForm] = useState(false);
+
+  const {
+    data: associations,
+    loading,
+    searchQuery,
+    setSearchQuery,
+    activeTab,
+    setActiveTab,
+    pagination,
+    hasData,
+    isEmpty,
+    isFiltered,
+    refresh
+  } = useDataManagement<Association>({
+    fetchData: associationService.getAll,
+    searchFields: ['nom', 'description'],
+    itemsPerPage: 9
   });
 
-  const renderContent = () => {
-    if (isLoading) {
-      return (
-        <div className="text-center py-10">
-          <p className="text-muted-foreground">Chargement des associations…</p>
-        </div>
-      );
-    }
+  const handleCreateAssociation = () => {
+    setShowCreateForm(true);
+  };
 
-    if (error) {
-      return (
-        <div className="text-center py-10 text-red-500">
-          <p>Erreur lors du chargement des associations.</p>
-        </div>
-      );
-    }
+  const handleAssociationCreated = () => {
+    setShowCreateForm(false);
+    refresh();
+  };
 
-    if (!associations || associations.length === 0) {
-      return (
-        <div className="text-center text-muted-foreground mt-8">
-          Aucune association enregistrée pour le moment.
-        </div>
-      );
-    }
+  const handleViewAssociation = (associationId: string) => {
+    navigate(`/associations/${associationId}`);
+  };
 
-    return (
-      <div className="grid gap-4 md:grid-cols-2">
-        {associations.map((asso) => (
-          <Card key={asso.id}>
-            <CardHeader>
-              <CardTitle>{asso.nom}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="mb-2 text-sm text-gray-700">
-                {asso.description}
-              </p>
-              <div className="flex items-center gap-2">
-                <span className="text-[13px] text-muted-foreground font-medium">
-                  Contact :
-                </span>
-                <span className="text-ville-DEFAULT font-semibold">
-                  {asso.contact}
-                </span>
+  const renderAssociationCard = (association: Association) => (
+    <Card 
+      key={association.id} 
+      className="hover:shadow-lg transition-all duration-200 cursor-pointer group"
+      onClick={() => handleViewAssociation(association.id)}
+    >
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3">
+            {association.logo_url ? (
+              <img 
+                src={association.logo_url} 
+                alt={association.nom}
+                className="w-12 h-12 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <Building2 className="h-6 w-6 text-primary" />
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    );
+            )}
+            <div>
+              <CardTitle className="text-lg group-hover:text-primary transition-colors">
+                {association.nom}
+              </CardTitle>
+              <div className="flex items-center gap-2 mt-1">
+                <Badge variant="secondary" className="text-xs">
+                  <Users className="h-3 w-3 mr-1" />
+                  {association.nombre_membres} membres
+                </Badge>
+                <Badge 
+                  variant={association.statut === 'active' ? 'default' : 'outline'}
+                  className="text-xs"
+                >
+                  {association.statut}
+                </Badge>
+              </div>
+            </div>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <CardDescription className="mb-4 line-clamp-3">
+          {association.description}
+        </CardDescription>
+        <div className="space-y-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            <span>Créée le {new Date(association.date_creation).toLocaleDateString('fr-FR')}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <DollarSign className="h-4 w-4" />
+            <span>Contact: {association.contact}</span>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  const renderContent = () => {
+    if (showCreateForm) {
+      return (
+        <AuthGuard>
+          <CreateAssociationForm 
+            onSuccess={handleAssociationCreated}
+            onCancel={() => setShowCreateForm(false)}
+          />
+        </AuthGuard>
+      );
+    }
+
+    if (hasData) {
+      return (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {pagination.paginatedData.map(renderAssociationCard)}
+        </div>
+      );
+    }
+
+    return null;
   };
 
   return (
     <PageLayout
-      title="Associations de la ville"
-      description="Découvrez les associations locales de votre commune"
+      title="Associations"
+      description="Découvrez et gérez les associations locales de votre communauté"
       icon={Users}
-      activeTab="liste"
-      onTabChange={() => {}}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      loading={loading}
+      hasData={hasData}
+      currentPage={pagination.currentPage}
+      totalPages={pagination.totalPages}
+      onPageChange={pagination.goToPage}
+      canGoNext={pagination.canGoNext}
+      canGoPrevious={pagination.canGoPrevious}
+      onAddClick={handleCreateAssociation}
+      addButtonText="Créer une association"
+      searchPlaceholder="Rechercher une association..."
+      emptyStateTitle={isEmpty ? "Aucune association trouvée" : isFiltered ? "Aucune association ne correspond à votre recherche" : "Aucune association"}
+      emptyStateDescription={isEmpty ? "Soyez le premier à créer une association dans votre communauté." : undefined}
+      emptyStateIcon={Users}
+      onAddFirst={isEmpty ? handleCreateAssociation : undefined}
+      addFirstText="Créer la première association"
+      resultCount={pagination.paginatedData.length}
       listContent={renderContent()}
-      loading={isLoading}
-      hasData={!!associations && associations.length > 0}
+      addContent={showCreateForm ? (
+        <AuthGuard>
+          <CreateAssociationForm 
+            onSuccess={handleAssociationCreated}
+            onCancel={() => setShowCreateForm(false)}
+          />
+        </AuthGuard>
+      ) : undefined}
     />
   );
 }
