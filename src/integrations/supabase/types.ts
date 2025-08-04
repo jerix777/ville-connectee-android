@@ -58,30 +58,201 @@ export type Database = {
           },
         ]
       }
+      association_annonces: {
+        Row: {
+          association_id: string
+          auteur_id: string
+          contenu: string
+          created_at: string | null
+          id: string
+          priorite: string | null
+          titre: string
+          updated_at: string | null
+          visible_jusqu: string | null
+        }
+        Insert: {
+          association_id: string
+          auteur_id: string
+          contenu: string
+          created_at?: string | null
+          id?: string
+          priorite?: string | null
+          titre: string
+          updated_at?: string | null
+          visible_jusqu?: string | null
+        }
+        Update: {
+          association_id?: string
+          auteur_id?: string
+          contenu?: string
+          created_at?: string | null
+          id?: string
+          priorite?: string | null
+          titre?: string
+          updated_at?: string | null
+          visible_jusqu?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "association_annonces_association_id_fkey"
+            columns: ["association_id"]
+            isOneToOne: false
+            referencedRelation: "associations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      association_depenses: {
+        Row: {
+          approuve: boolean | null
+          association_id: string
+          categorie: string
+          created_at: string | null
+          date_depense: string | null
+          description: string
+          id: string
+          justificatif_url: string | null
+          montant: number
+          responsable_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          approuve?: boolean | null
+          association_id: string
+          categorie: string
+          created_at?: string | null
+          date_depense?: string | null
+          description: string
+          id?: string
+          justificatif_url?: string | null
+          montant: number
+          responsable_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          approuve?: boolean | null
+          association_id?: string
+          categorie?: string
+          created_at?: string | null
+          date_depense?: string | null
+          description?: string
+          id?: string
+          justificatif_url?: string | null
+          montant?: number
+          responsable_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "association_depenses_association_id_fkey"
+            columns: ["association_id"]
+            isOneToOne: false
+            referencedRelation: "associations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      association_membres: {
+        Row: {
+          association_id: string
+          cotisation_a_jour: boolean | null
+          created_at: string | null
+          date_adhesion: string | null
+          date_arrivee: string | null
+          dernier_paiement: string | null
+          email: string
+          id: string
+          montant_cotisation: number | null
+          nom: string
+          prenom: string
+          role: string
+          telephone: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          association_id: string
+          cotisation_a_jour?: boolean | null
+          created_at?: string | null
+          date_adhesion?: string | null
+          date_arrivee?: string | null
+          dernier_paiement?: string | null
+          email: string
+          id?: string
+          montant_cotisation?: number | null
+          nom: string
+          prenom: string
+          role?: string
+          telephone?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          association_id?: string
+          cotisation_a_jour?: boolean | null
+          created_at?: string | null
+          date_adhesion?: string | null
+          date_arrivee?: string | null
+          dernier_paiement?: string | null
+          email?: string
+          id?: string
+          montant_cotisation?: number | null
+          nom?: string
+          prenom?: string
+          role?: string
+          telephone?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "association_membres_association_id_fkey"
+            columns: ["association_id"]
+            isOneToOne: false
+            referencedRelation: "associations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       associations: {
         Row: {
           contact: string
           created_at: string | null
+          date_creation: string | null
           description: string
           id: string
+          logo_url: string | null
           nom: string
+          nombre_membres: number | null
           quartier_id: string | null
+          responsable_id: string | null
+          statut: string | null
         }
         Insert: {
           contact: string
           created_at?: string | null
+          date_creation?: string | null
           description: string
           id?: string
+          logo_url?: string | null
           nom: string
+          nombre_membres?: number | null
           quartier_id?: string | null
+          responsable_id?: string | null
+          statut?: string | null
         }
         Update: {
           contact?: string
           created_at?: string | null
+          date_creation?: string | null
           description?: string
           id?: string
+          logo_url?: string | null
           nom?: string
+          nombre_membres?: number | null
           quartier_id?: string | null
+          responsable_id?: string | null
+          statut?: string | null
         }
         Relationships: [
           {
