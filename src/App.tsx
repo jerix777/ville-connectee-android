@@ -84,6 +84,7 @@ const AppContent = () => {
           <Route path="/steve-yobouet" element={<SteveYobouetPage />} />
           <Route path="/taxi" element={<TaxiPage />} />
           <Route path="/taxi-communal" element={<TaxiCommunalPage />} />
+         <Route path="/associations/:id" element={<AssociationDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
