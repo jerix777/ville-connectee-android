@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 <<<<<<< HEAD
 import { TrendingUp, Users, DollarSign, MessageSquare } from "lucide-react";
@@ -13,6 +14,46 @@ import { LoadingSkeleton } from "@/components/common";
 
 interface StatisticsTabProps {
   associationId: string;
+}
+
+export function StatisticsTab({ associationId }: StatisticsTabProps) {
+  const { data: members, isLoading: loadingMembers } = useQuery({
+    queryKey: ['association-members', associationId],
+    queryFn: () => associationService.getMembers(associationId)
+  });
+
+  const { data: expenses, isLoading: loadingExpenses } = useQuery({
+    queryKey: ['association-expenses', associationId],
+    queryFn: () => associationService.getDepenses(associationId)
+  });
+
+  if (loadingMembers || loadingExpenses) {
+    return <LoadingSkeleton count={4} />;
+  }
+
+  const totalMembers = members?.length || 0;
+  const membersUpToDate = members?.filter(m => m.cotisation_a_jour)?.length || 0;
+  const membersOverdue = totalMembers - membersUpToDate;
+  const totalCotisations = members?.reduce((sum, m) => sum + (m.montant_cotisation || 0), 0) || 0;
+  const totalExpenses = expenses?.reduce((sum, e) => sum + (e.montant || 0), 0) || 0;
+  const approvedExpenses = expenses?.filter(e => e.approuve)?.length || 0;
+  const pendingExpenses = (expenses?.length || 0) - approvedExpenses;
+
+  const cotisationStats = [
+    {
+      label: "À jour",
+      count: membersUpToDate,
+      percentage: totalMembers > 0 ? Math.round((membersUpToDate / totalMembers) * 100) : 0,
+      color: "bg-green-500"
+    },
+    {
+      label: "En retard",
+      count: membersOverdue,
+      percentage: totalMembers > 0 ? Math.round((membersOverdue / totalMembers) * 100) : 0,
+      color: "bg-red-500"
+    }
+  ];
+
 }
 
 export function StatisticsTab({ associationId }: StatisticsTabProps) {
