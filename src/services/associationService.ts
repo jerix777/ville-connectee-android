@@ -38,11 +38,14 @@ export interface AssociationAnnonce {
   titre: string;
   contenu: string;
   auteur_id: string;
-  priorite: string;
+  priorite: 'haute' | 'moyenne' | 'normale';
   visible_jusqu?: string;
   created_at: string;
   updated_at: string;
 }
+
+export type AssociationAnnonceInsert = Omit<AssociationAnnonce, 'id' | 'created_at' | 'updated_at' | 'auteur_id'>;
+export type AssociationDepenseInsert = Omit<AssociationDepense, 'id' | 'created_at' | 'updated_at' | 'responsable_id'>;
 
 export interface AssociationDepense {
   id: string;
@@ -167,7 +170,7 @@ export const associationService = {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data || []) as AssociationAnnonce[];
   },
 
   async createAnnonce(annonce: Omit<AssociationAnnonce, 'id' | 'created_at' | 'updated_at'>): Promise<AssociationAnnonce> {
@@ -178,7 +181,7 @@ export const associationService = {
       .single();
 
     if (error) throw error;
-    return data;
+    return data as AssociationAnnonce;
   },
 
   async updateAnnonce(id: string, updates: Partial<AssociationAnnonce>): Promise<AssociationAnnonce> {
@@ -190,7 +193,7 @@ export const associationService = {
       .single();
 
     if (error) throw error;
-    return data;
+    return data as AssociationAnnonce;
   },
 
   async deleteAnnonce(id: string): Promise<void> {

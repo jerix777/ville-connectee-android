@@ -170,7 +170,7 @@ export default function AssociationDashboard() {
         </TabsContent>
 
         <TabsContent value="statistiques">
-          <StatisticsTab associationId={association.id} statistics={statistics} />
+          <StatisticsTab associationId={association.id} />
         </TabsContent>
 
         <TabsContent value="depenses">
