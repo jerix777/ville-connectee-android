@@ -29,7 +29,7 @@ export function AnnouncementsTab({ associationId }: AnnouncementsTabProps) {
         association_id: associationId,
         titre: form.titre,
         contenu: form.contenu,
-        auteur_id: 'admin', // à remplacer par l'utilisateur courant
+        auteur_id: 'system', // TODO: Récupérer l'ID de l'utilisateur connecté
         priorite: form.priorite,
       });
     },

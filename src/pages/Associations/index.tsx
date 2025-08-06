@@ -4,15 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import { Users, Plus, Search, Building2, Calendar, DollarSign } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { PageLayout, SearchBar } from "@/components/common";
 import { useDataManagement } from "@/hooks";
 import { associationService, Association } from "@/services/associationService";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { CreateAssociationForm } from "./CreateAssociationForm";
+import { EditAssociationForm } from "./components/EditAssociationForm";
+import { AssociationCard } from "./components/AssociationCard";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AssociationsPage() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [editingAssociation, setEditingAssociation] = useState<Association | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [associationToDelete, setAssociationToDelete] = useState<string | null>(null);
 
   const {
     data: associations,
@@ -41,66 +50,51 @@ export default function AssociationsPage() {
     refresh();
   };
 
-  const handleViewAssociation = (associationId: string) => {
-    navigate(`/associations/${associationId}`);
+  const handleEditAssociation = (association: Association) => {
+    setEditingAssociation(association);
+  };
+
+  const handleAssociationUpdated = () => {
+    setEditingAssociation(null);
+    refresh();
+  };
+
+  const handleDeleteAssociation = (associationId: string) => {
+    setAssociationToDelete(associationId);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!associationToDelete) return;
+    
+    try {
+      await associationService.delete(associationToDelete);
+      toast({
+        title: "Association supprimée",
+        description: "L'association a été supprimée avec succès",
+      });
+      refresh();
+    } catch (error) {
+      console.error('Erreur lors de la suppression:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de la suppression",
+        variant: "destructive",
+      });
+    } finally {
+      setDeleteDialogOpen(false);
+      setAssociationToDelete(null);
+    }
   };
 
   const renderAssociationCard = (association: Association) => (
-    <Card 
-      key={association.id} 
-      className="hover:shadow-lg transition-all duration-200 cursor-pointer group"
-      onClick={() => handleViewAssociation(association.id)}
-    >
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            {association.logo_url ? (
-              <img 
-                src={association.logo_url} 
-                alt={association.nom}
-                className="w-12 h-12 rounded-full object-cover"
-              />
-            ) : (
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <Building2 className="h-6 w-6 text-primary" />
-              </div>
-            )}
-            <div>
-              <CardTitle className="text-lg group-hover:text-primary transition-colors">
-                {association.nom}
-              </CardTitle>
-              <div className="flex items-center gap-2 mt-1">
-                <Badge variant="secondary" className="text-xs">
-                  <Users className="h-3 w-3 mr-1" />
-                  {association.nombre_membres} membres
-                </Badge>
-                <Badge 
-                  variant={association.statut === 'active' ? 'default' : 'outline'}
-                  className="text-xs"
-                >
-                  {association.statut}
-                </Badge>
-              </div>
-            </div>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <CardDescription className="mb-4 line-clamp-3">
-          {association.description}
-        </CardDescription>
-        <div className="space-y-2 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4" />
-            <span>Créée le {new Date(association.date_creation).toLocaleDateString('fr-FR')}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <DollarSign className="h-4 w-4" />
-            <span>Contact: {association.contact}</span>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <AssociationCard
+      key={association.id}
+      association={association}
+      onEdit={handleEditAssociation}
+      onDelete={handleDeleteAssociation}
+      canManage={true} // TODO: Vérifier les permissions utilisateur
+    />
   );
 
   const renderContent = () => {
@@ -110,6 +104,18 @@ export default function AssociationsPage() {
           <CreateAssociationForm 
             onSuccess={handleAssociationCreated}
             onCancel={() => setShowCreateForm(false)}
+          />
+        </AuthGuard>
+      );
+    }
+
+    if (editingAssociation) {
+      return (
+        <AuthGuard>
+          <EditAssociationForm
+            association={editingAssociation}
+            onSuccess={handleAssociationUpdated}
+            onCancel={() => setEditingAssociation(null)}
           />
         </AuthGuard>
       );
@@ -127,39 +133,67 @@ export default function AssociationsPage() {
   };
 
   return (
-    <PageLayout
-      title="Associations"
-      description="Découvrez et gérez les associations locales de votre communauté"
-      icon={Users}
-      activeTab={activeTab}
-      onTabChange={setActiveTab}
-      searchQuery={searchQuery}
-      onSearchChange={setSearchQuery}
-      loading={loading}
-      hasData={hasData}
-      currentPage={pagination.currentPage}
-      totalPages={pagination.totalPages}
-      onPageChange={pagination.goToPage}
-      canGoNext={pagination.canGoNext}
-      canGoPrevious={pagination.canGoPrevious}
-      onAddClick={handleCreateAssociation}
-      addButtonText="Créer une association"
-      searchPlaceholder="Rechercher une association..."
-      emptyStateTitle={isEmpty ? "Aucune association trouvée" : isFiltered ? "Aucune association ne correspond à votre recherche" : "Aucune association"}
-      emptyStateDescription={isEmpty ? "Soyez le premier à créer une association dans votre communauté." : undefined}
-      emptyStateIcon={Users}
-      onAddFirst={isEmpty ? handleCreateAssociation : undefined}
-      addFirstText="Créer la première association"
-      resultCount={pagination.paginatedData.length}
-      listContent={renderContent()}
-      addContent={showCreateForm ? (
-        <AuthGuard>
-          <CreateAssociationForm 
-            onSuccess={handleAssociationCreated}
-            onCancel={() => setShowCreateForm(false)}
-          />
-        </AuthGuard>
-      ) : undefined}
-    />
+    <>
+      <PageLayout
+        title="Associations"
+        description="Découvrez et gérez les associations locales de votre communauté"
+        icon={Users}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        loading={loading}
+        hasData={hasData}
+        currentPage={pagination.currentPage}
+        totalPages={pagination.totalPages}
+        onPageChange={pagination.goToPage}
+        canGoNext={pagination.canGoNext}
+        canGoPrevious={pagination.canGoPrevious}
+        onAddClick={handleCreateAssociation}
+        addButtonText="Créer une association"
+        searchPlaceholder="Rechercher une association..."
+        emptyStateTitle={isEmpty ? "Aucune association trouvée" : isFiltered ? "Aucune association ne correspond à votre recherche" : "Aucune association"}
+        emptyStateDescription={isEmpty ? "Soyez le premier à créer une association dans votre communauté." : undefined}
+        emptyStateIcon={Users}
+        onAddFirst={isEmpty ? handleCreateAssociation : undefined}
+        addFirstText="Créer la première association"
+        resultCount={pagination.paginatedData.length}
+        listContent={renderContent()}
+        addContent={(showCreateForm || editingAssociation) ? (
+          <AuthGuard>
+            {showCreateForm && (
+              <CreateAssociationForm 
+                onSuccess={handleAssociationCreated}
+                onCancel={() => setShowCreateForm(false)}
+              />
+            )}
+            {editingAssociation && (
+              <EditAssociationForm
+                association={editingAssociation}
+                onSuccess={handleAssociationUpdated}
+                onCancel={() => setEditingAssociation(null)}
+              />
+            )}
+          </AuthGuard>
+        ) : undefined}
+      />
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Supprimer l'association</AlertDialogTitle>
+            <AlertDialogDescription>
+              Êtes-vous sûr de vouloir supprimer cette association ? Cette action est irréversible.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground">
+              Supprimer
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }

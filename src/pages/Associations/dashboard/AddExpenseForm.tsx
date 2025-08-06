@@ -55,7 +55,7 @@ export function AddExpenseForm({ associationId, onSuccess, onCancel }: AddExpens
         description: formData.description,
         montant: parseFloat(formData.montant),
         categorie: formData.categorie,
-        responsable_id: 'current-user-id', // TODO: Get from auth context
+        responsable_id: 'system', // TODO: Récupérer l'ID de l'utilisateur connecté
         date_depense: formData.date_depense,
         justificatif_url: formData.justificatif_url || null,
         approuve: false

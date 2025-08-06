@@ -29,7 +29,7 @@ export function ExpensesTab({ associationId }: ExpensesTabProps) {
         description: form.description,
         montant: Number(form.montant),
         categorie: form.categorie,
-        responsable_id: 'admin', // à remplacer par l'utilisateur courant
+        responsable_id: 'system', // TODO: Récupérer l'ID de l'utilisateur connecté
         date_depense: form.date_depense,
         approuve: false,
       });

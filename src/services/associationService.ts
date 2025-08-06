@@ -44,8 +44,8 @@ export interface AssociationAnnonce {
   updated_at: string;
 }
 
-export type AssociationAnnonceInsert = Omit<AssociationAnnonce, 'id' | 'created_at' | 'updated_at' | 'auteur_id'>;
-export type AssociationDepenseInsert = Omit<AssociationDepense, 'id' | 'created_at' | 'updated_at' | 'responsable_id'>;
+export type AssociationAnnonceInsert = Omit<AssociationAnnonce, 'id' | 'created_at' | 'updated_at'>;
+export type AssociationDepenseInsert = Omit<AssociationDepense, 'id' | 'created_at' | 'updated_at'>;
 
 export interface AssociationDepense {
   id: string;
@@ -173,7 +173,7 @@ export const associationService = {
     return (data || []) as AssociationAnnonce[];
   },
 
-  async createAnnonce(annonce: Omit<AssociationAnnonce, 'id' | 'created_at' | 'updated_at'>): Promise<AssociationAnnonce> {
+  async createAnnonce(annonce: AssociationAnnonceInsert): Promise<AssociationAnnonce> {
     const { data, error } = await supabase
       .from('association_annonces')
       .insert([annonce])
@@ -217,7 +217,7 @@ export const associationService = {
     return data || [];
   },
 
-  async createDepense(depense: Omit<AssociationDepense, 'id' | 'created_at' | 'updated_at'>): Promise<AssociationDepense> {
+  async createDepense(depense: AssociationDepenseInsert): Promise<AssociationDepense> {
     const { data, error } = await supabase
       .from('association_depenses')
       .insert([depense])
