@@ -15,7 +15,7 @@ interface AnnouncementsTabProps {
 export function AnnouncementsTab({ associationId }: AnnouncementsTabProps) {
   const queryClient = useQueryClient();
   const [editing, setEditing] = useState<AssociationAnnonce | null>(null);
-  const [form, setForm] = useState({ titre: '', contenu: '', priorite: 'normale' });
+  const [form, setForm] = useState<{ titre: string; contenu: string; priorite: 'normale' | 'haute' | 'moyenne' }>({ titre: '', contenu: '', priorite: 'normale' });
 
   const { data: annonces = [], isLoading } = useQuery({
     queryKey: ['association-annonces', associationId],
@@ -100,11 +100,16 @@ export function AnnouncementsTab({ associationId }: AnnouncementsTabProps) {
             onChange={e => setForm(f => ({ ...f, contenu: e.target.value }))}
             required
           />
-          <Input
-            placeholder="Priorité (normale, urgente...)"
+          <select
             value={form.priorite}
-            onChange={e => setForm(f => ({ ...f, priorite: e.target.value }))}
-          />
+            onChange={e => setForm(f => ({ ...f, priorite: e.target.value as 'normale' | 'haute' | 'moyenne' }))}
+            className="w-full border rounded px-2 py-1"
+            required
+          >
+            <option value="normale">Normale</option>
+            <option value="haute">Haute</option>
+            <option value="moyenne">Moyenne</option>
+          </select>
           <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
             {editing ? 'Modifier' : 'Publier'}
           </Button>
