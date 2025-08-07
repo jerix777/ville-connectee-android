@@ -1,8 +1,9 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "./Header";
 import { Sidebar } from "./Sidebar";
 import { cn } from "@/lib/utils";
+import { Capacitor } from '@capacitor/core';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -10,13 +11,24 @@ interface MainLayoutProps {
 
 export function MainLayout({ children }: MainLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [statusBarHeight, setStatusBarHeight] = useState(0);
+
+  useEffect(() => {
+    // Ajouter un padding top pour la barre d'état sur mobile
+    if (Capacitor.isNativePlatform()) {
+      setStatusBarHeight(24); // Hauteur approximative de la barre d'état
+    }
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div 
+      className="min-h-screen bg-background"
+      style={{ paddingTop: statusBarHeight }}
+    >
       <Header toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
       <Sidebar isOpen={sidebarOpen} />
       
