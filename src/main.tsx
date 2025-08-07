@@ -14,7 +14,7 @@ const setupMobile = async () => {
     // Configuration de la barre d'état
     await StatusBar.setStyle({ style: Style.Dark });
     await StatusBar.setBackgroundColor({ color: '#ffffff' });
-    await StatusBar.setOverlaysWebView({ overlay: true });
+    await StatusBar.setOverlaysWebView({ overlay: false });
     
     // Masquer le splash screen
     await SplashScreen.hide();
