@@ -31,7 +31,7 @@ export function MainLayout({ children }: MainLayoutProps) {
       
       <main 
         className={cn(
-          "min-h-screen transition-all duration-300",
+          "h-screen transition-all duration-300 overflow-hidden flex flex-col",
           Capacitor.isNativePlatform() ? "pt-28 sm:pt-16" : "pt-16",
           sidebarOpen ? "md:ml-64" : "ml-0"
         )}
