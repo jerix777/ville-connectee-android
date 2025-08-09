@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
 import { NotificationBell } from "./NotificationBell";
 import { BackButton } from "@/components/common/BackButton";
+import { Capacitor } from '@capacitor/core';
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -61,7 +62,10 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
 
   return (
     <header 
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between py-3 px-4 bg-[#9b87f5] shadow-md text-white"
+      className={cn(
+        "fixed left-0 right-0 z-50 flex items-center justify-between py-3 px-4 bg-[#9b87f5] shadow-md text-white",
+        Capacitor.isNativePlatform() ? "top-12 sm:top-0" : "top-0"
+      )}
     >
       <div className="flex items-center">
         <Button 
