@@ -108,7 +108,7 @@ export function PageLayout({
 
   return (
     <MainLayout>
-      <div className="h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col">
         {/* Zone 1: Titre de la page (non scrollable) */}
         <PageTitle
           title={title}
