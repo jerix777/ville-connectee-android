@@ -264,6 +264,42 @@ export type Database = {
           },
         ]
       }
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string | null
+          details: Json | null
+          id: string
+          ip_address: unknown | null
+          resource_id: string | null
+          resource_type: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          resource_id?: string | null
+          resource_type: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          resource_id?: string | null
+          resource_type?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       autorite_zones: {
         Row: {
           created_at: string | null
@@ -1598,6 +1634,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_association_member: {
+        Args: { p_association_id: string; p_user_id: string }
+        Returns: boolean
+      }
       link_professional_to_user: {
         Args: {
           professional_id: string
@@ -1605,6 +1645,15 @@ export type Database = {
           user_phone?: string
         }
         Returns: Json
+      }
+      log_audit_event: {
+        Args: {
+          p_action: string
+          p_details?: Json
+          p_resource_id?: string
+          p_resource_type: string
+        }
+        Returns: undefined
       }
       request_professional_verification: {
         Args: { method: string; professional_id: string }

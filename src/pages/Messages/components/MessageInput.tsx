@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
+import { validateMessageContent, sanitizeText, checkRateLimit, logSecurityEvent, SecurityEvents } from '@/lib/security';
 import { EmojiPicker } from './EmojiPicker';
 import { FileUpload } from './FileUpload';
 import { VoiceRecorder } from './VoiceRecorder';
@@ -31,7 +32,44 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   const [attachedFiles, setAttachedFiles] = useState<Array<{file: File, type: 'image' | 'document', preview?: string}>>([]);
 
   const handleEmojiSelect = (emoji: string) => {
-    setNewMessage(newMessage + emoji);
+    const sanitizedEmoji = sanitizeText(emoji);
+    setNewMessage(newMessage + sanitizedEmoji);
+  };
+
+  const handleMessageChange = (value: string) => {
+    // Rate limiting for input changes
+    if (!checkRateLimit('message_input', 100, 60000)) {
+      toast({
+        title: "Limite dépassée",
+        description: "Vous tapez trop rapidement. Veuillez ralentir.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const sanitizedValue = sanitizeText(value);
+    const validation = validateMessageContent(sanitizedValue);
+    
+    if (!validation.isValid && sanitizedValue.length > 0) {
+      // Log potential XSS attempt
+      logSecurityEvent({
+        action: SecurityEvents.XSS_ATTEMPT_BLOCKED,
+        resource_type: 'message',
+        details: { 
+          originalContent: value.substring(0, 100),
+          error: validation.error 
+        }
+      });
+      
+      toast({
+        title: "Contenu non autorisé",
+        description: validation.error,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setNewMessage(sanitizedValue);
   };
 
   const handleFileSelect = (file: File, type: 'image' | 'document') => {
@@ -120,10 +158,11 @@ export const MessageInput: React.FC<MessageInputProps> = ({
         <div className="flex-1 relative">
           <Input
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
+            onChange={(e) => handleMessageChange(e.target.value)}
             onKeyPress={onKeyPress}
             placeholder="Tapez votre message..."
             disabled={sendMessagePending}
+            maxLength={4000}
             className="rounded-[20px] sm:rounded-[24px] border border-[#dadce0] bg-white px-3 sm:px-4 py-2 text-sm min-h-[36px] sm:min-h-[40px] focus-visible:ring-2 focus-visible:ring-[#1976d2] focus-visible:border-[#1976d2] resize-none"
           />
         </div>

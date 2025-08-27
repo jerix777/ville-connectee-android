@@ -5,6 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Message } from '@/services/messageService';
 import { cn } from '@/lib/utils';
+import { sanitizeText } from '@/lib/security';
 import { Edit, Trash, MoreVertical, Copy } from 'lucide-react';
 
 interface MessageBubbleProps {
@@ -84,7 +85,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
               "text-[14px] leading-[20px] break-words hyphens-auto overflow-wrap-anywhere",
               isOwnMessage ? "text-white" : "text-[#202124]"
             )}>
-              {message.content}
+              {sanitizeText(message.content)}
             </p>
             {/* Timestamp */}
             <div className={cn(
