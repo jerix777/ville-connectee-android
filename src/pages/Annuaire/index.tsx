@@ -9,6 +9,7 @@ import { Search, UserPlus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { LinkToProfessional } from "@/components/professional/LinkToProfessional";
+import { AuthGuard } from "@/components/common/AuthGuard";
 
 export default function AnnuairePage() {
   const { user } = useAuth();
@@ -62,12 +63,14 @@ export default function AnnuairePage() {
     
     return Object.entries(professionalsByMetier).map(([metierId, { metier, list }]) => (
       <div key={metierId} className="mb-10">
-        <h2 className="text-lg font-semibold mb-3 text-primary-purple">{metier.nom}</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {list.map(professional => (
-            <DirectoryCard key={professional.id} professional={professional} />
-          ))}
-        </div>
+        <h2 className="text-lg font-semibold mb-3 text-primary">{metier.nom}</h2>
+        <AuthGuard>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {list.map(professional => (
+              <DirectoryCard key={professional.id} professional={professional} />
+            ))}
+          </div>
+        </AuthGuard>
       </div>
     ));
   };

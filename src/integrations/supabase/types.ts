@@ -511,6 +511,42 @@ export type Database = {
         }
         Relationships: []
       }
+      data_access_logs: {
+        Row: {
+          action: string
+          created_at: string | null
+          id: string
+          ip_address: unknown | null
+          resource_id: string | null
+          resource_type: string
+          sensitive_data_accessed: boolean | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          resource_id?: string | null
+          resource_type: string
+          sensitive_data_accessed?: boolean | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          resource_id?: string | null
+          resource_type?: string
+          sensitive_data_accessed?: boolean | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       evenements: {
         Row: {
           contact1: string
@@ -1650,6 +1686,14 @@ export type Database = {
         Args: {
           p_action: string
           p_details?: Json
+          p_resource_id?: string
+          p_resource_type: string
+        }
+        Returns: undefined
+      }
+      log_sensitive_data_access: {
+        Args: {
+          p_action?: string
           p_resource_id?: string
           p_resource_type: string
         }

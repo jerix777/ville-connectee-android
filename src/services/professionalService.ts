@@ -48,6 +48,18 @@ export const getProfessionals = async (): Promise<Professional[]> => {
     return [];
   }
 
+  // Log sensitive data access
+  if (data && data.length > 0) {
+    try {
+      await supabase.rpc('log_sensitive_data_access', {
+        p_resource_type: 'professionnels',
+        p_action: 'view_list'
+      });
+    } catch (logError) {
+      console.warn("Failed to log data access:", logError);
+    }
+  }
+
   return data?.map(pro => ({
     ...pro,
     metier: pro.metier as unknown as Metier,
@@ -77,6 +89,17 @@ export const requestProfessionalVerification = async (
   professionalId: string, 
   method: 'email' | 'phone'
 ): Promise<{ success: boolean; verificationCode?: string; error?: string }> => {
+  try {
+    // Log verification request
+    await supabase.rpc('log_sensitive_data_access', {
+      p_resource_type: 'professionnels',
+      p_resource_id: professionalId,
+      p_action: 'verification_request'
+    });
+  } catch (logError) {
+    console.warn("Failed to log verification request:", logError);
+  }
+
   const { data, error } = await supabase.rpc('request_professional_verification', {
     professional_id: professionalId,
     method: method

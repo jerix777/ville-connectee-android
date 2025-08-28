@@ -126,6 +126,20 @@ export const associationService = {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
+    
+    // Log sensitive member data access
+    if (data && data.length > 0) {
+      try {
+        await supabase.rpc('log_sensitive_data_access', {
+          p_resource_type: 'association_membres',
+          p_resource_id: associationId,
+          p_action: 'view_members'
+        });
+      } catch (logError) {
+        console.warn("Failed to log member data access:", logError);
+      }
+    }
+    
     return data || [];
   },
 
