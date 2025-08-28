@@ -18,6 +18,10 @@ export default function EmploisPage() {
     setLoading(false);
   };
 
+  useEffect(() => {
+    refresh();
+  }, []);
+
   const renderListContent = () => {
     if (loading) {
       return <div>Chargement...</div>;
