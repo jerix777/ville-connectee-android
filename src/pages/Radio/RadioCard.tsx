@@ -45,11 +45,13 @@ export function RadioCard({ radio }: RadioCardProps) {
       <CardContent className="p-6">
         <div className="flex items-center gap-4">
           {radio.logo_url && (
-            <img 
-              src={radio.logo_url} 
-              alt={`Logo ${radio.nom}`}
-              className="w-16 h-16 object-cover rounded-lg"
-            />
+            <div className="w-16 h-16 flex items-center justify-center bg-muted/20 rounded-lg overflow-hidden">
+              <img 
+                src={radio.logo_url} 
+                alt={`Logo ${radio.nom}`}
+                className="max-w-full max-h-full object-contain"
+              />
+            </div>
           )}
           
           <div className="flex-1">
