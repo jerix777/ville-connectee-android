@@ -1208,6 +1208,42 @@ export type Database = {
           },
         ]
       }
+      radios: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          flux_url: string
+          id: string
+          is_active: boolean
+          logo_url: string | null
+          nom: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          flux_url: string
+          id?: string
+          is_active?: boolean
+          logo_url?: string | null
+          nom: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          flux_url?: string
+          id?: string
+          is_active?: boolean
+          logo_url?: string | null
+          nom?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       services_commerces: {
         Row: {
           adresse: string

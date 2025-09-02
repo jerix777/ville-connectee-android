@@ -40,6 +40,7 @@ import SteveYobouetPage from "./pages/SteveYobouet";
 import TaxiPage from "./pages/Taxi";
 import AssociationDashboard from "./pages/Associations/AssociationDashboard";
 import TaxiCommunalPage from "./pages/TaxiCommunal";
+import RadioPage from "./pages/Radio";
 
 const queryClient = new QueryClient();
 
@@ -84,6 +85,7 @@ const AppContent = () => {
           <Route path="/steve-yobouet" element={<SteveYobouetPage />} />
           <Route path="/taxi" element={<TaxiPage />} />
           <Route path="/taxi-communal" element={<TaxiCommunalPage />} />
+          <Route path="/radio" element={<RadioPage />} />
          <Route path="/associations/:id" element={<AssociationDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
