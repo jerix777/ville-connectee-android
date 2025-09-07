@@ -1,75 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Volume2 } from "lucide-react";
 import { Radio } from "@/services/radioService";
-
-// Gestionnaire global pour s'assurer qu'une seule radio joue à la fois
-let globalAudio: HTMLAudioElement | null = null;
-let globalSetIsPlaying: ((playing: boolean) => void) | null = null;
+import { useAudio } from "@/contexts/AudioContext";
 
 interface RadioCardProps {
   radio: Radio;
 }
 
 export function RadioCard({ radio }: RadioCardProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  // Cleanup si une autre radio commence à jouer
-  useEffect(() => {
-    const currentSetIsPlaying = setIsPlaying;
-    
-    if (isPlaying) {
-      globalSetIsPlaying = currentSetIsPlaying;
-    }
-
-    return () => {
-      if (globalSetIsPlaying === currentSetIsPlaying) {
-        globalSetIsPlaying = null;
-      }
-    };
-  }, [isPlaying]);
+  const { currentRadio, isPlaying, playRadio, pauseRadio } = useAudio();
+  
+  const isCurrentRadio = currentRadio?.id === radio.id;
+  const isCurrentlyPlaying = isCurrentRadio && isPlaying;
 
   const handlePlay = () => {
-    if (isPlaying) {
-      // Arrêter la radio actuelle
-      if (globalAudio) {
-        globalAudio.pause();
-        globalAudio = null;
-      }
-      setIsPlaying(false);
+    if (isCurrentlyPlaying) {
+      pauseRadio();
     } else {
-      // Arrêter toute autre radio en cours
-      if (globalAudio) {
-        globalAudio.pause();
-        globalAudio = null;
-      }
-      if (globalSetIsPlaying) {
-        globalSetIsPlaying(false);
-      }
-      
-      // Démarrer la nouvelle radio
-      const newAudio = new Audio(radio.flux_url);
-      globalAudio = newAudio;
-      
-      newAudio.play().then(() => {
-        setIsPlaying(true);
-      }).catch((error) => {
-        console.error('Erreur lors de la lecture du flux radio:', error);
-        globalAudio = null;
-        setIsPlaying(false);
-      });
-
-      newAudio.onended = () => {
-        setIsPlaying(false);
-        globalAudio = null;
-      };
-
-      newAudio.onerror = () => {
-        setIsPlaying(false);
-        globalAudio = null;
-        console.error('Erreur lors de la lecture du flux radio');
-      };
+      playRadio(radio);
     }
   };
 
@@ -98,11 +48,11 @@ export function RadioCard({ radio }: RadioCardProps) {
             )}
             <Button
               onClick={handlePlay}
-              variant={isPlaying ? "default" : "outline"}
+              variant={isCurrentlyPlaying ? "default" : "outline"}
               size="sm"
               className="flex items-center gap-2"
             >
-              {isPlaying ? (
+              {isCurrentlyPlaying ? (
                 <>
                   <Pause className="h-4 w-4" />
                   Arrêter
@@ -118,7 +68,7 @@ export function RadioCard({ radio }: RadioCardProps) {
 
           <div className="flex flex-col items-center">
             <Volume2 className="h-5 w-5 text-muted-foreground mb-1" />
-            {isPlaying && (
+            {isCurrentlyPlaying && (
               <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
             )}
           </div>

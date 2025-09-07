@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { AudioProvider } from "@/contexts/AudioContext";
 import { useUpdateChecker } from "@/hooks/useUpdateChecker";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -97,9 +98,11 @@ const AppContent = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <TooltipProvider>
-        <AppContent />
-      </TooltipProvider>
+      <AudioProvider>
+        <TooltipProvider>
+          <AppContent />
+        </TooltipProvider>
+      </AudioProvider>
     </AuthProvider>
   </QueryClientProvider>
 );
