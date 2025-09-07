@@ -35,8 +35,8 @@ export default function RadioPage() {
 
   return (
     <PageLayout
-      title="Radio"
-      description="Écoutez vos stations de radio préférées en ligne"
+      title="Ecouter la radio"
+      description="Désormais vous pouvez écouter les radios dont le signal n'arrive pas à Ouellé. Des radios en anglais, espagnol et allemand ont été ajoutées à la liste pour les élèves et les amoureux de ces langues. Souhaiteriez-vous qu'on vous ajoute une chaîne que vous aimez ? Veuillez nous le dire en cliquant ici"
       icon={RadioIcon}
       activeTab={activeTab}
       onTabChange={setActiveTab}
