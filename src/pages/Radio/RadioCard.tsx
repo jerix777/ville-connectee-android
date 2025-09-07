@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Volume2 } from "lucide-react";
 import { Radio } from "@/services/radioService";
+
+// Gestionnaire global pour s'assurer qu'une seule radio joue à la fois
+let globalAudio: HTMLAudioElement | null = null;
+let globalSetIsPlaying: ((playing: boolean) => void) | null = null;
 
 interface RadioCardProps {
   radio: Radio;
@@ -10,31 +14,60 @@ interface RadioCardProps {
 
 export function RadioCard({ radio }: RadioCardProps) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+
+  // Cleanup si une autre radio commence à jouer
+  useEffect(() => {
+    const currentSetIsPlaying = setIsPlaying;
+    
+    if (isPlaying) {
+      globalSetIsPlaying = currentSetIsPlaying;
+    }
+
+    return () => {
+      if (globalSetIsPlaying === currentSetIsPlaying) {
+        globalSetIsPlaying = null;
+      }
+    };
+  }, [isPlaying]);
 
   const handlePlay = () => {
-    if (isPlaying && audio) {
-      audio.pause();
+    if (isPlaying) {
+      // Arrêter la radio actuelle
+      if (globalAudio) {
+        globalAudio.pause();
+        globalAudio = null;
+      }
       setIsPlaying(false);
-      setAudio(null);
     } else {
-      // Stop any other playing audio
-      const allAudio = document.querySelectorAll('audio');
-      allAudio.forEach(a => a.pause());
+      // Arrêter toute autre radio en cours
+      if (globalAudio) {
+        globalAudio.pause();
+        globalAudio = null;
+      }
+      if (globalSetIsPlaying) {
+        globalSetIsPlaying(false);
+      }
       
+      // Démarrer la nouvelle radio
       const newAudio = new Audio(radio.flux_url);
-      newAudio.play();
-      setAudio(newAudio);
-      setIsPlaying(true);
+      globalAudio = newAudio;
+      
+      newAudio.play().then(() => {
+        setIsPlaying(true);
+      }).catch((error) => {
+        console.error('Erreur lors de la lecture du flux radio:', error);
+        globalAudio = null;
+        setIsPlaying(false);
+      });
 
       newAudio.onended = () => {
         setIsPlaying(false);
-        setAudio(null);
+        globalAudio = null;
       };
 
       newAudio.onerror = () => {
         setIsPlaying(false);
-        setAudio(null);
+        globalAudio = null;
         console.error('Erreur lors de la lecture du flux radio');
       };
     }
