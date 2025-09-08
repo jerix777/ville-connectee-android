@@ -10,7 +10,7 @@ import { Heart, MapPin, Phone } from "lucide-react";
 import { toast } from "sonner";
 
 export default function SanteProximite() {
-  const [activeTab, setActiveTab] = useState<string>("recherche");
+  const [activeTab, setActiveTab] = useState<string>("liste");
   const [etablissements, setEtablissements] = useState<EtablissementSante[]>([]);
   const [loading, setLoading] = useState(false);
   const [userLocation, setUserLocation] = useState<{lat: number, lon: number} | null>(null);
@@ -157,7 +157,12 @@ export default function SanteProximite() {
       activeTab={activeTab}
       onTabChange={setActiveTab}
       listContent={renderSearchContent()}
-      hasData={true}
+      hasData={etablissements.length > 0 || userLocation !== null}
+      loading={loading}
+      showAddButton={false}
+      customTabs={[
+        { value: "liste", label: "Recherche" }
+      ]}
     />
   );
 }
