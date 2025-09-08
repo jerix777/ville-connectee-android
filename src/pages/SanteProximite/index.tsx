@@ -12,7 +12,7 @@ import { toast } from "sonner";
 export default function SanteProximite() {
   const [activeTab, setActiveTab] = useState<string>("liste");
   const [etablissements, setEtablissements] = useState<EtablissementSante[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [userLocation, setUserLocation] = useState<{lat: number, lon: number} | null>(null);
   
   // Filtres
@@ -20,6 +20,59 @@ export default function SanteProximite() {
   const [radiusFilter, setRadiusFilter] = useState<number>(10);
   const [urgencesOnly, setUrgencesOnly] = useState(false);
   const [gardeOnly, setGardeOnly] = useState(false);
+
+  // Charger toutes les données au démarrage
+  const loadAllEtablissements = async () => {
+    setLoading(true);
+    try {
+      let results = await santeService.getAllEtablissements();
+
+      // Appliquer les filtres
+      if (typeFilter && typeFilter !== 'tous') {
+        results = results.filter(e => e.type === typeFilter);
+      }
+      
+      if (urgencesOnly) {
+        results = results.filter(e => e.urgences === true);
+      }
+      
+      if (gardeOnly) {
+        results = results.filter(e => e.garde_permanente === true);
+      }
+
+      setEtablissements(results);
+      
+      if (results.length === 0) {
+        toast.info("Aucun établissement trouvé avec ces critères");
+      }
+    } catch (error) {
+      console.error('Error loading establishments:', error);
+      toast.error("Erreur lors du chargement des établissements");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Charger les données au démarrage
+  useEffect(() => {
+    loadAllEtablissements();
+  }, []);
+
+  // Re-filtrer quand les filtres changent (sauf radius qui nécessite la géolocalisation)
+  useEffect(() => {
+    if (userLocation) {
+      searchNearbyEtablissements(userLocation.lat, userLocation.lon);
+    } else {
+      loadAllEtablissements();
+    }
+  }, [typeFilter, urgencesOnly, gardeOnly]);
+
+  // Re-rechercher avec radius quand la géolocalisation est active
+  useEffect(() => {
+    if (userLocation) {
+      searchNearbyEtablissements(userLocation.lat, userLocation.lon);
+    }
+  }, [radiusFilter]);
 
   const handleLocationFound = async (lat: number, lon: number) => {
     setUserLocation({ lat, lon });
@@ -58,12 +111,6 @@ export default function SanteProximite() {
     }
   };
 
-  // Re-rechercher quand les filtres changent
-  useEffect(() => {
-    if (userLocation) {
-      searchNearbyEtablissements(userLocation.lat, userLocation.lon);
-    }
-  }, [typeFilter, radiusFilter, urgencesOnly, gardeOnly]);
 
   const handleCall = (phone: string) => {
     window.open(`tel:${phone}`, '_self');
@@ -111,15 +158,15 @@ export default function SanteProximite() {
               <LoadingSkeleton type="list" count={3} />
             )}
 
-            {!loading && !userLocation && (
+            {!loading && !userLocation && etablissements.length === 0 && (
               <EmptyState
-                icon={MapPin}
-                title="Localisation requise"
-                description="Veuillez activer votre géolocalisation pour trouver les établissements de santé proches de vous."
+                icon={Heart}
+                title="Aucun établissement trouvé"
+                description="Aucun établissement de santé trouvé avec ces critères. Activez la géolocalisation pour une recherche par proximité."
               />
             )}
 
-            {!loading && userLocation && etablissements.length === 0 && (
+            {!loading && etablissements.length === 0 && userLocation && (
               <EmptyState
                 icon={Heart}
                 title="Aucun établissement trouvé"
@@ -130,7 +177,8 @@ export default function SanteProximite() {
             {!loading && etablissements.length > 0 && (
               <div className="space-y-4">
                 <div className="text-sm text-muted-foreground mb-4">
-                  {etablissements.length} établissement{etablissements.length > 1 ? 's' : ''} trouvé{etablissements.length > 1 ? 's' : ''} près de vous
+                  {etablissements.length} établissement{etablissements.length > 1 ? 's' : ''} trouvé{etablissements.length > 1 ? 's' : ''}
+                  {userLocation ? ' près de vous' : ''}
                 </div>
 
                 {etablissements.map((etablissement) => (
@@ -157,7 +205,7 @@ export default function SanteProximite() {
       activeTab={activeTab}
       onTabChange={setActiveTab}
       listContent={renderSearchContent()}
-      hasData={etablissements.length > 0 || userLocation !== null}
+      hasData={etablissements.length > 0}
       loading={loading}
       showAddButton={false}
       customTabs={[
