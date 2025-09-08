@@ -547,6 +547,66 @@ export type Database = {
         }
         Relationships: []
       }
+      etablissements_sante: {
+        Row: {
+          adresse: string
+          created_at: string
+          description: string | null
+          email: string | null
+          garde_permanente: boolean | null
+          horaires: string | null
+          id: string
+          image_url: string | null
+          latitude: number
+          longitude: number
+          nom: string
+          quartier_id: string | null
+          services: string[] | null
+          telephone: string | null
+          type: string
+          updated_at: string
+          urgences: boolean | null
+        }
+        Insert: {
+          adresse: string
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          garde_permanente?: boolean | null
+          horaires?: string | null
+          id?: string
+          image_url?: string | null
+          latitude: number
+          longitude: number
+          nom: string
+          quartier_id?: string | null
+          services?: string[] | null
+          telephone?: string | null
+          type: string
+          updated_at?: string
+          urgences?: boolean | null
+        }
+        Update: {
+          adresse?: string
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          garde_permanente?: boolean | null
+          horaires?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number
+          longitude?: number
+          nom?: string
+          quartier_id?: string | null
+          services?: string[] | null
+          telephone?: string | null
+          type?: string
+          updated_at?: string
+          urgences?: boolean | null
+        }
+        Relationships: []
+      }
       evenements: {
         Row: {
           contact1: string
@@ -1695,6 +1755,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_distance: {
+        Args: { lat1: number; lat2: number; lon1: number; lon2: number }
+        Returns: number
+      }
       get_user_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["user_role_type"]
