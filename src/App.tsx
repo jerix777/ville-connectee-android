@@ -44,6 +44,7 @@ import TaxiCommunalPage from "./pages/TaxiCommunal";
 import RadioPage from "./pages/Radio";
 const SanteProximite = lazy(() => import('./pages/SanteProximite'));
 const MaquisResto = lazy(() => import('./pages/MaquisResto'));
+const CarburantGaz = lazy(() => import('./pages/CarburantGaz'));
 
 const queryClient = new QueryClient();
 
@@ -91,6 +92,7 @@ const AppContent = () => {
           <Route path="/radio" element={<RadioPage />} />
           <Route path="/sante-proximite" element={<SanteProximite />} />
           <Route path="/maquis-resto" element={<MaquisResto />} />
+          <Route path="/carburant-gaz" element={<CarburantGaz />} />
          <Route path="/associations/:id" element={<AssociationDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

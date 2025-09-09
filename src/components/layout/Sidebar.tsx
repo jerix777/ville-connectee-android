@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Bell, BookmarkCheck, Building, Calendar, Home, Info, Link as LinkIcon, MapPin, MessageSquare, Music, Search, Star, Users, BriefcaseBusiness, LucideProps, User, Bus, Radio, Heart, UtensilsCrossed } from "lucide-react";
+import { Bell, BookmarkCheck, Building, Calendar, Home, Info, Link as LinkIcon, MapPin, MessageSquare, Music, Search, Star, Users, BriefcaseBusiness, LucideProps, User, Bus, Radio, Heart, UtensilsCrossed, Fuel } from "lucide-react";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -43,6 +43,7 @@ const navItems = [
   { path: "/radio", label: "Radio", icon: Radio },
   { path: "/sante-proximite", label: "Santé de proximité", icon: Heart },
   { path: "/maquis-resto", label: "Maquis et Resto", icon: UtensilsCrossed },
+  { path: "/carburant-gaz", label: "Carburant et Gaz", icon: Fuel },
 ];
 
 function NavItem({ to, icon: Icon, label, isActive, onClick }: NavItemProps) {

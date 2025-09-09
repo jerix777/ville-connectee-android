@@ -1526,6 +1526,69 @@ export type Database = {
           },
         ]
       }
+      stations_carburant: {
+        Row: {
+          adresse: string
+          created_at: string
+          description: string | null
+          email: string | null
+          horaires: string | null
+          id: string
+          image_url: string | null
+          latitude: number | null
+          longitude: number | null
+          nom: string
+          prix_essence: number | null
+          prix_gasoil: number | null
+          prix_gaz_butane: number | null
+          quartier_id: string | null
+          services: string[] | null
+          telephone: string | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          adresse: string
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          horaires?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          nom: string
+          prix_essence?: number | null
+          prix_gasoil?: number | null
+          prix_gaz_butane?: number | null
+          quartier_id?: string | null
+          services?: string[] | null
+          telephone?: string | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          adresse?: string
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          horaires?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          nom?: string
+          prix_essence?: number | null
+          prix_gasoil?: number | null
+          prix_gaz_butane?: number | null
+          quartier_id?: string | null
+          services?: string[] | null
+          telephone?: string | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       suggestions: {
         Row: {
           auteur: string
