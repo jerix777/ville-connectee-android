@@ -1304,6 +1304,63 @@ export type Database = {
         }
         Relationships: []
       }
+      restaurants_buvettes: {
+        Row: {
+          adresse: string
+          created_at: string
+          description: string | null
+          email: string | null
+          horaires: string | null
+          id: string
+          image_url: string | null
+          latitude: number | null
+          longitude: number | null
+          nom: string
+          prix_moyen: number | null
+          quartier_id: string | null
+          specialites: string[] | null
+          telephone: string | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          adresse: string
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          horaires?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          nom: string
+          prix_moyen?: number | null
+          quartier_id?: string | null
+          specialites?: string[] | null
+          telephone?: string | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          adresse?: string
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          horaires?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          nom?: string
+          prix_moyen?: number | null
+          quartier_id?: string | null
+          specialites?: string[] | null
+          telephone?: string | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       services_commerces: {
         Row: {
           adresse: string

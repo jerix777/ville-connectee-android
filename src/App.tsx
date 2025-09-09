@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -42,7 +42,8 @@ import TaxiPage from "./pages/Taxi";
 import AssociationDashboard from "./pages/Associations/AssociationDashboard";
 import TaxiCommunalPage from "./pages/TaxiCommunal";
 import RadioPage from "./pages/Radio";
-import SanteProximite from "./pages/SanteProximite";
+const SanteProximite = lazy(() => import('./pages/SanteProximite'));
+const MaquisResto = lazy(() => import('./pages/MaquisResto'));
 
 const queryClient = new QueryClient();
 
@@ -89,6 +90,7 @@ const AppContent = () => {
           <Route path="/taxi-communal" element={<TaxiCommunalPage />} />
           <Route path="/radio" element={<RadioPage />} />
           <Route path="/sante-proximite" element={<SanteProximite />} />
+          <Route path="/maquis-resto" element={<MaquisResto />} />
          <Route path="/associations/:id" element={<AssociationDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
