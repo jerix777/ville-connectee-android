@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, startTransition } from 'react';
 import { PageLayout } from "@/components/common/PageLayout";
 import { GeolocationButton } from "./components/GeolocationButton";
 import { FilterSection } from "./components/FilterSection";
@@ -75,7 +75,11 @@ export default function SanteProximite() {
   }, [radiusFilter]);
 
   const handleLocationFound = async (lat: number, lon: number) => {
-    setUserLocation({ lat, lon });
+    // éviter une mise à jour d'état synchrone qui pourrait déclencher une suspension
+    startTransition(() => {
+      setUserLocation({ lat, lon });
+    });
+
     await searchNearbyEtablissements(lat, lon);
   };
 
@@ -133,7 +137,7 @@ export default function SanteProximite() {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1">
+          {/* <div className="lg:col-span-1">
             <div className="space-y-4">
               <GeolocationButton 
                 onLocationFound={handleLocationFound}
@@ -151,7 +155,7 @@ export default function SanteProximite() {
                 onGardeOnlyChange={setGardeOnly}
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="lg:col-span-2">
             {loading && (
@@ -199,7 +203,7 @@ export default function SanteProximite() {
 
   return (
     <PageLayout
-      title="Santé de proximité"
+      title="Hôpitaux et pharmacies"
       description="Trouvez rapidement les hôpitaux, pharmacies et centres de santé proches de votre position"
       icon={Heart}
       activeTab={activeTab}

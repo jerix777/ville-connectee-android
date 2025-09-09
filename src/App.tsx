@@ -1,9 +1,10 @@
-import React, { lazy } from "react";
+import React, { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AudioProvider } from "@/contexts/AudioContext";
 import { useUpdateChecker } from "@/hooks/useUpdateChecker";
@@ -56,7 +57,8 @@ const AppContent = () => {
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
+        <Suspense fallback={<LoadingSkeleton type="list" count={1} />}>
+          <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/actualites" element={<ActualitesPage />} />
           <Route path="/evenements" element={<EvenementsPage />} />
@@ -95,7 +97,8 @@ const AppContent = () => {
           <Route path="/carburant-gaz" element={<CarburantGaz />} />
          <Route path="/associations/:id" element={<AssociationDashboard />} />
           <Route path="*" element={<NotFound />} />
-        </Routes>
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </>
   );

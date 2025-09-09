@@ -184,23 +184,20 @@ export default function MaquisResto() {
   };
 
   return (
-    <>
-      <PageLayout
-        title="Maquis et Resto"
-        description="Découvrez les restaurants, maquis et buvettes de votre région"
-        icon={UtensilsCrossed}
-        iconClassName="text-orange-600"
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        listContent={renderSearchContent()}
-        hasData={restaurants.length > 0}
-        loading={loading}
-        showAddButton={false}
-        customTabs={[
-          { value: "liste", label: "Rechercher" }
-        ]}
-      />
-      <Toaster />
-    </>
+    <PageLayout
+      title="Maquis et Resto"
+      description="Découvrez les restaurants, maquis et buvettes de votre région"
+      icon={UtensilsCrossed}
+      iconClassName="text-orange-600"
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      listContent={renderSearchContent()}
+      hasData={restaurants.length > 0}
+      loading={loading}
+      showAddButton={false}
+      customTabs={[
+        { value: "liste", label: "Rechercher" }
+      ]}
+    />
   );
 }
