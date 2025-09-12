@@ -21,6 +21,23 @@ export interface StationCarburant {
   updated_at: string;
 }
 
+export interface StationCarburantInput {
+  nom: string;
+  type: string;
+  adresse: string;
+  telephone?: string;
+  email?: string;
+  horaires?: string;
+  services?: string;
+  prix_essence?: string;
+  prix_gasoil?: string;
+  prix_gaz?: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  image_url?: string;
+  description?: string;
+}
+
 export const carburantService = {
   async getAllStations(): Promise<StationCarburant[]> {
     const { data, error } = await supabase
@@ -120,6 +137,50 @@ export const carburantService = {
     if (error) {
       throw error;
     }
+  },
+
+  async addStation(station: StationCarburantInput): Promise<StationCarburant> {
+    // Convertir les chaînes de services en tableau
+    const stationData = {
+      ...station,
+      services: station.services ? station.services.split(',').map(s => s.trim()) : [],
+      prix_essence: station.prix_essence ? parseFloat(station.prix_essence) : null,
+      prix_gasoil: station.prix_gasoil ? parseFloat(station.prix_gasoil) : null,
+      prix_gaz_butane: station.prix_gaz ? parseFloat(station.prix_gaz) : null
+    };
+
+    const { data, error } = await supabase
+      .from('stations_carburant')
+      .insert([stationData])
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  },
+
+  async uploadStationImage(file: File): Promise<string> {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const filePath = `stations/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('stations')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      console.error('Error uploading image:', uploadError);
+      throw uploadError;
+    }
+
+    const { data } = supabase.storage
+      .from('stations')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
   }
 };
 

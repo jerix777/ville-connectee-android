@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageLayout } from "@/components/common/PageLayout";
 import { StationCard } from "./components/StationCard";
 import { FilterSection } from "./components/FilterSection";
+import { AddStationForm } from "./AddStationForm";
 import { GeolocationButton } from "@/pages/SanteProximite/components/GeolocationButton";
 import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
 import { EmptyState } from "@/components/common/EmptyState";
 import { carburantService, type StationCarburant } from "@/services/carburantService";
+import { usePagination } from "@/hooks/usePagination";
 import { Fuel } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 
 export default function CarburantGaz() {
-  const [activeTab, setActiveTab] = useState<string>("liste");
+  const [activeTab, setActiveTab] = useState<string>("tous");
+  const [activeViewTab, setActiveViewTab] = useState<string>("liste");
   const [stations, setStations] = useState<StationCarburant[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [userLocation, setUserLocation] = useState<{lat: number, lon: number} | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   
   // Filtres
   const [typeFilter, setTypeFilter] = useState<string>('tous');
@@ -23,6 +29,7 @@ export default function CarburantGaz() {
   // Charger toutes les données au démarrage
   const loadAllStations = async () => {
     setLoading(true);
+    setError(null);
     try {
       let results = await carburantService.getAllStations();
 
@@ -33,7 +40,7 @@ export default function CarburantGaz() {
 
       setStations(results);
       
-      if (results.length === 0) {
+      if (results.length === 0 && typeFilter !== 'tous') {
         toast({
           title: "Aucune station trouvée",
           description: "Aucune station trouvée avec ces critères",
@@ -41,6 +48,7 @@ export default function CarburantGaz() {
       }
     } catch (error) {
       console.error('Error loading stations:', error);
+      setError("Erreur lors du chargement des stations");
       toast({
         title: "Erreur",
         description: "Erreur lors du chargement des stations",
@@ -120,6 +128,49 @@ export default function CarburantGaz() {
     window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`, '_blank');
   };
 
+  // Filtrer les stations
+  const filteredStations = stations.filter((station) => {
+    const matchesSearch = !searchQuery || 
+      station.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      station.adresse.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (station.description && station.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (station.services && station.services.some(s => s.toLowerCase().includes(searchQuery.toLowerCase())));
+    
+    return matchesSearch;
+  });
+
+  const stationsService = filteredStations.filter(s => s.type === 'station-service');
+  const depotsGaz = filteredStations.filter(s => s.type === 'depot-gaz');
+  const stationsMixtes = filteredStations.filter(s => s.type === 'station-mixte');
+
+  const getTabData = () => {
+    switch (activeTab) {
+      case "stations-service": return stationsService;
+      case "depots-gaz": return depotsGaz;
+      case "stations-mixtes": return stationsMixtes;
+      default: return filteredStations;
+    }
+  };
+
+  const {
+    currentPage,
+    totalPages,
+    paginatedData: paginatedStations,
+    goToPage,
+    canGoNext,
+    canGoPrevious,
+  } = usePagination({
+    data: getTabData(),
+    itemsPerPage: 9,
+  });
+
+  const customTabs = [
+    { value: "tous", label: `Toutes (${filteredStations.length})` },
+    { value: "stations-service", label: `Stations-service (${stationsService.length})` },
+    { value: "depots-gaz", label: `Dépôts de gaz (${depotsGaz.length})` },
+    { value: "stations-mixtes", label: `Stations mixtes (${stationsMixtes.length})` }
+  ];
+
   const renderSearchContent = () => {
     return (
       <div className="space-y-6">
@@ -160,21 +211,36 @@ export default function CarburantGaz() {
               />
             )}
 
-            {!loading && stations.length > 0 && (
+            {!loading && filteredStations.length > 0 && (
               <div className="space-y-4">
                 <div className="text-sm text-muted-foreground mb-4">
-                  {stations.length} station{stations.length > 1 ? 's' : ''} trouvée{stations.length > 1 ? 's' : ''}
+                  {filteredStations.length} station{filteredStations.length > 1 ? 's' : ''} trouvée{filteredStations.length > 1 ? 's' : ''}
                   {userLocation ? ' près de vous' : ''}
                 </div>
 
-                {stations.map((station) => (
-                  <StationCard
-                    key={station.id}
-                    station={station}
-                    onCall={handleCall}
-                    onDirections={handleDirections}
-                  />
-                ))}
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="mb-6 flex-wrap">
+                    <TabsTrigger value="tous">Toutes ({filteredStations.length})</TabsTrigger>
+                    <TabsTrigger value="stations-service">Stations-service ({stationsService.length})</TabsTrigger>
+                    <TabsTrigger value="depots-gaz">Dépôts de gaz ({depotsGaz.length})</TabsTrigger>
+                    <TabsTrigger value="stations-mixtes">Stations mixtes ({stationsMixtes.length})</TabsTrigger>
+                  </TabsList>
+
+                  {["tous", "stations-service", "depots-gaz", "stations-mixtes"].map((tabValue) => (
+                    <TabsContent key={tabValue} value={tabValue}>
+                      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        {paginatedStations.map((station) => (
+                          <StationCard
+                            key={station.id}
+                            station={station}
+                            onCall={handleCall}
+                            onDirections={handleDirections}
+                          />
+                        ))}
+                      </div>
+                    </TabsContent>
+                  ))}
+                </Tabs>
               </div>
             )}
           </div>

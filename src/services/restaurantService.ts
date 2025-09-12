@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 export interface RestaurantBuvette {
   id: string;
   nom: string;
-  type: 'restaurant' | 'buvette' | 'maquis';
+  type: 'restaurant' | 'buvette' | 'maquis' | 'cafe' | 'bar';
   description?: string;
   adresse: string;
   telephone?: string;
@@ -11,6 +11,7 @@ export interface RestaurantBuvette {
   horaires?: string;
   prix_moyen?: number;
   specialites?: string[];
+  services?: string[];
   image_url?: string;
   quartier_id?: string;
   latitude?: number;
@@ -21,18 +22,18 @@ export interface RestaurantBuvette {
 
 export interface RestaurantBuvetteInput {
   nom: string;
-  type: 'restaurant' | 'buvette' | 'maquis';
+  type: string;
   description?: string;
   adresse: string;
   telephone?: string;
   email?: string;
   horaires?: string;
-  prix_moyen?: number;
-  specialites?: string[];
+  prix_moyen?: string;
+  specialites?: string;
+  services?: string;
   image_url?: string;
-  quartier_id?: string;
-  latitude?: number;
-  longitude?: number;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 export const restaurantService = {
@@ -100,9 +101,17 @@ export const restaurantService = {
   },
 
   async addRestaurant(restaurant: RestaurantBuvetteInput): Promise<RestaurantBuvette> {
+    // Convertir les chaînes en tableaux et les prix en nombres
+    const restaurantData = {
+      ...restaurant,
+      specialites: restaurant.specialites ? restaurant.specialites.split(',').map(s => s.trim()) : [],
+      services: restaurant.services ? restaurant.services.split(',').map(s => s.trim()) : [],
+      prix_moyen: restaurant.prix_moyen ? parseFloat(restaurant.prix_moyen) : null
+    };
+
     const { data, error } = await supabase
       .from('restaurants_buvettes')
-      .insert(restaurant)
+      .insert([restaurantData])
       .select()
       .single();
 
