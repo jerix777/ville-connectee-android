@@ -250,23 +250,36 @@ export default function CarburantGaz() {
   };
 
   return (
-    <>
-      <PageLayout
-        title="Carburant et Gaz"
-        description="Trouvez les stations-service et points de vente de gaz de votre région"
-        icon={Fuel}
-        iconClassName="text-blue-600"
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        listContent={renderSearchContent()}
-        hasData={stations.length > 0}
-        loading={loading}
-        showAddButton={false}
-        customTabs={[
-          { value: "liste", label: "Rechercher" }
-        ]}
-      />
-      <Toaster />
-    </>
+    <PageLayout
+      title="Carburant et Gaz"
+      description="Trouvez les stations-service et dépôts de gaz proches de votre position"
+      icon={Fuel}
+      iconClassName="text-blue-600"
+      activeTab={activeViewTab}
+      onTabChange={setActiveViewTab}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      searchPlaceholder="Rechercher une station..."
+      addContent={<AddStationForm />}
+      loading={loading}
+      hasData={filteredStations.length > 0}
+      emptyStateIcon={Fuel}
+      emptyStateTitle="Aucune station trouvée"
+      emptyStateDescription="Aucune station ne correspond à vos critères"
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={goToPage}
+      canGoNext={canGoNext}
+      canGoPrevious={canGoPrevious}
+      resultCount={filteredStations.length}
+      customTabs={customTabs}
+      skeletonType="grid"
+      skeletonCount={6}
+      listContent={error ? (
+        <div className="text-center py-10 text-red-500">
+          <p>{error}</p>
+        </div>
+      ) : renderSearchContent()}
+    />
   );
 }
