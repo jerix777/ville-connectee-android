@@ -64,8 +64,8 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
   return (
     <header 
       className={cn(
-        "fixed left-0 right-0 z-50 flex items-center justify-between py-3 px-4 bg-[#9b87f5] shadow-md text-white relative",
-        Capacitor.isNativePlatform() ? "top-12 sm:top-0" : "top-0"
+        "fixed left-0 right-0 top-0 z-50 flex items-center justify-between py-3 px-4 bg-[#9b87f5] shadow-md text-white",
+        Capacitor.isNativePlatform() && "top-12 sm:top-0"
       )}
     >
       <div className="flex items-center">
