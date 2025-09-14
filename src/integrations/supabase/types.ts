@@ -1318,6 +1318,7 @@ export type Database = {
           nom: string
           prix_moyen: number | null
           quartier_id: string | null
+          services: string[] | null
           specialites: string[] | null
           telephone: string | null
           type: string
@@ -1336,6 +1337,7 @@ export type Database = {
           nom: string
           prix_moyen?: number | null
           quartier_id?: string | null
+          services?: string[] | null
           specialites?: string[] | null
           telephone?: string | null
           type: string
@@ -1354,6 +1356,7 @@ export type Database = {
           nom?: string
           prix_moyen?: number | null
           quartier_id?: string | null
+          services?: string[] | null
           specialites?: string[] | null
           telephone?: string | null
           type?: string
