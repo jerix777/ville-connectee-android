@@ -59,7 +59,7 @@ const TaxiPage = () => {
 
   return (
     <PageLayout
-      title="Taxi Communal"
+      title="Motos taxis"
       description="Service de transport local et déplacements entre quartiers"
       icon={Car}
       activeTab={activeTab}

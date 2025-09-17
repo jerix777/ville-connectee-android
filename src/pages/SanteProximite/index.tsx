@@ -203,7 +203,7 @@ export default function SanteProximite() {
 
   return (
     <PageLayout
-      title="Hôpitaux et pharmacies"
+      title="Pharmacies ,Hôpitaux et Cliniques"
       description="Trouvez rapidement les hôpitaux, pharmacies et centres de santé proches de votre position"
       icon={Heart}
       activeTab={activeTab}

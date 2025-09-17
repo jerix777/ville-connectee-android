@@ -29,7 +29,7 @@ export default function AnnoncesPage() {
   return (
     <>
       <PageLayout
-        title="Communiqués officiels"
+        title="Avis et communiqués"
         description="Annonces importantes et communications officielles"
         icon={Shield}
         iconClassName="text-red-600"

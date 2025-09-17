@@ -61,7 +61,7 @@ export default function MainDoeuvrePage() {
 
   return (
     <PageLayout
-      title="Main d'œuvre"
+      title="Les Professionnels"
       description="Trouvez des professionnels qualifiés dans votre zone"
       icon={User}
       activeTab={activeTab}

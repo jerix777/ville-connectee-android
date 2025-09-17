@@ -94,7 +94,7 @@ export default function AnnuairePage() {
 
   return (
     <PageLayout
-      title="Annuaire"
+      title="Annuaire de la ville"
       description="Trouvez les professionnels, artisans et contacts utiles de la ville regroupés par domaine."
       icon={Search}
       activeTab="liste"
