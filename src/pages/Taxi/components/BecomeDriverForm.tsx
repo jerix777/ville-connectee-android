@@ -1,35 +1,35 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Button } from '@/components/ui/button';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createDriverProfile } from '@/services/taxiService';
-import { useAuth } from '@/contexts/AuthContext';
-import { toast } from '@/hooks/use-toast';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Car, UserPlus, CheckCircle } from 'lucide-react';
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createDriverProfile } from "@/services/taxiService";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Car, CheckCircle, UserPlus } from "lucide-react";
 
 const formSchema = z.object({
-  vehicle_type: z.string().min(1, 'Le type de véhicule est requis'),
-  vehicle_model: z.string().min(1, 'Le modèle du véhicule est requis'),
-  license_plate: z.string().min(1, 'La plaque d\'immatriculation est requise'),
+  vehicle_type: z.string().min(1, "Le type de véhicule est requis"),
+  vehicle_model: z.string().min(1, "Le modèle du véhicule est requis"),
+  license_plate: z.string().min(1, "La plaque d'immatriculation est requise"),
 });
 
 type BecomeDriverFormValues = z.infer<typeof formSchema>;
@@ -45,9 +45,9 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
   const form = useForm<BecomeDriverFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      vehicle_type: '',
-      vehicle_model: '',
-      license_plate: '',
+      vehicle_type: "",
+      vehicle_model: "",
+      license_plate: "",
     },
   });
 
@@ -55,19 +55,20 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
     mutationFn: createDriverProfile,
     onSuccess: () => {
       toast({
-        title: 'Inscription réussie !',
-        description: 'Vous êtes maintenant enregistré comme chauffeur de taxi communal.',
+        title: "Inscription réussie !",
+        description:
+          "Vous êtes maintenant enregistré comme chauffeur de taxi communal.",
       });
-      queryClient.invalidateQueries({ queryKey: ['availableDrivers'] });
-      queryClient.invalidateQueries({ queryKey: ['driverProfile', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["availableDrivers"] });
+      queryClient.invalidateQueries({ queryKey: ["driverProfile", user?.id] });
       form.reset();
       onSuccess();
     },
     onError: (error) => {
       toast({
-        title: 'Erreur lors de l\'inscription',
+        title: "Erreur lors de l'inscription",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     },
   });
@@ -89,9 +90,12 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
               <Car className="h-8 w-8 text-primary" />
             </div>
           </div>
-          <CardTitle className="text-2xl">Devenir chauffeur de Moto-taxi</CardTitle>
+          <CardTitle className="text-2xl">
+            Devenir chauffeur de Moto-taxi
+          </CardTitle>
           <p className="text-muted-foreground">
-            Rejoignez le groupe de chauffeurs et proposez vos services de transport local
+            Rejoignez le groupe de chauffeurs et proposez vos services de
+            transport local
           </p>
         </CardHeader>
         <CardContent>
@@ -115,21 +119,33 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Type de véhicule *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Sélectionnez le type de votre véhicule" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="moto">🏍️ Moto-taxi (1-2 passagers)</SelectItem>
-                        <SelectItem value="tricyclejaune">🚗 Tricycle Jaune (3-4 passagers)</SelectItem>
-                        <SelectItem value="tricyclebenne">🚗 Tricycle bène (1 passagers)</SelectItem>
-                        <SelectItem value="voiture">🚐 Taxi-brousse (5-9 passagers)</SelectItem>
+                        <SelectItem value="moto">
+                          🏍️ Moto-taxi (1-2 passagers)
+                        </SelectItem>
+                        <SelectItem value="tricyclejaune">
+                          🚗 Tricycle Jaune (3-4 passagers)
+                        </SelectItem>
+                        <SelectItem value="tricyclebenne">
+                          🚗 Tricycle bène (1 passagers)
+                        </SelectItem>
+                        <SelectItem value="voiture">
+                          🚐 Taxi-brousse (5-9 passagers)
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormDescription>
-                      Choisissez le type de véhicule que vous utilisez pour le transport
+                      Choisissez le type de véhicule que vous utilisez pour le
+                      transport
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -143,8 +159,8 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
                   <FormItem>
                     <FormLabel>Modèle du véhicule *</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="Ex: Honda CBR, Toyota Corolla, Mercedes Sprinter..."
+                      <Input
+                        placeholder="Ex: Apsonic 125-30, Toyota Corolla, Mercedes..."
                         {...field}
                       />
                     </FormControl>
@@ -163,11 +179,12 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
                   <FormItem>
                     <FormLabel>Plaque d'immatriculation *</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="Ex: AA-123-BB"
+                      <Input
+                        placeholder="Ex: 1234AB05"
                         {...field}
-                        style={{ textTransform: 'uppercase' }}
-                        onChange={(e) => field.onChange(e.target.value.toUpperCase())}
+                        style={{ textTransform: "uppercase" }}
+                        onChange={(e) =>
+                          field.onChange(e.target.value.toUpperCase())}
                       />
                     </FormControl>
                     <FormDescription>
@@ -179,20 +196,22 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
               />
 
               <div className="pt-4">
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={mutation.isPending}
                   className="w-full"
                   size="lg"
                 >
-                  {mutation.isPending ? (
-                    'Inscription en cours...'
-                  ) : (
-                    <>
-                      <UserPlus className="h-4 w-4 mr-2" />
-                      S'inscrire comme chauffeur
-                    </>
-                  )}
+                  {mutation.isPending
+                    ? (
+                      "Inscription en cours..."
+                    )
+                    : (
+                      <>
+                        <UserPlus className="h-4 w-4 mr-2" />
+                        S'inscrire comme chauffeur
+                      </>
+                    )}
                 </Button>
               </div>
             </form>
