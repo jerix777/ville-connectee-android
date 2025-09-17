@@ -60,7 +60,8 @@ const TaxiPage = () => {
   return (
     <PageLayout
       title="Motos taxis"
-      description="Service de transport local et déplacements entre quartiers"
+      description="Vous avez besoin d'une moto taxi pour une course ?
+                  Trouvez la liste et les contacts des chauffeurs ici puis appelez pour solliciter leurs services"
       icon={Car}
       activeTab={activeTab}
       onTabChange={setActiveTab}

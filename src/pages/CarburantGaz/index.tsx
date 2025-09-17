@@ -252,7 +252,7 @@ export default function CarburantGaz() {
   return (
     <PageLayout
       title="Carburant et Gaz"
-      description="Trouvez les stations-service et dépôts de gaz proches de votre position"
+      description="Contactez vos fournisseurs pour voir la disponibilité du carburant et du gaz pour approvisionnement"
       icon={Fuel}
       iconClassName="text-blue-600"
       activeTab={activeViewTab}

@@ -102,7 +102,7 @@ export function JukeboxPage() {
           <Music className="w-8 h-8" />
           <div>
             <h1 className="text-2xl font-bold">Ambiance baoulé</h1>
-            <p className="text-muted-foreground">Écoutez et partagez de la musique en communauté</p>
+            <p className="text-muted-foreground">Ici on se détend en musique</p>
           </div>
         </div>
         <div className="flex gap-2 w-full sm:w-auto">

@@ -70,8 +70,8 @@ export default function ServicesPage() {
 
   return (
     <PageLayout
-      title="Services et commerces"
-      description="Découvrez les services et commerces de votre localité"
+      title="Commerces"
+      description="Trouvez tous les commerces de la ville"
       icon={Building}
       activeTab={activeTab}
       onTabChange={setActiveTab}
@@ -79,7 +79,7 @@ export default function ServicesPage() {
       addContent={renderAddContent()}
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
-      searchPlaceholder="Rechercher un service ou commerce..."
+      searchPlaceholder="Rechercher commerce..."
       loading={isLoading}
       hasData={filteredServices.length > 0}
       currentPage={currentPage}

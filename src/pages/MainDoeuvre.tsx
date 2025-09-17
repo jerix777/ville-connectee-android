@@ -62,7 +62,8 @@ export default function MainDoeuvrePage() {
   return (
     <PageLayout
       title="Les Professionnels"
-      description="Trouvez des professionnels qualifiés dans votre zone"
+      description="Trouvez facilement les personnes ressources que vous recherchez.
+Exemple: plombier, électricien, pâtissière, informaticien..."
       icon={User}
       activeTab={activeTab}
       onTabChange={setActiveTab}

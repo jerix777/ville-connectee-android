@@ -1,6 +1,10 @@
-
 import { useQuery } from "@tanstack/react-query";
-import { getMetiers, getProfessionals, Metier, Professional } from "@/services/professionalService";
+import {
+  getMetiers,
+  getProfessionals,
+  Metier,
+  Professional,
+} from "@/services/professionalService";
 import { PageLayout } from "@/components/common/PageLayout";
 import { DirectoryCard } from "./DirectoryCard";
 import { useState } from "react";
@@ -14,21 +18,21 @@ import { AuthGuard } from "@/components/common/AuthGuard";
 export default function AnnuairePage() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  
+
   const { data: metiers = [] } = useQuery({
-    queryKey: ['metiers'],
-    queryFn: getMetiers
+    queryKey: ["metiers"],
+    queryFn: getMetiers,
   });
 
   const { data: professionals = [], isLoading, error, refetch } = useQuery({
-    queryKey: ['professionals'],
-    queryFn: getProfessionals
+    queryKey: ["professionals"],
+    queryFn: getProfessionals,
   });
 
   const [search, setSearch] = useState("");
 
   // Filter professionals
-  const filtered = professionals.filter(p =>
+  const filtered = professionals.filter((p) =>
     p.nom.toLowerCase().includes(search.toLowerCase()) ||
     (p.surnom && p.surnom.toLowerCase().includes(search.toLowerCase())) ||
     (p.base && p.base.toLowerCase().includes(search.toLowerCase())) ||
@@ -36,9 +40,12 @@ export default function AnnuairePage() {
   );
 
   // Group by metier
-  const professionalsByMetier: Record<string, { metier: Metier, list: Professional[] }> = {};
-  metiers.forEach(metier => {
-    const inMetier = filtered.filter(p => p.metier_id === metier.id);
+  const professionalsByMetier: Record<
+    string,
+    { metier: Metier; list: Professional[] }
+  > = {};
+  metiers.forEach((metier) => {
+    const inMetier = filtered.filter((p) => p.metier_id === metier.id);
     if (inMetier.length > 0) {
       professionalsByMetier[metier.id] = { metier, list: inMetier };
     }
@@ -46,13 +53,19 @@ export default function AnnuairePage() {
 
   const renderContent = () => {
     if (isLoading) {
-      return <div className="text-center py-10">Chargement de l'annuaire...</div>;
+      return (
+        <div className="text-center py-10">Chargement de l'annuaire...</div>
+      );
     }
-    
+
     if (error) {
-      return <div className="text-center py-10 text-red-500">Erreur de chargement de l'annuaire</div>;
+      return (
+        <div className="text-center py-10 text-red-500">
+          Erreur de chargement de l'annuaire
+        </div>
+      );
     }
-    
+
     if (Object.keys(professionalsByMetier).length === 0) {
       return (
         <div className="text-center py-10 text-gray-500">
@@ -60,14 +73,21 @@ export default function AnnuairePage() {
         </div>
       );
     }
-    
-    return Object.entries(professionalsByMetier).map(([metierId, { metier, list }]) => (
+
+    return Object.entries(professionalsByMetier).map((
+      [metierId, { metier, list }],
+    ) => (
       <div key={metierId} className="mb-10">
-        <h2 className="text-lg font-semibold mb-3 text-primary">{metier.nom}</h2>
+        <h2 className="text-lg font-semibold mb-3 text-primary">
+          {metier.nom}
+        </h2>
         <AuthGuard>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {list.map(professional => (
-              <DirectoryCard key={professional.id} professional={professional} />
+            {list.map((professional) => (
+              <DirectoryCard
+                key={professional.id}
+                professional={professional}
+              />
             ))}
           </div>
         </AuthGuard>
@@ -79,11 +99,14 @@ export default function AnnuairePage() {
     <div className="space-y-6">
       {user && (
         <div className="flex flex-col sm:flex-row gap-3">
-          <LinkToProfessional 
-            professionals={professionals} 
-            onLinked={() => refetch()} 
+          <LinkToProfessional
+            professionals={professionals}
+            onLinked={() => refetch()}
           />
-          <Button onClick={() => navigate('/annuaire/mon-profil')} className="flex items-center justify-center space-x-2 whitespace-nowrap">
+          <Button
+            onClick={() => navigate("/annuaire/mon-profil")}
+            className="flex items-center justify-center space-x-2 whitespace-nowrap"
+          >
             <UserPlus className="h-4 w-4" />
             <span>Mon profil professionnel</span>
           </Button>
@@ -95,7 +118,8 @@ export default function AnnuairePage() {
   return (
     <PageLayout
       title="Annuaire de la ville"
-      description="Trouvez les professionnels, artisans et contacts utiles de la ville regroupés par domaine."
+      description="Trouvez tous les contacts des différents services publics et privés de Ouellé.
+Exemple: Ministère des sports, Inspection d'école primaire, Cantonnement des eaux et forêts..."
       icon={Search}
       activeTab="liste"
       onTabChange={() => {}}
