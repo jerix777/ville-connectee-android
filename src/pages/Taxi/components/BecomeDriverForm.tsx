@@ -89,9 +89,9 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
               <Car className="h-8 w-8 text-primary" />
             </div>
           </div>
-          <CardTitle className="text-2xl">Devenir chauffeur de taxi communal</CardTitle>
+          <CardTitle className="text-2xl">Devenir chauffeur de Moto-taxi</CardTitle>
           <p className="text-muted-foreground">
-            Rejoignez notre réseau de chauffeurs et proposez vos services de transport local
+            Rejoignez le groupe de chauffeurs et proposez vos services de transport local
           </p>
         </CardHeader>
         <CardContent>
@@ -101,10 +101,9 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
               Avantages de devenir chauffeur
             </h3>
             <ul className="space-y-2 text-sm text-muted-foreground ml-7">
-              <li>• Gagnez un revenu complémentaire</li>
-              <li>• Choisissez vos horaires de travail</li>
+              <li>• Vous devenez plus visible</li>
               <li>• Aidez votre communauté locale</li>
-              <li>• Interface simple et intuitive</li>
+              <li>• Vos revenues accroissent significativement</li>
             </ul>
           </div>
 
@@ -124,8 +123,9 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="moto">🏍️ Moto-taxi (1-2 passagers)</SelectItem>
-                        <SelectItem value="voiture">🚗 Voiture (3-4 passagers)</SelectItem>
-                        <SelectItem value="minibus">🚐 Minibus (5-8 passagers)</SelectItem>
+                        <SelectItem value="tricyclejaune">🚗 Tricycle Jaune (3-4 passagers)</SelectItem>
+                        <SelectItem value="tricyclebenne">🚗 Tricycle bène (1 passagers)</SelectItem>
+                        <SelectItem value="voiture">🚐 Taxi-brousse (5-9 passagers)</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormDescription>
