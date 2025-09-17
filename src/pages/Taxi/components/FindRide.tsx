@@ -92,7 +92,7 @@ export const FindRide = ({ drivers, loading, onRefresh }: FindRideProps) => {
 
   return (
     <div className="space-y-6">
-      <Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Navigation className="h-5 w-5" />
@@ -150,7 +150,7 @@ export const FindRide = ({ drivers, loading, onRefresh }: FindRideProps) => {
             </DialogContent>
           </Dialog>
         </CardContent>
-      </Card>
+      </Card> */}
 
       <div>
         <h3 className="text-lg font-semibold mb-4">
