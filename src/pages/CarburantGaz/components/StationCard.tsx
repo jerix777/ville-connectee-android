@@ -79,7 +79,7 @@ export function StationCard({ station, onCall, onDirections }: StationCardProps)
             </div>
           )}
 
-          {(station.prix_essence || station.prix_gasoil || station.prix_gaz_butane) && (
+          {(station.prix_essence || station.prix_gasoil || station.prix_gaz) && (
             <div>
               <div className="text-sm font-medium mb-2">Prix :</div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
@@ -89,8 +89,8 @@ export function StationCard({ station, onCall, onDirections }: StationCardProps)
                 {station.prix_gasoil && (
                   <div>Gasoil : {station.prix_gasoil} FCFA/L</div>
                 )}
-                {station.prix_gaz_butane && (
-                  <div>Gaz butane : {station.prix_gaz_butane} FCFA/kg</div>
+                {station.prix_gaz && (
+                  <div>Gaz butane : {station.prix_gaz} FCFA/kg</div>
                 )}
               </div>
             </div>

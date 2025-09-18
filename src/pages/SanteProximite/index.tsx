@@ -203,7 +203,7 @@ export default function SanteProximite() {
 
   return (
     <PageLayout
-      title="Pharmacies ,Hôpitaux et Cliniques"
+      title="Pharmacies, Hôpitaux et Cliniques"
       description="Trouvez la liste des professionnels de la santé à Ouellé, Daoukro, M'Bahiakro, Prikro et plus"
       icon={Heart}
       activeTab={activeTab}

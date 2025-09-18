@@ -55,8 +55,7 @@ export function RestaurantCard({
               </Badge>
               {restaurant.prix_moyen && (
                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <Euro className="h-4 w-4" />
-                  <span>{restaurant.prix_moyen}€</span>
+                  <span>Prix mini: {restaurant.prix_moyen}FCFA</span>
                 </div>
               )}
             </div>

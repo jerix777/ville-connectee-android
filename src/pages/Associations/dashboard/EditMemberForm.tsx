@@ -191,7 +191,7 @@ export function EditMemberForm({ member, onSuccess, onCancel }: EditMemberFormPr
                 name="montant_cotisation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Montant cotisation (€)</FormLabel>
+                    <FormLabel>Montant cotisation (FCFA)</FormLabel>
                     <FormControl>
                       <Input 
                         type="number" 

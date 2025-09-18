@@ -11,7 +11,7 @@ export interface StationCarburant {
   services: string[] | null;
   prix_essence?: number | null;
   prix_gasoil?: number | null;
-  prix_gaz_butane?: number | null;
+  prix_gaz?: number | null;
   latitude?: number | null;
   longitude?: number | null;
   quartier_id?: string | null;
@@ -146,7 +146,7 @@ export const carburantService = {
       services: station.services ? station.services.split(',').map(s => s.trim()) : [],
       prix_essence: station.prix_essence ? parseFloat(station.prix_essence) : null,
       prix_gasoil: station.prix_gasoil ? parseFloat(station.prix_gasoil) : null,
-      prix_gaz_butane: station.prix_gaz ? parseFloat(station.prix_gaz) : null
+      prix_gaz: station.prix_gaz ? parseFloat(station.prix_gaz) : null
     };
 
     const { data, error } = await supabase

@@ -70,7 +70,7 @@ export function StatisticsTab({ associationId }: StatisticsTabProps) {
             <DollarSign className="h-6 w-6 text-green-600" />
             <div>
               <div className="font-bold">Cotisations</div>
-              <div>{totalCotisations} €</div>
+              <div>{totalCotisations} FCFA</div>
               <div className="text-xs text-muted-foreground">Total collecté</div>
             </div>
           </div>
@@ -78,7 +78,7 @@ export function StatisticsTab({ associationId }: StatisticsTabProps) {
             <DollarSign className="h-6 w-6 text-orange-600" />
             <div>
               <div className="font-bold">Dépenses</div>
-              <div>{totalExpenses} €</div>
+              <div>{totalExpenses} FCFA</div>
               <div className="text-xs text-muted-foreground">{pendingExpenses} en attente</div>
             </div>
           </div>

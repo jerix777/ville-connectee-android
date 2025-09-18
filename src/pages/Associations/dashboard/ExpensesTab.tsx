@@ -103,7 +103,7 @@ export function ExpensesTab({ associationId }: ExpensesTabProps) {
           />
           <Input
             type="number"
-            placeholder="Montant (€)"
+            placeholder="Montant (FCFA)"
             value={form.montant}
             onChange={e => setForm(f => ({ ...f, montant: e.target.value }))}
             required
@@ -140,7 +140,7 @@ export function ExpensesTab({ associationId }: ExpensesTabProps) {
                 <div className="flex justify-between items-center">
                   <div>
                     <div className="font-bold">{depense.description}</div>
-                    <div className="text-sm text-muted-foreground">Montant : {depense.montant} €</div>
+                    <div className="text-sm text-muted-foreground">Montant : {depense.montant} FCFA</div>
                     <div className="text-xs mt-1">Catégorie : {depense.categorie} | Date : {depense.date_depense}</div>
                   </div>
                   <div className="flex gap-2">

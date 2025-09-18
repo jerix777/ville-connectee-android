@@ -180,7 +180,7 @@ export default function MaquisResto() {
     return (
       <div className="space-y-6">
         <div className="flex flex-col lg:flex-row gap-6">
-          <div className="lg:w-80 flex-shrink-0">
+          {/* <div className="lg:w-80 flex-shrink-0">
             <div className="space-y-4">
               <FilterSection
                 typeFilter={typeFilter}
@@ -193,7 +193,7 @@ export default function MaquisResto() {
                 onLocationFound={handleLocationFound}
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="flex-1">
             {loading && (
@@ -218,10 +218,10 @@ export default function MaquisResto() {
 
             {!loading && filteredRestaurants.length > 0 && (
               <div className="space-y-4">
-                <div className="text-sm text-muted-foreground mb-4">
+                {/* <div className="text-sm text-muted-foreground mb-4">
                   {filteredRestaurants.length} établissement{filteredRestaurants.length > 1 ? 's' : ''} trouvé{filteredRestaurants.length > 1 ? 's' : ''}
                   {userLocation ? ' près de vous' : ''}
-                </div>
+                </div> */}
 
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                   <TabsList className="mb-6 flex-wrap">

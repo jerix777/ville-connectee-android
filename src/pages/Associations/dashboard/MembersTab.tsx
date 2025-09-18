@@ -134,7 +134,7 @@ export function MembersTab({ associationId }: MembersTabProps) {
                   {member.montant_cotisation > 0 && (
                     <div className="pt-2 border-t">
                       <p className="text-xs text-muted-foreground">
-                        Cotisation: {member.montant_cotisation}€
+                        Cotisation: {member.montant_cotisation}FCFA
                       </p>
                       {member.dernier_paiement && (
                         <p className="text-xs text-muted-foreground">

@@ -73,14 +73,14 @@ export default function AssociationDashboard() {
     },
     {
       title: "Cotisations",
-      value: `${statistics?.totalCotisations || 0}€`,
+      value: `${statistics?.totalCotisations || 0}FCFA`,
       icon: DollarSign,
       description: "Total collecté",
       color: "text-green-600"
     },
     {
       title: "Dépenses",
-      value: `${statistics?.totalDepenses || 0}€`,
+      value: `${statistics?.totalDepenses || 0}FCFA`,
       icon: TrendingUp,
       description: `${statistics?.depensesEnAttente || 0} en attente`,
       color: "text-orange-600"

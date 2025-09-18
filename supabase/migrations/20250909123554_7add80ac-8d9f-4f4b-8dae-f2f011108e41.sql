@@ -10,7 +10,7 @@ CREATE TABLE public.stations_carburant (
   services text[], -- 'essence', 'gasoil', 'gaz-butane', 'lavage', 'mecanique'
   prix_essence numeric,
   prix_gasoil numeric,
-  prix_gaz_butane numeric,
+  prix_gaz numeric,
   latitude numeric,
   longitude numeric,
   quartier_id uuid,

@@ -1543,7 +1543,7 @@ export type Database = {
           nom: string
           prix_essence: number | null
           prix_gasoil: number | null
-          prix_gaz_butane: number | null
+          prix_gaz: number | null
           quartier_id: string | null
           services: string[] | null
           telephone: string | null
@@ -1563,7 +1563,7 @@ export type Database = {
           nom: string
           prix_essence?: number | null
           prix_gasoil?: number | null
-          prix_gaz_butane?: number | null
+          prix_gaz?: number | null
           quartier_id?: string | null
           services?: string[] | null
           telephone?: string | null
@@ -1583,7 +1583,7 @@ export type Database = {
           nom?: string
           prix_essence?: number | null
           prix_gasoil?: number | null
-          prix_gaz_butane?: number | null
+          prix_gaz?: number | null
           quartier_id?: string | null
           services?: string[] | null
           telephone?: string | null

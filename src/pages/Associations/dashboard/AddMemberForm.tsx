@@ -222,7 +222,7 @@ export function AddMemberForm({ associationId, onSuccess, onCancel }: AddMemberF
                   name="montant_cotisation"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Montant cotisation (€)</FormLabel>
+                      <FormLabel>Montant cotisation (FCFA)</FormLabel>
                       <FormControl>
                         <Input 
                           type="number" 

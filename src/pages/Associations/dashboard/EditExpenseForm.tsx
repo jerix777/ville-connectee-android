@@ -105,7 +105,7 @@ export function EditExpenseForm({ expense, onSuccess, onCancel }: EditExpenseFor
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="montant">Montant (€) *</Label>
+              <Label htmlFor="montant">Montant (FCFA) *</Label>
               <Input
                 id="montant"
                 type="number"
