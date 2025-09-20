@@ -165,7 +165,7 @@ export function AddRestaurantForm() {
               />
             </div>
 
-            <div>
+            {/* <div>
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
@@ -174,10 +174,10 @@ export function AddRestaurantForm() {
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 placeholder="Adresse email"
               />
-            </div>
+            </div> */}
           </div>
 
-          <div>
+          {/* <div>
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
@@ -186,9 +186,9 @@ export function AddRestaurantForm() {
               placeholder="Description de l'établissement"
               rows={3}
             />
-          </div>
+          </div> */}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="prix_moyen">Prix moyen</Label>
               <Input
@@ -208,9 +208,9 @@ export function AddRestaurantForm() {
                 placeholder="Ex: 8h-22h"
               />
             </div>
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <Label htmlFor="specialites">Spécialités</Label>
             <Input
               id="specialites"
@@ -218,9 +218,9 @@ export function AddRestaurantForm() {
               onChange={(e) => handleInputChange('specialites', e.target.value)}
               placeholder="Ex: Attiéké, Poisson braisé (séparer par des virgules)"
             />
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <Label htmlFor="services">Services</Label>
             <Input
               id="services"
@@ -228,9 +228,9 @@ export function AddRestaurantForm() {
               onChange={(e) => handleInputChange('services', e.target.value)}
               placeholder="Ex: Livraison, Terrasse (séparer par des virgules)"
             />
-          </div>
+          </div> */}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="latitude">Latitude</Label>
               <Input
@@ -254,9 +254,9 @@ export function AddRestaurantForm() {
                 placeholder="Ex: -4.0267"
               />
             </div>
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <Label htmlFor="image">Photo de l'établissement</Label>
             <div className="mt-2">
               <input
@@ -276,7 +276,7 @@ export function AddRestaurantForm() {
                 {selectedFile ? selectedFile.name : 'Choisir une photo'}
               </Button>
             </div>
-          </div>
+          </div> */}
 
           <Button
             type="submit"

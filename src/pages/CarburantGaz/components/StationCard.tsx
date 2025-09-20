@@ -59,12 +59,12 @@ export function StationCard({ station, onCall, onDirections }: StationCardProps)
             {station.adresse}
           </div>
 
-          {station.horaires && (
+          {/* {station.horaires && (
             <div className="flex items-center text-sm text-muted-foreground">
               <Clock className="h-4 w-4 mr-2" />
               {station.horaires}
             </div>
-          )}
+          )} */}
 
           {station.services && station.services.length > 0 && (
             <div>
@@ -79,7 +79,7 @@ export function StationCard({ station, onCall, onDirections }: StationCardProps)
             </div>
           )}
 
-          {(station.prix_essence || station.prix_gasoil || station.prix_gaz) && (
+          {/* {(station.prix_essence || station.prix_gasoil || station.prix_gaz) && (
             <div>
               <div className="text-sm font-medium mb-2">Prix :</div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
@@ -94,13 +94,13 @@ export function StationCard({ station, onCall, onDirections }: StationCardProps)
                 )}
               </div>
             </div>
-          )}
+          )} */}
 
-          {station.description && (
+          {/* {station.description && (
             <p className="text-sm text-muted-foreground">
               {station.description}
             </p>
-          )}
+          )} */}
         </div>
 
         <div className="flex gap-2 mt-4">
@@ -116,7 +116,7 @@ export function StationCard({ station, onCall, onDirections }: StationCardProps)
             </Button>
           )}
           
-          {station.latitude && station.longitude && (
+          {/* {station.latitude && station.longitude && (
             <Button
               variant="outline"
               size="sm"
@@ -126,7 +126,7 @@ export function StationCard({ station, onCall, onDirections }: StationCardProps)
               <MapPin className="h-4 w-4" />
               Itinéraire
             </Button>
-          )}
+          )} */}
         </div>
       </CardContent>
     </Card>

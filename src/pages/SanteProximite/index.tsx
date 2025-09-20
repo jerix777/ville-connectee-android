@@ -178,7 +178,7 @@ export default function SanteProximite() {
               />
             )}
 
-            {!loading && etablissements.length > 0 && (
+            {/* {!loading && etablissements.length > 0 && (
               <div className="space-y-4">
                 <div className="text-sm text-muted-foreground mb-4">
                   {etablissements.length} établissement{etablissements.length > 1 ? 's' : ''} trouvé{etablissements.length > 1 ? 's' : ''}
@@ -194,7 +194,7 @@ export default function SanteProximite() {
                   />
                 ))}
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>

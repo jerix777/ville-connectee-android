@@ -134,7 +134,7 @@ export function EtablissementCard({ etablissement, onCall, onDirections }: Etabl
               Appeler
             </Button>
           )}
-          <Button
+          {/* <Button
             variant="outline"
             size="sm"
             onClick={handleDirections}
@@ -142,7 +142,7 @@ export function EtablissementCard({ etablissement, onCall, onDirections }: Etabl
           >
             <MapPin size={16} className="mr-1" />
             Itinéraire
-          </Button>
+          </Button> */}
         </div>
       </CardContent>
     </Card>

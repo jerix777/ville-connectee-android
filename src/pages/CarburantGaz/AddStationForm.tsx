@@ -164,7 +164,7 @@ export function AddStationForm() {
                 placeholder="Numéro de téléphone"
               />
             </div>
-
+{/* 
             <div>
               <Label htmlFor="email">Email</Label>
               <Input
@@ -174,10 +174,10 @@ export function AddStationForm() {
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 placeholder="Adresse email"
               />
-            </div>
+            </div> */}
           </div>
 
-          <div>
+          {/* <div>
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
@@ -186,9 +186,9 @@ export function AddStationForm() {
               placeholder="Description de la station"
               rows={3}
             />
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <Label htmlFor="horaires">Horaires</Label>
             <Input
               id="horaires"
@@ -196,7 +196,7 @@ export function AddStationForm() {
               onChange={(e) => handleInputChange('horaires', e.target.value)}
               placeholder="Ex: 6h-22h"
             />
-          </div>
+          </div> */}
 
           <div>
             <Label htmlFor="services">Services</Label>
@@ -208,7 +208,7 @@ export function AddStationForm() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="prix_essence">Prix essence (FCFA/L)</Label>
               <Input
@@ -238,9 +238,9 @@ export function AddStationForm() {
                 placeholder="Ex: 800"
               />
             </div>
-          </div>
+          </div> */}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="latitude">Latitude</Label>
               <Input
@@ -264,9 +264,9 @@ export function AddStationForm() {
                 placeholder="Ex: -4.0267"
               />
             </div>
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <Label htmlFor="image">Photo de la station</Label>
             <div className="mt-2">
               <input
@@ -286,7 +286,7 @@ export function AddStationForm() {
                 {selectedFile ? selectedFile.name : 'Choisir une photo'}
               </Button>
             </div>
-          </div>
+          </div> */}
 
           <Button
             type="submit"

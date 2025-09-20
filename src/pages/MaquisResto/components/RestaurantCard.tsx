@@ -53,22 +53,22 @@ export function RestaurantCard({
               >
                 {typeLabels[restaurant.type] || restaurant.type}
               </Badge>
-              {restaurant.prix_moyen && (
+              {/* {restaurant.prix_moyen && (
                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
                   <span>Prix mini: {restaurant.prix_moyen}FCFA</span>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {restaurant.description && (
+        {/* {restaurant.description && (
           <p className="text-sm text-muted-foreground line-clamp-2">
             {restaurant.description}
           </p>
-        )}
+        )} */}
 
         <div className="space-y-2">
           <div className="flex items-start gap-2">
@@ -83,12 +83,12 @@ export function RestaurantCard({
             </div>
           )}
           
-          {restaurant.horaires && (
+          {/* {restaurant.horaires && (
             <div className="flex items-start gap-2">
               <Clock className="h-4 w-4 text-muted-foreground mt-0.5" />
               <span className="text-sm">{restaurant.horaires}</span>
             </div>
-          )}
+          )} */}
         </div>
 
         {restaurant.specialites && restaurant.specialites.length > 0 && (
@@ -121,7 +121,7 @@ export function RestaurantCard({
               Appeler
             </Button>
           )}
-          {restaurant.latitude && restaurant.longitude && (
+          {/* {restaurant.latitude && restaurant.longitude && (
             <Button
               size="sm"
               variant="outline"
@@ -131,7 +131,7 @@ export function RestaurantCard({
               <MapPin className="h-4 w-4 mr-1" />
               Itinéraire
             </Button>
-          )}
+          )} */}
         </div>
       </CardContent>
     </Card>
