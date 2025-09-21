@@ -147,25 +147,25 @@ export default function SanteProximite() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {
-            /* <div className="lg:col-span-1">
-            <div className="space-y-4">
-              <GeolocationButton
-                onLocationFound={handleLocationFound}
-                isLoading={loading}
-              />
+            // <div className="lg:col-span-1">
+            //   <div className="space-y-4">
+            //     <GeolocationButton
+            //       onLocationFound={handleLocationFound}
+            //       isLoading={loading}
+            //     />
 
-              <FilterSection
-                typeFilter={typeFilter}
-                onTypeFilterChange={setTypeFilter}
-                radiusFilter={radiusFilter}
-                onRadiusFilterChange={setRadiusFilter}
-                urgencesOnly={urgencesOnly}
-                onUrgencesOnlyChange={setUrgencesOnly}
-                gardeOnly={gardeOnly}
-                onGardeOnlyChange={setGardeOnly}
-              />
-            </div>
-          </div> */
+            //     <FilterSection
+            //       typeFilter={typeFilter}
+            //       onTypeFilterChange={setTypeFilter}
+            //       radiusFilter={radiusFilter}
+            //       onRadiusFilterChange={setRadiusFilter}
+            //       urgencesOnly={urgencesOnly}
+            //       onUrgencesOnlyChange={setUrgencesOnly}
+            //       gardeOnly={gardeOnly}
+            //       onGardeOnlyChange={setGardeOnly}
+            //     />
+            //   </div>
+            // </div>
           }
 
           <div className="lg:col-span-2">
@@ -187,14 +187,14 @@ export default function SanteProximite() {
               />
             )}
 
-            {
-              /* {!loading && etablissements.length > 0 && (
+            {!loading && etablissements.length > 0 && (
               <div className="space-y-4">
                 <div className="text-sm text-muted-foreground mb-4">
-                  {etablissements.length} établissement{etablissements.length > 1 ? 's' : ''} trouvé{etablissements.length > 1 ? 's' : ''}
-                  {userLocation ? ' près de vous' : ''}
+                  {etablissements.length}{" "}
+                  établissement{etablissements.length > 1 ? "s" : ""}{" "}
+                  trouvé{etablissements.length > 1 ? "s" : ""}
+                  {userLocation ? " près de vous" : ""}
                 </div>
-
                 {etablissements.map((etablissement) => (
                   <EtablissementCard
                     key={etablissement.id}
@@ -204,8 +204,7 @@ export default function SanteProximite() {
                   />
                 ))}
               </div>
-            )} */
-            }
+            )}
           </div>
         </div>
       </div>
@@ -220,7 +219,12 @@ export default function SanteProximite() {
       iconClassName="text-blue-600"
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
-      addContent={<AddSanteProximiteForm inline onCreated={() => loadAllEtablissements()} />}
+      addContent={
+        <AddSanteProximiteForm
+          inline
+          onCreated={() => loadAllEtablissements()}
+        />
+      }
       activeTab={activeTab}
       onTabChange={setActiveTab}
       listContent={renderSearchContent()}

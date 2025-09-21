@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AudioProvider } from "@/contexts/AudioContext";
+import { ModuleVisibilityProvider } from "@/contexts/ModuleVisibilityContext";
 import { useUpdateChecker } from "@/hooks/useUpdateChecker";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -110,9 +111,11 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <AudioProvider>
-        <TooltipProvider>
-          <AppContent />
-        </TooltipProvider>
+        <ModuleVisibilityProvider>
+          <TooltipProvider>
+            <AppContent />
+          </TooltipProvider>
+        </ModuleVisibilityProvider>
       </AudioProvider>
     </AuthProvider>
   </QueryClientProvider>

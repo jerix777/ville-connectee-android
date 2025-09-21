@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Bell, BookmarkCheck, Building, Calendar, Home, Info, Link as LinkIcon, MapPin, MessageSquare, Music, Search, Star, Users, BriefcaseBusiness, LucideProps, User, Bus, Radio, Heart, UtensilsCrossed, Fuel } from "lucide-react";
+import { Bell, BookmarkCheck, Building, Calendar, Home, Info, Link as LinkIcon, MapPin, MessageSquare, Music, Search, Star, Users, BriefcaseBusiness, LucideProps, User, Bus, Radio, Heart, UtensilsCrossed, Fuel, Settings } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useModuleVisibility } from "@/contexts/ModuleVisibilityContext";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -17,34 +19,35 @@ interface NavItemProps {
 }
 
 const navItems = [
-  { path: "/", label: "Accueil", icon: Home },
-  // { path: "/catalogue", label: "Catalogue", icon: BookmarkCheck },
-  // { path: "/actualites", label: "Actualités", icon: BookmarkCheck },
-  // { path: "/evenements", label: "Événements", icon: Calendar },
-  // { path: "/messages", label: "Messages", icon: MessageSquare },
-  { path: "/jukebox", label: "Ambiance baoulé", icon: Music },
-  { path: "/main-doeuvre", label: "Professionnels", icon: Users },
-  // { path: "/marche", label: "Marché", icon: Star },
-  // { path: "/emplois", label: "Offres d'emploi", icon: BriefcaseBusiness },
-  { path: "/annuaire", label: "Annuaire", icon: LinkIcon },
-  // { path: "/associations", label: "Associations", icon: Users },
-  { path: "/immobilier", label: "Espace immobilier", icon: Building },
-  // { path: "/alertes", label: "Alertes", icon: Bell },
-  // { path: "/annonces", label: "Avis et Communiqués", icon: Info },
-  // { path: "/services", label: "Services et commerces", icon: Building },
-  // { path: "/villages", label: "Villages", icon: MapPin },
-  // { path: "/necrologie", label: "Nécrologie", icon: BookmarkCheck },
-  // { path: "/souvenirs", label: "Souvenirs", icon: Calendar },
-  // { path: "/tribune", label: "Tribune", icon: MessageSquare },
-  // { path: "/suggestions", label: "Suggestions", icon: MessageSquare },
-  { path: "/steve-yobouet", label: "Steve Yobouet", icon: User },
-  { path: "/taxi", label: "Motos Taxis", icon: Bus },
-  { path: "/hotelerie", label: "Hôtel et Gaz", icon: Fuel },
-  // { path: "/taxi-communal", label: "Taxis villages", icon: Bus },
-  { path: "/radio", label: "Radio", icon: Radio },
-  { path: "/sante-proximite", label: "Hôpitaux", icon: Heart },
-  { path: "/maquis-resto", label: "Maquis et Resto", icon: UtensilsCrossed },
-  { path: "/carburant-gaz", label: "Carburant et Gaz", icon: Fuel },
+  { path: "/", label: "Accueil", icon: Home, id: "home" },
+  { path: "/catalogue", label: "Catalogue", icon: BookmarkCheck, id: "catalogue" },
+  { path: "/actualites", label: "Actualités", icon: BookmarkCheck, id: "actualites" },
+  { path: "/evenements", label: "Événements", icon: Calendar, id: "evenements" },
+  { path: "/messages", label: "Messages", icon: MessageSquare, id: "messages", private: true },
+  { path: "/jukebox", label: "Ambiance baoulé", icon: Music, id: "jukebox" },
+  { path: "/main-doeuvre", label: "Professionnels", icon: Users, id: "main_doeuvre" },
+  { path: "/marche", label: "Marché", icon: Star, id: "marche" },
+  { path: "/emplois", label: "Offres d'emploi", icon: BriefcaseBusiness, id: "emplois" },
+  { path: "/annuaire", label: "Annuaire", icon: LinkIcon, id: "annuaire" },
+  { path: "/associations", label: "Associations", icon: Users, id: "associations" },
+  { path: "/immobilier", label: "Espace immobilier", icon: Building, id: "immobilier" },
+  { path: "/alertes", label: "Alertes", icon: Bell, id: "alertes" },
+  { path: "/annonces", label: "Avis et Communiqués", icon: Info, id: "annonces" },
+  { path: "/services", label: "Services et commerces", icon: Building, id: "services" },
+  { path: "/villages", label: "Villages", icon: MapPin, id: "villages" },
+  { path: "/necrologie", label: "Nécrologie", icon: BookmarkCheck, id: "necrologie" },
+  { path: "/souvenirs", label: "Souvenirs", icon: Calendar, id: "souvenirs" },
+  { path: "/tribune", label: "Tribune", icon: MessageSquare, id: "tribune" },
+  { path: "/suggestions", label: "Suggestions", icon: MessageSquare, id: "suggestions" },
+  { path: "/steve-yobouet", label: "Steve Yobouet", icon: User, id: "steve_yobouet" },
+  { path: "/taxi", label: "Motos Taxis", icon: Bus, id: "taxi" },
+  { path: "/hotelerie", label: "Hôtel et Gaz", icon: Fuel, id: "hotelerie" },
+  { path: "/taxi-communal", label: "Taxis villages", icon: Bus, id: "taxi_communal" },
+  { path: "/radio", label: "Radio", icon: Radio, id: "radio" },
+  { path: "/sante-proximite", label: "Hôpitaux", icon: Heart, id: "sante" },
+  { path: "/maquis-resto", label: "Maquis et Resto", icon: UtensilsCrossed, id: "maquis_resto" },
+  { path: "/carburant-gaz", label: "Carburant et Gaz", icon: Fuel, id: "carburant_gaz" },
+  { path: "/settings", label: "Paramètres", icon: Settings, id: "settings", private: true },
 ];
 
 function NavItem({ to, icon: Icon, label, isActive, onClick }: NavItemProps) {
@@ -69,6 +72,27 @@ function NavItem({ to, icon: Icon, label, isActive, onClick }: NavItemProps) {
 export function Sidebar({ isOpen }: SidebarProps) {
   const { pathname } = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+  const { user } = useAuth();
+  const { modules, loading } = useModuleVisibility();
+
+  const visibleNavItems = useMemo(() => {
+    if (loading) return [];
+    
+    return navItems.filter(item => {
+      // @ts-ignore
+      if (item.private && !user) {
+        return false;
+      }
+      
+      if (user) {
+        return true;
+      }
+      
+      // @ts-ignore
+      const module = modules.find(m => m.id === item.id);
+      return module ? module.is_public : true;
+    });
+  }, [user, modules, loading]);
 
   const sidebarClasses = cn(
     "fixed top-0 left-0 bottom-0 z-40 w-64 bg-white shadow-lg transition-transform duration-300 pt-16 overflow-y-auto",
@@ -76,10 +100,10 @@ export function Sidebar({ isOpen }: SidebarProps) {
   );
 
   const filteredNavItems = searchQuery
-    ? navItems.filter((item) =>
+    ? visibleNavItems.filter((item) =>
         item.label.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : navItems;
+    : visibleNavItems;
 
   return (
     <aside className={sidebarClasses}>

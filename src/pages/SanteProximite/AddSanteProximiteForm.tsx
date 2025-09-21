@@ -130,7 +130,7 @@ export function AddSanteProximiteForm(
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label>Nom</Label>
+                        <Label>Nom de l'établissement</Label>
                         <Input
                             name="nom"
                             value={form.nom}
@@ -174,7 +174,7 @@ export function AddSanteProximiteForm(
                             onChange={handleChange}
                         />
                     </div>
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                         <Label>Latitude</Label>
                         <Input
                             name="latitude"
@@ -189,7 +189,7 @@ export function AddSanteProximiteForm(
                             value={form.longitude}
                             onChange={handleChange}
                         />
-                    </div>
+                    </div> */}
                     <div className="space-y-2">
                         <Label>Téléphone</Label>
                         <Input
@@ -206,15 +206,15 @@ export function AddSanteProximiteForm(
                             onChange={handleChange}
                         />
                     </div>
-                    <div className="space-y-2 md:col-span-2">
+                    {/* <div className="space-y-2 md:col-span-2">
                         <Label>Horaires</Label>
                         <Input
                             name="horaires"
                             value={form.horaires}
                             onChange={handleChange}
                         />
-                    </div>
-                    <div className="space-y-2 md:col-span-2">
+                    </div> */}
+                    {/* <div className="space-y-2 md:col-span-2">
                         <Label>Services (séparés par une virgule)</Label>
                         <Input
                             name="services"
@@ -243,7 +243,7 @@ export function AddSanteProximiteForm(
                                 handleCheckbox("garde_permanente", !!v)}
                         />
                         <Label>Garde permanente</Label>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="flex justify-end gap-2">
                     <Button
