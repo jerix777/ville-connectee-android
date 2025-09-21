@@ -21,16 +21,16 @@ export default function AnnuairePage() {
   // Filter entries
   const filtered = entries.filter(
     (e) =>
-      (e.denomination &&
-        e.denomination.toLowerCase().includes(search.toLowerCase())) ||
-      (e.type_service &&
-        e.type_service.toLowerCase().includes(search.toLowerCase()))
+      (e.name &&
+        e.name.toLowerCase().includes(search.toLowerCase())) ||
+      (e.service_type &&
+        e.service_type.toLowerCase().includes(search.toLowerCase()))
   );
 
-  // Group by type_service
+  // Group by service_type
   const entriesByServiceType: Record<string, DirectoryEntry[]> = {};
   filtered.forEach((entry) => {
-    const serviceType = entry.type_service || "Non classé";
+    const serviceType = entry.service_type || "Non classé";
     if (!entriesByServiceType[serviceType]) {
       entriesByServiceType[serviceType] = [];
     }

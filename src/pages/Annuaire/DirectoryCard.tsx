@@ -1,44 +1,48 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Building, Mail, Phone, User } from "lucide-react";
+import { Building, Mail, Phone, MapPin } from "lucide-react";
 import { DirectoryEntry } from "@/services/directoryService";
 
 export function DirectoryCard({ entry }: { entry: DirectoryEntry }) {
   return (
-    <Card className="mb-4 shadow-sm">
+    <Card className="flex flex-col h-full">
       <CardHeader>
-        <div className="flex items-center gap-2">
-          <Building size={20} className="text-purple-500" />
-          <div className="flex-1">
-            <CardTitle className="text-lg">{entry.denomination}</CardTitle>
-            <p className="text-xs text-gray-500">{entry.type_service}</p>
+        <div className="flex items-start gap-4">
+          <Building size={24} className="text-blue-500 mt-1" />
+          <div>
+            <CardTitle className="text-lg font-semibold">{entry.name}</CardTitle>
+            <p className="text-sm text-gray-600">{entry.service_type}</p>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="text-sm space-y-1">
-        {entry.contact1 && (
-          <div className="flex items-center gap-1">
-            <Phone size={14} className="text-purple-400" />
-            <span>{entry.contact1}</span>
+      <CardContent className="flex-grow text-sm space-y-3">
+        {entry.phone1 && (
+          <div className="flex items-center gap-3">
+            <Phone size={16} className="text-gray-500" />
+            <span>{entry.phone1}</span>
           </div>
         )}
-        {entry.contact2 && (
-          <div className="flex items-center gap-1">
-            <Phone size={14} className="text-purple-400" />
-            <span>{entry.contact2}</span>
+        {entry.phone2 && (
+          <div className="flex items-center gap-3">
+            <Phone size={16} className="text-gray-500" />
+            <span>{entry.phone2}</span>
           </div>
         )}
-        {
-          /* {entry.postal_box && (
-          <div className="flex items-center gap-1">
-            <User size={14} className="text-purple-400" />
-            <span>{entry.postal_box}</span>
-          </div>
-        )} */
-        }
         {entry.email && (
-          <div className="flex items-center gap-1">
-            <Mail size={14} className="text-purple-400" />
-            <span className="text-xs">{entry.email}</span>
+          <div className="flex items-center gap-3">
+            <Mail size={16} className="text-gray-500" />
+            <span className="truncate">{entry.email}</span>
+          </div>
+        )}
+        {entry.address && (
+          <div className="flex items-center gap-3">
+            <MapPin size={16} className="text-gray-500" />
+            <span>{entry.address}</span>
+          </div>
+        )}
+        {entry.village?.nom && (
+          <div className="flex items-center gap-3">
+            <Building size={16} className="text-gray-500" />
+            <span>{entry.village.nom}</span>
           </div>
         )}
       </CardContent>

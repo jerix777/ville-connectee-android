@@ -1,5 +1,10 @@
 import { supabase } from "@/integrations/supabase/client";
 
+export interface Village {
+  id: string;
+  nom: string;
+}
+
 export interface DirectoryEntry {
   id: string;
   name: string;
@@ -8,28 +13,24 @@ export interface DirectoryEntry {
   phone1: string;
   phone2: string | null;
   email: string | null;
-  quartier: string;
+  village: { nom: string } | null;
 }
 
 export interface NewDirectoryEntry {
     name: string;
     service_type: string;
+    village_id: string;
     address?: string | null;
     phone1: string;
     phone2?: string | null;
     email?: string | null;
-    quartier_id: string;
-}
-
-export interface Quartier {
-    id: string;
-    nom: string;
 }
 
 export const getDirectoryEntries = async (): Promise<DirectoryEntry[]> => {
-  const { data, error } = await supabase
+  const { data: entries, error: entriesError } = await supabase
     .from("directory_entries")
-    .select(`
+    .select(
+      `
       id,
       name,
       service_type,
@@ -37,19 +38,28 @@ export const getDirectoryEntries = async (): Promise<DirectoryEntry[]> => {
       phone1,
       phone2,
       email,
-      quartiers ( nom )
-    `)
-    .order('name', { ascending: true });
+      village:villages(nom)
+    `
+    )
+    .order("name", { ascending: true });
 
-  if (error) {
-    console.error("Error fetching directory entries:", error);
-    throw error;
+  if (entriesError) {
+    console.error("Error fetching directory entries:", entriesError);
+    throw entriesError;
   }
 
-  return data.map((entry: any) => ({
-    ...entry,
-    quartier: entry.quartiers ? entry.quartiers.nom : 'N/A',
-  }));
+  return entries || [];
+};
+
+export const getVillages = async (): Promise<Village[]> => {
+    const { data, error } = await supabase.from("villages").select("id, nom");
+  
+    if (error) {
+      console.error("Error fetching villages:", error);
+      throw error;
+    }
+  
+    return data || [];
 };
 
 export const addDirectoryEntry = async (entry: NewDirectoryEntry) => {
@@ -65,20 +75,6 @@ export const addDirectoryEntry = async (entry: NewDirectoryEntry) => {
 
     if (error) {
         console.error('Error adding directory entry:', error);
-        throw error;
-    }
-
-    return data;
-}
-
-export const getQuartiers = async (): Promise<Quartier[]> => {
-    const { data, error } = await supabase
-        .from('quartiers')
-        .select('id, nom')
-        .order('nom', { ascending: true });
-
-    if (error) {
-        console.error('Error fetching quartiers:', error);
         throw error;
     }
 

@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addDirectoryEntry, getQuartiers } from "@/services/directoryService";
+import { addDirectoryEntry, getVillages, NewDirectoryEntry } from "@/services/directoryService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -13,7 +13,7 @@ import { Loader2 } from "lucide-react";
 const formSchema = z.object({
   name: z.string().min(2, { message: "Le nom doit contenir au moins 2 caractères." }),
   service_type: z.string().min(2, { message: "Le type de service est requis." }),
-  quartier_id: z.string({ required_error: "Veuillez sélectionner un quartier." }).uuid({ message: "Sélection invalide." }),
+  village_id: z.string({ required_error: "Veuillez sélectionner un village." }).uuid({ message: "Sélection invalide." }),
   address: z.string().optional(),
   phone1: z.string().min(8, { message: "Le contact principal est requis." }),
   phone2: z.string().optional(),
@@ -22,13 +22,17 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export function AddDirectoryEntryForm() {
+interface AddDirectoryEntryFormProps {
+  onCancel: () => void;
+}
+
+export function AddDirectoryEntryForm({ onCancel }: AddDirectoryEntryFormProps) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  const { data: quartiers = [], isLoading: isLoadingQuartiers } = useQuery({
-    queryKey: ["quartiers"],
-    queryFn: getQuartiers,
+  const { data: villages = [], isLoading: isLoadingVillages } = useQuery({
+    queryKey: ["villages"],
+    queryFn: getVillages,
   });
 
   const form = useForm<FormValues>({
@@ -36,6 +40,7 @@ export function AddDirectoryEntryForm() {
     defaultValues: {
       name: "",
       service_type: "",
+      village_id: "",
       address: "",
       phone1: "",
       phone2: "",
@@ -52,6 +57,7 @@ export function AddDirectoryEntryForm() {
       });
       queryClient.invalidateQueries({ queryKey: ["directory_entries"] });
       form.reset();
+      onCancel();
     },
     onError: (error) => {
       toast({
@@ -63,7 +69,17 @@ export function AddDirectoryEntryForm() {
   });
 
   const onSubmit = (values: FormValues) => {
-    addEntryMutation.mutate(values);
+    // Ensure the object passed to the mutation matches the NewDirectoryEntry interface
+    const newEntry: NewDirectoryEntry = {
+      name: values.name,
+      service_type: values.service_type,
+      village_id: values.village_id,
+      phone1: values.phone1,
+      address: values.address || null,
+      phone2: values.phone2 || null,
+      email: values.email || null,
+    };
+    addEntryMutation.mutate(newEntry);
   };
 
   return (
@@ -99,20 +115,20 @@ export function AddDirectoryEntryForm() {
             />
             <FormField
             control={form.control}
-            name="quartier_id"
+            name="village_id"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Quartier *</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoadingQuartiers}>
+                <FormLabel>Village *</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoadingVillages}>
                     <FormControl>
                     <SelectTrigger>
-                        <SelectValue placeholder={isLoadingQuartiers ? "Chargement..." : "Sélectionnez un quartier"} />
+                        <SelectValue placeholder={isLoadingVillages ? "Chargement..." : "Sélectionnez un village"} />
                     </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                    {quartiers.map((quartier) => (
-                        <SelectItem key={quartier.id} value={quartier.id}>
-                        {quartier.nom}
+                    {villages.map((village) => (
+                        <SelectItem key={village.id} value={village.id}>
+                        {village.nom}
                         </SelectItem>
                     ))}
                     </SelectContent>
@@ -175,16 +191,21 @@ export function AddDirectoryEntryForm() {
                 </FormItem>
             )}
             />
-            <Button type="submit" className="w-full" disabled={addEntryMutation.isPending}>
-            {addEntryMutation.isPending ? (
-                <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Ajout en cours...
-                </>
-            ) : (
-                "Ajouter à l'annuaire"
-            )}
-            </Button>
+            <div className="flex justify-end gap-4">
+                <Button type="button" variant="outline" onClick={onCancel}>
+                    Annuler
+                </Button>
+                <Button type="submit" disabled={addEntryMutation.isPending}>
+                {addEntryMutation.isPending ? (
+                    <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Ajout en cours...
+                    </>
+                ) : (
+                    "Ajouter à l'annuaire"
+                )}
+                </Button>
+            </div>
         </form>
         </Form>
     </div>
