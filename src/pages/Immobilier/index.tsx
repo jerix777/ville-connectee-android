@@ -60,6 +60,8 @@ export default function ImmobilierPage() {
     { value: "locations", label: `Locations (${locations.length})` }
   ];
 
+  const handleOpenAdd = () => setActiveViewTab("ajouter");
+
   return (
     <PageLayout
       title="Espace Immobilier" 
@@ -70,7 +72,9 @@ export default function ImmobilierPage() {
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
       searchPlaceholder="Rechercher un bien immobilier..."
-      addContent={<AddImmobilierForm />}
+  addContent={<AddImmobilierForm inline onClose={() => setActiveViewTab('liste')} />}
+  onAddClick={handleOpenAdd}
+  showAddButton={true}
       loading={isLoading}
       hasData={filteredImmobilier.length > 0}
       emptyStateIcon={Building}

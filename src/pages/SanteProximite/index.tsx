@@ -1,20 +1,26 @@
-import React, { useState, useEffect, startTransition } from 'react';
+import React, { startTransition, useEffect, useState } from "react";
 import { PageLayout } from "@/components/common/PageLayout";
 import { GeolocationButton } from "./components/GeolocationButton";
 import { FilterSection } from "./components/FilterSection";
 import { EtablissementCard } from "./components/EtablissementCard";
 import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
 import { EmptyState } from "@/components/common/EmptyState";
-import { santeService, EtablissementSante } from "@/services/santeService";
+import { EtablissementSante, santeService } from "@/services/santeService";
 import { Heart, MapPin, Phone } from "lucide-react";
+import AddSanteProximiteForm from "./AddSanteProximiteForm";
 import { toast } from "sonner";
 
 export default function SanteProximite() {
   const [activeTab, setActiveTab] = useState<string>("liste");
-  const [etablissements, setEtablissements] = useState<EtablissementSante[]>([]);
+  const [etablissements, setEtablissements] = useState<EtablissementSante[]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
-  const [userLocation, setUserLocation] = useState<{lat: number, lon: number} | null>(null);
-  
+  const [userLocation, setUserLocation] = useState<
+    { lat: number; lon: number } | null
+  >(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
   // Filtres
   const [typeFilter, setTypeFilter] = useState<string>("tous");
   const [radiusFilter, setRadiusFilter] = useState<number>(10);
@@ -28,25 +34,25 @@ export default function SanteProximite() {
       let results = await santeService.getAllEtablissements();
 
       // Appliquer les filtres
-      if (typeFilter && typeFilter !== 'tous') {
-        results = results.filter(e => e.type === typeFilter);
+      if (typeFilter && typeFilter !== "tous") {
+        results = results.filter((e) => e.type === typeFilter);
       }
-      
+
       if (urgencesOnly) {
-        results = results.filter(e => e.urgences === true);
+        results = results.filter((e) => e.urgences === true);
       }
-      
+
       if (gardeOnly) {
-        results = results.filter(e => e.garde_permanente === true);
+        results = results.filter((e) => e.garde_permanente === true);
       }
 
       setEtablissements(results);
-      
+
       if (results.length === 0) {
         toast.info("Aucun établissement trouvé avec ces critères");
       }
     } catch (error) {
-      console.error('Error loading establishments:', error);
+      console.error("Error loading establishments:", error);
       toast.error("Erreur lors du chargement des établissements");
     } finally {
       setLoading(false);
@@ -87,49 +93,52 @@ export default function SanteProximite() {
     setLoading(true);
     try {
       let results = await santeService.getEtablissementsProches(
-        lat, 
-        lon, 
+        lat,
+        lon,
         radiusFilter,
-        typeFilter
+        typeFilter,
       );
 
       // Appliquer les filtres supplémentaires
       if (urgencesOnly) {
-        results = results.filter(e => e.urgences === true);
+        results = results.filter((e) => e.urgences === true);
       }
-      
+
       if (gardeOnly) {
-        results = results.filter(e => e.garde_permanente === true);
+        results = results.filter((e) => e.garde_permanente === true);
       }
 
       setEtablissements(results);
-      
+
       if (results.length === 0) {
         toast.info("Aucun établissement trouvé dans ce rayon");
       }
     } catch (error) {
-      console.error('Error searching establishments:', error);
+      console.error("Error searching establishments:", error);
       toast.error("Erreur lors de la recherche des établissements");
     } finally {
       setLoading(false);
     }
   };
 
-
   const handleCall = (phone: string) => {
-    window.open(`tel:${phone}`, '_self');
+    window.open(`tel:${phone}`, "_self");
   };
 
   const handleDirections = (lat: number, lon: number) => {
     // Ouvrir dans Google Maps ou Plans selon la plateforme
-    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
+    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+      .test(navigator.userAgent);
+
     if (isMobile) {
       // Sur mobile, essayer d'ouvrir l'app native
-      window.open(`geo:${lat},${lon}?q=${lat},${lon}`, '_blank');
+      window.open(`geo:${lat},${lon}?q=${lat},${lon}`, "_blank");
     } else {
       // Sur desktop, ouvrir Google Maps
-      window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`, '_blank');
+      window.open(
+        `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`,
+        "_blank",
+      );
     }
   };
 
@@ -137,13 +146,14 @@ export default function SanteProximite() {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* <div className="lg:col-span-1">
+          {
+            /* <div className="lg:col-span-1">
             <div className="space-y-4">
-              <GeolocationButton 
+              <GeolocationButton
                 onLocationFound={handleLocationFound}
                 isLoading={loading}
               />
-              
+
               <FilterSection
                 typeFilter={typeFilter}
                 onTypeFilterChange={setTypeFilter}
@@ -155,12 +165,11 @@ export default function SanteProximite() {
                 onGardeOnlyChange={setGardeOnly}
               />
             </div>
-          </div> */}
+          </div> */
+          }
 
           <div className="lg:col-span-2">
-            {loading && (
-              <LoadingSkeleton type="list" count={3} />
-            )}
+            {loading && <LoadingSkeleton type="list" count={3} />}
 
             {!loading && !userLocation && etablissements.length === 0 && (
               <EmptyState
@@ -178,7 +187,8 @@ export default function SanteProximite() {
               />
             )}
 
-            {/* {!loading && etablissements.length > 0 && (
+            {
+              /* {!loading && etablissements.length > 0 && (
               <div className="space-y-4">
                 <div className="text-sm text-muted-foreground mb-4">
                   {etablissements.length} établissement{etablissements.length > 1 ? 's' : ''} trouvé{etablissements.length > 1 ? 's' : ''}
@@ -194,7 +204,8 @@ export default function SanteProximite() {
                   />
                 ))}
               </div>
-            )} */}
+            )} */
+            }
           </div>
         </div>
       </div>
@@ -206,15 +217,16 @@ export default function SanteProximite() {
       title="Pharmacies, Hôpitaux et Cliniques"
       description="Trouvez la liste des professionnels de la santé à Ouellé, Daoukro, M'Bahiakro, Prikro et plus"
       icon={Heart}
+      iconClassName="text-blue-600"
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      addContent={<AddSanteProximiteForm inline onCreated={() => loadAllEtablissements()} />}
       activeTab={activeTab}
       onTabChange={setActiveTab}
       listContent={renderSearchContent()}
       hasData={etablissements.length > 0}
       loading={loading}
-      showAddButton={false}
-      customTabs={[
-        { value: "liste", label: "Recherche" }
-      ]}
+      customTabs={[{ value: "liste", label: "Recherche" }]}
     />
   );
 }

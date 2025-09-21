@@ -1,8 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { TaxiDriver } from '@/services/taxiService';
-import { Car, Phone, MapPin } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { TaxiDriver } from "@/services/taxiService";
+import { Car, MapPin, Phone } from "lucide-react";
 
 interface DriverCardProps {
   driver: TaxiDriver;
@@ -12,32 +11,35 @@ interface DriverCardProps {
 export const DriverCard = ({ driver, onSelect }: DriverCardProps) => {
   const getVehicleIcon = (vehicleType: string) => {
     switch (vehicleType) {
-      case 'moto':
-        return '🏍️';
-      case 'voiture':
-        return '🚗';
-      case 'minibus':
-        return '🚐';
+      case "moto":
+        return "🏍️";
+      case "voiture":
+        return "🚗";
+      case "minibus":
+        return "🚐";
       default:
-        return '🚕';
+        return "🚕";
     }
   };
 
   const getVehicleLabel = (vehicleType: string) => {
     switch (vehicleType) {
-      case 'moto':
-        return 'Moto-taxi';
-      case 'voiture':
-        return 'Taxi voiture';
-      case 'minibus':
-        return 'Minibus';
+      case "moto":
+        return "Moto-taxi";
+      case "voiture":
+        return "Taxi voiture";
+      case "minibus":
+        return "Minibus";
       default:
-        return 'Véhicule';
+        return "Véhicule";
     }
   };
 
   return (
-    <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={onSelect}>
+    <Card
+      className="hover:shadow-md transition-shadow cursor-pointer"
+      onClick={onSelect}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -49,16 +51,11 @@ export const DriverCard = ({ driver, onSelect }: DriverCardProps) => {
                 {getVehicleLabel(driver.vehicle_type)}
               </CardTitle>
               <p className="text-xs text-muted-foreground">
-                {getVehicleIcon(driver.vehicle_type)} {driver.vehicle_model || 'Véhicule standard'}
+                {getVehicleIcon(driver.vehicle_type)}{" "}
+                {driver.vehicle_model || "Véhicule standard"}
               </p>
             </div>
           </div>
-          <Badge 
-            variant={driver.is_available ? "default" : "secondary"}
-            className={driver.is_available ? "bg-green-100 text-green-800" : ""}
-          >
-            {driver.is_available ? 'Disponible' : 'Occupé'}
-          </Badge>
         </div>
       </CardHeader>
       <CardContent className="pt-0">
@@ -69,9 +66,9 @@ export const DriverCard = ({ driver, onSelect }: DriverCardProps) => {
           </div>
         )}
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             className="flex-1"
             onClick={(e) => {
               e.stopPropagation();
@@ -80,16 +77,6 @@ export const DriverCard = ({ driver, onSelect }: DriverCardProps) => {
           >
             <Phone className="h-4 w-4 mr-1" />
             Contacter
-          </Button>
-          <Button 
-            size="sm" 
-            className="flex-1"
-            onClick={(e) => {
-              e.stopPropagation();
-              onSelect?.();
-            }}
-          >
-            Réserver
           </Button>
         </div>
       </CardContent>

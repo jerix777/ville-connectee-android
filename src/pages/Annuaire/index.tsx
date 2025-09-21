@@ -1,54 +1,40 @@
 import { useQuery } from "@tanstack/react-query";
 import {
-  getMetiers,
-  getProfessionals,
-  Metier,
-  Professional,
-} from "@/services/professionalService";
+  DirectoryEntry,
+  getDirectoryEntries,
+} from "@/services/directoryService";
 import { PageLayout } from "@/components/common/PageLayout";
 import { DirectoryCard } from "./DirectoryCard";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Search, UserPlus } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { LinkToProfessional } from "@/components/professional/LinkToProfessional";
-import { AuthGuard } from "@/components/common/AuthGuard";
+import { Search } from "lucide-react";
+import { AddDirectoryEntryForm } from "./components/AddDirectoryEntryForm";
 
 export default function AnnuairePage() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  const { data: metiers = [] } = useQuery({
-    queryKey: ["metiers"],
-    queryFn: getMetiers,
-  });
-
-  const { data: professionals = [], isLoading, error, refetch } = useQuery({
-    queryKey: ["professionals"],
-    queryFn: getProfessionals,
+  const { data: entries = [], isLoading, error } = useQuery({
+    queryKey: ["directory_entries"],
+    queryFn: getDirectoryEntries,
   });
 
   const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState("liste");
 
-  // Filter professionals
-  const filtered = professionals.filter((p) =>
-    p.nom.toLowerCase().includes(search.toLowerCase()) ||
-    (p.surnom && p.surnom.toLowerCase().includes(search.toLowerCase())) ||
-    (p.base && p.base.toLowerCase().includes(search.toLowerCase())) ||
-    (p.metier?.nom && p.metier.nom.toLowerCase().includes(search.toLowerCase()))
+  // Filter entries
+  const filtered = entries.filter(
+    (e) =>
+      (e.denomination &&
+        e.denomination.toLowerCase().includes(search.toLowerCase())) ||
+      (e.type_service &&
+        e.type_service.toLowerCase().includes(search.toLowerCase()))
   );
 
-  // Group by metier
-  const professionalsByMetier: Record<
-    string,
-    { metier: Metier; list: Professional[] }
-  > = {};
-  metiers.forEach((metier) => {
-    const inMetier = filtered.filter((p) => p.metier_id === metier.id);
-    if (inMetier.length > 0) {
-      professionalsByMetier[metier.id] = { metier, list: inMetier };
+  // Group by type_service
+  const entriesByServiceType: Record<string, DirectoryEntry[]> = {};
+  filtered.forEach((entry) => {
+    const serviceType = entry.type_service || "Non classé";
+    if (!entriesByServiceType[serviceType]) {
+      entriesByServiceType[serviceType] = [];
     }
+    entriesByServiceType[serviceType].push(entry);
   });
 
   const renderContent = () => {
@@ -66,70 +52,46 @@ export default function AnnuairePage() {
       );
     }
 
-    if (Object.keys(professionalsByMetier).length === 0) {
+    if (Object.keys(entriesByServiceType).length === 0) {
       return (
         <div className="text-center py-10 text-gray-500">
-          <p>Aucun professionnel trouvé</p>
+          <p>Aucune entrée trouvée</p>
         </div>
       );
     }
 
-    return Object.entries(professionalsByMetier).map((
-      [metierId, { metier, list }],
-    ) => (
-      <div key={metierId} className="mb-10">
+    return Object.entries(entriesByServiceType).map(([serviceType, list]) => (
+      <div key={serviceType} className="mb-10">
         <h2 className="text-lg font-semibold mb-3 text-primary">
-          {metier.nom}
+          {serviceType}
         </h2>
-        <AuthGuard>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {list.map((professional) => (
-              <DirectoryCard
-                key={professional.id}
-                professional={professional}
-              />
-            ))}
-          </div>
-        </AuthGuard>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {list.map((entry) => <DirectoryCard key={entry.id} entry={entry} />)}
+        </div>
       </div>
     ));
   };
 
   const renderAddContent = () => (
     <div className="space-y-6">
-      {user && (
-        <div className="flex flex-col sm:flex-row gap-3">
-          <LinkToProfessional
-            professionals={professionals}
-            onLinked={() => refetch()}
-          />
-          <Button
-            onClick={() => navigate("/annuaire/mon-profil")}
-            className="flex items-center justify-center space-x-2 whitespace-nowrap"
-          >
-            <UserPlus className="h-4 w-4" />
-            <span>Mon profil professionnel</span>
-          </Button>
-        </div>
-      )}
+      <AddDirectoryEntryForm onCancel={() => setActiveTab("liste")} />
     </div>
   );
 
   return (
     <PageLayout
-      title="Annuaire de la ville"
-      description="Trouvez tous les contacts des différents services publics et privés de Ouellé.
-Exemple: Ministère des sports, Inspection d'école primaire, Cantonnement des eaux et forêts..."
+      title="Annuaire de la commune"
+      description="Trouvez tous les contacts des différents services publics et privés de Ouellé. Exemple: Ministère des sports, Inspection d'école primaire, Cantonnement des eaux et forêts..."
       icon={Search}
-      activeTab="liste"
-      onTabChange={() => {}}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
       listContent={renderContent()}
       addContent={renderAddContent()}
       searchQuery={search}
       onSearchChange={setSearch}
-      searchPlaceholder="Rechercher un professionnel, un domaine, une base..."
+      searchPlaceholder="Rechercher un service, un nom..."
       loading={isLoading}
-      hasData={Object.keys(professionalsByMetier).length > 0}
+      hasData={Object.keys(entriesByServiceType).length > 0}
     />
   );
 }
