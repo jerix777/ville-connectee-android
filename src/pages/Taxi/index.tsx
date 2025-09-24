@@ -53,7 +53,10 @@ const TaxiPage = () => {
         loading={bookingsLoading}
       />
     ) : (
-      <BecomeDriverForm onSuccess={() => setIsDriver(true)} />
+      <BecomeDriverForm onClose={() => {
+        setIsDriver(true);
+        setActiveTab("liste");
+      }} />
     )
   );
 

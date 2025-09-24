@@ -301,6 +301,7 @@ export default function CarburantGaz() {
 
   return (
     <PageLayout
+      moduleId="carburant"
       title="Carburant et Gaz"
       description="Contactez vos fournisseurs pour voir la disponibilité du carburant et du gaz pour approvisionnement"
       icon={Fuel}
@@ -310,7 +311,7 @@ export default function CarburantGaz() {
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
       searchPlaceholder="Rechercher une station..."
-      addContent={<AddStationForm />}
+      addContent={<AddStationForm onClose={() => setActiveViewTab("liste")} />}
       loading={loading}
       hasData={filteredStations.length > 0}
       emptyStateIcon={Fuel}

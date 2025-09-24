@@ -10,7 +10,11 @@ import { addEvent, getEventTypes } from "@/services/eventService";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
 
-export function AddEventForm() {
+interface AddEventFormProps {
+  onClose?: () => void;
+}
+
+export function AddEventForm({ onClose }: AddEventFormProps) {
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     titre: "",
@@ -49,6 +53,9 @@ export function AddEventForm() {
         contact1: "",
         contact2: ""
       });
+      if (onClose) {
+        onClose();
+      }
     },
     onError: (error) => {
       toast("Erreur lors de l'ajout de l'événement", {
@@ -209,18 +216,7 @@ export function AddEventForm() {
             <Button 
               type="button" 
               variant="outline"
-              onClick={() => setFormData({
-                titre: "",
-                type_id: "",
-                organisateur: "",
-                lieu: "",
-                date_debut: "",
-                heure_debut: "",
-                date_fin: "",
-                heure_fin: "",
-                contact1: "",
-                contact2: ""
-              })}
+              onClick={onClose}
             >
               Annuler
             </Button>

@@ -71,7 +71,10 @@ export default function RadioPage() {
       loading={loading}
       hasData={hasData}
       listContent={renderRadioList()}
-      addContent={<AddRadioForm onSuccess={refresh} />}
+      addContent={<AddRadioForm onClose={() => {
+        refresh();
+        setActiveTab("liste");
+      }} />}
       
       // Empty state
       emptyStateIcon={RadioIcon}

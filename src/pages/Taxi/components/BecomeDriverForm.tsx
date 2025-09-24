@@ -34,10 +34,10 @@ const formSchema = z.object({
 type BecomeDriverFormValues = z.infer<typeof formSchema>;
 
 interface BecomeDriverFormProps {
-  onSuccess: () => void;
+  onClose: () => void;
 }
 
-export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
+export const BecomeDriverForm = ({ onClose }: BecomeDriverFormProps) => {
   const queryClient = useQueryClient();
 
   const form = useForm<BecomeDriverFormValues>({
@@ -60,7 +60,7 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
       });
       queryClient.invalidateQueries({ queryKey: ["availableDrivers"] });
       form.reset();
-      onSuccess();
+      onClose();
     },
     onError: (error) => {
       toast({
@@ -175,7 +175,7 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={onSuccess}
+                  onClick={onClose}
                   className="w-full"
                   size="lg"
                 >

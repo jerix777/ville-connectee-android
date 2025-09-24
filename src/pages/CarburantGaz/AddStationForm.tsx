@@ -18,7 +18,11 @@ import {
 } from "@/services/carburantService";
 import { Fuel, Upload } from "lucide-react";
 
-export function AddStationForm() {
+interface AddStationFormProps {
+  onClose?: () => void;
+}
+
+export function AddStationForm({ onClose }: AddStationFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [formData, setFormData] = useState<StationCarburantInput>({
@@ -319,7 +323,7 @@ export function AddStationForm() {
           </div> */
           }
 
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="outline" onClick={onClose}>
             Annuler
           </Button>
           <Button

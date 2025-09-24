@@ -202,7 +202,7 @@ export default function EvenementsPage() {
         skeletonType="grid"
         skeletonCount={6}
         listContent={renderEventsList()}
-        addContent={<AddEventForm />}
+        addContent={<AddEventForm onClose={() => setActiveViewTab("liste")} />}
       />
       <Toaster />
     </>
