@@ -6,16 +6,7 @@ import { LoadingSkeleton, EmptyState } from '@/components/common';
 import { Users, Radio, Play, Pause } from 'lucide-react';
 import { joinSession } from '@/services/jukeboxService';
 import { toast } from '@/hooks/use-toast';
-import type { JukeboxSession as BaseJukeboxSession, Musique } from '@/services/jukeboxService';
-
-interface JukeboxSession extends BaseJukeboxSession {
-  id: string;
-  nom: string;
-  description: string | null;
-  is_playing: boolean;
-  session_participants: { count: number }[];
-  musiques: Musique | null;
-}
+import type { JukeboxSessionWithDetails as JukeboxSession } from '../types';
 
 interface SessionManagerProps {
   sessions: JukeboxSession[];

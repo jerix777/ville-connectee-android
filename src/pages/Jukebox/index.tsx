@@ -12,20 +12,8 @@ import { SessionManager } from './components/SessionManager';
 import { UploadMusicForm } from './components/UploadMusicForm';
 import { CreateSessionForm } from './components/CreateSessionForm';
 import { getMusicList, getPlaylists, getActiveSessions } from '@/services/jukeboxService';
-import type { Musique, Playlist as BasePlaylist, JukeboxSession as BaseJukeboxSession } from '@/services/jukeboxService';
-
-interface Playlist extends BasePlaylist {
-  playlist_musiques: {
-    id: string;
-    position: number;
-    musiques: Musique;
-  }[];
-}
-
-interface JukeboxSession extends BaseJukeboxSession {
-  session_participants: { count: number }[];
-  musiques: Musique | null;
-}
+import type { Musique } from '@/services/jukeboxService';
+import type { PlaylistWithMusiques as Playlist, JukeboxSessionWithDetails as JukeboxSession } from './types';
 
 export function JukeboxPage() {
   const [activeTab, setActiveTab] = useState("library");
@@ -50,8 +38,8 @@ export function JukeboxPage() {
       ]);
       
       setMusiques(musicsData as Musique[]);
-      setPlaylists(playlistsData as unknown as Playlist[]);
-      setSessions(sessionsData as unknown as JukeboxSession[]);
+      setPlaylists(playlistsData as Playlist[]);
+      setSessions(sessionsData as JukeboxSession[]);
     } catch (error) {
       console.error('Erreur lors du chargement:', error);
       toast({
@@ -208,7 +196,7 @@ export function JukeboxPage() {
       onTabChange={setActiveViewTab}
       listContent={renderListContent()}
       addContent={renderAddContent()}
-      customActions={
+      additionalOptions={
         <div className="flex gap-2 w-full sm:w-auto">
           <Button
             onClick={() => setActiveViewTab("upload")}
