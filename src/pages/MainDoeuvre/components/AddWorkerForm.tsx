@@ -145,7 +145,7 @@ export function AddWorkerForm({ inline = false, onClose }: AddWorkerFormProps) {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="contact1">Contact 1</Label>
+                <Label htmlFor="contact1">Contact primaire</Label>
                 <Input
                   id="contact1"
                   name="contact1"

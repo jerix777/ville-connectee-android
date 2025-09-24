@@ -166,7 +166,7 @@ export function AddHotelForm({ onClose }: AddHotelFormProps) {
               />
             </div>
             <div>
-              <Label htmlFor="contact2">Contact 2</Label>
+              <Label htmlFor="contact2">Contact secondaire</Label>
               <Input
                 id="contact2"
                 value={formData.contact2}

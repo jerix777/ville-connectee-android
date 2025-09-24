@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,12 +10,11 @@ import { toast } from '@/hooks/use-toast';
 import type { JukeboxSession, JukeboxSessionInsert } from '@/services/jukeboxService';
 
 interface CreateSessionFormProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onClose: () => void;
   onSuccess: (session: JukeboxSession) => void;
 }
 
-export function CreateSessionForm({ open, onOpenChange, onSuccess }: CreateSessionFormProps) {
+export function CreateSessionForm({ onClose, onSuccess }: CreateSessionFormProps) {
   const [formData, setFormData] = useState<Partial<JukeboxSessionInsert>>({
     nom: '',
     description: '',
@@ -59,15 +58,14 @@ export function CreateSessionForm({ open, onOpenChange, onSuccess }: CreateSessi
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Radio className="w-5 h-5" />
-            Créer une Session
-          </DialogTitle>
-        </DialogHeader>
-
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Radio className="w-5 h-5" />
+          Créer une Session
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="nom">Nom de la session *</Label>
@@ -97,7 +95,7 @@ export function CreateSessionForm({ open, onOpenChange, onSuccess }: CreateSessi
             <Button
               type="button"
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={onClose}
               disabled={creating}
             >
               Annuler
@@ -120,7 +118,7 @@ export function CreateSessionForm({ open, onOpenChange, onSuccess }: CreateSessi
             </Button>
           </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+    </Card>
   );
 }

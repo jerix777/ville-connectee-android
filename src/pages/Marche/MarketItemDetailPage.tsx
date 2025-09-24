@@ -85,7 +85,7 @@ export default function MarketItemDetailPage() {
               {item.contact2 && (
                 <div className="flex items-center gap-2">
                   <Phone size={18} className="text-ville-DEFAULT" />
-                  <span className="font-medium">Contact 2:</span>
+                  <span className="font-medium">Contact secondaire:</span>
                   <span>{item.contact2}</span>
                 </div>
               )}

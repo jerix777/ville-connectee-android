@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,12 +11,11 @@ import { toast } from '@/hooks/use-toast';
 import type { Musique, MusiqueInsert } from '@/services/jukeboxService';
 
 interface UploadMusicFormProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onClose: () => void;
   onSuccess: (musique: Musique) => void;
 }
 
-export function UploadMusicForm({ open, onOpenChange, onSuccess }: UploadMusicFormProps) {
+export function UploadMusicForm({ onClose, onSuccess }: UploadMusicFormProps) {
   const [formData, setFormData] = useState<Partial<MusiqueInsert>>({
     titre: '',
     artiste: '',
@@ -112,15 +111,14 @@ export function UploadMusicForm({ open, onOpenChange, onSuccess }: UploadMusicFo
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Music className="w-5 h-5" />
-            Ajouter une Musique
-          </DialogTitle>
-        </DialogHeader>
-
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Music className="w-5 h-5" />
+          Ajouter une Musique
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* File Upload */}
           <div className="space-y-2">
@@ -225,7 +223,7 @@ export function UploadMusicForm({ open, onOpenChange, onSuccess }: UploadMusicFo
             <Button
               type="button"
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={onClose}
               disabled={uploading}
             >
               Annuler
@@ -248,7 +246,7 @@ export function UploadMusicForm({ open, onOpenChange, onSuccess }: UploadMusicFo
             </Button>
           </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+    </Card>
   );
 }

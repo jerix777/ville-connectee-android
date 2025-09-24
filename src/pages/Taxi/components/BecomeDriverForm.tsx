@@ -127,7 +127,7 @@ export const BecomeDriverForm = ({ onClose }: BecomeDriverFormProps) => {
                 name="contact2"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Contact 2</FormLabel>
+                    <FormLabel>Contact secondaire</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Ex: 0506070809"

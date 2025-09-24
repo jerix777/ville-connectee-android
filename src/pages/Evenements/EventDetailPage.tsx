@@ -99,7 +99,7 @@ export default function EventDetailPage() {
               {event.contact2 && (
                 <div className="flex items-center gap-2">
                   <Phone size={18} className="text-ville-DEFAULT" />
-                  <span className="font-medium">Contact 2:</span>
+                  <span className="font-medium">Contact secondaire:</span>
                   <span>{event.contact2}</span>
                 </div>
               )}
