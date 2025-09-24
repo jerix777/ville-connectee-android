@@ -110,7 +110,7 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
                 name="contact1"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Contact 1 *</FormLabel>
+                    <FormLabel>Contact principal *</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Ex: 0102030405"

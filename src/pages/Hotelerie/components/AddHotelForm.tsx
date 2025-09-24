@@ -26,7 +26,11 @@ export interface HotelFormInput {
   description?: string;
 }
 
-export function AddHotelForm() {
+interface AddHotelFormProps {
+  onClose?: () => void;
+}
+
+export function AddHotelForm({ onClose }: AddHotelFormProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState<HotelFormInput>({
@@ -70,7 +74,9 @@ export function AddHotelForm() {
         email: "",
         description: "",
       });
-      // Maybe close a dialog here if it was in one
+      if (onClose) {
+        onClose();
+      }
     },
     onError: (error) => {
       toast({
@@ -150,7 +156,7 @@ export function AddHotelForm() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="contact1">Contact 1 *</Label>
+              <Label htmlFor="contact1">Contact principal *</Label>
               <Input
                 id="contact1"
                 value={formData.contact1}
@@ -196,15 +202,7 @@ export function AddHotelForm() {
             <Button
               type="button"
               variant="outline"
-              onClick={() => setFormData({
-                nom: "",
-                type: "",
-                adresse: "",
-                contact1: "",
-                contact2: "",
-                email: "",
-                description: "",
-              })}
+              onClick={onClose}
             >
               Annuler
             </Button>

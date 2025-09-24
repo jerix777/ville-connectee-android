@@ -193,7 +193,7 @@ export default function HotelGaz() {
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
       searchPlaceholder="Rechercher un hôtel par nom, adresse, contact..."
-      addContent={<AddHotelForm />}
+      addContent={<AddHotelForm onClose={() => setActiveViewTab("liste")} />}
       loading={loading}
       hasData={filteredHotels.length > 0}
       emptyStateIcon={HotelIcon}
