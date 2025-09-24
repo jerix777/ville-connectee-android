@@ -29,6 +29,7 @@ export default function VillagesPage() {
   return (
     <>
       <PageLayout
+        moduleId="villages"
         title="Villages"
         description="Découvrez les villages et quartiers de votre commune"
         icon={MapPin}

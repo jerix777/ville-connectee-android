@@ -20,14 +20,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createDriverProfile } from "@/services/taxiService";
-import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserPlus } from "lucide-react";
 
 const formSchema = z.object({
   vehicle_type: z.string().min(1, "Le type de moto est requis"),
-  name_or_nickname: z.string().min(2, "Le nom ou surnom est requis"),
+  name: z.string().min(2, "Le nom ou surnom est requis"),
   contact1: z.string().min(8, "Le contact principal est requis"),
   contact2: z.string().optional(),
 });
@@ -39,14 +38,13 @@ interface BecomeDriverFormProps {
 }
 
 export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
-  const { user } = useAuth();
   const queryClient = useQueryClient();
 
   const form = useForm<BecomeDriverFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       vehicle_type: "",
-      name_or_nickname: "",
+      name: "",
       contact1: "",
       contact2: "",
     },
@@ -61,7 +59,6 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
           "Vous êtes maintenant enregistré comme chauffeur de moto-taxi.",
       });
       queryClient.invalidateQueries({ queryKey: ["availableDrivers"] });
-      queryClient.invalidateQueries({ queryKey: ["driverProfile", user?.id] });
       form.reset();
       onSuccess();
     },
@@ -93,7 +90,7 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
-                name="name_or_nickname"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nom et prénoms ou Surnom chauffeur *</FormLabel>
@@ -174,7 +171,16 @@ export const BecomeDriverForm = ({ onSuccess }: BecomeDriverFormProps) => {
                 )}
               />
 
-              <div className="pt-4">
+              <div className="pt-4 flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={onSuccess}
+                  className="w-full"
+                  size="lg"
+                >
+                  Annuler
+                </Button>
                 <Button
                   type="submit"
                   disabled={mutation.isPending}

@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-import { MainLayout } from "@/components/layout/MainLayout";
+import { PageLayout } from "@/components/common/PageLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Settings, User, MapPin, Bell, Palette } from "lucide-react";
+import { Settings, User, MapPin, Bell, Palette, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { CommuneSelector } from "@/components/CommuneSelector";
+import AccessibilitySettings from "./components/AccessibilitySettings";
 import { updateUserProfile } from "@/services/authService";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function SettingsPage() {
   const { user, profile, refreshProfile } = useAuth();
+  const [activeTab, setActiveTab] = useState("profile");
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [profileForm, setProfileForm] = useState({
     nom: profile?.nom || "",
@@ -67,15 +69,19 @@ export default function SettingsPage() {
   };
 
   return (
-    <MainLayout>
-      <div className="container mx-auto max-w-4xl">
-        <div className="flex items-center gap-2 mb-6">
-          <Settings className="text-ville-DEFAULT" />
-          <h1 className="text-lg font-bold">Paramètres</h1>
-        </div>
-
-        <Tabs defaultValue="profile" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+    <PageLayout
+      moduleId="settings"
+      title="Paramètres"
+      description="Gérez vos informations de profil, vos préférences et les paramètres de l'application."
+      icon={Settings}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      showAddButton={false}
+      hasPageContent={true}
+    >
+      <div className="max-w-7xl mx-auto px-4 lg:px-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="flex flex-wrap h-auto">
             <TabsTrigger value="profile">
               <User className="h-4 w-4 mr-2" />
               Profil
@@ -92,6 +98,10 @@ export default function SettingsPage() {
               <Palette className="h-4 w-4 mr-2" />
               Apparence
             </TabsTrigger>
+            <TabsTrigger value="accessibility">
+              <ShieldCheck className="h-4 w-4 mr-2" />
+              Accessibilité
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile" className="space-y-6">
@@ -102,7 +112,7 @@ export default function SettingsPage() {
                   Gérez vos informations de profil et vos préférences de compte
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-2">
                 {user ? (
                   <>
                     <div className="space-y-2">
@@ -114,7 +124,7 @@ export default function SettingsPage() {
                     </div>
 
                     <form onSubmit={handleProfileUpdate} className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
+                      {/* <div className="grid grid-cols-2 gap-4"> */}
                         <div className="space-y-2">
                           <Label htmlFor="prenom">Prénom</Label>
                           <Input
@@ -133,7 +143,7 @@ export default function SettingsPage() {
                             placeholder="Votre nom"
                           />
                         </div>
-                      </div>
+                      {/* </div> */}
                       <Button type="submit" disabled={isUpdatingProfile}>
                         {isUpdatingProfile ? "Mise à jour..." : "Mettre à jour le profil"}
                       </Button>
@@ -235,8 +245,12 @@ export default function SettingsPage() {
               </CardContent>
             </Card>
           </TabsContent>
+          
+          <TabsContent value="accessibility">
+            <AccessibilitySettings />
+          </TabsContent>
         </Tabs>
       </div>
-    </MainLayout>
+    </PageLayout>
   );
 }

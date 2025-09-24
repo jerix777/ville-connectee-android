@@ -29,6 +29,7 @@ export default function AnnoncesPage() {
   return (
     <>
       <PageLayout
+        moduleId="annonces"
         title="Avis et communiqués"
         description="Annonces importantes et communications officielles"
         icon={Shield}

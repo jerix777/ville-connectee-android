@@ -205,6 +205,7 @@ export default function NecrologiePage() {
   return (
     <>
       <PageLayout
+        moduleId="necrologie"
         title="Nécrologie"
         description="Hommages et mémoire de nos proches disparus"
         icon={Heart}

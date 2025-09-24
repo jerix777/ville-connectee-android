@@ -99,6 +99,7 @@ const MessagesPage = () => {
   if (!user) {
     return (
       <PageLayout
+        moduleId = "messagerie"
         title="Messageries"
         description="Gérez vos conversations et échangez avec d'autres utilisateurs"
         icon={MessageCircle}
@@ -121,6 +122,7 @@ const MessagesPage = () => {
   if (error) {
     return (
       <PageLayout
+      moduleId="messagerie"
         title="Messageries"
         description="Gérez vos conversations et échangez avec d'autres utilisateurs"
         icon={MessageCircle}
@@ -145,6 +147,7 @@ const MessagesPage = () => {
   return (
     <div>
       <PageLayout
+        moduleId="messagerie"
         title="Messageries"
         description="Gérez vos conversations et échangez avec d'autres utilisateurs"
         icon={MessageCircle}

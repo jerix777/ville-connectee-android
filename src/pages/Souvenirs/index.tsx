@@ -43,6 +43,7 @@ export default function SouvenirsPage() {
 
   return (
     <PageLayout
+      moduleId="souvenirs"
       title="Souvenirs"
       description="Partagez et découvrez les moments précieux de la communauté"
       icon={BookmarkCheck}

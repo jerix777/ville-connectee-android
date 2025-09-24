@@ -135,6 +135,7 @@ export default function AssociationsPage() {
   return (
     <>
       <PageLayout
+        moduleId="associations"
         title="Associations"
         description="Découvrez et gérez les associations locales de votre communauté"
         icon={Users}

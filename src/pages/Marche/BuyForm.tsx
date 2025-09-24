@@ -136,6 +136,13 @@ export function BuyForm({ onClose }: BuyFormProps) {
         
         <DialogFooter>
           <Button 
+            type="button" 
+            variant="outline" 
+            onClick={onClose}
+          >
+            Annuler
+          </Button>
+          <Button 
             type="submit" 
             variant="secondary"
             disabled={addItemMutation.isPending}

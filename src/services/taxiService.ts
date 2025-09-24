@@ -1,12 +1,12 @@
 import { supabase } from "@/integrations/supabase/client";
-import { Tables, TablesInsert } from "@/integrations/supabase/types";
+import { Database } from "@/integrations/supabase/types";
 
-export type TaxiDriver = Tables<"taxi_drivers"> & {
-  vehicle_type: string;
-};
-export type TaxiDriverInsert = TablesInsert<"taxi_drivers">;
-export type TaxiBooking = Tables<"taxi_bookings">;
-export type TaxiBookingInsert = TablesInsert<"taxi_bookings">;
+type Db = Database["public"]["Tables"];
+
+export type TaxiDriver = Db["taxi_drivers"]["Row"];
+export type TaxiDriverInsert = Db["taxi_drivers"]["Insert"];
+export type TaxiBooking = Db["taxi_bookings"]["Row"];
+export type TaxiBookingInsert = Db["taxi_bookings"]["Insert"];
 
 export const getAvailableDrivers = async () => {
   const { data, error } = await supabase
@@ -18,16 +18,10 @@ export const getAvailableDrivers = async () => {
   return data || [];
 };
 
-export const createDriverProfile = async (driverData: Omit<TaxiDriverInsert, 'user_id'>) => {
-  const user = (await supabase.auth.getUser()).data.user;
-  if (!user) throw new Error("Utilisateur non connecté");
-
+export const createDriverProfile = async (driverData: TaxiDriverInsert) => {
   const { data, error } = await supabase
     .from("taxi_drivers")
-    .insert({
-      ...driverData,
-      user_id: user.id,
-    })
+    .insert(driverData)
     .select()
     .single();
   

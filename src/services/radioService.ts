@@ -10,18 +10,43 @@ export interface Radio {
   created_by?: string;
   created_at: string;
   updated_at: string;
+  category_id?: string;
+}
+
+export interface RadioCategory {
+  id: string;
+  name: string;
 }
 
 export const radioService = {
-  async getAll(): Promise<Radio[]> {
-    const { data, error } = await supabase
+  async getAll(categoryId?: string): Promise<Radio[]> {
+    let query = supabase
       .from('radios')
       .select('*')
-      .eq('is_active', true)
-      .order('nom');
+      .eq('is_active', true);
+
+    if (categoryId) {
+      query = query.eq('category_id', categoryId);
+    }
+
+    const { data, error } = await query.order('nom');
 
     if (error) {
       console.error('Error fetching radios:', error);
+      throw error;
+    }
+
+    return data || [];
+  },
+
+  async getCategories(): Promise<RadioCategory[]> {
+    const { data, error } = await supabase
+      .from('radio_categories')
+      .select('*')
+      .order('name');
+
+    if (error) {
+      console.error('Error fetching radio categories:', error);
       throw error;
     }
 

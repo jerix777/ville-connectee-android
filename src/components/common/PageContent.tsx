@@ -1,11 +1,15 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { EmptyState } from "./EmptyState";
 import { ContentWrapper } from "./ContentWrapper";
 import { AuthGuard } from "@/components/auth/AuthGuard";
+import { useModuleVisibility } from '@/contexts/ModuleVisibilityContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { LucideIcon } from 'lucide-react';
 
 interface PageContentProps {
+  moduleId: string;
   activeTab: string;
   loading?: boolean;
   hasData?: boolean;
@@ -35,9 +39,11 @@ interface PageContentProps {
   skeletonType?: 'list' | 'grid';
   skeletonCount?: number;
   showResultCount?: boolean;
+  children?: React.ReactNode;
 }
 
 export function PageContent({
+  moduleId,
   activeTab,
   loading = false,
   hasData = false,
@@ -58,8 +64,23 @@ export function PageContent({
   resultCount,
   skeletonType = 'list',
   skeletonCount = 3,
-  showResultCount = true
+  showResultCount = true,
+  children
 }: PageContentProps) {
+  const { modules } = useModuleVisibility();
+  const { user } = useAuth();
+  const location = useLocation();
+
+  const isModulePublic = modules.find(m => m.id === moduleId)?.is_public ?? false;
+  const isAuthUser = !!user;
+  
+  const renderAddView = () => {
+    if (isModulePublic || isAuthUser) {
+      return addContent;
+    }
+    return <AuthGuard>{addContent}</AuthGuard>;
+  };
+
   const renderListView = () => {
     if (loading) {
       return <LoadingSkeleton type={skeletonType} count={skeletonCount} />;
@@ -97,14 +118,11 @@ export function PageContent({
 
   return (
     <div className="flex-1 overflow-y-auto bg-muted/30">
+      {children}
       <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
         {activeTab === "liste" && renderListView()}
         
-        {activeTab === "ajouter" && (
-          <AuthGuard>
-            {addContent}
-          </AuthGuard>
-        )}
+        {activeTab === "ajouter" && renderAddView()}
       </div>
     </div>
   );

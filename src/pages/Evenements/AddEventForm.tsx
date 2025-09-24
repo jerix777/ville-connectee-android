@@ -205,7 +205,25 @@ export function AddEventForm() {
             </div>
           </div>
           
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
+            <Button 
+              type="button" 
+              variant="outline"
+              onClick={() => setFormData({
+                titre: "",
+                type_id: "",
+                organisateur: "",
+                lieu: "",
+                date_debut: "",
+                heure_debut: "",
+                date_fin: "",
+                heure_fin: "",
+                contact1: "",
+                contact2: ""
+              })}
+            >
+              Annuler
+            </Button>
             <Button 
               type="submit" 
               variant="secondary"

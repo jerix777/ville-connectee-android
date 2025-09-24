@@ -12,7 +12,7 @@ import { useUpdateChecker } from "@/hooks/useUpdateChecker";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import EvenementsPage from "./pages/Evenements";
-import MainDoeuvrePage from "./pages/MainDoeuvre";
+const MainDoeuvrePage = lazy(() => import("./pages/MainDoeuvre"));
 import MarchePage from "./pages/Marche";
 import ActualitesPage from "./pages/Actualites";
 import EmploisPage from "./pages/Emplois";

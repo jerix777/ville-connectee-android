@@ -1,11 +1,18 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getMetiers, addProfessional } from "@/services/professionalService";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { addProfessional, getMetiers } from "@/services/professionalService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -30,18 +37,18 @@ export function AddWorkerForm({ inline = false, onClose }: AddWorkerFormProps) {
     metier_id: "",
     contact1: "",
     contact2: "",
-    base: ""
+    base: "",
   });
 
   const { data: metiers = [] } = useQuery({
-    queryKey: ['metiers'],
-    queryFn: getMetiers
+    queryKey: ["metiers"],
+    queryFn: getMetiers,
   });
 
   const addWorkerMutation = useMutation({
     mutationFn: addProfessional,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['professionals'] });
+      queryClient.invalidateQueries({ queryKey: ["professionals"] });
       toast({
         title: "Professionnel ajouté",
         description: "Le professionnel a été ajouté avec succès",
@@ -52,7 +59,7 @@ export function AddWorkerForm({ inline = false, onClose }: AddWorkerFormProps) {
         metier_id: "",
         contact1: "",
         contact2: "",
-        base: ""
+        base: "",
       });
       setIsOpen(false);
       if (onClose) onClose();
@@ -61,19 +68,19 @@ export function AddWorkerForm({ inline = false, onClose }: AddWorkerFormProps) {
       toast({
         title: "Erreur",
         description: "Une erreur est survenue lors de l'ajout du professionnel",
-        variant: "destructive"
+        variant: "destructive",
       });
       console.error("Error adding professional:", error);
-    }
+    },
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSelectChange = (value: string) => {
-    setFormData(prev => ({ ...prev, metier_id: value }));
+    setFormData((prev) => ({ ...prev, metier_id: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -83,30 +90,37 @@ export function AddWorkerForm({ inline = false, onClose }: AddWorkerFormProps) {
 
   const formContent = (
     <div className={inline ? "" : ""}>
-      {!inline && (
-        <div className="sr-only" />
-      )}
-      <div className={inline ? "max-w-2xl" : "max-w-2xl max-h-[90vh] overflow-y-auto"}>
-        {(!inline) ? (
-          <div className="hidden" />
-        ) : null}
+      {!inline && <div className="sr-only" />}
+      <div
+        className={inline
+          ? "max-w-2xl"
+          : "max-w-2xl max-h-[90vh] overflow-y-auto"}
+      >
+        {(!inline) ? <div className="hidden" /> : null}
         <div>
           {!inline && (
             <div className="mb-4">
-              <h3 className="text-lg font-medium">Ajouter un nouveau professionnel</h3>
+              <h3 className="text-lg font-medium">
+                Ajouter un nouveau professionnel
+              </h3>
             </div>
           )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="metier_id">Domaine d'activité</Label>
-                <Select onValueChange={handleSelectChange} value={formData.metier_id}>
+                <Select
+                  onValueChange={handleSelectChange}
+                  value={formData.metier_id}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner un domaine" />
                   </SelectTrigger>
                   <SelectContent>
-                    {metiers.map(metier => (
-                      <SelectItem key={metier.id} value={metier.id}>{metier.nom}</SelectItem>
+                    {metiers.map((metier) => (
+                      <SelectItem key={metier.id} value={metier.id}>
+                        {metier.nom}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -161,21 +175,27 @@ export function AddWorkerForm({ inline = false, onClose }: AddWorkerFormProps) {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button type="button" variant="outline" onClick={() => {
-                if (inline) {
-                  if (onClose) onClose();
-                } else {
-                  setIsOpen(false);
-                }
-              }}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  if (inline) {
+                    if (onClose) onClose();
+                  } else {
+                    setIsOpen(false);
+                  }
+                }}
+              >
                 Annuler
               </Button>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 variant="secondary"
                 disabled={addWorkerMutation.isPending}
               >
-                {addWorkerMutation.isPending ? "Ajout en cours..." : "Ajouter le professionnel"}
+                {addWorkerMutation.isPending
+                  ? "Ajout en cours..."
+                  : "Ajouter le professionnel"}
               </Button>
             </div>
           </form>
@@ -189,19 +209,21 @@ export function AddWorkerForm({ inline = false, onClose }: AddWorkerFormProps) {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Ajouter un professionnel
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Ajouter un nouveau professionnel</DialogTitle>
-        </DialogHeader>
-        {formContent}
-      </DialogContent>
-    </Dialog>
+    <Card>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Ajouter un professionnel
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Ajouter un nouveau professionnel</DialogTitle>
+          </DialogHeader>
+          {formContent}
+        </DialogContent>
+      </Dialog>
+    </Card>
   );
 }

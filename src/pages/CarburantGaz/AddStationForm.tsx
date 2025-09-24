@@ -1,38 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { carburantService, type StationCarburantInput } from "@/services/carburantService";
+import {
+  carburantService,
+  type StationCarburantInput,
+} from "@/services/carburantService";
 import { Fuel, Upload } from "lucide-react";
 
 export function AddStationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [formData, setFormData] = useState<StationCarburantInput>({
-    nom: '',
-    type: '',
-    adresse: '',
-    telephone: '',
-    email: '',
-    description: '',
-    horaires: '',
-    services: '',
-    prix_essence: '',
-    prix_gasoil: '',
-    prix_gaz: '',
-    image_url: '',
+    nom: "",
+    type: "",
+    adresse: "",
+    telephone: "",
+    email: "",
+    description: "",
+    horaires: "",
+    services: "",
+    prix_essence: "",
+    prix_gasoil: "",
+    prix_gaz: "",
+    image_url: "",
     latitude: null,
-    longitude: null
+    longitude: null,
   });
 
-  const handleInputChange = (field: keyof StationCarburantInput, value: string | number | null) => {
-    setFormData(prev => ({
+  const handleInputChange = (
+    field: keyof StationCarburantInput,
+    value: string | number | null,
+  ) => {
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -45,12 +57,12 @@ export function AddStationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.nom || !formData.type || !formData.adresse) {
       toast({
         title: "Erreur",
         description: "Veuillez remplir tous les champs obligatoires",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -62,28 +74,30 @@ export function AddStationForm() {
 
       // Upload image if selected
       if (selectedFile) {
-        const imageUrl = await carburantService.uploadStationImage(selectedFile);
+        const imageUrl = await carburantService.uploadStationImage(
+          selectedFile,
+        );
         finalFormData.image_url = imageUrl;
       }
 
       await carburantService.addStation(finalFormData);
-      
+
       // Reset form
       setFormData({
-        nom: '',
-        type: '',
-        adresse: '',
-        telephone: '',
-        email: '',
-        description: '',
-        horaires: '',
-        services: '',
-        prix_essence: '',
-        prix_gasoil: '',
-        prix_gaz: '',
-        image_url: '',
+        nom: "",
+        type: "",
+        adresse: "",
+        telephone: "",
+        email: "",
+        description: "",
+        horaires: "",
+        services: "",
+        prix_essence: "",
+        prix_gasoil: "",
+        prix_gaz: "",
+        image_url: "",
         latitude: null,
-        longitude: null
+        longitude: null,
       });
       setSelectedFile(null);
 
@@ -95,11 +109,11 @@ export function AddStationForm() {
       // Refresh the page to show the new station
       window.location.reload();
     } catch (error) {
-      console.error('Error adding station:', error);
+      console.error("Error adding station:", error);
       toast({
         title: "Erreur",
         description: "Erreur lors de l'ajout de la station",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -122,7 +136,7 @@ export function AddStationForm() {
               <Input
                 id="nom"
                 value={formData.nom}
-                onChange={(e) => handleInputChange('nom', e.target.value)}
+                onChange={(e) => handleInputChange("nom", e.target.value)}
                 placeholder="Nom de la station"
                 required
               />
@@ -130,12 +144,17 @@ export function AddStationForm() {
 
             <div>
               <Label htmlFor="type">Type d'établissement *</Label>
-              <Select value={formData.type} onValueChange={(value) => handleInputChange('type', value)}>
+              <Select
+                value={formData.type}
+                onValueChange={(value) => handleInputChange("type", value)}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionner le type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="station-service">Station-service</SelectItem>
+                  <SelectItem value="station-service">
+                    Station-service
+                  </SelectItem>
                   <SelectItem value="depot-gaz">Dépôt de gaz</SelectItem>
                   <SelectItem value="station-mixte">Station mixte</SelectItem>
                 </SelectContent>
@@ -148,7 +167,7 @@ export function AddStationForm() {
             <Input
               id="adresse"
               value={formData.adresse}
-              onChange={(e) => handleInputChange('adresse', e.target.value)}
+              onChange={(e) => handleInputChange("adresse", e.target.value)}
               placeholder="Adresse complète"
               required
             />
@@ -160,11 +179,12 @@ export function AddStationForm() {
               <Input
                 id="telephone"
                 value={formData.telephone}
-                onChange={(e) => handleInputChange('telephone', e.target.value)}
+                onChange={(e) => handleInputChange("telephone", e.target.value)}
                 placeholder="Numéro de téléphone"
               />
             </div>
-{/* 
+            {
+              /*
             <div>
               <Label htmlFor="email">Email</Label>
               <Input
@@ -174,10 +194,12 @@ export function AddStationForm() {
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 placeholder="Adresse email"
               />
-            </div> */}
+            </div> */
+            }
           </div>
 
-          {/* <div>
+          {
+            /* <div>
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
@@ -186,9 +208,11 @@ export function AddStationForm() {
               placeholder="Description de la station"
               rows={3}
             />
-          </div> */}
+          </div> */
+          }
 
-          {/* <div>
+          {
+            /* <div>
             <Label htmlFor="horaires">Horaires</Label>
             <Input
               id="horaires"
@@ -196,19 +220,21 @@ export function AddStationForm() {
               onChange={(e) => handleInputChange('horaires', e.target.value)}
               placeholder="Ex: 6h-22h"
             />
-          </div> */}
+          </div> */
+          }
 
           <div>
             <Label htmlFor="services">Services</Label>
             <Input
               id="services"
               value={formData.services}
-              onChange={(e) => handleInputChange('services', e.target.value)}
+              onChange={(e) => handleInputChange("services", e.target.value)}
               placeholder="Ex: Lavage auto, Boutique"
             />
           </div>
 
-          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {
+            /* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="prix_essence">Prix essence (FCFA/L)</Label>
               <Input
@@ -238,9 +264,11 @@ export function AddStationForm() {
                 placeholder="Ex: 800"
               />
             </div>
-          </div> */}
+          </div> */
+          }
 
-          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            /* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="latitude">Latitude</Label>
               <Input
@@ -264,9 +292,11 @@ export function AddStationForm() {
                 placeholder="Ex: -4.0267"
               />
             </div>
-          </div> */}
+          </div> */
+          }
 
-          {/* <div>
+          {
+            /* <div>
             <Label htmlFor="image">Photo de la station</Label>
             <div className="mt-2">
               <input
@@ -286,14 +316,18 @@ export function AddStationForm() {
                 {selectedFile ? selectedFile.name : 'Choisir une photo'}
               </Button>
             </div>
-          </div> */}
+          </div> */
+          }
 
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Annuler
+          </Button>
           <Button
             type="submit"
             className="w-full"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Ajout en cours...' : 'Ajouter la station'}
+            {isSubmitting ? "Ajout en cours..." : "Ajouter la station"}
           </Button>
         </form>
       </CardContent>

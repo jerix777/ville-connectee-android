@@ -142,9 +142,9 @@ export function AddDirectoryEntryForm({ onCancel }: AddDirectoryEntryFormProps) 
             name="address"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Adresse</FormLabel>
+                <FormLabel>Adresse Postale</FormLabel>
                 <FormControl>
-                    <Input placeholder="Ex: Rue des écoles" {...field} />
+                    <Input placeholder="Ex: BP... OU Lieu de résidence" {...field} />
                 </FormControl>
                 <FormMessage />
                 </FormItem>

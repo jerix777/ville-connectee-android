@@ -224,6 +224,7 @@ export default function AlertesPage() {
 
   return (
     <PageLayout
+      moduleId="alertes"
       title="Gérer mes alertes"
       description="Retrouvez et gérez toutes vos alertes immobilières"
       icon={Bell}

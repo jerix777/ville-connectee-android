@@ -7,6 +7,7 @@ import { PageContent } from "./PageContent";
 import { LucideIcon } from 'lucide-react';
 
 interface PageLayoutProps {
+  moduleId: string;
   // Header props
   title: string;
   description: string;
@@ -21,6 +22,8 @@ interface PageLayoutProps {
   // Content rendering
   listContent?: React.ReactNode;
   addContent?: React.ReactNode;
+  children?: React.ReactNode;
+  hasPageContent?: boolean;
   
   // Search functionality
   searchQuery?: string;
@@ -57,6 +60,7 @@ interface PageLayoutProps {
 }
 
 export function PageLayout({
+  moduleId,
   title,
   description,
   icon,
@@ -65,7 +69,9 @@ export function PageLayout({
   onTabChange,
   listContent,
   addContent,
+  children,
   customTabs,
+  hasPageContent = true,
   searchQuery = "",
   onSearchChange,
   searchPlaceholder = "Rechercher...",
@@ -135,7 +141,9 @@ export function PageLayout({
 
 
         {/* Zone 4: Données scrollables et paginées */}
+        {hasPageContent && (
         <PageContent
+          moduleId={moduleId}
           activeTab={activeTab}
           loading={loading}
           hasData={hasData}
@@ -157,7 +165,10 @@ export function PageLayout({
           skeletonType={skeletonType}
           skeletonCount={skeletonCount}
           showResultCount={showResultCount}
-        />
+        >
+          {children}
+        </PageContent>
+        )}
       </div>
     </MainLayout>
   );

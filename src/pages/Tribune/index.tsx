@@ -29,6 +29,7 @@ export default function TribunePage() {
   return (
     <>
       <PageLayout
+        moduleId="tribune"
         title="Tribune Libre"
         description="Partagez vos opinions et débattez avec la communauté"
         icon={MessageSquare}

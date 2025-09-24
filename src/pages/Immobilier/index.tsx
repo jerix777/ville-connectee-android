@@ -64,6 +64,7 @@ export default function ImmobilierPage() {
 
   return (
     <PageLayout
+      moduleId="immobilier"
       title="Espace Immobilier" 
       description="Trouvez votre nouveau logement ou publiez vos annonces immobilières"
       icon={Building}

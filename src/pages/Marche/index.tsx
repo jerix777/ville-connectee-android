@@ -214,6 +214,7 @@ export default function MarchePage() {
 
   return (
     <PageLayout
+      moduleId="marche"
       title="Marché"
       description="Achetez, vendez et échangez des biens avec d'autres membres de la communauté"
       icon={ShoppingBag}

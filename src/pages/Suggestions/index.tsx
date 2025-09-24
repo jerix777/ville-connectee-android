@@ -43,6 +43,7 @@ export default function SuggestionsPage() {
 
   return (
     <PageLayout
+      moduleId="suggestions"
       title="Suggestions"
       description="Proposez vos idées pour améliorer la communauté"
       icon={Lightbulb}

@@ -18,7 +18,6 @@ import { WorkerCard } from "./components/WorkerCard";
 import { AddWorkerForm } from "./components/AddWorkerForm";
 import { usePagination } from "@/hooks/usePagination";
 import { PageLayout } from "@/components/common/PageLayout";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function MainDoeuvrePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,21 +70,12 @@ export default function MainDoeuvrePage() {
     itemsPerPage: 9,
   });
 
-  // Build dynamic tabs (Tous + metiers)
-  const customTabs = [
-    { value: "tous", label: `Tous (${filteredWorkers.length})` },
-    ...metiers.map((m) => ({
-      value: m.id,
-      label: `${m.nom} (${
-        filteredWorkers.filter((w) => w.metier_id === m.id).length
-      })`,
-    })),
-  ];
 
   const handleOpenAdd = () => setActiveViewTab("ajouter");
 
   return (
     <PageLayout
+      moduleId="main_doeuvre"
       title="Les Professionnels"
       description="Trouvez facilement les personnes ressources que vous recherchez. Exemple: plombier, électricien, pâtissière, informaticien..."
       icon={User}
@@ -113,7 +103,6 @@ export default function MainDoeuvrePage() {
       canGoNext={canGoNext}
       canGoPrevious={canGoPrevious}
       resultCount={filteredWorkers.length}
-      customTabs={customTabs}
       skeletonType="grid"
       skeletonCount={6}
       listContent={
@@ -125,29 +114,35 @@ export default function MainDoeuvrePage() {
               </div>
             )
             : (
-              <Tabs
-                value={activeTab}
-                onValueChange={setActiveTab}
-                className="w-full"
-              >
-                <TabsList className="mb-6">
-                  {customTabs.map((t) => (
-                    <TabsTrigger key={t.value} value={t.value}>
-                      {t.label}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-
-                {customTabs.map((t) => (
-                  <TabsContent key={t.value} value={t.value}>
-                    <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                      {paginatedWorkers.map((worker) => (
-                        <WorkerCard key={worker.id} worker={worker} />
+              <div>
+                <div className="mb-6 max-w-sm">
+                  <Select value={activeTab} onValueChange={setActiveTab}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Filtrer par métier" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="tous">
+                        Tous ({filteredWorkers.length})
+                      </SelectItem>
+                      {metiers.map((m: Metier) => (
+                        <SelectItem key={m.id} value={m.id}>
+                          {m.nom} (
+                          {
+                            filteredWorkers.filter((w) => w.metier_id === m.id)
+                              .length
+                          }
+                          )
+                        </SelectItem>
                       ))}
-                    </div>
-                  </TabsContent>
-                ))}
-              </Tabs>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                  {paginatedWorkers.map((worker: Professional) => (
+                    <WorkerCard key={worker.id} worker={worker} />
+                  ))}
+                </div>
+              </div>
             )}
         </div>
       }

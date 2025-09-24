@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Radio as RadioIcon } from 'lucide-react';
 import { PageLayout } from '@/components/common';
 import { useDataManagement } from '@/hooks/useDataManagement';
-import { radioService, Radio } from '@/services/radioService';
+import { radioService, Radio, RadioCategory } from '@/services/radioService';
 import { RadioCard } from './RadioCard';
 import { AddRadioForm } from './AddRadioForm';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useQuery } from "@tanstack/react-query";
 
 export default function RadioPage() {
+  const [categoryId, setCategoryId] = useState<string | undefined>();
   const {
     data: radios,
     loading,
@@ -20,9 +23,14 @@ export default function RadioPage() {
     isEmpty,
     isFiltered
   } = useDataManagement<Radio>({
-    fetchData: radioService.getAll,
+    fetchData: () => radioService.getAll(categoryId),
     searchFields: ['nom', 'description'],
     itemsPerPage: 6
+  });
+
+  const { data: categories = [], isLoading: isLoadingCategories } = useQuery({
+    queryKey: ["radioCategories"],
+    queryFn: radioService.getCategories,
   });
 
   const renderRadioList = () => (
@@ -35,6 +43,7 @@ export default function RadioPage() {
 
   return (
     <PageLayout
+      moduleId="radio"
       title="Ecouter la radio"
       description="Désormais vous pouvez écouter les radios dont le signal n'arrive pas à Ouellé. Des radios en anglais, espagnol et allemand ont été ajoutées à la liste pour les élèves et les amoureux de ces langues. Souhaiteriez-vous qu'on vous ajoute une chaîne que vous aimez ? Veuillez nous le dire en cliquant ici"
       icon={RadioIcon}
@@ -42,6 +51,21 @@ export default function RadioPage() {
       onTabChange={setActiveTab}
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
+      additionalOptions={
+        <Select onValueChange={setCategoryId} defaultValue={categoryId}>
+          <SelectTrigger>
+            <SelectValue placeholder={isLoadingCategories ? "Chargement..." : "Toutes les catégories"} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">Toutes les catégories</SelectItem>
+            {categories.map((category) => (
+              <SelectItem key={category.id} value={category.id}>
+                {category.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      }
       
       // Content
       loading={loading}

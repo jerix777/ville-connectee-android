@@ -3,51 +3,34 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageLayout } from "@/components/common/PageLayout";
 import { HotelCard } from "./components/HotelCard";
 import { FilterSection } from "./components/FilterSection";
-import { AddHotelForm } from "./AddHotelForm";
-import { GeolocationButton } from "@/pages/SanteProximite/components/GeolocationButton";
+import { AddHotelForm } from "./components/AddHotelForm";
 import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
 import { EmptyState } from "@/components/common/EmptyState";
-import { hotelService, type StationHotel } from "@/services/hotelService";
+import { hotelService, type Hotel } from "@/services/hotelService";
 import { usePagination } from "@/hooks/usePagination";
-import { Fuel } from "lucide-react";
+import { Hotel as HotelIcon } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { Toaster } from "@/components/ui/toaster";
 
 export default function HotelGaz() {
   const [activeTab, setActiveTab] = useState<string>("tous");
   const [activeViewTab, setActiveViewTab] = useState<string>("liste");
-  const [hotels, setHotels] = useState<StationHotel[]>([]);
+  const [hotels, setHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [userLocation, setUserLocation] = useState<
-    { lat: number; lon: number } | null
-  >(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
-
-  // Filtres
   const [typeFilter, setTypeFilter] = useState<string>("tous");
-  const [radiusFilter, setRadiusFilter] = useState<number>(10);
 
-  // Charger toutes les données au démarrage
-  const loadAllStations = async () => {
+  const loadHotels = async () => {
     setLoading(true);
     setError(null);
     try {
-      let results = await hotelService.getAllStations();
+      let results = await hotelService.getAllHotels();
 
-      // Appliquer les filtres
       if (typeFilter && typeFilter !== "tous") {
-        results = results.filter((s) => s.type === typeFilter);
+        results = results.filter((h) => h.type === typeFilter);
       }
 
       setHotels(results);
-
-      if (results.length === 0 && typeFilter !== "tous") {
-        toast({
-          title: "Aucun hôtel trouvé",
-          description: "Aucun hôtel trouvé avec ces critères",
-        });
-      }
     } catch (error) {
       console.error("Error loading hotels:", error);
       setError("Erreur lors du chargement des hôtels");
@@ -61,105 +44,39 @@ export default function HotelGaz() {
     }
   };
 
-  // Charger les données au démarrage
   useEffect(() => {
-    loadAllStations();
-  }, []);
-
-  // Re-filtrer quand les filtres changent (sauf radius qui nécessite la géolocalisation)
-  useEffect(() => {
-    if (userLocation) {
-      searchNearbyStations(userLocation.lat, userLocation.lon);
-    } else {
-      loadAllStations();
-    }
+    loadHotels();
   }, [typeFilter]);
-
-  // Re-rechercher avec radius quand la géolocalisation est active
-  useEffect(() => {
-    if (userLocation) {
-      searchNearbyStations(userLocation.lat, userLocation.lon);
-    }
-  }, [radiusFilter]);
-
-  const handleLocationFound = async (lat: number, lon: number) => {
-    setUserLocation({ lat, lon });
-    await searchNearbyStations(lat, lon);
-  };
-
-  const searchNearbyStations = async (lat: number, lon: number) => {
-    setLoading(true);
-    try {
-      let results = await hotelService.getNearbyStations(
-        lat,
-        lon,
-        radiusFilter,
-      );
-
-      // Appliquer les filtres additionnels
-      if (typeFilter && typeFilter !== "tous") {
-        results = results.filter((s) => s.type === typeFilter);
-      }
-
-      setHotels(results);
-
-      if (results.length === 0) {
-        toast({
-          title: "Aucun hôtel trouvé",
-          description: `Aucun hôtel trouvé dans un rayon de ${radiusFilter}km`,
-        });
-      } else {
-        toast({
-          title: "Recherche terminée",
-          description: `${results.length} hôtel${
-            results.length > 1 ? "s" : ""
-          } trouvé${results.length > 1 ? "s" : ""} près de vous`,
-        });
-      }
-    } catch (error) {
-      console.error("Error searching nearby stations:", error);
-      toast({
-        title: "Erreur",
-        description: "Erreur lors de la recherche d'hôtels à proximité",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleCall = (phone: string) => {
     window.open(`tel:${phone}`, "_self");
   };
 
-  const handleDirections = (lat: number, lon: number) => {
+  const handleDirections = (address: string) => {
     window.open(
-      `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`,
+      `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`,
       "_blank",
     );
   };
 
-  // Filtrer les hôtels
-  const filteredStations = hotels.filter((station) => {
+  const filteredHotels = hotels.filter((hotel) => {
     const matchesSearch = !searchQuery ||
-      station.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      station.adresse.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (station.description &&
-        station.description.toLowerCase().includes(
-          searchQuery.toLowerCase(),
-        )) ||
-      (station.services &&
-        station.services.some((s) =>
-          s.toLowerCase().includes(searchQuery.toLowerCase())
-        ));
+      hotel.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      hotel.adresse.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (hotel.description &&
+        hotel.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (hotel.contact1 &&
+        hotel.contact1.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (hotel.contact2 &&
+        hotel.contact2.toLowerCase().includes(searchQuery.toLowerCase()));
 
     return matchesSearch;
   });
 
-  const chambres = filteredStations.filter((s) => s.type === "chambre");
-  const auberges = filteredStations.filter((s) => s.type === "auberge");
-  const residences = filteredStations.filter((s) =>
-    s.type === "residence-meublee"
+  const chambres = filteredHotels.filter((s) => s.type === "chambre");
+  const auberges = filteredHotels.filter((s) => s.type === "auberge");
+  const residences = filteredHotels.filter(
+    (s) => s.type === "residence-meublee",
   );
 
   const getTabData = () => {
@@ -171,14 +88,14 @@ export default function HotelGaz() {
       case "chambre":
         return chambres;
       default:
-        return filteredStations;
+        return filteredHotels;
     }
   };
 
   const {
     currentPage,
     totalPages,
-    paginatedData: paginatedStations,
+    paginatedData: paginatedHotels,
     goToPage,
     canGoNext,
     canGoPrevious,
@@ -188,7 +105,7 @@ export default function HotelGaz() {
   });
 
   const customTabs = [
-    { value: "tous", label: `Tous (${filteredStations.length})` },
+    { value: "tous", label: `Tous (${filteredHotels.length})` },
     { value: "auberge", label: `Auberges (${auberges.length})` },
     { value: "residence-meublee", label: `Résidences (${residences.length})` },
     { value: "chambre", label: `Chambres (${chambres.length})` },
@@ -218,31 +135,16 @@ export default function HotelGaz() {
           <div className="flex-1">
             {loading && <LoadingSkeleton type="list" count={3} />}
 
-            {!loading && !userLocation && hotels.length === 0 && (
+            {!loading && hotels.length === 0 && (
               <EmptyState
-                icon={Fuel}
+                icon={HotelIcon}
                 title="Aucun hôtel trouvé"
-                description="Aucun hôtel trouvé avec ces critères. Activez la géolocalisation pour une recherche par proximité."
+                description="Aucun hôtel n'a été trouvé. Ajoutez-en un pour commencer."
               />
             )}
 
-            {!loading && hotels.length === 0 && userLocation && (
-              <EmptyState
-                icon={Fuel}
-                title="Aucun hôtel trouvé"
-                description={`Aucun hôtel trouvé dans un rayon de ${radiusFilter}km avec ces critères.`}
-              />
-            )}
-
-            {!loading && filteredStations.length > 0 && (
+            {!loading && filteredHotels.length > 0 && (
               <div className="space-y-4">
-                {
-                  /* <div className="text-sm text-muted-foreground mb-4">
-                  {filteredStations.length} hôtel{filteredStations.length > 1 ? 's' : ''} trouvé{filteredStations.length > 1 ? 's' : ''}
-                  {userLocation ? ' près de vous' : ''}
-                </div> */
-                }
-
                 <Tabs
                   value={activeTab}
                   onValueChange={setActiveTab}
@@ -259,10 +161,10 @@ export default function HotelGaz() {
                   {customTabs.map((t) => (
                     <TabsContent key={t.value} value={t.value}>
                       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                        {paginatedStations.map((station) => (
+                        {paginatedHotels.map((hotel) => (
                           <HotelCard
-                            key={station.id}
-                            station={station}
+                            key={hotel.id}
+                            hotel={hotel}
                             onCall={handleCall}
                             onDirections={handleDirections}
                           />
@@ -281,27 +183,28 @@ export default function HotelGaz() {
 
   return (
     <PageLayout
-      title="Hotel / Résidence meublée"
-      description="Contactez vos fournisseurs pour voir la disponibilité du hotel et du gaz pour approvisionnement"
-      icon={Fuel}
+      moduleId="hotelerie"
+      title="Hôtels et Résidences"
+      description="Trouvez des hôtels, auberges et résidences meublées."
+      icon={HotelIcon}
       iconClassName="text-blue-600"
       activeTab={activeViewTab}
       onTabChange={setActiveViewTab}
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
-      searchPlaceholder="Rechercher un hotel..."
+      searchPlaceholder="Rechercher un hôtel par nom, adresse, contact..."
       addContent={<AddHotelForm />}
       loading={loading}
-      hasData={filteredStations.length > 0}
-      emptyStateIcon={Fuel}
+      hasData={filteredHotels.length > 0}
+      emptyStateIcon={HotelIcon}
       emptyStateTitle="Aucun hôtel trouvé"
-      emptyStateDescription="Aucun hôtel ne correspond à vos critères"
+      emptyStateDescription="Aucun hôtel ne correspond à vos critères de recherche."
       currentPage={currentPage}
       totalPages={totalPages}
       onPageChange={goToPage}
       canGoNext={canGoNext}
       canGoPrevious={canGoPrevious}
-      resultCount={filteredStations.length}
+      resultCount={filteredHotels.length}
       customTabs={customTabs}
       skeletonType="grid"
       skeletonCount={6}

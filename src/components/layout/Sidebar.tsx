@@ -39,15 +39,14 @@ const navItems = [
   { path: "/souvenirs", label: "Souvenirs", icon: Calendar, id: "souvenirs" },
   { path: "/tribune", label: "Tribune", icon: MessageSquare, id: "tribune" },
   { path: "/suggestions", label: "Suggestions", icon: MessageSquare, id: "suggestions" },
-  { path: "/steve-yobouet", label: "Steve Yobouet", icon: User, id: "steve_yobouet" },
+  { path: "/steve-yobouet", label: "Steve YOBOUET", icon: User, id: "steve_yobouet" },
   { path: "/taxi", label: "Motos Taxis", icon: Bus, id: "taxi" },
-  { path: "/hotelerie", label: "Hôtel et Gaz", icon: Fuel, id: "hotelerie" },
+  { path: "/hotelerie", label: "Hôtels et résidences", icon: Building, id: "hotelerie" },
   { path: "/taxi-communal", label: "Taxis villages", icon: Bus, id: "taxi_communal" },
-  { path: "/radio", label: "Radio", icon: Radio, id: "radio" },
+  { path: "/radio", label: "Radios", icon: Radio, id: "radios" },
   { path: "/sante-proximite", label: "Hôpitaux", icon: Heart, id: "sante" },
-  { path: "/maquis-resto", label: "Maquis et Resto", icon: UtensilsCrossed, id: "maquis_resto" },
+  { path: "/maquis-resto", label: "Maquis et Restaus", icon: UtensilsCrossed, id: "maquis_resto" },
   { path: "/carburant-gaz", label: "Carburant et Gaz", icon: Fuel, id: "carburant_gaz" },
-  { path: "/settings", label: "Paramètres", icon: Settings, id: "settings", private: true },
 ];
 
 function NavItem({ to, icon: Icon, label, isActive, onClick }: NavItemProps) {
@@ -78,7 +77,7 @@ export function Sidebar({ isOpen }: SidebarProps) {
   const visibleNavItems = useMemo(() => {
     if (loading) return [];
     
-    return navItems.filter(item => {
+    let items = navItems.filter(item => {
       // @ts-ignore
       if (item.private && !user) {
         return false;
@@ -92,6 +91,12 @@ export function Sidebar({ isOpen }: SidebarProps) {
       const module = modules.find(m => m.id === item.id);
       return module ? module.is_public : true;
     });
+
+    if (user) {
+      items.push({ path: "/settings", label: "Paramètres", icon: Settings, id: "settings" });
+    }
+
+    return items;
   }, [user, modules, loading]);
 
   const sidebarClasses = cn(

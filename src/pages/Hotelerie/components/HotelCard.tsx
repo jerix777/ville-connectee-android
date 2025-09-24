@@ -2,16 +2,16 @@ import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Phone, MapPin, Clock, Fuel } from "lucide-react";
-import type { StationHotel } from "@/services/hotelService";
+import { Phone, MapPin, Hotel as HotelIcon } from "lucide-react";
+import type { Hotel } from "@/services/hotelService";
 
 interface HotelCardProps {
-  station: StationHotel;
+  hotel: Hotel;
   onCall: (phone: string) => void;
-  onDirections: (lat: number, lon: number) => void;
+  onDirections: (address: string) => void;
 }
 
-export function HotelCard({ station, onCall, onDirections }: HotelCardProps) {
+export function HotelCard({ hotel, onCall, onDirections }: HotelCardProps) {
   const getTypeLabel = (type: string) => {
     switch (type) {
       case 'auberge':
@@ -44,89 +44,53 @@ export function HotelCard({ station, onCall, onDirections }: HotelCardProps) {
         <div className="flex justify-between items-start mb-4">
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-foreground mb-1">
-              {station.nom}
+              {hotel.nom}
             </h3>
-            <Badge className={getTypeColor(station.type)}>
-              {getTypeLabel(station.type)}
+            <Badge className={getTypeColor(hotel.type)}>
+              {getTypeLabel(hotel.type)}
             </Badge>
           </div>
-          <Fuel className="h-6 w-6 text-muted-foreground" />
+          <HotelIcon className="h-6 w-6 text-muted-foreground" />
         </div>
 
         <div className="space-y-3">
           <div className="flex items-center text-sm text-muted-foreground">
             <MapPin className="h-4 w-4 mr-2" />
-            {station.adresse}
+            {hotel.adresse}
           </div>
 
-          {/* {station.horaires && (
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Clock className="h-4 w-4 mr-2" />
-              {station.horaires}
-            </div>
-          )} */}
+          <div className="flex items-center text-sm text-muted-foreground">
+            <Phone className="h-4 w-4 mr-2" />
+            {hotel.contact1}
+            {hotel.contact2 && ` / ${hotel.contact2}`}
+          </div>
 
-          {station.services && station.services.length > 0 && (
-            <div>
-              <div className="text-sm font-medium mb-2">Services disponibles :</div>
-              <div className="flex flex-wrap gap-1">
-                {station.services.map((service, index) => (
-                  <Badge key={index} variant="outline" className="text-xs">
-                    {service}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* {(station.prix_essence || station.prix_gasoil || station.prix_gaz) && (
-            <div>
-              <div className="text-sm font-medium mb-2">Prix :</div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
-                {station.prix_essence && (
-                  <div>Essence : {station.prix_essence} FCFA/L</div>
-                )}
-                {station.prix_gasoil && (
-                  <div>Gasoil : {station.prix_gasoil} FCFA/L</div>
-                )}
-                {station.prix_gaz && (
-                  <div>Gaz butane : {station.prix_gaz} FCFA/kg</div>
-                )}
-              </div>
-            </div>
-          )} */}
-
-          {/* {station.description && (
-            <p className="text-sm text-muted-foreground">
-              {station.description}
+          {hotel.description && (
+            <p className="text-sm text-muted-foreground pt-2">
+              {hotel.description}
             </p>
-          )} */}
+          )}
         </div>
 
         <div className="flex gap-2 mt-4">
-          {station.telephone && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onCall(station.telephone!)}
-              className="flex items-center gap-1"
-            >
-              <Phone className="h-4 w-4" />
-              Appeler
-            </Button>
-          )}
-          
-          {/* {station.latitude && station.longitude && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onDirections(station.latitude!, station.longitude!)}
-              className="flex items-center gap-1"
-            >
-              <MapPin className="h-4 w-4" />
-              Itinéraire
-            </Button>
-          )} */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onCall(hotel.contact1)}
+            className="flex items-center gap-1"
+          >
+            <Phone className="h-4 w-4" />
+            Appeler
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onDirections(hotel.adresse)}
+            className="flex items-center gap-1"
+          >
+            <MapPin className="h-4 w-4" />
+            Itinéraire
+          </Button>
         </div>
       </CardContent>
     </Card>

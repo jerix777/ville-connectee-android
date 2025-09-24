@@ -62,6 +62,7 @@ export default function EmploisPage() {
 
   return (
     <PageLayout
+      moduleId="emplois"
       title="Offres d'emploi"
       description="Consultez les offres d'emploi locales et publiez vos annonces"
       icon={Briefcase}

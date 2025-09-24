@@ -80,6 +80,7 @@ export default function AnnuairePage() {
 
   return (
     <PageLayout
+      moduleId="annuaire"
       title="Annuaire de la commune"
       description="Trouvez tous les contacts des différents services publics et privés de Ouellé. Exemple: Ministère des sports, Inspection d'école primaire, Cantonnement des eaux et forêts..."
       icon={Search}
