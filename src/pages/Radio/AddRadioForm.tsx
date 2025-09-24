@@ -38,10 +38,10 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 interface AddRadioFormProps {
-  onSuccess?: () => void;
+  onClose?: () => void;
 }
 
-export function AddRadioForm({ onSuccess }: AddRadioFormProps) {
+export function AddRadioForm({ onClose }: AddRadioFormProps) {
   const { toast } = useToast();
 
   const { data: categories = [], isLoading: isLoadingCategories } = useQuery({
@@ -78,7 +78,7 @@ export function AddRadioForm({ onSuccess }: AddRadioFormProps) {
       });
 
       form.reset();
-      onSuccess?.();
+      onClose?.();
     } catch (error) {
       console.error("Error creating radio:", error);
       toast({
@@ -210,7 +210,7 @@ export function AddRadioForm({ onSuccess }: AddRadioFormProps) {
             <Button
               type="button"
               variant="outline"
-              onClick={() => form.reset()}
+              onClick={onClose}
             >
               Annuler
             </Button>
