@@ -1,0 +1,26 @@
+Voilà les retouches à faire dans l'application
+
+Généralités:
+
+- Afficher les infos par ordre décroissant d'enregistrement; c'est-à-dire la publication la plus récente doit apparaitre au-dessus des autres
+- Après enregistrement d'un formulaire l'on doit automatiquement être redirigé vers la page d'affichages des enregistrements de la rubrique 
+- Tous les boutons de validation d'enregistrement doivent avoir la même couleur (violet foncé)
+
+
+*Steve YOBOUET*
+Ajouter au bas de la page un bouton ``Contacter`` qui permet de composer le numéro *
+
+
+*Événements:*
+- On doit pouvoir s'abonner à un événement pour recevoir une notification 
+- On doit pouvoir voir les évènements passés 
+- Le numéro de l'organisateur doit s'afficher directement dans le bouton pour appeler 
+
+
+*Offres d'emploi*
+- Ajouter ``s`` à Emploi dans le menu
+- Implémenter le formulaire d'ajout d'offre d'emploi: (Emploi / Intitulé, Description, Source, Contact, Email, Date)
+
+
+*Message*
+- Les conversations doivent être conservées dans un fichier en locale aussitôt et supprimé du serveur qu'ils sont récupérés

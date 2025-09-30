@@ -31,7 +31,7 @@ export default function AnnoncesPage() {
       <PageLayout
         moduleId="annonces"
         title="Avis et communiqués"
-        description="Annonces importantes et communications officielles"
+        description="Les annonces des services officiels de Ouellé, Daoukro, M'Bahiakro, Prikro et plus"
         icon={Shield}
         iconClassName="text-red-600"
         activeTab={activeTab}

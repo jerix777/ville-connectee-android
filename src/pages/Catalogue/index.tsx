@@ -77,7 +77,7 @@ export function CataloguePage() {
     <MainLayout>
       <div className="flex justify-between items-center mb-6">
         <PageTitle
-          title="Catalogue"
+          title="Catalogue d'idées"
           description="Parcourez les différentes catégories d'images."
           icon={Image}
         />

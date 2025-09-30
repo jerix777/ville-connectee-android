@@ -18,18 +18,19 @@ export default function ActualitesPage() {
     refresh,
     pagination,
     hasData,
-    isFiltered
+    isFiltered,
   } = useDataManagement({
     fetchData: getNews,
-    searchFields: ['titre', 'contenu', 'auteur'],
-    itemsPerPage: 6
+    searchFields: ["titre", "contenu", "auteur"],
+    itemsPerPage: 6,
   });
 
   return (
     <>
       <PageLayout
-        title="Actualités & Communiqués"
-        description="Suivez les dernières nouvelles et annonces de la communauté"
+        moduleId="actualites"
+        title="Actualité"
+        description="L'actualité de Ouellé et d'ailleurs"
         icon={Newspaper}
         activeTab={activeTab}
         onTabChange={setActiveTab}
@@ -39,7 +40,9 @@ export default function ActualitesPage() {
         loading={loading}
         hasData={hasData}
         emptyStateIcon={Newspaper}
-        emptyStateTitle={isFiltered ? "Aucune actualité trouvée avec ces critères." : "Aucune actualité disponible pour le moment."}
+        emptyStateTitle={isFiltered
+          ? "Aucune actualité trouvée avec ces critères."
+          : "Aucune actualité disponible pour le moment."}
         onAddFirst={() => setActiveTab("ajouter")}
         addFirstText="Publier la première actualité"
         currentPage={pagination.currentPage}

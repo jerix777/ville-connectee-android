@@ -1,12 +1,10 @@
 import { supabase } from "@/integrations/supabase/client";
-import { Database } from "@/integrations/supabase/types";
+import { Tables, TablesInsert } from "@/integrations/supabase/types";
 
-type Db = Database["public"]["Tables"];
-
-export type TaxiDriver = Db["taxi_drivers"]["Row"];
-export type TaxiDriverInsert = Db["taxi_drivers"]["Insert"];
-export type TaxiBooking = Db["taxi_bookings"]["Row"];
-export type TaxiBookingInsert = Db["taxi_bookings"]["Insert"];
+export type TaxiDriver = Tables<"taxi_drivers">;
+export type TaxiDriverInsert = TablesInsert<"taxi_drivers">;
+export type TaxiBooking = Tables<"taxi_bookings">;
+export type TaxiBookingInsert = TablesInsert<"taxi_bookings">;
 
 export const getAvailableDrivers = async () => {
   const { data, error } = await supabase

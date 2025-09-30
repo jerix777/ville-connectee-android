@@ -28,6 +28,8 @@ dist-ssr
 compose.yaml
 Dockerfile
 compose.debug.yaml
+supabase/certs/prod-ca-2021.crt
+src/components/common/PageOptions copy.tsx
+src/integrations/supabase/types.temp.ts
 src/pages/Associations/dashboard/association_migration.sql
 Fonction pour récupérer un id utilisa.sql
-src/components/common/PageOptions copy.tsx

@@ -1,0 +1,89 @@
+Voilà les retouches à faire dans l'application
+
+Généralités:
+
+- Afficher les infos par ordre décroissant d'enregistrement; c'est-à-dire la publication la plus récente doit apparaitre au-dessus des autres
+- Après enregistrement d'un formulaire l'on doit automatiquement être redirigé vers la page d'affichages des enregistrements de la rubrique 
+- Tous les boutons de validation d'enregistrement doivent avoir la même couleur (violet foncé)
+
+
+
+*Annuaire*
+Page de formulaire Ajouter :
+Supprimer le champ Type de service
+
+
+
+*Actualités*
+-Un clic de trop pour enregistrer une actualité 
+Formulaire:
+- Titre
+- Texte
+- Source 
+- Date (auto_increment)
+
+
+*Services et Commerces* 
+Supprimer le champ ``Rubrique``
+
+
+*Nécrologie**
+- Description de la page:
+``Restez informé(e) de l'actualité funèbre et prions pour le repos de nos proches``
+
+Filtres: 
+- Funérailles à venir 
+- Funérailles passées 
+
+Formulaire d'enregistrement :
+- Nom défunt(e)
+- Prénom défunt(e)
+- Date de décès 
+- Lieu funérailles
+- Votre nom
+- Contact 1 Organisation
+- Contact 2  Organisation 
+
+
+
+*Motos taxis**:
+- Changer le logo par une moto
+
+Page d'affichages:
+On doit voir le nom du conducteur de la moto
+
+
+*Taxis des villages*:
+- Description de la page:
+``Contactez les chauffeurs de taxis de Ouellé en destination des villages pour voir leurs disponibilités``
+
+- Refaire le formulaire:
+Village
+Nom du chauffeur
+Type de véhicule: (Voiture, Moto tricycle, Contact principal, Contact secondaire, adresse/localité)
+
+
+*Radios*
+- Regler le problème de la page qui n'affiche plus
+Ajouter un moteur de recherche seulement, le bouton Ajouter s'affiche seulement pour les utilisateurs authentifiés
+
+- Ajouter les flux manquants 
+
+
+*Suggestions*
+- Description de la page;
+Faites-nous vos suggestions pour améliorer la vie à Ouellé.
+Nous les prendrons en compte
+Un clic de trop pour ajouter une suggestion 
+
+Formulaire Ajouter:
+Il y a un clic de trop pour faire une suggestion 
+
+
+*Ambiance baoulé**
+Utiliser le PageLayout que les autres pages du projet
+
+
+*Alertes*
+- Description de la page :
+Avertissez d'une anomalie, une panne ou un danger

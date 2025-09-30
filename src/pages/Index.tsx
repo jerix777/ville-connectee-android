@@ -105,17 +105,17 @@ export default function Index() {
       <section className="mb-10 px-4">
         <div className="rounded-xl bg-gradient-to-r from-primary to-secondary p-8 text-primary-foreground">
           <h1 className="text-xl md:text-2xl font-bold mb-4">
-            Bienvenue à Ouellé
+            Ouellé en mouvement
           </h1>
           <p className="text-lg opacity-90 mb-6">
-            la cité de l'innovation et du développement durable
+            Une ville à la hauteur de nos attentes
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="bg-background text-foreground px-6 py-3 rounded-md font-medium hover:bg-muted transition-colors">
+            {/* <button className="bg-background text-foreground px-6 py-3 rounded-md font-medium hover:bg-muted transition-colors">
               Découvrir
-            </button>
+            </button> */}
             <button className="bg-transparent border border-primary-foreground text-primary-foreground px-6 py-3 rounded-md font-medium hover:bg-primary-foreground/10 transition-colors">
-              En savoir plus
+              Par Steve YOBOUET
             </button>
           </div>
         </div>

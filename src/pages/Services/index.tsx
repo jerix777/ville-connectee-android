@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { PageLayout } from "@/components/common/PageLayout";
 import { useQuery } from "@tanstack/react-query";
@@ -22,11 +21,12 @@ export default function ServicesPage() {
   const categories = [...new Set(services.map((service) => service.categorie))];
 
   const filteredServices = services.filter((service) => {
-    const matchesCategory = !selectedCategory || service.categorie === selectedCategory;
-    const matchesSearch = !searchQuery || 
+    const matchesCategory = !selectedCategory ||
+      service.categorie === selectedCategory;
+    const matchesSearch = !searchQuery ||
       service.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
       service.description.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     return matchesCategory && matchesSearch;
   });
 
@@ -49,27 +49,28 @@ export default function ServicesPage() {
         selectedCategory={selectedCategory}
         onCategorySelect={setSelectedCategory}
       />
-      
-      {filteredServices.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {paginatedServices.map((service) => (
-            <ServiceCommerceCard key={service.id} service={service} />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-10">
-          <p className="text-gray-500">Aucun service ou commerce trouvé.</p>
-        </div>
-      )}
+
+      {filteredServices.length > 0
+        ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {paginatedServices.map((service) => (
+              <ServiceCommerceCard key={service.id} service={service} />
+            ))}
+          </div>
+        )
+        : (
+          <div className="text-center py-10">
+            <p className="text-gray-500">Aucun service ou commerce trouvé.</p>
+          </div>
+        )}
     </div>
   );
 
-  const renderAddContent = () => (
-    <AddServiceCommerceForm />
-  );
+  const renderAddContent = () => <AddServiceCommerceForm />;
 
   return (
     <PageLayout
+      moduleId="commerce"
       title="Commerces"
       description="Trouvez tous les commerces de la ville"
       icon={Building}

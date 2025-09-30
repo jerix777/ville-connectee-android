@@ -165,16 +165,16 @@ const MessagesPage = () => {
         addFirstText="Nouvelle conversation"
         onAddClick={() => setShowNewConversationModal(true)}
         addButtonText="Nouvelle conversation"
-        additionalOptions={
-          <Button 
-            variant="outline"
-            onClick={() => setShowNewConversationModal(true)}
-            size="sm"
-          >
-            <Edit className="h-4 w-4 mr-2" />
-            Nouvelle conversation
-          </Button>
-        }
+        // additionalOptions={
+        //   <Button 
+        //     variant="outline"
+        //     onClick={() => setShowNewConversationModal(true)}
+        //     size="sm"
+        //   >
+        //     <Edit className="h-4 w-4 mr-2" />
+        //     Nouvelle conversation
+        //   </Button>
+        // }
         listContent={
           <div className="space-y-2">
             <ConversationList

@@ -46,8 +46,8 @@ export function MusicLibrary(
   return (
     <div className="space-y-4">
       {/* Search and Filters */}
-      <Card>
-        <CardContent className="space-y-4">
+      {/* <Card>
+        <CardContent className="space-y-4"> */}
           <div className="flex gap-4">
             <div className="flex-1">
               <Input
@@ -68,8 +68,8 @@ export function MusicLibrary(
               ))}
             </select>
           </div>
-        </CardContent>
-      </Card>
+        {/* </CardContent>
+      </Card> */}
 
       {/* Music List */}
       <div className="space-y-3 max-h-96 overflow-y-auto">

@@ -179,6 +179,7 @@ export default function EvenementsPage() {
   return (
     <>
       <PageLayout
+        moduleId="evenements"
         title="Événements"
         description="Découvrez et participez aux événements de la communauté"
         icon={Calendar}

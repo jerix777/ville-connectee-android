@@ -185,7 +185,7 @@ export default function HotelGaz() {
     <PageLayout
       moduleId="hotelerie"
       title="Hôtels et Résidences"
-      description="Trouvez des hôtels, auberges et résidences meublées."
+      description="Contactez les hôtels et résidences de Ouellé, Daoukro, M'Bahiakro, Prikro et plus pour passer vos réservations."
       icon={HotelIcon}
       iconClassName="text-blue-600"
       activeTab={activeViewTab}

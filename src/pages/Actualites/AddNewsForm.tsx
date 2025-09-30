@@ -47,12 +47,12 @@ export function AddNewsForm({ onAdded }: { onAdded?: () => void }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
+      {/* <DialogTrigger asChild>
         <Button>
           <Plus className="h-4 w-4 mr-2" />
           Nouvelle actualité
         </Button>
-      </DialogTrigger>
+      </DialogTrigger> */}
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Nouvelle actualité</DialogTitle>
