@@ -23,30 +23,35 @@ import { createDriverProfile, type TaxiDriverInsert } from "@/services/taxiServi
 import { toast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserPlus } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
-  vehicle_type: z.string().min(1, "Le type de moto est requis"),
+  vehicle_type: z.string().min(1, "Le type de véhicule est requis"),
   name: z.string().min(2, "Le nom ou surnom est requis"),
   contact1: z.string().min(8, "Le contact principal est requis"),
   contact2: z.string().optional(),
+  description: z.string().optional(),
+  quartier: z.string().min(2, "Le quartier est requis"),
 });
 
-type BecomeDriverFormValues = z.infer<typeof formSchema>;
+type AddDriverFormValues = z.infer<typeof formSchema>;
 
-interface BecomeDriverFormProps {
+interface AddDriverFormProps {
   onClose: () => void;
 }
 
-export const BecomeDriverForm = ({ onClose }: BecomeDriverFormProps) => {
+export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
   const queryClient = useQueryClient();
 
-  const form = useForm<BecomeDriverFormValues>({
+  const form = useForm<AddDriverFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       vehicle_type: "",
       name: "",
       contact1: "",
       contact2: "",
+      description: "",
+      quartier: "",
     },
   });
 
@@ -54,9 +59,9 @@ export const BecomeDriverForm = ({ onClose }: BecomeDriverFormProps) => {
     mutationFn: createDriverProfile,
     onSuccess: () => {
       toast({
-        title: "Inscription réussie !",
+        title: "Enregistrement réussi !",
         description:
-          "Vous êtes maintenant enregistré comme chauffeur de moto-taxi.",
+          "Le chauffeur a été enregistré avec succès.",
       });
       queryClient.invalidateQueries({ queryKey: ["availableDrivers"] });
       form.reset();
@@ -64,16 +69,18 @@ export const BecomeDriverForm = ({ onClose }: BecomeDriverFormProps) => {
     },
     onError: (error) => {
       toast({
-        title: "Erreur lors de l'inscription",
+        title: "Erreur lors de l'enregistrement",
         description: error.message,
         variant: "destructive",
       });
     },
   });
 
-  const onSubmit = (data: BecomeDriverFormValues) => {
+  const onSubmit = (data: AddDriverFormValues) => {
     const driverData: TaxiDriverInsert = {
       ...data,
+      // use the provided quartier as the location fallback (adjust as needed)
+      location: data.quartier,
       is_available: true,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -98,7 +105,7 @@ export const BecomeDriverForm = ({ onClose }: BecomeDriverFormProps) => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nom et prénoms ou Surnom chauffeur *</FormLabel>
+                    <FormLabel>Nom et prénoms ou Surnom du chauffeur *</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Ex: Kouassi Jean"
@@ -112,63 +119,19 @@ export const BecomeDriverForm = ({ onClose }: BecomeDriverFormProps) => {
 
               <FormField
                 control={form.control}
-                name="contact1"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Contact principal *</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Ex: 0102030405"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="contact2"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Contact secondaire</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Ex: 0506070809"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
                 name="vehicle_type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Type de moto *</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <FormLabel>Type de véhicule *</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Sélectionnez le type de moto" />
+                          <SelectValue placeholder="Sélectionnez un type" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="deux_places">
-                          Moto deux places
-                        </SelectItem>
-                        <SelectItem value="jaune_saloni">
-                          Moto jaune Saloni
-                        </SelectItem>
-                        <SelectItem value="tricycle_bagages">
-                          Moto tricycle bagages
-                        </SelectItem>
+                        <SelectItem value="moto">Moto-taxi</SelectItem>
+                        <SelectItem value="car">Taxi voiture</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -176,13 +139,77 @@ export const BecomeDriverForm = ({ onClose }: BecomeDriverFormProps) => {
                 )}
               />
 
-              <div className="pt-4 flex gap-2">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="contact1"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Contact principal *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ex: 0709080706" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="contact2"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Contact secondaire</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ex: 0102030405" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="quartier"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Quartier *</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Ex: Résidentiel"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Informations supplémentaires sur le chauffeur..."
+                        className="resize-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="flex justify-end gap-2">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={onClose}
-                  className="w-full"
-                  size="lg"
+                  disabled={mutation.isPending}
                 >
                   Annuler
                 </Button>
@@ -190,19 +217,18 @@ export const BecomeDriverForm = ({ onClose }: BecomeDriverFormProps) => {
                   type="submit"
                   variant="secondary"
                   disabled={mutation.isPending}
-                  className="w-full"
-                  size="lg"
                 >
-                  {mutation.isPending
-                    ? (
-                      "Enregistrement en cours..."
-                    )
-                    : (
-                      <>
-                        <UserPlus className="h-4 w-4 mr-2" />
-                        Enregistrer le chauffeur
-                      </>
-                    )}
+                  {mutation.isPending ? (
+                    <>
+                      <UserPlus className="w-4 h-4 mr-2 animate-spin" />
+                      Enregistrement...
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      Enregistrer
+                    </>
+                  )}
                 </Button>
               </div>
             </form>

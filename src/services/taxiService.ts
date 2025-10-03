@@ -1,8 +1,20 @@
 import { supabase } from "@/integrations/supabase/client";
-import { Tables, TablesInsert } from "@/integrations/supabase/types";
 
-export type TaxiDriver = Tables<"taxi_drivers">;
-export type TaxiDriverInsert = TablesInsert<"taxi_drivers">;
+export interface TaxiDriver {
+  id: string;
+  name: string;
+  contact1: string;
+  contact2?: string;
+  vehicle_type: string;
+  description?: string;
+  is_available: boolean;
+  created_at: string;
+  updated_at: string;
+  status: string;
+  location: string;
+}
+
+export type TaxiDriverInsert = Omit<TaxiDriver, 'id'>;
 export type TaxiBooking = Tables<"taxi_bookings">;
 export type TaxiBookingInsert = TablesInsert<"taxi_bookings">;
 

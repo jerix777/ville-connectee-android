@@ -1,18 +1,11 @@
-import { useState } from 'react';
 import { PageLayout } from '@/components/common/PageLayout';
-import { useQuery } from '@tanstack/react-query';
-import { getAvailableDrivers, getUserBookings } from '@/services/taxiService';
+import { getAvailableDrivers, type TaxiDriver } from '@/services/taxiService';
 import { FindRide } from './components/FindRide';
-import { BecomeDriverForm } from './components/BecomeDriverForm';
-import { DriverDashboard } from './components/DriverDashboard';
-import { useAuth } from '@/contexts/AuthContext';
+import { AddDriverForm } from './components/AddDriverForm';
 import { Car } from 'lucide-react';
 import { useDataManagement } from '@/hooks/useDataManagement';
 
 const TaxiPage = () => {
-  const { user } = useAuth();
-  const [isDriver, setIsDriver] = useState(false);
-
   const {
     data: drivers,
     loading: driversLoading,
@@ -25,17 +18,11 @@ const TaxiPage = () => {
     hasData: hasDrivers,
     isEmpty: driversEmpty,
     isFiltered: driversFiltered
-  } = useDataManagement({
+  } = useDataManagement<TaxiDriver>({
     fetchData: getAvailableDrivers,
-    searchFields: ['vehicle_type'],
+    searchFields: ['name', 'location', 'vehicle_type'] as (keyof TaxiDriver)[],
     itemsPerPage: 6,
     enableRealTimeRefresh: true
-  });
-
-  const { data: bookings = [], isLoading: bookingsLoading } = useQuery({
-    queryKey: ['userBookings', user?.id],
-    queryFn: getUserBookings,
-    enabled: !!user,
   });
 
   const renderListContent = () => (
@@ -47,41 +34,26 @@ const TaxiPage = () => {
   );
 
   const renderAddContent = () => (
-    isDriver ? (
-      <DriverDashboard 
-        bookings={bookings}
-        loading={bookingsLoading}
-      />
-    ) : (
-      <BecomeDriverForm onClose={() => {
-        setIsDriver(true);
-        setActiveTab("liste");
-      }} />
-    )
+    <AddDriverForm onClose={() => setActiveTab('list')} />
   );
 
   return (
     <PageLayout
       moduleId="taxi"
-      title="Motos taxis"
-      description="Contactez les chauffeurs de taxis de Ouellé en destination des villages pour voir leurs disponibilités"
+      title="Moto taxi"
+      description="Liste des chauffeurs de taxi disponibles à Ouellé et enregistrement de nouveaux chauffeurs"
       icon={Car}
-      activeTab={activeTab}
-      onTabChange={setActiveTab}
-      listContent={renderListContent()}
-      addContent={renderAddContent()}
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
-      searchPlaceholder="Rechercher un type de véhicule..."
-      loading={driversLoading}
+      searchPlaceholder="Rechercher par nom, quartier..."
+      addButtonText="Ajouter un chauffeur"
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
       hasData={hasDrivers}
-      currentPage={driversPagination.currentPage}
-      totalPages={driversPagination.totalPages}
-      onPageChange={driversPagination.goToPage}
-      canGoNext={driversPagination.canGoNext}
-      canGoPrevious={driversPagination.canGoPrevious}
-      skeletonType="grid"
-      skeletonCount={6}
+      isEmpty={driversEmpty}
+      isFiltered={driversFiltered}
+      listContent={renderListContent()}
+      addContent={renderAddContent()}
     />
   );
 };
