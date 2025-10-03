@@ -37,9 +37,9 @@ export function JukeboxPage() {
         getActiveSessions()
       ]);
       
-      setMusiques(musicsData as Musique[]);
-      setPlaylists(playlistsData as Playlist[]);
-      setSessions(sessionsData as JukeboxSession[]);
+      setMusiques(musicsData as any as Musique[]);
+      setPlaylists(playlistsData as any as Playlist[]);
+      setSessions(sessionsData as any as JukeboxSession[]);
     } catch (error) {
       console.error('Erreur lors du chargement:', error);
       toast({

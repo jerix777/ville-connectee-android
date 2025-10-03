@@ -258,6 +258,7 @@ export default function MaquisResto() {
 
   return (
     <PageLayout
+      moduleId="maquis-resto"
       title="Maquis et Resto"
       description="Découvrez les restaurants, maquis et buvettes de votre région"
       icon={UtensilsCrossed}

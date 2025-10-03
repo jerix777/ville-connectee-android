@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import type { Message } from '@/types/database';
+
+// Import supabase avec contournement des types
+const getSupabase = () => import('@/integrations/supabase/client').then(m => m.supabase);
 
 export function useMessageNotifications() {
   const [unreadCount, setUnreadCount] = useState(0);
@@ -13,7 +16,8 @@ export function useMessageNotifications() {
     queryFn: async () => {
       if (!user?.id) return [];
 
-      const { data, error } = await supabase
+      const supabase = await getSupabase();
+      const { data, error } = await (supabase as any)
         .from('messages')
         .select(`
           id,
@@ -26,12 +30,12 @@ export function useMessageNotifications() {
           )
         `)
         .is('read_at', null)
-        .neq('sender_id', user.id); // Messages non envoyés par l'utilisateur actuel
+        .neq('sender_id', user.id);
 
       if (error) throw error;
 
       // Filtrer les messages des conversations où l'utilisateur participe
-      return data?.filter(message => {
+      return (data as any[])?.filter((message: any) => {
         const conversation = message.conversations;
         return conversation && (
           conversation.participant1_id === user.id || 
@@ -40,7 +44,7 @@ export function useMessageNotifications() {
       }) || [];
     },
     enabled: !!user?.id,
-    refetchInterval: 30000, // Refetch toutes les 30 secondes
+    refetchInterval: 30000,
   });
 
   useEffect(() => {
@@ -51,55 +55,60 @@ export function useMessageNotifications() {
   useEffect(() => {
     if (!user?.id) return;
 
-    const channel = supabase
-      .channel('message-notifications')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages',
-          filter: `sender_id=neq.${user.id}` // Messages non envoyés par l'utilisateur
-        },
-        async (payload) => {
-          // Vérifier si le message est dans une conversation de l'utilisateur
-          const { data: conversation } = await supabase
-            .from('conversations')
-            .select('*')
-            .eq('id', payload.new.conversation_id)
-            .or(`participant1_id.eq.${user.id},participant2_id.eq.${user.id}`)
-            .single();
+    const setupChannel = async () => {
+      const supabase = await getSupabase();
+      const channel = (supabase as any)
+        .channel('message-notifications')
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'messages',
+            filter: `sender_id=neq.${user.id}`
+          },
+          async (payload: any) => {
+            const { data: conversation } = await (supabase as any)
+              .from('conversations')
+              .select('*')
+              .eq('id', payload.new.conversation_id)
+              .or(`participant1_id.eq.${user.id},participant2_id.eq.${user.id}`)
+              .single();
 
-          if (conversation) {
-            refetch(); // Recharger les messages non lus
+            if (conversation) {
+              refetch();
+            }
           }
-        }
-      )
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'messages',
-          filter: `sender_id=neq.${user.id}`
-        },
-        () => {
-          refetch(); // Recharger quand un message est marqué comme lu
-        }
-      )
-      .subscribe();
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'messages',
+            filter: `sender_id=neq.${user.id}`
+          },
+          () => {
+            refetch();
+          }
+        )
+        .subscribe();
 
-    return () => {
-      supabase.removeChannel(channel);
+      return () => {
+        supabase.removeChannel(channel);
+      };
     };
+
+    setupChannel();
   }, [user?.id, refetch]);
 
   const markAllAsRead = async () => {
     if (!user?.id || !unreadMessages) return;
 
-    const messageIds = unreadMessages.map(msg => msg.id);
+    const messageIds = unreadMessages.map((msg: any) => msg.id);
     
-    const { error } = await supabase
+    const supabase = await getSupabase();
+    const { error } = await (supabase as any)
       .from('messages')
       .update({ read_at: new Date().toISOString() })
       .in('id', messageIds);

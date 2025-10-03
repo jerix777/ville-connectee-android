@@ -42,7 +42,7 @@ export function CreatePlaylistForm({ open, onOpenChange, onSuccess }: CreatePlay
         nom: values.nom,
         description: values.description,
         is_public: values.is_public,
-      });
+      }) as Playlist;
       toast({
         title: "Playlist créée",
         description: `La playlist "${newPlaylist.nom}" a été créée avec succès.`,

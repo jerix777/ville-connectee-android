@@ -77,7 +77,7 @@ export interface AuditEvent {
 
 export const logSecurityEvent = async (event: AuditEvent): Promise<void> => {
   try {
-    const { error } = await supabase.rpc('log_audit_event', {
+    const { error } = await (supabase.rpc as any)('log_audit_event', {
       p_action: event.action,
       p_resource_type: event.resource_type,
       p_resource_id: event.resource_id || null,

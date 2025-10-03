@@ -1,12 +1,10 @@
 import { supabase } from "@/integrations/supabase/client";
-import { Tables, TablesInsert } from "@/integrations/supabase/types";
+import type { Musique, Playlist, JukeboxSession, PlaylistMusique } from "@/types/database";
 
-export type Musique = Tables<"musiques">;
-export type MusiqueInsert = TablesInsert<"musiques">;
-export type Playlist = Tables<"playlists">;
-export type PlaylistInsert = TablesInsert<"playlists">;
-export type JukeboxSession = Tables<"jukebox_sessions">;
-export type JukeboxSessionInsert = TablesInsert<"jukebox_sessions">;
+export type { Musique, Playlist, JukeboxSession, PlaylistMusique };
+export type MusiqueInsert = Omit<Musique, 'id' | 'created_at' | 'updated_at'>;
+export type PlaylistInsert = Omit<Playlist, 'id' | 'created_at' | 'updated_at'>;
+export type JukeboxSessionInsert = Omit<JukeboxSession, 'id' | 'created_at' | 'updated_at'>;
 
 // Music Management
 export const getMusicList = async (quartier_id?: string) => {

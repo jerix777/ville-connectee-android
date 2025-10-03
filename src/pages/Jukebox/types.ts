@@ -1,27 +1,11 @@
-import type { 
-  JukeboxSession as BaseJukeboxSession, 
-  Musique, 
-  Playlist as BasePlaylist 
-} from '@/services/jukeboxService';
+import type { JukeboxSession, Musique, Playlist } from '@/types/database';
 
-/**
- * Represents a JukeboxSession with additional details fetched from the database,
- * such as participant count and the currently playing music.
- * This type explicitly includes properties that might not be inferred correctly from the base type.
- */
-export interface JukeboxSessionWithDetails extends BaseJukeboxSession {
-  id: string;
-  nom: string;
-  description: string | null;
-  is_playing: boolean;
+export interface JukeboxSessionWithDetails extends JukeboxSession {
   session_participants: { count: number }[];
   musiques: Pick<Musique, 'titre' | 'artiste'> | null;
 }
 
-/**
- * Represents a Playlist with its associated music tracks fully loaded.
- */
-export interface PlaylistWithMusiques extends BasePlaylist {
+export interface PlaylistWithMusiques extends Playlist {
   playlist_musiques: {
     id: string;
     position: number;

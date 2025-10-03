@@ -35,7 +35,7 @@ export function CreateSessionForm({ onClose, onSuccess }: CreateSessionFormProps
 
     try {
       setCreating(true);
-      const newSession = await createSession(formData as JukeboxSessionInsert);
+      const newSession = await createSession(formData as any) as JukeboxSession;
       onSuccess(newSession);
       resetForm();
     } catch (error) {

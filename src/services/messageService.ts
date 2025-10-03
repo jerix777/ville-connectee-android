@@ -1,9 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
-import { Tables, TablesInsert } from "@/integrations/supabase/types";
+import type { Conversation, Message } from "@/types/database";
 
-export type Conversation = Tables<'conversations'>;
-export type Message = Tables<'messages'>;
-export type NewMessage = TablesInsert<'messages'>;
+export type { Conversation, Message };
+export type NewMessage = Omit<Message, 'id' | 'created_at' | 'read_at'>;
 
 export const messageService = {
   // Get all conversations for current user
