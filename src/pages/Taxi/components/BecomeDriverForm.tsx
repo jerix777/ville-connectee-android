@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createDriverProfile } from "@/services/taxiService";
+import { createDriverProfile, type TaxiDriverInsert } from "@/services/taxiService";
 import { toast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserPlus } from "lucide-react";
@@ -72,9 +72,14 @@ export const BecomeDriverForm = ({ onClose }: BecomeDriverFormProps) => {
   });
 
   const onSubmit = (data: BecomeDriverFormValues) => {
-    mutation.mutate({
+    const driverData: TaxiDriverInsert = {
       ...data,
-    });
+      is_available: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      status: 'active'
+    };
+    mutation.mutate(driverData);
   };
 
   return (

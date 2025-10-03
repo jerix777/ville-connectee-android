@@ -16,13 +16,16 @@ interface UploadMusicFormProps {
 }
 
 export function UploadMusicForm({ onClose, onSuccess }: UploadMusicFormProps) {
-  const [formData, setFormData] = useState<Partial<MusiqueInsert>>({
+  const [formData, setFormData] = useState<MusiqueInsert>({
     titre: '',
     artiste: '',
     album: '',
     genre: '',
     annee: undefined,
     duree: undefined,
+    file_url: '',
+    created_at: new Date().toISOString(),
+    status: 'active'
   });
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
