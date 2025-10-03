@@ -230,6 +230,7 @@ export function UploadMusicForm({ onClose, onSuccess }: UploadMusicFormProps) {
             </Button>
             <Button
               type="submit"
+              variant="secondary"
               disabled={uploading || !file || !formData.titre || !formData.artiste}
             >
               {uploading ? (

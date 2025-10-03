@@ -178,7 +178,7 @@ export function AddTribuneForm({ onSuccess }: AddTribuneFormProps) {
               <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                 Annuler
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" variant="secondary" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
                     <Spinner size="sm" className="mr-2" /> Envoi en cours...

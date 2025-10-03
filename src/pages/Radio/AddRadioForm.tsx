@@ -214,7 +214,7 @@ export function AddRadioForm({ onClose }: AddRadioFormProps) {
             >
               Annuler
             </Button>
-            <Button type="submit" className="w-full">
+            <Button type="submit" variant="secondary" className="w-full">
               Ajouter la station
             </Button>
           </form>

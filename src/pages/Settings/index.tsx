@@ -144,7 +144,7 @@ export default function SettingsPage() {
                           />
                         </div>
                       {/* </div> */}
-                      <Button type="submit" disabled={isUpdatingProfile}>
+                      <Button type="submit" variant="secondary" disabled={isUpdatingProfile}>
                         {isUpdatingProfile ? "Mise à jour..." : "Mettre à jour le profil"}
                       </Button>
                     </form>

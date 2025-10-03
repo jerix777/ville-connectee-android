@@ -280,6 +280,7 @@ export function AddRestaurantForm() {
 
           <Button
             type="submit"
+            variant="secondary"
             className="w-full"
             disabled={isSubmitting}
           >

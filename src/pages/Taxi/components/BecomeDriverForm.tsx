@@ -183,6 +183,7 @@ export const BecomeDriverForm = ({ onClose }: BecomeDriverFormProps) => {
                 </Button>
                 <Button
                   type="submit"
+                  variant="secondary"
                   disabled={mutation.isPending}
                   className="w-full"
                   size="lg"

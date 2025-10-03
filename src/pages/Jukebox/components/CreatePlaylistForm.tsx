@@ -114,7 +114,7 @@ export function CreatePlaylistForm({ open, onOpenChange, onSuccess }: CreatePlay
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Annuler
               </Button>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
+              <Button type="submit" variant="secondary" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? 'Création...' : 'Créer'}
               </Button>
             </DialogFooter>

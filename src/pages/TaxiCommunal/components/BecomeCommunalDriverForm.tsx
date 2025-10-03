@@ -165,7 +165,8 @@ export const BecomeCommunalDriverForm = ({ onSuccess }: BecomeCommunalDriverForm
           />
 
           <Button 
-            type="submit" 
+            type="submit"
+            variant="secondary"
             disabled={mutation.isPending}
             className="w-full"
             size="lg"

@@ -143,7 +143,7 @@ export function BuyForm({ onClose }: BuyFormProps) {
             Annuler
           </Button>
           <Button 
-            type="submit" 
+            type="submit"
             variant="secondary"
             disabled={addItemMutation.isPending}
           >

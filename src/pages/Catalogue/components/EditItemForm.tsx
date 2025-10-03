@@ -163,7 +163,7 @@ export function EditItemForm({ item, open, onOpenChange, onSuccess }: EditItemFo
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Annuler
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" variant="secondary" disabled={isSubmitting}>
                 {isSubmitting ? "Modification..." : "Modifier"}
               </Button>
             </DialogFooter>

@@ -151,7 +151,7 @@ export function ObituaryForm({ open, onOpenChange, onSubmit, initialData, isSubm
             />
             
             <DialogFooter>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" variant="secondary" disabled={isSubmitting}>
                 {isSubmitting ? "Traitement en cours..." : initialData ? "Mettre à jour" : "Ajouter"}
               </Button>
             </DialogFooter>

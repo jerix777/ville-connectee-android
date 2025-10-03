@@ -74,7 +74,7 @@ export function AddOffreForm({ onAdded }: AddOffreFormProps) {
             <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
               Annuler
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" variant="secondary" disabled={loading}>
               {loading ? "Ajout..." : "Ajouter l'offre"}
             </Button>
           </div>

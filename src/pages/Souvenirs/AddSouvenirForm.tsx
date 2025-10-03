@@ -292,6 +292,7 @@ export const AddSouvenirForm = ({ onSuccess }: { onSuccess: () => void }) => {
               </Button>
               <Button
                 type="submit"
+                variant="secondary"
                 disabled={souvenirMutation.isPending || isUploading}
               >
                 {(souvenirMutation.isPending || isUploading) && (

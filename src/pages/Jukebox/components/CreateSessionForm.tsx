@@ -102,6 +102,7 @@ export function CreateSessionForm({ onClose, onSuccess }: CreateSessionFormProps
             </Button>
             <Button
               type="submit"
+              variant="secondary"
               disabled={creating || !formData.nom?.trim()}
             >
               {creating ? (

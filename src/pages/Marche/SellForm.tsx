@@ -143,7 +143,7 @@ export function SellForm({ onClose }: SellFormProps) {
             Annuler
           </Button>
           <Button 
-            type="submit" 
+            type="submit"
             variant="secondary"
             disabled={addItemMutation.isPending}
           >

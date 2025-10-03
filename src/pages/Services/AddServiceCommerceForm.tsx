@@ -340,6 +340,7 @@ export function AddServiceCommerceForm() {
               </Button>
               <Button
                 type="submit"
+                variant="secondary"
                 disabled={isSubmitting}
                 variant="secondary"
               >
