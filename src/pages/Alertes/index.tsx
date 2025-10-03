@@ -226,7 +226,7 @@ export default function AlertesPage() {
     <PageLayout
       moduleId="alertes"
       title="Gérer mes alertes"
-      description="Retrouvez et gérez toutes vos alertes immobilières"
+      description="Avertissez d'une anomalie, une panne ou un danger"
       icon={Bell}
       activeTab={activeTab}
       onTabChange={setActiveTab}

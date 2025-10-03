@@ -45,7 +45,8 @@ export default function SuggestionsPage() {
     <PageLayout
       moduleId="suggestions"
       title="Suggestions"
-      description="Proposez vos idées pour améliorer la communauté"
+      description="Faites-nous vos suggestions pour améliorer la vie à Ouellé.
+                   Nous les prendrons en compte"
       icon={Lightbulb}
       activeTab={activeTab}
       onTabChange={setActiveTab}

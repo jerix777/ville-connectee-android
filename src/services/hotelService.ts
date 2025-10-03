@@ -19,7 +19,7 @@ export const hotelService = {
     const { data, error } = await supabase
       .from('hotels')
       .select('*')
-      .order('nom');
+      .order('created_at', { ascending: false });
 
     if (error) {
       console.error('Error fetching hotels:', error);

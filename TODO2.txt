@@ -1,26 +1,39 @@
-Voilà les retouches à faire dans l'application
-
+Voici les retouches à intégrer dans l’application, classées par fonctionnalité et priorité technique. Merci de traiter les plus impactantes en premier :
 Généralités:
-
-- Afficher les infos par ordre décroissant d'enregistrement; c'est-à-dire la publication la plus récente doit apparaitre au-dessus des autres
-- Après enregistrement d'un formulaire l'on doit automatiquement être redirigé vers la page d'affichages des enregistrements de la rubrique 
-- Tous les boutons de validation d'enregistrement doivent avoir la même couleur (violet foncé)
-
-
-*Steve YOBOUET*
-Ajouter au bas de la page un bouton ``Contacter`` qui permet de composer le numéro *
-
-
-*Événements:*
-- On doit pouvoir s'abonner à un événement pour recevoir une notification 
-- On doit pouvoir voir les évènements passés 
-- Le numéro de l'organisateur doit s'afficher directement dans le bouton pour appeler 
-
-
-*Offres d'emploi*
-- Ajouter ``s`` à Emploi dans le menu
-- Implémenter le formulaire d'ajout d'offre d'emploi: (Emploi / Intitulé, Description, Source, Contact, Email, Date)
-
-
-*Message*
-- Les conversations doivent être conservées dans un fichier en locale aussitôt et supprimé du serveur qu'ils sont récupérés
+• 	Afficher les enregistrements par ordre décroissant (plus récents en haut)
+• 	Rediriger automatiquement vers la page d’affichage après soumission d’un formulaire
+• 	Harmoniser la couleur des boutons de validation (violet foncé)
+Steve YOBOUET:
+• 	Ajouter un bouton “Contacter” en bas de page qui compose le numéro
+Événements:
+• 	Permettre l’abonnement à un événement pour recevoir des notifications
+• 	Afficher les événements passés
+• 	Intégrer le numéro de l’organisateur dans le bouton d’appel
+Offres d’emploi:
+• 	Renommer “Emploi” en “Emplois” dans le menu
+• 	Implémenter le formulaire : Intitulé, Description, Source, Contact, Email, Date
+Message:
+• 	Sauvegarder les conversations en local et les supprimer du serveur après récupération
+Ambiance baoulé:
+• 	Appliquer le PageLayout utilisé dans les autres pages
+Annuaire:
+• 	Supprimer le champ “Type de service” du formulaire
+Actualités:
+• 	Réduire le nombre de clics pour enregistrer une actualité
+• 	Champs requis : Titre, Texte, Source, Date
+Services et Commerces:
+• 	Supprimer le champ “Rubrique”
+Nécrologie:
+• 	Ajouter filtres : Funérailles à venir / Funérailles passées
+• 	Champs du formulaire : Nom, Prénom, Date de décès, Lieu funérailles, Votre nom, Contact 1 & 2 Organisation
+Motos taxis:
+• 	Remplacer le logo par une moto
+• 	Afficher le nom du conducteur dans la page d’affichage
+Taxis des villages:
+• 	Champs du formulaire : Village, Nom du chauffeur, Type de véhicule, Contacts, Adresse/localité
+Radios:
+• 	Ajouter un moteur de recherche
+• 	Afficher le bouton “Ajouter” uniquement pour les utilisateurs authentifiés
+• 	Ajouter les flux manquants
+Suggestions:
+• 	Accéder directement au formulaire par le clic du bouton Ajouter de la page d'affichages

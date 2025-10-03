@@ -207,7 +207,7 @@ export default function NecrologiePage() {
       <PageLayout
         moduleId="necrologie"
         title="Nécrologie"
-        description="Hommages et mémoire de nos proches disparus"
+        description="Restez informé(e) de l'actualité funèbre et prions pour le repos de nos proches"
         icon={Heart}
         activeTab={activeTab}
         onTabChange={setActiveTab}

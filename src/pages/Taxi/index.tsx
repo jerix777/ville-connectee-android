@@ -64,8 +64,7 @@ const TaxiPage = () => {
     <PageLayout
       moduleId="taxi"
       title="Motos taxis"
-      description="Vous avez besoin d'une moto taxi pour une course ?
-                  Trouvez la liste et les contacts des chauffeurs ici puis appelez pour solliciter leurs services"
+      description="Contactez les chauffeurs de taxis de Ouellé en destination des villages pour voir leurs disponibilités"
       icon={Car}
       activeTab={activeTab}
       onTabChange={setActiveTab}
