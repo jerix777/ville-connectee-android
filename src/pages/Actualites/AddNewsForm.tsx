@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -25,9 +24,10 @@ interface FormValues {
 }
 
 export function AddNewsForm({ onAdded }: { onAdded?: () => void }) {
-  const { register, handleSubmit, formState: { isSubmitting }, reset } = useForm<FormValues>({
-    defaultValues: { type: "actualité" }
-  });
+  const { register, handleSubmit, formState: { isSubmitting }, reset } =
+    useForm<FormValues>({
+      defaultValues: { type: "actualité" },
+    });
   const [error, setError] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,7 +36,11 @@ export function AddNewsForm({ onAdded }: { onAdded?: () => void }) {
     const news = await addNews(data);
     if (!news) {
       setError("Erreur lors de l'ajout.");
-      toast({ title: "Erreur", description: "Impossible d'ajouter l'actualité", variant: "destructive" });
+      toast({
+        title: "Erreur",
+        description: "Impossible d'ajouter l'actualité",
+        variant: "destructive",
+      });
       return;
     }
     toast({ title: "Succès", description: "Actualité ajoutée !" });
@@ -47,12 +51,14 @@ export function AddNewsForm({ onAdded }: { onAdded?: () => void }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      {/* <DialogTrigger asChild>
+      {
+        /* <DialogTrigger asChild>
         <Button>
           <Plus className="h-4 w-4 mr-2" />
           Nouvelle actualité
         </Button>
-      </DialogTrigger> */}
+      </DialogTrigger> */
+      }
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Nouvelle actualité</DialogTitle>
@@ -60,11 +66,15 @@ export function AddNewsForm({ onAdded }: { onAdded?: () => void }) {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <Label htmlFor="titre">Titre</Label>
-            <Input id="titre" {...register("titre", { required: true })}/>
+            <Input id="titre" {...register("titre", { required: true })} />
           </div>
           <div>
             <Label htmlFor="type">Type</Label>
-            <select id="type" {...register("type", { required: true })} className="w-full border rounded p-2">
+            <select
+              id="type"
+              {...register("type", { required: true })}
+              className="w-full border rounded p-2"
+            >
               <option value="actualité">Actualité</option>
               <option value="communiqué">Communiqué</option>
             </select>
@@ -79,11 +89,19 @@ export function AddNewsForm({ onAdded }: { onAdded?: () => void }) {
           </div>
           <div>
             <Label htmlFor="contenu">Contenu</Label>
-            <Textarea id="contenu" {...register("contenu", { required: true })} rows={5} />
+            <Textarea
+              id="contenu"
+              {...register("contenu", { required: true })}
+              rows={5}
+            />
           </div>
           {error && <div className="text-red-500">{error}</div>}
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsOpen(false)}
+            >
               Annuler
             </Button>
             <Button type="submit" disabled={isSubmitting}>
