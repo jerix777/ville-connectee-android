@@ -1,4 +1,6 @@
 import { MainLayout } from "@/components/layout/MainLayout";
+import { Button } from "@/components/ui/button";
+import { Phone } from "lucide-react";
 
 export default function SteveYobouetPage() {
   return (
@@ -32,6 +34,19 @@ export default function SteveYobouetPage() {
                 <p className="text-lg font-semibold text-foreground mb-2">
                   Ouellé en mouvement
                 </p>
+              </div>
+              
+              <div className="mt-8 flex justify-center">
+                <Button 
+                  asChild
+                  size="lg"
+                  className="gap-2"
+                >
+                  <a href="tel:0748610016">
+                    <Phone className="h-5 w-5" />
+                    Contacter
+                  </a>
+                </Button>
               </div>
             </div>
           </div>
