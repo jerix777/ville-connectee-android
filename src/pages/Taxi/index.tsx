@@ -41,7 +41,7 @@ const TaxiPage = () => {
     <PageLayout
       moduleId="taxi"
       title="Moto taxi"
-      description="Liste des chauffeurs de taxi disponibles à Ouellé et enregistrement de nouveaux chauffeurs"
+      description="Contactez les chauffeurs de taxis de Ouellé en destination des villages pour voir leurs disponibilités"
       icon={Car}
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
