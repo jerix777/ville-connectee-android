@@ -86,7 +86,7 @@ export function AddNewsForm({ onAdded }: { onAdded?: () => void }) {
             <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
               Annuler
             </Button>
-            <Button type="submit" variant="secondary" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               Publier
             </Button>
           </div>
