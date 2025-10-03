@@ -142,7 +142,7 @@ export function AddVillageForm() {
             >
               Annuler
             </Button>
-            <Button type="submit" variant="secondary" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? "Enregistrement..." : "Ajouter"}
             </Button>
           </div>

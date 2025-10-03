@@ -74,7 +74,7 @@ export function AddImmobilierForm({ inline = false, onClose }: AddImmobilierForm
             }}>
               Annuler
             </Button>
-            <Button type="submit" variant="secondary">
+            <Button type="submit">
               Publier l'annonce
             </Button>
           </div>

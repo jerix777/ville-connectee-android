@@ -91,7 +91,7 @@ export function AddAnnonceForm({ onAdded }: { onAdded?: () => void }) {
             <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
               Annuler
             </Button>
-            <Button type="submit" className="bg-red-600 hover:bg-red-700" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               <Shield className="h-4 w-4 mr-2" />
               Publier le communiqué
             </Button>
