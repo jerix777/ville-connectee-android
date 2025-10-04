@@ -171,7 +171,7 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
                   name="contact1"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Contact principal *</FormLabel>
+                      <FormLabel>Contact 1 *</FormLabel>
                       <FormControl>
                         <Input placeholder="Ex: 0709080706" {...field} />
                       </FormControl>
@@ -185,7 +185,7 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
                   name="contact2"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Contact secondaire</FormLabel>
+                      <FormLabel>Contact 2</FormLabel>
                       <FormControl>
                         <Input placeholder="Ex: 0102030405" {...field} />
                       </FormControl>
