@@ -1,13 +1,38 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TaxiDriver } from "@/services/taxiService";
-import { Bike, MapPin, Phone, MessageSquare } from "lucide-react";
+import { Bike, MapPin, Phone, MessageSquare, BusFront, Truck, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
 
 interface DriverCardProps {
   driver: TaxiDriver;
   onSelect?: () => void;
 }
+
+const getVehicleInfo = (type: string) => {
+  switch (type) {
+    case 'moto2places':
+      return {
+        icon: <Bike className="w-4 h-4 text-muted-foreground" />,
+        label: 'Moto 2 places'
+      };
+    case 'moto4places':
+      return {
+        icon: <Truck className="w-4 h-4 text-muted-foreground" />,
+        label: 'Moto 4 places (Saloni)'
+      };
+    case 'motoportebagage':
+      return {
+        icon: <BusFront className="w-4 h-4 text-muted-foreground" />,
+        label: 'Moto tricycle Bagages'
+      };
+    default:
+      return {
+        icon: <HelpCircle className="w-4 h-4 text-muted-foreground" />,
+        label: 'Type de véhicule inconnu'
+      };
+  }
+};
 
 export const DriverCard = ({ driver, onSelect }: DriverCardProps) => {
   const handleContact = (contact: string) => {
@@ -44,21 +69,9 @@ export const DriverCard = ({ driver, onSelect }: DriverCardProps) => {
         <div className="flex items-start gap-3">
           <div className="flex-1 space-y-2">
             <div className="flex items-center gap-2">
-              <Bike className="w-4 h-4 text-muted-foreground" />
+              {getVehicleInfo(driver.vehicle_type).icon}
               <span className="text-sm font-medium capitalize">
-                {(() => {
-                  switch (driver.vehicle_type) {
-                    case 'moto2places':
-                      return 'Moto 2 places';
-                    case 'moto4places':
-                      return 'Moto 4 places (Saloni)';
-                    case 'motoportebagage':
-                      return 'Moto tricycle Bagages';
-                    default:
-                      return 'Type de véhicule inconnu';
-                  }
-                })()
-              }
+                {getVehicleInfo(driver.vehicle_type).label}
               </span>
             </div>
 
