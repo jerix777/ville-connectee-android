@@ -36,38 +36,38 @@ export const initDefaultData = async () => {
     console.log("Initialisation des données par défaut...");
     
     // Vérifier et ajouter les types d'événements par défaut
-    const { data: existingEventTypes } = await supabase
+    const { data: existingEventTypes } = await (supabase as any)
       .from("event_types")
       .select("label");
     
-    const existingEventTypeLabels = existingEventTypes?.map(type => type.label) || [];
+    const existingEventTypeLabels = (existingEventTypes as any)?.map((type: any) => type.label) || [];
     
     const eventTypesToAdd = DEFAULT_EVENT_TYPES
       .filter(type => !existingEventTypeLabels.includes(type))
       .map(label => ({ label }));
     
     if (eventTypesToAdd.length > 0) {
-      await supabase
+      await (supabase as any)
         .from("event_types")
-        .insert(eventTypesToAdd);
+        .insert(eventTypesToAdd as any);
       console.log(`${eventTypesToAdd.length} types d'événements ajoutés`);
     }
     
     // Vérifier et ajouter les métiers par défaut
-    const { data: existingMetiers } = await supabase
+    const { data: existingMetiers } = await (supabase as any)
       .from("metiers")
       .select("nom");
     
-    const existingMetierNames = existingMetiers?.map(metier => metier.nom) || [];
+    const existingMetierNames = (existingMetiers as any)?.map((metier: any) => metier.nom) || [];
     
     const metiersToAdd = DEFAULT_METIERS
       .filter(nom => !existingMetierNames.includes(nom))
       .map(nom => ({ nom }));
     
     if (metiersToAdd.length > 0) {
-      await supabase
+      await (supabase as any)
         .from("metiers")
-        .insert(metiersToAdd);
+        .insert(metiersToAdd as any);
       console.log(`${metiersToAdd.length} métiers ajoutés`);
     }
     

@@ -26,7 +26,7 @@ export interface TribuneInput {
 
 export async function fetchTribunes(): Promise<Tribune[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("tribune")
       .select("*, quartiers(nom)")
       .order("created_at", { ascending: false });
@@ -41,7 +41,7 @@ export async function fetchTribunes(): Promise<Tribune[]> {
       return [];
     }
 
-    return data as Tribune[];
+    return data as any;
   } catch (error) {
     console.error("Erreur:", error);
     toast({
@@ -55,7 +55,7 @@ export async function fetchTribunes(): Promise<Tribune[]> {
 
 export async function addTribune(tribune: TribuneInput): Promise<boolean> {
   try {
-    const { error } = await supabase.from("tribune").insert([tribune]);
+    const { error } = await (supabase as any).from("tribune").insert([tribune] as any);
 
     if (error) {
       console.error("Erreur lors de l'ajout de la tribune:", error);

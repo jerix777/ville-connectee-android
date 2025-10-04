@@ -8,7 +8,7 @@ export type JukeboxSessionInsert = Omit<JukeboxSession, 'id' | 'created_at' | 'u
 
 // Music Management
 export const getMusicList = async (quartier_id?: string) => {
-  let query = supabase
+  let query = (supabase as any)
     .from("musiques")
     .select("*")
     .order("created_at", { ascending: false });
@@ -19,12 +19,12 @@ export const getMusicList = async (quartier_id?: string) => {
 
   const { data, error } = await query;
   if (error) throw error;
-  return data;
+  return data as any;
 };
 
 export const addPlaylistToQueue = async (playlistId: string, sessionId: string) => {
   // Get all musiques from the playlist
-  const { data: playlistMusiques, error: playlistError } = await supabase
+  const { data: playlistMusiques, error: playlistError } = await (supabase as any)
     .from('playlist_musiques')
     .select('musique_id')
     .eq('playlist_id', playlistId);
@@ -38,7 +38,7 @@ export const addPlaylistToQueue = async (playlistId: string, sessionId: string) 
   if (!user) throw new Error('Utilisateur non connecté');
 
   // Get current max position in queue
-  const { data: queueItems } = await supabase
+  const { data: queueItems } = await (supabase as any)
     .from('session_queue')
     .select('position')
     .eq('session_id', sessionId)
@@ -46,16 +46,16 @@ export const addPlaylistToQueue = async (playlistId: string, sessionId: string) 
     .limit(1);
 
   let nextPosition =
-    queueItems && queueItems.length > 0 ? queueItems[0].position + 1 : 1;
+    queueItems && queueItems.length > 0 ? (queueItems[0] as any).position + 1 : 1;
 
-  const newQueueItems = playlistMusiques.map((pm, index) => ({
+  const newQueueItems = playlistMusiques.map((pm: any, index: number) => ({
     session_id: sessionId,
     musique_id: pm.musique_id,
     added_by: user.id,
     position: nextPosition + index,
   }));
 
-  const { error: insertError } = await supabase
+  const { error: insertError } = await (supabase as any)
     .from('session_queue')
     .insert(newQueueItems);
 
@@ -65,7 +65,7 @@ export const addPlaylistToQueue = async (playlistId: string, sessionId: string) 
 };
 
 export const removeFromPlaylist = async (playlistMusiqueId: string) => {
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from("playlist_musiques")
     .delete()
     .eq("id", playlistMusiqueId);
@@ -91,22 +91,22 @@ export const uploadMusic = async (musicData: MusiqueInsert, file: File) => {
     .getPublicUrl(fileName);
 
   // Save music data
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("musiques")
     .insert({
       ...musicData,
       file_url: publicUrl,
       uploaded_by: user.id,
-    })
+    } as any)
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+  return data as any;
 };
 
 export const deleteMusic = async (id: string) => {
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from("musiques")
     .delete()
     .eq("id", id);
@@ -116,7 +116,7 @@ export const deleteMusic = async (id: string) => {
 
 // Playlist Management
 export const getPlaylists = async () => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("playlists")
     .select(`
       *,
@@ -128,29 +128,29 @@ export const getPlaylists = async () => {
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return data;
+  return data as any;
 };
 
 export const createPlaylist = async (playlistData: Omit<PlaylistInsert, 'created_by' | 'id' | 'created_at' | 'updated_at' | 'quartier_id'>) => {
   const user = (await supabase.auth.getUser()).data.user;
   if (!user) throw new Error("Utilisateur non connecté");
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("playlists")
     .insert({
       ...playlistData,
       created_by: user.id,
-    })
+    } as any)
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+  return data as any;
 };
 
 export const addToPlaylist = async (playlistId: string, musiqueId: string) => {
   // Get next position
-  const { data: existingItems } = await supabase
+  const { data: existingItems } = await (supabase as any)
     .from("playlist_musiques")
     .select("position")
     .eq("playlist_id", playlistId)
@@ -158,26 +158,26 @@ export const addToPlaylist = async (playlistId: string, musiqueId: string) => {
     .limit(1);
 
   const nextPosition = existingItems && existingItems.length > 0 
-    ? existingItems[0].position + 1 
+    ? (existingItems[0] as any).position + 1 
     : 1;
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("playlist_musiques")
     .insert({
       playlist_id: playlistId,
       musique_id: musiqueId,
       position: nextPosition,
-    })
+    } as any)
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+  return data as any;
 };
 
 // Jukebox Sessions
 export const getActiveSessions = async () => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("jukebox_sessions")
     .select(`
       *,
@@ -188,41 +188,41 @@ export const getActiveSessions = async () => {
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return data;
+  return data as any;
 };
 
 export const createSession = async (sessionData: JukeboxSessionInsert) => {
   const user = (await supabase.auth.getUser()).data.user;
   if (!user) throw new Error("Utilisateur non connecté");
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("jukebox_sessions")
     .insert({
       ...sessionData,
       host_user_id: user.id,
-    })
+    } as any)
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+  return data as any;
 };
 
 export const joinSession = async (sessionId: string) => {
   const user = (await supabase.auth.getUser()).data.user;
   if (!user) throw new Error("Utilisateur non connecté");
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("session_participants")
     .insert({
       session_id: sessionId,
       user_id: user.id,
-    })
+    } as any)
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+  return data as any;
 };
 
 export const addToQueue = async (sessionId: string, musiqueId: string) => {
@@ -230,7 +230,7 @@ export const addToQueue = async (sessionId: string, musiqueId: string) => {
   if (!user) throw new Error("Utilisateur non connecté");
 
   // Get next position in queue
-  const { data: queueItems } = await supabase
+  const { data: queueItems } = await (supabase as any)
     .from("session_queue")
     .select("position")
     .eq("session_id", sessionId)
@@ -238,26 +238,26 @@ export const addToQueue = async (sessionId: string, musiqueId: string) => {
     .limit(1);
 
   const nextPosition = queueItems && queueItems.length > 0 
-    ? queueItems[0].position + 1 
+    ? (queueItems[0] as any).position + 1 
     : 1;
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("session_queue")
     .insert({
       session_id: sessionId,
       musique_id: musiqueId,
       added_by: user.id,
       position: nextPosition,
-    })
+    } as any)
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+  return data as any;
 };
 
 export const getSessionQueue = async (sessionId: string) => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("session_queue")
     .select(`
       *,
@@ -269,7 +269,7 @@ export const getSessionQueue = async (sessionId: string) => {
     .order("position", { ascending: true });
 
   if (error) throw error;
-  return data;
+  return data as any;
 };
 
 export const updateSessionState = async (
@@ -280,13 +280,13 @@ export const updateSessionState = async (
     is_playing?: boolean; 
   }
 ) => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("jukebox_sessions")
-    .update(updates)
+    .update(updates as any)
     .eq("id", sessionId)
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+  return data as any;
 };

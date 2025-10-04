@@ -32,7 +32,7 @@ export interface ServiceCommerceInput {
 
 export async function fetchServicesCommerces(): Promise<ServiceCommerce[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("services_commerces")
       .select("*, quartiers(nom)")
       .order("created_at", { ascending: false });
@@ -47,7 +47,7 @@ export async function fetchServicesCommerces(): Promise<ServiceCommerce[]> {
       return [];
     }
 
-    return data as ServiceCommerce[];
+    return data as any;
   } catch (error) {
     console.error("Erreur:", error);
     toast({
@@ -61,7 +61,7 @@ export async function fetchServicesCommerces(): Promise<ServiceCommerce[]> {
 
 export async function fetchServicesByCategory(categorie: string): Promise<ServiceCommerce[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("services_commerces")
       .select("*, quartiers(nom)")
       .eq("categorie", categorie)
@@ -77,7 +77,7 @@ export async function fetchServicesByCategory(categorie: string): Promise<Servic
       return [];
     }
 
-    return data as ServiceCommerce[];
+    return data as any;
   } catch (error) {
     console.error("Erreur:", error);
     toast({
@@ -91,7 +91,7 @@ export async function fetchServicesByCategory(categorie: string): Promise<Servic
 
 export async function addServiceCommerce(service: ServiceCommerceInput): Promise<boolean> {
   try {
-    const { error } = await supabase.from("services_commerces").insert([service]);
+    const { error } = await (supabase as any).from("services_commerces").insert([service] as any);
 
     if (error) {
       console.error("Erreur lors de l'ajout du service:", error);

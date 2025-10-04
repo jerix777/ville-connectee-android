@@ -14,7 +14,7 @@ export interface Souvenir {
 }
 
 export const fetchSouvenirs = async () => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("souvenirs")
     .select(`
       *,
@@ -30,11 +30,11 @@ export const fetchSouvenirs = async () => {
     throw error;
   }
 
-  return data;
+  return data as any;
 };
 
 export const fetchSouvenirsByQuartier = async (quartierId: string) => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("souvenirs")
     .select(`
       *,
@@ -51,13 +51,13 @@ export const fetchSouvenirsByQuartier = async (quartierId: string) => {
     throw error;
   }
 
-  return data;
+  return data as any;
 };
 
 export const addSouvenir = async (souvenir: Omit<Souvenir, "id" | "created_at">) => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("souvenirs")
-    .insert([{ ...souvenir, id: uuidv4() }])
+    .insert([{ ...souvenir, id: uuidv4() }] as any)
     .select();
 
   if (error) {
@@ -65,7 +65,7 @@ export const addSouvenir = async (souvenir: Omit<Souvenir, "id" | "created_at">)
     throw error;
   }
 
-  return data[0];
+  return data[0] as any;
 };
 
 export const uploadSouvenirPhoto = async (file: File) => {

@@ -82,7 +82,7 @@ export const messageService = {
     if (!currentUserId) throw new Error('User not authenticated');
 
     // Try to find existing conversation
-    const { data: existing } = await supabase
+    const { data: existing } = await (supabase as any)
       .from('conversations')
       .select('*')
       .or(`and(participant1_id.eq.${currentUserId},participant2_id.eq.${otherUserId}),and(participant1_id.eq.${otherUserId},participant2_id.eq.${currentUserId})`)
@@ -91,12 +91,12 @@ export const messageService = {
     if (existing) return existing;
 
     // Create new conversation
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('conversations')
       .insert({
         participant1_id: currentUserId,
         participant2_id: otherUserId
-      })
+      } as any)
       .select()
       .single();
 
@@ -109,25 +109,25 @@ export const messageService = {
     const currentUserId = (await supabase.auth.getUser()).data.user?.id;
     if (!currentUserId) throw new Error('User not authenticated');
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('messages')
       .insert({
         conversation_id: conversationId,
         sender_id: currentUserId,
         content
-      })
+      } as any)
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return data as any;
   },
 
   // Mark message as read
   async markAsRead(messageId: string) {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('messages')
-      .update({ read_at: new Date().toISOString() })
+      .update({ read_at: new Date().toISOString() } as any)
       .eq('id', messageId);
 
     if (error) throw error;
@@ -138,9 +138,9 @@ export const messageService = {
     const currentUserId = (await supabase.auth.getUser()).data.user?.id;
     if (!currentUserId) throw new Error('User not authenticated');
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('messages')
-      .update({ read_at: new Date().toISOString() })
+      .update({ read_at: new Date().toISOString() } as any)
       .eq('conversation_id', conversationId)
       .neq('sender_id', currentUserId)
       .is('read_at', null);
@@ -153,7 +153,7 @@ export const messageService = {
     const currentUserId = (await supabase.auth.getUser()).data.user?.id;
     if (!currentUserId) throw new Error('User not authenticated');
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('messages')
       .delete()
       .eq('id', messageId)
@@ -167,16 +167,16 @@ export const messageService = {
     const currentUserId = (await supabase.auth.getUser()).data.user?.id;
     if (!currentUserId) throw new Error('User not authenticated');
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('messages')
-      .update({ content: newContent })
+      .update({ content: newContent } as any)
       .eq('id', messageId)
       .eq('sender_id', currentUserId) // Only allow users to edit their own messages
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return data as any;
   },
 
   // Delete a conversation
@@ -184,7 +184,7 @@ export const messageService = {
     const currentUserId = (await supabase.auth.getUser()).data.user?.id;
     if (!currentUserId) throw new Error('User not authenticated');
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('conversations')
       .delete()
       .eq('id', conversationId)
