@@ -20,7 +20,7 @@ export interface RadioCategory {
 
 export const radioService = {
   async getAll(categoryId?: string): Promise<Radio[]> {
-    let query = supabase
+    let query = (supabase as any)
       .from('radios')
       .select('*')
       .eq('is_active', true);
@@ -36,11 +36,11 @@ export const radioService = {
       throw error;
     }
 
-    return data || [];
+    return (data as Radio[]) || [];
   },
 
   async getCategories(): Promise<RadioCategory[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('radio_categories')
       .select('*')
       .order('name');
@@ -50,11 +50,11 @@ export const radioService = {
       throw error;
     }
 
-    return data || [];
+    return (data as RadioCategory[]) || [];
   },
 
   async getById(id: string): Promise<Radio> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('radios')
       .select('*')
       .eq('id', id)
@@ -65,11 +65,11 @@ export const radioService = {
       throw error;
     }
 
-    return data;
+    return data as Radio;
   },
 
   async create(radio: Omit<Radio, 'id' | 'created_at' | 'updated_at' | 'created_by'>): Promise<Radio> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('radios')
       .insert({
         ...radio,
@@ -83,11 +83,11 @@ export const radioService = {
       throw error;
     }
 
-    return data;
+    return data as Radio;
   },
 
   async update(id: string, updates: Partial<Omit<Radio, 'id' | 'created_at' | 'updated_at' | 'created_by'>>): Promise<Radio> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('radios')
       .update(updates)
       .eq('id', id)
@@ -99,11 +99,11 @@ export const radioService = {
       throw error;
     }
 
-    return data;
+    return data as Radio;
   },
 
   async delete(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('radios')
       .delete()
       .eq('id', id);

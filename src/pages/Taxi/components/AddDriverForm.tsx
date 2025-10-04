@@ -77,10 +77,15 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
   });
 
   const onSubmit = (data: AddDriverFormValues) => {
-    const driverData: TaxiDriverInsert = {
-      ...data,
+    const driverData: any = {
+      name: data.name || '',
+      contact1: data.contact1 || '',
+      contact2: data.contact2,
+      vehicle_type: data.vehicle_type,
+      description: data.description,
+      quartier: data.quartier,
       // use the provided quartier as the location fallback (adjust as needed)
-      location: data.quartier,
+      location: data.quartier || '',
       is_available: true,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),

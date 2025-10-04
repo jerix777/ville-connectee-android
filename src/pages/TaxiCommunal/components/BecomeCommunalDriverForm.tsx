@@ -50,9 +50,18 @@ export const BecomeCommunalDriverForm = ({ onSuccess }: BecomeCommunalDriverForm
   });
 
   const mutation = useMutation({
-    mutationFn: (data: { vehicle_type: string; vehicle_model?: string; license_plate?: string }) => {
+    mutationFn: (formData: any) => {
       if (!user) throw new Error('User not authenticated');
-      return createDriverProfile(data);
+      return createDriverProfile({
+        ...formData,
+        name: user.email || 'Chauffeur',
+        contact1: user.email || '',
+        is_available: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        status: 'active',
+        location: ''
+      } as any);
     },
     onSuccess: () => {
       toast({

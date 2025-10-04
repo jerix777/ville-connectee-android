@@ -56,7 +56,7 @@ export const setLocalCommuneId = (communeId: string): void => {
 // Récupère le profil utilisateur
 export async function getUserProfile(userId: string): Promise<UserProfile | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("users_profiles")
       .select("*")
       .eq("user_id", userId)
@@ -85,7 +85,7 @@ export async function updateUserProfile(
     
     if (!existingProfile) {
       // Créer un nouveau profil si aucun n'existe
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("users_profiles")
         .insert({
           user_id: userId,
@@ -108,7 +108,7 @@ export async function updateUserProfile(
     }
     
     // Mettre à jour le profil existant
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("users_profiles")
       .update(updates)
       .eq("user_id", userId)
@@ -144,7 +144,7 @@ export async function saveSessionCommune(
     }
     
     // Vérifie si une préférence existe déjà pour ce sessionId
-    const { data: existingPref, error: queryError } = await supabase
+    const { data: existingPref, error: queryError } = await (supabase as any)
       .from("commune_preferences")
       .select("id")
       .eq("session_id", sessionId)
@@ -157,7 +157,7 @@ export async function saveSessionCommune(
     
     if (existingPref) {
       // Mise à jour
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("commune_preferences")
         .update({ commune_id: communeId })
         .eq("session_id", sessionId);
@@ -168,7 +168,7 @@ export async function saveSessionCommune(
       }
     } else {
       // Nouvelle insertion
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("commune_preferences")
         .insert({ session_id: sessionId, commune_id: communeId });
         
@@ -207,7 +207,7 @@ export async function getSessionCommune(sessionId: string): Promise<string | nul
       return localCommuneId;
     }
     
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("commune_preferences")
       .select("commune_id")
       .eq("session_id", sessionId)
@@ -218,10 +218,11 @@ export async function getSessionCommune(sessionId: string): Promise<string | nul
       return null;
     }
     
-    if (data && data.commune_id) {
+    const result = data as any;
+    if (result && result.commune_id) {
       // Met à jour aussi le stockage local
-      setLocalCommuneId(data.commune_id);
-      return data.commune_id;
+      setLocalCommuneId(result.commune_id);
+      return result.commune_id;
     }
     
     return null;

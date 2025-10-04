@@ -10,7 +10,7 @@ export const messageService = {
     const currentUserId = (await supabase.auth.getUser()).data.user?.id;
     if (!currentUserId) throw new Error('User not authenticated');
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('conversations')
       .select(`
         *,
@@ -26,7 +26,7 @@ export const messageService = {
       .limit(1, { referencedTable: 'messages' });
 
     if (error) throw error;
-    return data;
+    return data as any;
   },
 
   // Get count of unread messages for current user
@@ -34,7 +34,7 @@ export const messageService = {
     const currentUserId = (await supabase.auth.getUser()).data.user?.id;
     if (!currentUserId) throw new Error('User not authenticated');
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('messages')
       .select(`
         id,
@@ -50,7 +50,7 @@ export const messageService = {
     if (error) throw error;
 
     // Filter messages from conversations where user participates
-    const unreadMessages = data?.filter(message => {
+    const unreadMessages = (data as any[])?.filter((message: any) => {
       const conversation = message.conversations;
       return conversation && (
         conversation.participant1_id === currentUserId || 
@@ -63,7 +63,7 @@ export const messageService = {
 
   // Get messages for a specific conversation
   async getMessages(conversationId: string) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('messages')
       .select('*')
       .eq('conversation_id', conversationId)
@@ -73,7 +73,7 @@ export const messageService = {
       console.error('Error fetching messages:', error);
       throw error;
     }
-    return data;
+    return data as Message[];
   },
 
   // Create or get existing conversation between two users

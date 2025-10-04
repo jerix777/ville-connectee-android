@@ -65,39 +65,39 @@ export interface AssociationDepense {
 export const associationService = {
   // CRUD Associations
   async getAll(): Promise<Association[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('associations')
       .select('*')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data as Association[]) || [];
   },
 
   async getById(id: string): Promise<Association | null> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('associations')
       .select('*')
       .eq('id', id)
       .single();
 
     if (error) throw error;
-    return data;
+    return data as Association;
   },
 
   async create(association: Omit<Association, 'id' | 'created_at' | 'nombre_membres'>): Promise<Association> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('associations')
       .insert([association])
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return data as Association;
   },
 
   async update(id: string, updates: Partial<Association>): Promise<Association> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('associations')
       .update(updates)
       .eq('id', id)
@@ -105,11 +105,11 @@ export const associationService = {
       .single();
 
     if (error) throw error;
-    return data;
+    return data as Association;
   },
 
   async delete(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('associations')
       .delete()
       .eq('id', id);
@@ -119,7 +119,7 @@ export const associationService = {
 
   // CRUD Membres
   async getMembers(associationId: string): Promise<AssociationMembre[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('association_membres')
       .select('*')
       .eq('association_id', associationId)
@@ -130,7 +130,7 @@ export const associationService = {
     // Log sensitive member data access
     if (data && data.length > 0) {
       try {
-        await supabase.rpc('log_sensitive_data_access', {
+        await (supabase as any).rpc('log_sensitive_data_access', {
           p_resource_type: 'association_membres',
           p_resource_id: associationId,
           p_action: 'view_members'
@@ -140,22 +140,22 @@ export const associationService = {
       }
     }
     
-    return data || [];
+    return (data as AssociationMembre[]) || [];
   },
 
   async addMember(membre: Omit<AssociationMembre, 'id' | 'created_at' | 'updated_at'>): Promise<AssociationMembre> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('association_membres')
       .insert([membre])
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return data as AssociationMembre;
   },
 
   async updateMember(id: string, updates: Partial<AssociationMembre>): Promise<AssociationMembre> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('association_membres')
       .update(updates)
       .eq('id', id)
@@ -163,11 +163,11 @@ export const associationService = {
       .single();
 
     if (error) throw error;
-    return data;
+    return data as AssociationMembre;
   },
 
   async deleteMember(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('association_membres')
       .delete()
       .eq('id', id);
@@ -177,20 +177,20 @@ export const associationService = {
 
   // CRUD Annonces
   async getAnnonces(associationId: string): Promise<AssociationAnnonce[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('association_annonces')
       .select('*')
       .eq('association_id', associationId)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return (data || []) as AssociationAnnonce[];
+    return (data as AssociationAnnonce[]) || [];
   },
 
   async createAnnonce(annonce: AssociationAnnonceInsert): Promise<AssociationAnnonce> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('association_annonces')
-      .insert([annonce])
+      .insert([annonce as any])
       .select()
       .single();
 
@@ -199,9 +199,9 @@ export const associationService = {
   },
 
   async updateAnnonce(id: string, updates: Partial<AssociationAnnonce>): Promise<AssociationAnnonce> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('association_annonces')
-      .update(updates)
+      .update(updates as any)
       .eq('id', id)
       .select()
       .single();
@@ -211,7 +211,7 @@ export const associationService = {
   },
 
   async deleteAnnonce(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('association_annonces')
       .delete()
       .eq('id', id);
@@ -221,41 +221,41 @@ export const associationService = {
 
   // CRUD Dépenses
   async getDepenses(associationId: string): Promise<AssociationDepense[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('association_depenses')
       .select('*')
       .eq('association_id', associationId)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data as AssociationDepense[]) || [];
   },
 
   async createDepense(depense: AssociationDepenseInsert): Promise<AssociationDepense> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('association_depenses')
-      .insert([depense])
+      .insert([depense as any])
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return data as AssociationDepense;
   },
 
   async updateDepense(id: string, updates: Partial<AssociationDepense>): Promise<AssociationDepense> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('association_depenses')
-      .update(updates)
+      .update(updates as any)
       .eq('id', id)
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return data as AssociationDepense;
   },
 
   async deleteDepense(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('association_depenses')
       .delete()
       .eq('id', id);

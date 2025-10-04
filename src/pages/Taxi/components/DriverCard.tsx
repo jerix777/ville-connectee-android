@@ -52,19 +52,13 @@ export const DriverCard = ({ driver, onSelect }: DriverCardProps) => {
               </CardTitle>
               <p className="text-xs text-muted-foreground">
                 {getVehicleIcon(driver.vehicle_type)}{" "}
-                {driver.vehicle_model || "Véhicule standard"}
+                Véhicule standard
               </p>
             </div>
           </div>
         </div>
       </CardHeader>
       <CardContent className="pt-0">
-        {driver.license_plate && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-            <MapPin className="h-4 w-4" />
-            <span className="font-mono">{driver.license_plate}</span>
-          </div>
-        )}
         <div className="flex gap-2">
           <Button
             variant="outline"

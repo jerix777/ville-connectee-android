@@ -15,7 +15,7 @@ export async function getAnnonces(): Promise<Annonce[]> {
   try {
     // For now, we'll use the actualites table with a filter for "communiqué" type
     // This could be changed later to a dedicated table if needed
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("actualites")
       .select("*")
       .eq("type", "communiqué officiel")
@@ -27,7 +27,7 @@ export async function getAnnonces(): Promise<Annonce[]> {
     }
     
     // Map database fields to our Annonce interface
-    return (data || []).map(item => ({
+    return ((data as any[]) || []).map((item: any) => ({
       id: item.id,
       titre: item.titre,
       contenu: item.contenu,
@@ -45,7 +45,7 @@ export async function getAnnonces(): Promise<Annonce[]> {
 export async function addAnnonce(annonce: Omit<Annonce, "id" | "created_at" | "publie_le">): Promise<Annonce | null> {
   try {
     // Using the existing actualites table with a specific type
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("actualites")
       .insert([{
         titre: annonce.titre,
@@ -64,14 +64,15 @@ export async function addAnnonce(annonce: Omit<Annonce, "id" | "created_at" | "p
     
     // Map the returned data to our Annonce interface
     if (data && data[0]) {
+      const item = data[0] as any;
       return {
-        id: data[0].id,
-        titre: data[0].titre,
-        contenu: data[0].contenu,
-        emetteur: data[0].auteur || '', // Map auteur to emetteur
-        publie_le: data[0].publie_le,
-        image_url: data[0].image_url,
-        created_at: data[0].created_at
+        id: item.id,
+        titre: item.titre,
+        contenu: item.contenu,
+        emetteur: item.auteur || '', // Map auteur to emetteur
+        publie_le: item.publie_le,
+        image_url: item.image_url,
+        created_at: item.created_at
       } as Annonce;
     }
     

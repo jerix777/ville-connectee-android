@@ -38,7 +38,7 @@ export interface RestaurantBuvetteInput {
 
 export const restaurantService = {
   async getAllRestaurants(): Promise<RestaurantBuvette[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('restaurants_buvettes')
       .select('*')
       .order('created_at', { ascending: false });
@@ -48,11 +48,11 @@ export const restaurantService = {
       throw error;
     }
 
-    return (data || []) as RestaurantBuvette[];
+    return (data as RestaurantBuvette[]) || [];
   },
 
   async getRestaurantsByType(type: string): Promise<RestaurantBuvette[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('restaurants_buvettes')
       .select('*')
       .eq('type', type)
@@ -63,7 +63,7 @@ export const restaurantService = {
       throw error;
     }
 
-    return (data || []) as RestaurantBuvette[];
+    return (data as RestaurantBuvette[]) || [];
   },
 
   async getNearbyRestaurants(
@@ -73,7 +73,7 @@ export const restaurantService = {
   ): Promise<RestaurantBuvette[]> {
     // Pour l'instant, on récupère tous les restaurants et on filtre côté client
     // On peut implémenter la logique de distance plus tard
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('restaurants_buvettes')
       .select('*')
       .not('latitude', 'is', null)
@@ -85,7 +85,7 @@ export const restaurantService = {
       throw error;
     }
 
-    const allRestaurants = (data || []) as RestaurantBuvette[];
+    const allRestaurants = (data as RestaurantBuvette[]) || [];
     
     // Filtrer par distance si on a les coordonnées
     return allRestaurants.filter(restaurant => {
@@ -109,7 +109,7 @@ export const restaurantService = {
       prix_moyen: restaurant.prix_moyen ? parseFloat(restaurant.prix_moyen) : null
     };
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('restaurants_buvettes')
       .insert([restaurantData])
       .select()

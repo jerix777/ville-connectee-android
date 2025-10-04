@@ -27,7 +27,7 @@ export async function checkCommuneExists(id: string): Promise<boolean> {
   if (!id) return false;
   
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('villages')
       .select('id')
       .eq('id', id)

@@ -41,7 +41,7 @@ export async function updateExtendedUserProfile(
   profileData: Partial<Omit<ExtendedUserProfile, "id" | "user_id" | "created_at">>
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('users_profiles')
       .update(profileData)
       .eq('user_id', userId);
@@ -64,7 +64,7 @@ export async function addAutoriteZone(
   zoneData: Omit<AutoriteZone, "id" | "user_id" | "created_at">
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('autorite_zones')
       .insert({
         user_id: userId,
@@ -86,7 +86,7 @@ export async function addAutoriteZone(
 // Récupérer les zones d'autorité d'un utilisateur
 export async function getAutoriteZones(userId: string): Promise<AutoriteZone[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('autorite_zones')
       .select('*')
       .eq('user_id', userId);
@@ -96,7 +96,7 @@ export async function getAutoriteZones(userId: string): Promise<AutoriteZone[]> 
       return [];
     }
 
-    return data as AutoriteZone[];
+    return (data as AutoriteZone[]) || [];
   } catch (err) {
     console.error('Erreur inattendue:', err);
     return [];
@@ -109,7 +109,7 @@ export async function addProfessionnelCompetence(
   competenceData: Omit<ProfessionnelCompetence, "id" | "user_id" | "created_at">
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('professionnel_competences')
       .insert({
         user_id: userId,
@@ -131,7 +131,7 @@ export async function addProfessionnelCompetence(
 // Récupérer les compétences professionnelles d'un utilisateur
 export async function getProfessionnelCompetences(userId: string): Promise<ProfessionnelCompetence[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('professionnel_competences')
       .select('*')
       .eq('user_id', userId);
@@ -141,7 +141,7 @@ export async function getProfessionnelCompetences(userId: string): Promise<Profe
       return [];
     }
 
-    return data as ProfessionnelCompetence[];
+    return (data as ProfessionnelCompetence[]) || [];
   } catch (err) {
     console.error('Erreur inattendue:', err);
     return [];

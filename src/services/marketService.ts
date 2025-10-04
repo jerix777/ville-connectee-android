@@ -14,7 +14,7 @@ export interface MarketItem {
 
 export const getMarketItems = async (): Promise<MarketItem[]> => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("marche")
       .select("*");
 
@@ -23,7 +23,7 @@ export const getMarketItems = async (): Promise<MarketItem[]> => {
       return [];
     }
 
-    return data || [];
+    return (data as MarketItem[]) || [];
   } catch (err) {
     console.error("Unexpected error fetching market items:", err);
     return [];
@@ -32,9 +32,9 @@ export const getMarketItems = async (): Promise<MarketItem[]> => {
 
 export const addMarketItem = async (item: Omit<MarketItem, "id">): Promise<MarketItem | null> => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("marche")
-      .insert([item])
+      .insert([item as any])
       .select();
 
     if (error) {
@@ -42,7 +42,7 @@ export const addMarketItem = async (item: Omit<MarketItem, "id">): Promise<Marke
       return null;
     }
 
-    return data?.[0] || null;
+    return (data?.[0] as MarketItem) || null;
   } catch (err) {
     console.error("Unexpected error adding market item:", err);
     return null;

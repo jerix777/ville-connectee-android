@@ -22,7 +22,7 @@ export interface Event {
 }
 
 export const getEventTypes = async (): Promise<EventType[]> => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("event_types")
     .select("*");
 
@@ -31,11 +31,11 @@ export const getEventTypes = async (): Promise<EventType[]> => {
     return [];
   }
 
-  return data || [];
+  return (data as EventType[]) || [];
 };
 
 export const getEvents = async (): Promise<Event[]> => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("evenements")
     .select(`
       *,
@@ -47,16 +47,16 @@ export const getEvents = async (): Promise<Event[]> => {
     return [];
   }
 
-  return data?.map(event => ({
+  return ((data as any[])?.map((event: any) => ({
     ...event,
     type: event.type as unknown as EventType
-  })) || [];
+  })) || []) as Event[];
 };
 
 export const addEvent = async (event: Omit<Event, "id" | "type">): Promise<Event | null> => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("evenements")
-    .insert([event])
+    .insert([event as any])
     .select();
 
   if (error) {
@@ -64,7 +64,7 @@ export const addEvent = async (event: Omit<Event, "id" | "type">): Promise<Event
     return null;
   }
 
-  return data?.[0] || null;
+  return (data?.[0] as Event) || null;
 };
 
 // Helper function to format date for display

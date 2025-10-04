@@ -19,7 +19,7 @@ export interface Immobilier {
 
 export const getImmobilier = async (): Promise<Immobilier[]> => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("immobilier")
       .select("*")
       .order("created_at", { ascending: false });
@@ -29,7 +29,7 @@ export const getImmobilier = async (): Promise<Immobilier[]> => {
       return [];
     }
 
-    return data || [];
+    return (data as Immobilier[]) || [];
   } catch (err) {
     console.error("Erreur inattendue:", err);
     return [];
@@ -38,9 +38,9 @@ export const getImmobilier = async (): Promise<Immobilier[]> => {
 
 export const addImmobilier = async (bien: Omit<Immobilier, "id" | "created_at">): Promise<Immobilier | null> => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("immobilier")
-      .insert([bien])
+      .insert([bien as any])
       .select();
 
     if (error) {
@@ -48,7 +48,7 @@ export const addImmobilier = async (bien: Omit<Immobilier, "id" | "created_at">)
       return null;
     }
 
-    return data?.[0] || null;
+    return (data?.[0] as Immobilier) || null;
   } catch (err) {
     console.error("Erreur inattendue:", err);
     return null;

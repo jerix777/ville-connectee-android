@@ -15,7 +15,7 @@ export interface Obituary {
 
 export async function getObituaries(): Promise<Obituary[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("necrologie")
       .select("*")
       .order("date_deces", { ascending: false });
@@ -25,7 +25,7 @@ export async function getObituaries(): Promise<Obituary[]> {
       return [];
     }
     
-    return data as Obituary[];
+    return (data as Obituary[]) || [];
   } catch (err) {
     console.error("Erreur inattendue:", err);
     return [];
@@ -34,7 +34,7 @@ export async function getObituaries(): Promise<Obituary[]> {
 
 export async function getObituaryById(id: string): Promise<Obituary | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("necrologie")
       .select("*")
       .eq("id", id)
@@ -54,9 +54,9 @@ export async function getObituaryById(id: string): Promise<Obituary | null> {
 
 export async function addObituary(obituary: Omit<Obituary, "id" | "created_at">): Promise<Obituary | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("necrologie")
-      .insert([obituary])
+      .insert([obituary as any])
       .select();
 
     if (error) {
@@ -64,7 +64,7 @@ export async function addObituary(obituary: Omit<Obituary, "id" | "created_at">)
       return null;
     }
     
-    return data[0] as Obituary;
+    return (data[0] as Obituary) || null;
   } catch (err) {
     console.error("Erreur inattendue:", err);
     return null;
@@ -73,9 +73,9 @@ export async function addObituary(obituary: Omit<Obituary, "id" | "created_at">)
 
 export async function updateObituary(id: string, obituary: Partial<Omit<Obituary, "id" | "created_at">>): Promise<Obituary | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("necrologie")
-      .update(obituary)
+      .update(obituary as any)
       .eq("id", id)
       .select();
 
@@ -84,7 +84,7 @@ export async function updateObituary(id: string, obituary: Partial<Omit<Obituary
       return null;
     }
     
-    return data[0] as Obituary;
+    return (data[0] as Obituary) || null;
   } catch (err) {
     console.error("Erreur inattendue:", err);
     return null;
@@ -93,7 +93,7 @@ export async function updateObituary(id: string, obituary: Partial<Omit<Obituary
 
 export async function deleteObituary(id: string): Promise<boolean> {
   try {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("necrologie")
       .delete()
       .eq("id", id);

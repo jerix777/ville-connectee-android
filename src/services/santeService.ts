@@ -23,7 +23,7 @@ export interface EtablissementSante {
 
 export const santeService = {
   async getAllEtablissements(): Promise<EtablissementSante[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('etablissements_sante')
       .select('*')
       .order('nom');
@@ -33,7 +33,7 @@ export const santeService = {
       throw error;
     }
 
-    return data || [];
+    return (data as EtablissementSante[]) || [];
   },
 
   async getEtablissementsProches(
@@ -42,7 +42,7 @@ export const santeService = {
     radiusKm: number = 10,
     type?: string
   ): Promise<EtablissementSante[]> {
-    let query = supabase
+    let query = (supabase as any)
       .from('etablissements_sante')
       .select('*');
 
@@ -60,8 +60,8 @@ export const santeService = {
     if (!data) return [];
 
     // Calculer la distance pour chaque établissement et filtrer par rayon
-    const etablissementsAvecDistance = data
-      .map(etablissement => {
+    const etablissementsAvecDistance = (data as any[])
+      .map((etablissement: any) => {
         const distance = calculateDistance(
           userLat, 
           userLon, 
@@ -77,13 +77,13 @@ export const santeService = {
       .filter(etablissement => etablissement.distance <= radiusKm)
       .sort((a, b) => a.distance - b.distance);
 
-    return etablissementsAvecDistance;
+    return etablissementsAvecDistance as EtablissementSante[];
   },
 
   async createEtablissement(etablissement: Omit<EtablissementSante, 'id' | 'created_at' | 'updated_at'>): Promise<EtablissementSante> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('etablissements_sante')
-      .insert([etablissement])
+      .insert([etablissement as any])
       .select()
       .single();
 
@@ -92,11 +92,11 @@ export const santeService = {
       throw error;
     }
 
-    return data;
+    return data as EtablissementSante;
   },
 
   async updateEtablissement(id: string, updates: Partial<EtablissementSante>): Promise<EtablissementSante> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('etablissements_sante')
       .update({ ...updates, updated_at: new Date().toISOString() })
       .eq('id', id)
@@ -108,11 +108,11 @@ export const santeService = {
       throw error;
     }
 
-    return data;
+    return data as EtablissementSante;
   },
 
   async deleteEtablissement(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('etablissements_sante')
       .delete()
       .eq('id', id);

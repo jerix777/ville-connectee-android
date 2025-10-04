@@ -50,8 +50,6 @@ const TaxiPage = () => {
       activeTab={activeTab}
       onTabChange={setActiveTab}
       hasData={hasDrivers}
-      isEmpty={driversEmpty}
-      isFiltered={driversFiltered}
       listContent={renderListContent()}
       addContent={renderAddContent()}
     />

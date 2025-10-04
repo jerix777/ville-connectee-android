@@ -23,7 +23,7 @@ export interface Professional {
 }
 
 export const getMetiers = async (): Promise<Metier[]> => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("metiers")
     .select("*");
 
@@ -32,11 +32,11 @@ export const getMetiers = async (): Promise<Metier[]> => {
     return [];
   }
 
-  return data || [];
+  return (data as Metier[]) || [];
 };
 
 export const getProfessionals = async (): Promise<Professional[]> => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("professionnels")
     .select(`
       *,
@@ -51,7 +51,7 @@ export const getProfessionals = async (): Promise<Professional[]> => {
   // Log sensitive data access
   if (data && data.length > 0) {
     try {
-      await supabase.rpc('log_sensitive_data_access', {
+      await (supabase as any).rpc('log_sensitive_data_access', {
         p_resource_type: 'professionnels',
         p_action: 'view_list'
       });
@@ -60,17 +60,17 @@ export const getProfessionals = async (): Promise<Professional[]> => {
     }
   }
 
-  return data?.map(pro => ({
+  return ((data as any[])?.map((pro: any) => ({
     ...pro,
     metier: pro.metier as unknown as Metier,
     verification_method: pro.verification_method as 'email' | 'phone' | undefined
-  })) || [];
+  })) || []) as Professional[];
 };
 
 export const addProfessional = async (professional: Omit<Professional, "id" | "metier">): Promise<Professional | null> => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("professionnels")
-    .insert([professional])
+    .insert([professional as any])
     .select();
 
   if (error) {
@@ -78,10 +78,10 @@ export const addProfessional = async (professional: Omit<Professional, "id" | "m
     return null;
   }
 
-  return data?.[0] ? {
-    ...data[0],
+  return (data?.[0] ? {
+    ...(data[0] as any),
     verification_method: data[0].verification_method as 'email' | 'phone' | undefined
-  } : null;
+  } : null) as Professional;
 };
 
 // Fonction pour demander la vérification d'un professionnel
@@ -91,7 +91,7 @@ export const requestProfessionalVerification = async (
 ): Promise<{ success: boolean; verificationCode?: string; error?: string }> => {
   try {
     // Log verification request
-    await supabase.rpc('log_sensitive_data_access', {
+    await (supabase as any).rpc('log_sensitive_data_access', {
       p_resource_type: 'professionnels',
       p_resource_id: professionalId,
       p_action: 'verification_request'
@@ -100,7 +100,7 @@ export const requestProfessionalVerification = async (
     console.warn("Failed to log verification request:", logError);
   }
 
-  const { data, error } = await supabase.rpc('request_professional_verification', {
+  const { data, error } = await (supabase as any).rpc('request_professional_verification', {
     professional_id: professionalId,
     method: method
   });
@@ -118,7 +118,7 @@ export const verifyProfessional = async (
   professionalId: string, 
   verificationCode: string
 ): Promise<{ success: boolean; message?: string; error?: string }> => {
-  const { data, error } = await supabase.rpc('verify_professional', {
+  const { data, error } = await (supabase as any).rpc('verify_professional', {
     professional_id: professionalId,
     verification_code: verificationCode
   });
@@ -158,7 +158,7 @@ export const getMyProfessionalProfile = async (): Promise<Professional | null> =
     return null;
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("professionnels")
     .select(`
       *,
@@ -172,11 +172,11 @@ export const getMyProfessionalProfile = async (): Promise<Professional | null> =
     return null;
   }
 
-  return data ? {
-    ...data,
+  return (data ? {
+    ...(data as any),
     metier: data.metier as unknown as Metier,
     verification_method: data.verification_method as 'email' | 'phone' | undefined
-  } : null;
+  } : null) as Professional;
 };
 
 // Fonction pour lier un professionnel existant à l'utilisateur connecté
@@ -185,7 +185,7 @@ export const linkProfessionalToUser = async (
   email: string,
   phone?: string
 ): Promise<{ success: boolean; message?: string; error?: string }> => {
-  const { data, error } = await supabase.rpc('link_professional_to_user', {
+  const { data, error } = await (supabase as any).rpc('link_professional_to_user', {
     professional_id: professionalId,
     user_email: email,
     user_phone: phone

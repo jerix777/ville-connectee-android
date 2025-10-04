@@ -16,7 +16,7 @@ export interface Hotel {
 
 export const hotelService = {
   async getAllHotels(): Promise<Hotel[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('hotels')
       .select('*')
       .order('created_at', { ascending: false });
@@ -26,11 +26,11 @@ export const hotelService = {
       throw error;
     }
 
-    return data || [];
+    return (data as Hotel[]) || [];
   },
 
   async addHotel(hotelData: HotelFormInput): Promise<Hotel> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('hotels')
       .insert([hotelData])
       .select()
@@ -41,6 +41,6 @@ export const hotelService = {
       throw error;
     }
 
-    return data;
+    return data as Hotel;
   },
 };

@@ -40,7 +40,7 @@ export interface StationCarburantInput {
 
 export const carburantService = {
   async getAllStations(): Promise<StationCarburant[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('stations_carburant')
       .select('*')
       .order('nom');
@@ -49,7 +49,7 @@ export const carburantService = {
       throw error;
     }
 
-    return data || [];
+    return (data as StationCarburant[]) || [];
   },
 
   async getNearbyStations(
@@ -58,7 +58,7 @@ export const carburantService = {
     radiusKm: number = 10,
     type?: string
   ): Promise<StationCarburant[]> {
-    let query = supabase
+    let query = (supabase as any)
       .from('stations_carburant')
       .select('*')
       .not('latitude', 'is', null)
@@ -77,7 +77,7 @@ export const carburantService = {
             if (!data) return [];
 
             // Filtrer les services null et les convertir en array vide si nécessaire
-            const cleanedData = data.map(station => ({
+            const cleanedData = (data as any[]).map((station: any) => ({
               ...station,
               services: station.services || []
             }));
@@ -96,13 +96,13 @@ export const carburantService = {
       .filter(station => station.distance <= radiusKm)
       .sort((a, b) => a.distance - b.distance);
 
-    return stationsWithDistance;
+    return stationsWithDistance as StationCarburant[];
   },
 
   async createStation(station: Omit<StationCarburant, 'id' | 'created_at' | 'updated_at'>): Promise<StationCarburant> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('stations_carburant')
-      .insert([station])
+      .insert([station as any])
       .select()
       .single();
 
@@ -110,13 +110,13 @@ export const carburantService = {
       throw error;
     }
 
-    return data;
+    return data as StationCarburant;
   },
 
   async updateStation(id: string, updates: Partial<StationCarburant>): Promise<StationCarburant> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('stations_carburant')
-      .update(updates)
+      .update(updates as any)
       .eq('id', id)
       .select()
       .single();
@@ -125,11 +125,11 @@ export const carburantService = {
       throw error;
     }
 
-    return data;
+    return data as StationCarburant;
   },
 
   async deleteStation(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('stations_carburant')
       .delete()
       .eq('id', id);
@@ -149,7 +149,7 @@ export const carburantService = {
       prix_gaz: station.prix_gaz ? parseFloat(station.prix_gaz) : null
     };
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('stations_carburant')
       .insert([stationData])
       .select()
@@ -159,7 +159,7 @@ export const carburantService = {
       throw error;
     }
 
-    return data;
+    return data as StationCarburant;
   },
 
   async uploadStationImage(file: File): Promise<string> {
