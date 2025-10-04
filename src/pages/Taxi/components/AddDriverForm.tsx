@@ -147,7 +147,7 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
                 name="vehicle_type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Type de véhicule *</FormLabel>
+                    <FormLabel>Type de moto *</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
