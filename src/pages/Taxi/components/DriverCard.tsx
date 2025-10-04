@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TaxiDriver } from "@/services/taxiService";
-import { BikeIcon, MapPinIcon, PhoneIcon, MessageSquareIcon } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { Bike, MapPin, Phone, MessageSquare } from "lucide-react";
+import { toast } from "sonner";
 
 interface DriverCardProps {
   driver: TaxiDriver;
@@ -10,15 +10,20 @@ interface DriverCardProps {
 }
 
 export const DriverCard = ({ driver, onSelect }: DriverCardProps) => {
-  const handleContact = (contact: string, driverName: string) => {
+  const handleContact = (contact: string) => {
     window.location.href = `tel:${contact}`;
   };
 
   const handleWhatsApp = (contact: string, driverName: string, village: string) => {
+    const formattedContact = contact.replace(/\D/g, '');
+    if (!formattedContact) {
+      toast.error("Le numéro de contact n'est pas valide");
+      return;
+    }
     const message = encodeURIComponent(
       `Bonjour ${driverName}, je souhaiterais un transport vers ${village}.`
     );
-    const whatsappUrl = `https://wa.me/${contact.replace(/\D/g, '')}?text=${message}`;
+    const whatsappUrl = `https://wa.me/${formattedContact}?text=${message}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -39,22 +44,34 @@ export const DriverCard = ({ driver, onSelect }: DriverCardProps) => {
         <div className="flex items-start gap-3">
           <div className="flex-1 space-y-2">
             <div className="flex items-center gap-2">
-              <BikeIcon className="w-4 h-4 text-muted-foreground" />
+              <Bike className="w-4 h-4 text-muted-foreground" />
               <span className="text-sm font-medium capitalize">
-                {driver.vehicle_type === 'moto' ? 'Moto-taxi' : 'Tricycle'}
+                {(() => {
+                  switch (driver.vehicle_type) {
+                    case 'moto2places':
+                      return 'Moto 2 places';
+                    case 'moto4places':
+                      return 'Moto 4 places (Saloni)';
+                    case 'motoportebagage':
+                      return 'Moto tricycle Bagages';
+                    default:
+                      return 'Type de véhicule inconnu';
+                  }
+                })()
+              }
               </span>
             </div>
 
-            {driver.description && (
+            {/* {driver.description && (
               <p className="text-sm text-muted-foreground line-clamp-2">
                 {driver.description}
               </p>
             )}
 
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <MapPinIcon className="w-4 h-4" />
+              <MapPin className="w-4 h-4" />
               <span>{driver.villages?.nom || 'Village non spécifié'}</span>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -62,9 +79,9 @@ export const DriverCard = ({ driver, onSelect }: DriverCardProps) => {
           <Button 
             variant="default" 
             className="flex-1"
-            onClick={() => handleContact(driver.contact1, driver.name)}
+            onClick={() => handleContact(driver.contact1)}
           >
-            <PhoneIcon className="w-4 h-4 mr-2" />
+            <Phone className="w-4 h-4 mr-2" />
             Appeler
           </Button>
           
@@ -72,7 +89,7 @@ export const DriverCard = ({ driver, onSelect }: DriverCardProps) => {
             variant="outline"
             onClick={() => handleWhatsApp(driver.contact1, driver.name, driver.villages?.nom || 'Village')}
           >
-            <MessageSquareIcon className="w-4 h-4" />
+            <MessageSquare className="w-4 h-4" />
           </Button>
         </div>
       </CardContent>

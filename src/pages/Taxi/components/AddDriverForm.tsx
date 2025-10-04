@@ -33,8 +33,9 @@ const formSchema = z.object({
   contact1: z.string().min(8, "Le contact principal est requis"),
   contact2: z.string().optional(),
   description: z.string().optional(),
-  village_id: z.string().min(1, "La localité est requise"),
+  village_id: z.string().optional(),
 });
+  // village_id: z.string().min(1, "La localité est requise"),
 
 type AddDriverFormValues = z.infer<typeof formSchema>;
 
@@ -105,11 +106,11 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
       contact1: data.contact1,
       contact2: data.contact2 || null,
       vehicle_type: data.vehicle_type,
-      description: data.description || null,
-      village_id: data.village_id,
       is_available: true,
       status: 'active'
     };
+      // description: data.description || null,
+      // village_id: data.village_id,
     mutation.mutate(driverData);
   };
 
@@ -154,8 +155,9 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="moto">Moto-taxi</SelectItem>
-                        <SelectItem value="mototruck">Tricycle</SelectItem>
+                        <SelectItem value="moto2places">Moto 2 places</SelectItem>
+                        <SelectItem value="moto4places">Moto 4 places (Saloni)</SelectItem>
+                        <SelectItem value="motoportebagage">Moto tricycle Bagages</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -192,7 +194,7 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
                   )}
                 />
               </div>
-
+{/* 
               <FormField
                 control={form.control}
                 name="village_id"
@@ -220,8 +222,8 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
-
+              /> */}
+{/* 
               <FormField
                 control={form.control}
                 name="description"
@@ -238,7 +240,7 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               <div className="flex justify-end gap-2">
                 <Button
