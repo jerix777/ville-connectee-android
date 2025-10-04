@@ -1928,30 +1928,50 @@ export type Database = {
           contact1: string
           contact2: string | null
           created_at: string
+          description: string | null
           id: string
           is_available: boolean
           name: string
+          status: string
+          updated_at: string
           vehicle_type: string
+          village_id: string | null
         }
         Insert: {
           contact1: string
           contact2?: string | null
           created_at?: string
+          description?: string | null
           id?: string
           is_available?: boolean
           name: string
+          status?: string
+          updated_at?: string
           vehicle_type: string
+          village_id?: string | null
         }
         Update: {
           contact1?: string
           contact2?: string | null
           created_at?: string
+          description?: string | null
           id?: string
           is_available?: boolean
           name?: string
+          status?: string
+          updated_at?: string
           vehicle_type?: string
+          village_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "taxi_drivers_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tribune: {
         Row: {

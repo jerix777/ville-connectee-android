@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -24,6 +25,7 @@ import { toast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserPlus } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import { getVillages, type Village } from "@/services/villageService";
 
 const formSchema = z.object({
   vehicle_type: z.string().min(1, "Le type de véhicule est requis"),
@@ -31,7 +33,7 @@ const formSchema = z.object({
   contact1: z.string().min(8, "Le contact principal est requis"),
   contact2: z.string().optional(),
   description: z.string().optional(),
-  localite: z.string().min(2, "La localité est requise"),
+  village_id: z.string().min(1, "La localité est requise"),
 });
 
 type AddDriverFormValues = z.infer<typeof formSchema>;
@@ -42,6 +44,27 @@ interface AddDriverFormProps {
 
 export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
   const queryClient = useQueryClient();
+  const [villages, setVillages] = useState<Village[]>([]);
+  const [loadingVillages, setLoadingVillages] = useState(true);
+
+  useEffect(() => {
+    const fetchVillages = async () => {
+      try {
+        const data = await getVillages();
+        setVillages(data);
+      } catch (error) {
+        console.error("Erreur chargement villages:", error);
+        toast({
+          title: "Erreur",
+          description: "Impossible de charger les villages",
+          variant: "destructive",
+        });
+      } finally {
+        setLoadingVillages(false);
+      }
+    };
+    fetchVillages();
+  }, []);
 
   const form = useForm<AddDriverFormValues>({
     resolver: zodResolver(formSchema),
@@ -51,7 +74,7 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
       contact1: "",
       contact2: "",
       description: "",
-      localite: "",
+      village_id: "",
     },
   });
 
@@ -78,17 +101,13 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
 
   const onSubmit = (data: AddDriverFormValues) => {
     const driverData: any = {
-      name: data.name || '',
-      contact1: data.contact1 || '',
-      contact2: data.contact2,
+      name: data.name,
+      contact1: data.contact1,
+      contact2: data.contact2 || null,
       vehicle_type: data.vehicle_type,
-      description: data.description,
-      localite: data.localite,
-      // use the provided localite as the location fallback (adjust as needed)
-      location: data.localite || '',
+      description: data.description || null,
+      village_id: data.village_id,
       is_available: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
       status: 'active'
     };
     mutation.mutate(driverData);
@@ -176,19 +195,26 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
 
               <FormField
                 control={form.control}
-                name="localite"
+                name="village_id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Localité *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormLabel>Localité (Village) *</FormLabel>
+                    <Select 
+                      onValueChange={field.onChange} 
+                      defaultValue={field.value}
+                      disabled={loadingVillages}
+                    >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Sélectionnez un type" />
+                          <SelectValue placeholder={loadingVillages ? "Chargement..." : "Sélectionnez un village"} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="moto">Moto-taxi</SelectItem>
-                        <SelectItem value="mototruck">Tricycle</SelectItem>
+                        {villages.map((village) => (
+                          <SelectItem key={village.id} value={village.id}>
+                            {village.nom}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />

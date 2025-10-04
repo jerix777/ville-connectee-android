@@ -11,7 +11,11 @@ export interface TaxiDriver {
   created_at: string;
   updated_at: string;
   status: string;
-  location: string;
+  village_id?: string;
+  villages?: {
+    id: string;
+    nom: string;
+  };
 }
 
 export type TaxiDriverInsert = Omit<TaxiDriver, 'id'>;
@@ -21,7 +25,13 @@ export type TaxiBookingInsert = any;
 export const getAvailableDrivers = async () => {
   const { data, error } = await (supabase as any)
     .from("taxi_drivers")
-    .select("*")
+    .select(`
+      *,
+      villages (
+        id,
+        nom
+      )
+    `)
     .eq("is_available", true);
   
   if (error) throw error;

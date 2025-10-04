@@ -16,11 +16,9 @@ const TaxiPage = () => {
     refresh: refreshDrivers,
     pagination: driversPagination,
     hasData: hasDrivers,
-    isEmpty: driversEmpty,
-    isFiltered: driversFiltered
   } = useDataManagement<TaxiDriver>({
     fetchData: getAvailableDrivers,
-    searchFields: ['name', 'location', 'vehicle_type'] as (keyof TaxiDriver)[],
+    searchFields: ['name', 'vehicle_type'] as (keyof TaxiDriver)[],
     itemsPerPage: 6,
     enableRealTimeRefresh: true
   });
