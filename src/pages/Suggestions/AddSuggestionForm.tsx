@@ -61,13 +61,13 @@ export function AddSuggestionForm({ onSuccess }: AddSuggestionFormProps) {
   const { data: quartiers } = useQuery({
     queryKey: ["quartiers"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("quartiers")
         .select("id, nom")
         .order("nom");
 
       if (error) throw error;
-      return data;
+      return data as any[];
     },
   });
 
@@ -181,7 +181,7 @@ export function AddSuggestionForm({ onSuccess }: AddSuggestionFormProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {quartiers?.map((quartier) => (
+                      {(quartiers as any[] || []).map((quartier: any) => (
                         <SelectItem key={quartier.id} value={quartier.id}>
                           {quartier.nom}
                         </SelectItem>

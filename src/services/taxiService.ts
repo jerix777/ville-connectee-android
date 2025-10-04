@@ -15,35 +15,35 @@ export interface TaxiDriver {
 }
 
 export type TaxiDriverInsert = Omit<TaxiDriver, 'id'>;
-export type TaxiBooking = Tables<"taxi_bookings">;
-export type TaxiBookingInsert = TablesInsert<"taxi_bookings">;
+export type TaxiBooking = any;
+export type TaxiBookingInsert = any;
 
 export const getAvailableDrivers = async () => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("taxi_drivers")
     .select("*")
     .eq("is_available", true);
   
   if (error) throw error;
-  return data || [];
+  return (data as TaxiDriver[]) || [];
 };
 
 export const createDriverProfile = async (driverData: TaxiDriverInsert) => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("taxi_drivers")
     .insert(driverData)
     .select()
     .single();
   
   if (error) throw error;
-  return data;
+  return data as TaxiDriver;
 };
 
-export const createBooking = async (bookingData: Omit<TaxiBookingInsert, 'user_id'>) => {
+export const createBooking = async (bookingData: any) => {
   const user = (await supabase.auth.getUser()).data.user;
   if (!user) throw new Error("Utilisateur non connecté");
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("taxi_bookings")
     .insert({
       ...bookingData,
@@ -53,25 +53,25 @@ export const createBooking = async (bookingData: Omit<TaxiBookingInsert, 'user_i
     .single();
   
   if (error) throw error;
-  return data;
+  return data as TaxiBooking;
 };
 
 export const getUserBookings = async () => {
   const user = (await supabase.auth.getUser()).data.user;
   if (!user) throw new Error("Utilisateur non connecté");
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("taxi_bookings")
     .select("*")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
   
   if (error) throw error;
-  return data || [];
+  return (data as TaxiBooking[]) || [];
 };
 
 export const updateBookingStatus = async (bookingId: string, status: string) => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("taxi_bookings")
     .update({ status })
     .eq("id", bookingId)
@@ -79,5 +79,5 @@ export const updateBookingStatus = async (bookingId: string, status: string) => 
     .single();
   
   if (error) throw error;
-  return data;
+  return data as TaxiBooking;
 };

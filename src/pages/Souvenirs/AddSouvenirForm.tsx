@@ -60,13 +60,13 @@ export const AddSouvenirForm = ({ onSuccess }: { onSuccess: () => void }) => {
   const { data: quartiers, isLoading: isLoadingQuartiers } = useQuery({
     queryKey: ["quartiers"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("quartiers")
         .select("id, nom")
         .order("nom");
 
       if (error) throw error;
-      return data || [];
+      return (data as any[]) || [];
     },
   });
 
@@ -255,7 +255,7 @@ export const AddSouvenirForm = ({ onSuccess }: { onSuccess: () => void }) => {
                       value={field.value || ""}
                     >
                       <option value="">Sélectionner un quartier</option>
-                      {quartiers?.map((quartier) => (
+                      {(quartiers as any[] || []).map((quartier: any) => (
                         <option key={quartier.id} value={quartier.id}>
                           {quartier.nom}
                         </option>

@@ -1,19 +1,18 @@
 import { supabase } from "@/integrations/supabase/client";
-import { Tables, TablesInsert } from "@/integrations/supabase/types";
 
-export type TaxiCommunalDriver = Tables<"taxi_drivers"> & {
+export type TaxiCommunalDriver = any & {
   profiles: {
     full_name: string;
     phone: string;
   } | null;
 };
 
-export type TaxiCommunalDriverInsert = TablesInsert<"taxi_drivers">;
-export type TaxiCommunalBooking = Tables<"taxi_bookings">;
-export type TaxiCommunalBookingInsert = TablesInsert<"taxi_bookings">;
+export type TaxiCommunalDriverInsert = any;
+export type TaxiCommunalBooking = any;
+export type TaxiCommunalBookingInsert = any;
 
 export const getAvailableCommunalDrivers = async (category: 'moto' | 'brousse', search: string = '') => {
-  let query = supabase
+  let query = (supabase as any)
     .from("taxi_drivers")
     .select(`
       *,
@@ -35,14 +34,14 @@ export const getAvailableCommunalDrivers = async (category: 'moto' | 'brousse', 
 
   const { data, error } = await query;
   if (error) throw error;
-  return data || [];
+  return (data as TaxiCommunalDriver[]) || [];
 };
 
-export const createCommunalDriverProfile = async (driverData: Omit<TaxiCommunalDriverInsert, 'user_id'>) => {
+export const createCommunalDriverProfile = async (driverData: any) => {
   const user = (await supabase.auth.getUser()).data.user;
   if (!user) throw new Error("Utilisateur non connecté");
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("taxi_drivers")
     .insert({
       ...driverData,
@@ -52,14 +51,14 @@ export const createCommunalDriverProfile = async (driverData: Omit<TaxiCommunalD
     .single();
   
   if (error) throw error;
-  return data;
+  return data as TaxiCommunalDriver;
 };
 
-export const createCommunalBooking = async (bookingData: Omit<TaxiCommunalBookingInsert, 'user_id'>) => {
+export const createCommunalBooking = async (bookingData: any) => {
   const user = (await supabase.auth.getUser()).data.user;
   if (!user) throw new Error("Utilisateur non connecté");
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("taxi_bookings")
     .insert({
       ...bookingData,
@@ -69,28 +68,28 @@ export const createCommunalBooking = async (bookingData: Omit<TaxiCommunalBookin
     .single();
   
   if (error) throw error;
-  return data;
+  return data as TaxiCommunalBooking;
 };
 
 export const getCommunalDriverBookings = async () => {
   const user = (await supabase.auth.getUser()).data.user;
   if (!user) throw new Error("Utilisateur non connecté");
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("taxi_bookings")
     .select("*")
     .eq("driver_id", user.id)
     .order("created_at", { ascending: false });
   
   if (error) throw error;
-  return data || [];
+  return (data as TaxiCommunalBooking[]) || [];
 };
 
 export const updateCommunalDriverAvailability = async (isAvailable: boolean) => {
   const user = (await supabase.auth.getUser()).data.user;
   if (!user) throw new Error("Utilisateur non connecté");
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("taxi_drivers")
     .update({ is_available: isAvailable })
     .eq("user_id", user.id)
@@ -98,5 +97,5 @@ export const updateCommunalDriverAvailability = async (isAvailable: boolean) => 
     .single();
   
   if (error) throw error;
-  return data;
+  return data as TaxiCommunalDriver;
 };

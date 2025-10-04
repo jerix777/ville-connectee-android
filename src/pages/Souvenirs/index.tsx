@@ -18,11 +18,11 @@ export default function SouvenirsPage() {
     queryFn: fetchSouvenirs,
   });
 
-  const filteredSouvenirs = (souvenirs || []).filter((souvenir) => {
+  const filteredSouvenirs = ((souvenirs as any[]) || []).filter((souvenir: any) => {
     const matchesSearch = !searchQuery || 
-      souvenir.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      souvenir.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      souvenir.auteur.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      souvenir.titre?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      souvenir.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      souvenir.auteur?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (souvenir.quartiers?.nom &&
         souvenir.quartiers.nom.toLowerCase().includes(searchQuery.toLowerCase()));
     
@@ -51,8 +51,8 @@ export default function SouvenirsPage() {
       onTabChange={setActiveTab}
       listContent={
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {paginatedSouvenirs.map((souvenir) => (
-            <SouvenirCard key={souvenir.id} souvenir={souvenir} />
+          {(paginatedSouvenirs as any[]).map((souvenir: any) => (
+            <SouvenirCard key={souvenir.id} souvenir={souvenir as any} />
           ))}
         </div>
       }
