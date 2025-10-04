@@ -32,7 +32,7 @@ const TaxiPage = () => {
   );
 
   const renderAddContent = () => (
-    <AddDriverForm onClose={() => setActiveTab('list')} />
+    <AddDriverForm onClose={() => setActiveTab('liste')} />
   );
 
   return (
