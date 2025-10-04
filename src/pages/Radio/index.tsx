@@ -71,7 +71,7 @@ export default function RadioPage() {
         : "Aucune station radio disponible"}
       emptyStateDescription={isFiltered
         ? "Essayez de modifier vos critères de recherche"
-        : "Les administrateurs peuvent ajouter des stations radio"}
+        : "Seuls les administrateurs peuvent ajouter des stations radio"}
       // Pagination
       currentPage={pagination.currentPage}
       totalPages={pagination.totalPages}

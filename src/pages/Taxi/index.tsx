@@ -2,7 +2,7 @@ import { PageLayout } from '@/components/common/PageLayout';
 import { getAvailableDrivers, type TaxiDriver } from '@/services/taxiService';
 import { FindRide } from './components/FindRide';
 import { AddDriverForm } from './components/AddDriverForm';
-import { BikeIcon, Car } from 'lucide-react';
+import { BikeIcon } from 'lucide-react';
 import { useDataManagement } from '@/hooks/useDataManagement';
 
 const TaxiPage = () => {
