@@ -43,13 +43,13 @@ export async function setUserRole(
       }
     }
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('user_roles')
       .upsert({
         user_id: userId,
         role,
         sub_role: subRole
-      }, {
+      } as any, {
         onConflict: 'user_id,role'
       });
 
@@ -68,7 +68,7 @@ export async function setUserRole(
 // Récupérer le rôle d'un utilisateur
 export async function getUserRole(userId: string): Promise<UserRole | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('user_roles')
       .select('*')
       .eq('user_id', userId)
@@ -79,7 +79,7 @@ export async function getUserRole(userId: string): Promise<UserRole | null> {
       return null;
     }
 
-    return data as UserRole;
+    return data as any;
   } catch (err) {
     console.error('Erreur inattendue:', err);
     return null;
@@ -89,7 +89,7 @@ export async function getUserRole(userId: string): Promise<UserRole | null> {
 // Vérifier si un utilisateur a un rôle spécifique
 export async function checkUserRole(userId: string, role: UserRoleType): Promise<boolean> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .rpc('has_role', { _user_id: userId, _role: role });
 
     if (error) {

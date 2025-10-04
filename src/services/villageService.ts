@@ -13,7 +13,7 @@ export interface Village {
 
 export async function getVillages(): Promise<Village[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("villages")
       .select("*")
       .order("nom");
@@ -23,7 +23,7 @@ export async function getVillages(): Promise<Village[]> {
       return [];
     }
     
-    return data as Village[];
+    return data as any;
   } catch (err) {
     console.error("Erreur inattendue:", err);
     return [];
@@ -32,7 +32,7 @@ export async function getVillages(): Promise<Village[]> {
 
 export async function getVillageById(id: string): Promise<Village | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("villages")
       .select("*")
       .eq("id", id)
@@ -43,7 +43,7 @@ export async function getVillageById(id: string): Promise<Village | null> {
       return null;
     }
     
-    return data as Village;
+    return data as any;
   } catch (err) {
     console.error("Erreur inattendue:", err);
     return null;
@@ -52,9 +52,9 @@ export async function getVillageById(id: string): Promise<Village | null> {
 
 export async function addVillage(village: Omit<Village, "id" | "created_at">): Promise<Village | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("villages")
-      .insert([village])
+      .insert([village] as any)
       .select();
 
     if (error) {
@@ -62,7 +62,7 @@ export async function addVillage(village: Omit<Village, "id" | "created_at">): P
       return null;
     }
     
-    return data[0] as Village;
+    return data[0] as any;
   } catch (err) {
     console.error("Erreur inattendue:", err);
     return null;
@@ -71,9 +71,9 @@ export async function addVillage(village: Omit<Village, "id" | "created_at">): P
 
 export async function updateVillage(id: string, village: Partial<Omit<Village, "id" | "created_at">>): Promise<Village | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("villages")
-      .update(village)
+      .update(village as any)
       .eq("id", id)
       .select();
 
@@ -82,7 +82,7 @@ export async function updateVillage(id: string, village: Partial<Omit<Village, "
       return null;
     }
     
-    return data[0] as Village;
+    return data[0] as any;
   } catch (err) {
     console.error("Erreur inattendue:", err);
     return null;
@@ -91,7 +91,7 @@ export async function updateVillage(id: string, village: Partial<Omit<Village, "
 
 export async function deleteVillage(id: string): Promise<boolean> {
   try {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("villages")
       .delete()
       .eq("id", id);

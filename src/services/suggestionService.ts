@@ -28,7 +28,7 @@ export interface SuggestionInput {
 
 export async function fetchSuggestions(): Promise<Suggestion[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("suggestions")
       .select("*, quartiers(nom)")
       .order("created_at", { ascending: false });
@@ -43,7 +43,7 @@ export async function fetchSuggestions(): Promise<Suggestion[]> {
       return [];
     }
 
-    return data as Suggestion[];
+    return data as any;
   } catch (error) {
     console.error("Erreur:", error);
     toast({
@@ -57,7 +57,7 @@ export async function fetchSuggestions(): Promise<Suggestion[]> {
 
 export async function addSuggestion(suggestion: SuggestionInput): Promise<boolean> {
   try {
-    const { error } = await supabase.from("suggestions").insert([suggestion]);
+    const { error } = await (supabase as any).from("suggestions").insert([suggestion] as any);
 
     if (error) {
       console.error("Erreur lors de l'ajout de la suggestion:", error);
