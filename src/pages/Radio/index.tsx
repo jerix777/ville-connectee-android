@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
-import { Radio as RadioIcon } from 'lucide-react';
-import { PageLayout } from '@/components/common';
-import { useDataManagement } from '@/hooks/useDataManagement';
-import { radioService, Radio, RadioCategory } from '@/services/radioService';
-import { RadioCard } from './RadioCard';
-import { AddRadioForm } from './AddRadioForm';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState } from "react";
+import { BoomBox, Radio as RadioIcon } from "lucide-react";
+import { PageLayout } from "@/components/common";
+import { useDataManagement } from "@/hooks/useDataManagement";
+import { Radio, radioService } from "@/services/radioService";
+import { AddRadioForm } from "./AddRadioForm";
 import { useQuery } from "@tanstack/react-query";
+import { RadioList } from "./components/RadioList";
+import { CategorySelector } from "./components/CategorySelector";
 
 export default function RadioPage() {
-  const [categoryId, setCategoryId] = useState<string | undefined>();
+  const [categoryId, setCategoryId] = useState<string>("all");
+
+  const handleCategoryChange = (value: string) => {
+    setCategoryId(value);
+  };
   const {
     data: radios,
     loading,
@@ -21,11 +25,11 @@ export default function RadioPage() {
     pagination,
     hasData,
     isEmpty,
-    isFiltered
+    isFiltered,
   } = useDataManagement<Radio>({
-    fetchData: () => radioService.getAll(categoryId),
-    searchFields: ['nom', 'description'],
-    itemsPerPage: 6
+    fetchData: () => radioService.getAll(categoryId === "all" ? undefined : categoryId),
+    searchFields: ["nom", "description"],
+    itemsPerPage: 6,
   });
 
   const { data: categories = [], isLoading: isLoadingCategories } = useQuery({
@@ -33,62 +37,41 @@ export default function RadioPage() {
     queryFn: radioService.getCategories,
   });
 
-  const renderRadioList = () => (
-    <div className="space-y-4">
-      {pagination.paginatedData.map((radio) => (
-        <RadioCard key={radio.id} radio={radio} />
-      ))}
-    </div>
-  );
+  const handleClose = () => {
+    refresh();
+    setActiveTab("liste");
+  };
 
   return (
     <PageLayout
       moduleId="radio"
       title="Ecouter la radio"
       description="Désormais vous pouvez écouter les radios dont le signal n'arrive pas à Ouellé. Des radios en anglais, espagnol et allemand ont été ajoutées à la liste pour les élèves et les amoureux de ces langues. Souhaiteriez-vous qu'on vous ajoute une chaîne que vous aimez ? Veuillez nous le dire en cliquant ici"
-      icon={RadioIcon}
+      icon={BoomBox}
       activeTab={activeTab}
       onTabChange={setActiveTab}
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
       additionalOptions={
-        <Select onValueChange={setCategoryId} defaultValue={categoryId}>
-          <SelectTrigger>
-            <SelectValue placeholder={isLoadingCategories ? "Chargement..." : "Toutes les catégories"} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">Toutes les catégories</SelectItem>
-            {categories.map((category) => (
-              <SelectItem key={category.id} value={category.id}>
-                {category.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <CategorySelector
+          categories={categories}
+          value={categoryId}
+          onChange={handleCategoryChange}
+          isLoading={isLoadingCategories}
+        />
       }
-      
-      // Content
       loading={loading}
       hasData={hasData}
-      listContent={renderRadioList()}
-      addContent={<AddRadioForm onClose={() => {
-        refresh();
-        setActiveTab("liste");
-      }} />}
-      
+      listContent={<RadioList radios={pagination.paginatedData} />}
+      addContent={<AddRadioForm onClose={handleClose} />}
       // Empty state
       emptyStateIcon={RadioIcon}
-      emptyStateTitle={
-        isFiltered 
-          ? "Aucune station trouvée" 
-          : "Aucune station radio disponible"
-      }
-      emptyStateDescription={
-        isFiltered
-          ? "Essayez de modifier vos critères de recherche"
-          : "Les administrateurs peuvent ajouter des stations radio"
-      }
-      
+      emptyStateTitle={isFiltered
+        ? "Aucune station trouvée"
+        : "Aucune station radio disponible"}
+      emptyStateDescription={isFiltered
+        ? "Essayez de modifier vos critères de recherche"
+        : "Les administrateurs peuvent ajouter des stations radio"}
       // Pagination
       currentPage={pagination.currentPage}
       totalPages={pagination.totalPages}

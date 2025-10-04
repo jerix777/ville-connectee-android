@@ -2,7 +2,7 @@ import { PageLayout } from '@/components/common/PageLayout';
 import { getAvailableDrivers, type TaxiDriver } from '@/services/taxiService';
 import { FindRide } from './components/FindRide';
 import { AddDriverForm } from './components/AddDriverForm';
-import { Car } from 'lucide-react';
+import { BikeIcon, Car } from 'lucide-react';
 import { useDataManagement } from '@/hooks/useDataManagement';
 
 const TaxiPage = () => {
@@ -42,7 +42,7 @@ const TaxiPage = () => {
       moduleId="taxi"
       title="Moto taxi"
       description="Contactez les chauffeurs de taxis de Ouellé en destination des villages pour voir leurs disponibilités"
-      icon={Car}
+      icon={BikeIcon}
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
       searchPlaceholder="Rechercher par nom, quartier..."
