@@ -1,9 +1,11 @@
+import { useEffect } from 'react';
 import { PageLayout } from '@/components/common/PageLayout';
 import { getAvailableDrivers, type TaxiDriver } from '@/services/taxiService';
 import { FindRide } from './components/FindRide';
 import { AddDriverForm } from './components/AddDriverForm';
 import { BikeIcon } from 'lucide-react';
 import { useDataManagement } from '@/hooks/useDataManagement';
+import { supabase } from '@/integrations/supabase/client';
 
 const TaxiPage = () => {
   const {
@@ -20,8 +22,29 @@ const TaxiPage = () => {
     fetchData: getAvailableDrivers,
     searchFields: ['name', 'vehicle_type'] as (keyof TaxiDriver)[],
     itemsPerPage: 6,
-    enableRealTimeRefresh: true
   });
+
+  // Écoute en temps réel des changements sur la table taxi_drivers
+  useEffect(() => {
+    const channel = supabase
+      .channel('taxi-drivers-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'taxi_drivers'
+        },
+        () => {
+          refreshDrivers();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refreshDrivers]);
 
   const renderListContent = () => (
     <FindRide 
