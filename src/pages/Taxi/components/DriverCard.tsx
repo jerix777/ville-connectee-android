@@ -26,12 +26,12 @@ export const DriverCard = ({ driver, onSelect }: DriverCardProps) => {
     switch (vehicleType) {
       case "moto":
         return "Moto-taxi";
-      case "voiture":
-        return "Taxi voiture";
-      case "minibus":
-        return "Minibus";
+      case "mototruck":
+        return "Tricycle";
+      case "taxibrousse":
+        return "Taxi-brousse";
       default:
-        return "Véhicule";
+        return "Moto-taxi";
     }
   };
 

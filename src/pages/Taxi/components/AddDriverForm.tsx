@@ -31,7 +31,7 @@ const formSchema = z.object({
   contact1: z.string().min(8, "Le contact principal est requis"),
   contact2: z.string().optional(),
   description: z.string().optional(),
-  quartier: z.string().min(2, "Le quartier est requis"),
+  localite: z.string().min(2, "La localité est requise"),
 });
 
 type AddDriverFormValues = z.infer<typeof formSchema>;
@@ -51,7 +51,7 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
       contact1: "",
       contact2: "",
       description: "",
-      quartier: "",
+      localite: "",
     },
   });
 
@@ -83,9 +83,9 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
       contact2: data.contact2,
       vehicle_type: data.vehicle_type,
       description: data.description,
-      quartier: data.quartier,
-      // use the provided quartier as the location fallback (adjust as needed)
-      location: data.quartier || '',
+      localite: data.localite,
+      // use the provided localite as the location fallback (adjust as needed)
+      location: data.localite || '',
       is_available: true,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -136,7 +136,7 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="moto">Moto-taxi</SelectItem>
-                        <SelectItem value="car">Taxi voiture</SelectItem>
+                        <SelectItem value="mototruck">Tricycle</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -176,16 +176,21 @@ export const AddDriverForm = ({ onClose }: AddDriverFormProps) => {
 
               <FormField
                 control={form.control}
-                name="quartier"
+                name="localite"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Quartier *</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Ex: Résidentiel"
-                        {...field}
-                      />
-                    </FormControl>
+                    <FormLabel>Localité *</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionnez un type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="moto">Moto-taxi</SelectItem>
+                        <SelectItem value="mototruck">Tricycle</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

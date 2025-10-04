@@ -27,7 +27,8 @@ export default function RadioPage() {
     isEmpty,
     isFiltered,
   } = useDataManagement<Radio>({
-    fetchData: () => radioService.getAll(categoryId === "all" ? undefined : categoryId),
+    fetchData: () =>
+      radioService.getAll(categoryId === "all" ? undefined : categoryId),
     searchFields: ["nom", "description"],
     itemsPerPage: 6,
   });
