@@ -50,7 +50,7 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
   // Mark messages as read when conversation is opened
   useEffect(() => {
     if (conversationId && messages && messages.length > 0) {
-      const unreadMessages = messages.filter(msg => 
+      const unreadMessages = (messages as any[]).filter((msg: any) => 
         !msg.read_at && msg.sender_id !== user?.id
       );
       
@@ -225,7 +225,7 @@ export const MessageView: React.FC<MessageViewProps> = ({ conversationId }) => {
       <MessageHeader conversationId={conversationId} />
       
       <MessageList
-        messages={messages}
+        messages={messages as any}
         isLoading={isLoading}
         currentUserId={user?.id}
         editingMessageId={editingMessageId}

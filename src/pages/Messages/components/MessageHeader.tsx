@@ -15,14 +15,14 @@ export const MessageHeader: React.FC<MessageHeaderProps> = ({ conversationId }) 
   const { data: conversation } = useQuery({
     queryKey: ['conversation', conversationId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('conversations')
         .select('participant1_id, participant2_id')
         .eq('id', conversationId)
         .single();
       
       if (error) throw error;
-      return data;
+      return data as any;
     },
     enabled: !!conversationId
   });
@@ -34,14 +34,14 @@ export const MessageHeader: React.FC<MessageHeaderProps> = ({ conversationId }) 
   const { data: otherParticipant } = useQuery({
     queryKey: ['user-profile', otherParticipantId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('users_profiles')
         .select('nom, prenom')
         .eq('user_id', otherParticipantId)
         .single();
       
       if (error) throw error;
-      return data;
+      return data as any;
     },
     enabled: !!otherParticipantId
   });

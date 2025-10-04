@@ -33,14 +33,14 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({
     queryFn: async () => {
       if (!searchTerm.trim()) return [];
       
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('users_profiles')
         .select('*')
         .or(`nom.ilike.%${searchTerm}%,prenom.ilike.%${searchTerm}%`)
         .limit(10);
       
       if (error) throw error;
-      return data;
+      return data as any[];
     },
     enabled: searchTerm.length > 2
   });
@@ -58,7 +58,7 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({
       }
 
       // Vérifier si une conversation existe déjà
-      const { data: existing } = await supabase
+      const { data: existing } = await (supabase as any)
         .from('conversations')
         .select('id')
         .or(`and(participant1_id.eq.${currentUserId},participant2_id.eq.${otherUserId}),and(participant1_id.eq.${otherUserId},participant2_id.eq.${currentUserId})`)
@@ -75,7 +75,7 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({
       }
 
       // Créer une nouvelle conversation
-      const { data: newConversation, error } = await supabase
+      const { data: newConversation, error } = await (supabase as any)
         .from('conversations')
         .insert({
           participant1_id: currentUserId,

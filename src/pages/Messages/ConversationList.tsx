@@ -72,17 +72,17 @@ export const ConversationList: React.FC<ConversationListProps> = ({
           : conv.participant1_id
       ).filter(Boolean);
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("users_profiles")
         .select("user_id, nom, prenom")
         .in("user_id", otherUserIds);
 
       if (error) throw error;
 
-      return data.reduce(
+      return (data as any[]).reduce(
         (
           acc: Record<string, { user_id: string; nom: string; prenom: string }>,
-          profile,
+          profile: any,
         ) => {
           acc[profile.user_id] = profile;
           return acc;

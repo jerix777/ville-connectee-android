@@ -256,8 +256,8 @@ export function AddSanteProximiteForm(
                     >
                         Annuler
                     </Button>
-                    <Button type="submit" variant="secondary" disabled={createMutation.isLoading}>
-                        {createMutation.isLoading
+                    <Button type="submit" disabled={createMutation.isPending}>
+                        {createMutation.isPending
                             ? "Enregistrement..."
                             : "Enregistrer"}
                     </Button>

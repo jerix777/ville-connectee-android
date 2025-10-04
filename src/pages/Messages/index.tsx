@@ -90,10 +90,10 @@ const MessagesPage = () => {
   };
 
   // Filtrer les conversations
-  const filteredConversations = conversations.filter(conversation => {
+  const filteredConversations = (conversations as any[]).filter((conversation: any) => {
     if (!searchTerm) return true;
     const lastMessage = conversation.messages?.[0];
-    return lastMessage?.content.toLowerCase().includes(searchTerm.toLowerCase());
+    return lastMessage?.content?.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   if (!user) {
@@ -178,7 +178,7 @@ const MessagesPage = () => {
         listContent={
           <div className="space-y-2">
             <ConversationList
-              conversations={filteredConversations}
+              conversations={filteredConversations as any}
               isLoading={isLoading}
               selectedConversationId={selectedConversationId}
               onSelectConversation={setSelectedConversationId}
