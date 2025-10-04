@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, Building2, Calendar, DollarSign, Eye, Edit, Trash2 } from "lucide-react";
+import { Users, Blend, Calendar, DollarSign, Eye, Edit, Trash2, Phone } from "lucide-react";
 import { Association } from "@/services/associationService";
 
 interface AssociationCardProps {
@@ -43,7 +43,7 @@ export function AssociationCard({ association, onEdit, onDelete, canManage = fal
               />
             ) : (
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <Building2 className="h-6 w-6 text-primary" />
+                <Blend className="h-6 w-6 text-primary" />
               </div>
             )}
             <div className="flex-1">
@@ -99,7 +99,7 @@ export function AssociationCard({ association, onEdit, onDelete, canManage = fal
             <span>Créée le {new Date(association.date_creation).toLocaleDateString('fr-FR')}</span>
           </div>
           <div className="flex items-center gap-2">
-            <DollarSign className="h-4 w-4" />
+            <Phone className="h-4 w-4" />
             <span>Contact: {association.contact}</span>
           </div>
         </div>

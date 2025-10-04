@@ -217,7 +217,7 @@ export default function MarchePage() {
       moduleId="marche"
       title="Marché"
       description="Achetez, vendez et échangez des biens avec d'autres membres de la communauté"
-      icon={ShoppingBag}
+      icon={ShoppingCart}
       activeTab="liste"
       onTabChange={() => {}}
       listContent={renderContent()}

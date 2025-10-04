@@ -6,7 +6,7 @@ import {
 import { PageLayout } from "@/components/common/PageLayout";
 import { DirectoryCard } from "./DirectoryCard";
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Phone } from "lucide-react";
 import { AddDirectoryEntryForm } from "./components/AddDirectoryEntryForm";
 
 export default function AnnuairePage() {
@@ -83,7 +83,7 @@ export default function AnnuairePage() {
       moduleId="annuaire"
       title="Annuaire de la commune"
       description="Trouvez tous les contacts des différents services publics et privés de Ouellé. Exemple: Ministère des sports, Inspection d'école primaire, Cantonnement des eaux et forêts..."
-      icon={Search}
+      icon={Phone}
       activeTab={activeTab}
       onTabChange={setActiveTab}
       listContent={renderContent()}

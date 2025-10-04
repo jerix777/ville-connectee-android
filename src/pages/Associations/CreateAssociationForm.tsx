@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useToast } from "@/hooks/use-toast";
 import { associationService } from "@/services/associationService";
 import { useAuth } from "@/contexts/AuthContext";
-import { ArrowLeft, Building2 } from "lucide-react";
+import { ArrowLeft, Building2, Blend } from "lucide-react";
 
 const createAssociationSchema = z.object({
   nom: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
@@ -90,7 +90,7 @@ export function CreateAssociationForm({ onSuccess, onCancel }: CreateAssociation
         </Button>
         
         <div className="flex items-center gap-3 mb-2">
-          <Building2 className="h-8 w-8 text-primary" />
+          <Blend className="h-8 w-8 text-primary" />
           <h1 className="text-3xl font-bold">Créer une association</h1>
         </div>
         <p className="text-muted-foreground">
@@ -101,9 +101,6 @@ export function CreateAssociationForm({ onSuccess, onCancel }: CreateAssociation
       <Card>
         <CardHeader>
           <CardTitle>Informations de l'association</CardTitle>
-          <CardDescription>
-            Ces informations seront visibles par tous les utilisateurs
-          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>

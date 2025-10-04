@@ -3,7 +3,7 @@ import { MainLayout } from '@/components/layout/MainLayout';
 import { PageHeader, PageTitle } from '@/components/common';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plus, Image, Edit, Trash2, MoreVertical } from 'lucide-react';
+import { Lightbulb, Plus, Image, Edit, Trash2, MoreVertical } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { getCatalogueCategories, deleteCatalogueCategory } from '@/services/catalogueService';
@@ -79,7 +79,7 @@ export function CataloguePage() {
         <PageTitle
           title="Catalogue d'idées"
           description="Parcourez les différentes catégories d'images."
-          icon={Image}
+          icon={Lightbulb}
         />
         <Button onClick={() => setShowCreateForm(true)}>
           <Plus className="mr-2 h-4 w-4" />

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Plus, Search, Building2, Calendar, DollarSign } from "lucide-react";
+import { Users, Plus, Search, Building2, Calendar, DollarSign, Blend } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -138,7 +138,7 @@ export default function AssociationsPage() {
         moduleId="associations"
         title="Associations"
         description="Découvrez et gérez les associations locales de votre communauté"
-        icon={Users}
+        icon={Blend}
         activeTab={activeTab}
         onTabChange={setActiveTab}
         searchQuery={searchQuery}
@@ -155,7 +155,7 @@ export default function AssociationsPage() {
         searchPlaceholder="Rechercher une association..."
         emptyStateTitle={isEmpty ? "Aucune association trouvée" : isFiltered ? "Aucune association ne correspond à votre recherche" : "Aucune association"}
         emptyStateDescription={isEmpty ? "Soyez le premier à créer une association dans votre communauté." : undefined}
-        emptyStateIcon={Users}
+        emptyStateIcon={Blend}
         onAddFirst={isEmpty ? handleCreateAssociation : undefined}
         addFirstText="Créer la première association"
         resultCount={pagination.paginatedData.length}

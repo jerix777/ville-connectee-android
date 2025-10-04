@@ -177,7 +177,7 @@ export function AddSuggestionForm({ onSuccess }: AddSuggestionFormProps) {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Sélectionnez un quartier" />
+                        <SelectValue placeholder="Sélectionnez un village" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>

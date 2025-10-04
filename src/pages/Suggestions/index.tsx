@@ -4,7 +4,7 @@ import { PageLayout } from "@/components/common/PageLayout";
 import { SuggestionCard } from "./SuggestionCard";
 import { AddSuggestionForm } from "./AddSuggestionForm";
 import { fetchSuggestions } from "@/services/suggestionService";
-import { Lightbulb } from "lucide-react";
+import { MicVocal } from "lucide-react";
 import { usePagination } from "@/hooks/usePagination";
 import { useQuery } from "@tanstack/react-query";
 
@@ -47,7 +47,7 @@ export default function SuggestionsPage() {
       title="Suggestions"
       description="Faites-nous vos suggestions pour améliorer la vie à Ouellé.
                    Nous les prendrons en compte"
-      icon={Lightbulb}
+      icon={MicVocal}
       activeTab={activeTab}
       onTabChange={setActiveTab}
       listContent={
