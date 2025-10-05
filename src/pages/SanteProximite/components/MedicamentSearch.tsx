@@ -70,9 +70,9 @@ export function MedicamentSearch({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="public">Public</SelectItem>
-                <SelectItem value="mutuelle">Mutuelle</SelectItem>
-                <SelectItem value="indigent">Indigent</SelectItem>
-                <SelectItem value="cmuc">CMUC</SelectItem>
+                <SelectItem value="indigent">Social</SelectItem>
+                <SelectItem value="cmuc">CMU</SelectItem>
+                <SelectItem value="mutuelle">MUGEFCI</SelectItem>
               </SelectContent>
             </Select>
           </div>
