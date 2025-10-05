@@ -32,7 +32,8 @@ export const getAvailableDrivers = async () => {
         nom
       )
     `)
-    .eq("is_available", true);
+    .eq("is_available", true)
+    .order("created_at", { ascending: false });
   
   if (error) throw error;
   return (data as TaxiDriver[]) || [];
