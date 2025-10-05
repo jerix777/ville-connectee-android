@@ -79,7 +79,7 @@ export function MedicamentSearch({
 
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
-              {medicaments.length} médicament(s) trouvé(s)
+              {/* {medicaments.length} médicament(s) trouvé(s) */}
             </p>
             {panier.length > 0 && (
               <Button
@@ -89,7 +89,7 @@ export function MedicamentSearch({
                 className="gap-2"
               >
                 <ShoppingCart size={16} />
-                Voir le panier ({panier.length})
+                Voir l'ordonnance ({panier.length})
               </Button>
             )}
           </div>
