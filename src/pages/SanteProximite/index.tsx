@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { PageLayout } from "@/components/common/PageLayout";
-import { Stethoscope, Pill } from "lucide-react";
+import { Stethoscope } from "lucide-react";
 import AddSanteProximiteForm from "./components/AddSanteProximiteForm";
-import { useQuery } from "@tanstack/react-query";
-import { type EtablissementSante, santeService } from "@/services/santeService";
-import { EtablissementCard } from "./components/EtablissementCard";
-import { Button } from "@/components/ui/button";
 import { MedicamentSearch } from "./components/MedicamentSearch";
 import { MedicamentPanierDialog } from "./components/MedicamentPanier";
-import { type Medicament, type MedicamentPanier, type RegimeType } from "@/services/medicamentService";
+import { EtablissementsList } from "./components/EtablissementsList";
+import { useEtablissements } from "./hooks/useEtablissements";
+import { useMedicamentPanier } from "./hooks/useMedicamentPanier";
 
 export default function SanteProximite() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -91,7 +89,7 @@ export default function SanteProximite() {
                   className="gap-2"
                 >
                   <Pill size={20} />
-                  Calculer le montant d'une ordonnance
+                  Calculer mon ordonnance
                 </Button>
               </div>
 

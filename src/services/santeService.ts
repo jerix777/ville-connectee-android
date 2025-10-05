@@ -37,6 +37,28 @@ export const santeService = {
     return data as EtablissementSante[];
   },
 
+  async searchEtablissements(query: string) {
+    const { data, error } = await supabase
+      .from(TABLE)
+      .select()
+      .or(`nom.ilike.%${query}%,adresse.ilike.%${query}%,description.ilike.%${query}%`)
+      .order('nom');
+
+    if (error) throw error;
+    return data as EtablissementSante[];
+  },
+
+  async getEtablissementById(id: string) {
+    const { data, error } = await supabase
+      .from(TABLE)
+      .select()
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data as EtablissementSante;
+  },
+
   async addEtablissement(etablissement: CreateEtablissementSanteDTO) {
     const timestamp = new Date().toISOString();
     const { data, error } = await supabase
