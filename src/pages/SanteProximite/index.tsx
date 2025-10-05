@@ -14,7 +14,7 @@ export default function SanteProximite() {
   const [medicamentSearchOpen, setMedicamentSearchOpen] = useState(false);
   const [panierOpen, setPanierOpen] = useState(false);
   const [panier, setPanier] = useState<MedicamentPanier[]>([]);
-  const [regime, setRegime] = useState<RegimeType>('public');
+  const [regime, setRegime] = useState<RegimeType>("public");
 
   const { data: etablissements = [], isLoading, error } = useQuery<
     EtablissementSante[]
@@ -37,21 +37,23 @@ export default function SanteProximite() {
   );
 
   const handleAddToPanier = (medicament: Medicament) => {
-    setPanier(prev => {
-      const exists = prev.find(p => p.id === medicament.id);
+    setPanier((prev) => {
+      const exists = prev.find((p) => p.id === medicament.id);
       if (exists) return prev;
       return [...prev, { ...medicament, quantite: 1 }];
     });
   };
 
   const handleUpdateQuantite = (id: string, quantite: number) => {
-    setPanier(prev => prev.map(item => 
-      item.id === id ? { ...item, quantite: Math.max(1, quantite) } : item
-    ));
+    setPanier((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, quantite: Math.max(1, quantite) } : item
+      )
+    );
   };
 
   const handleRemoveFromPanier = (id: string) => {
-    setPanier(prev => prev.filter(item => item.id !== id));
+    setPanier((prev) => prev.filter((item) => item.id !== id));
   };
 
   const handleOpenPanier = () => {
@@ -63,7 +65,7 @@ export default function SanteProximite() {
     <>
       <PageLayout
         moduleId="sante"
-        title="Pharmacies, Hôpitaux et Cliniques"
+        title="Hôpitaux et Pharmacies"
         description="Trouvez la liste des professionnels de la santé"
         icon={Stethoscope}
         iconClassName="text-blue-600"
