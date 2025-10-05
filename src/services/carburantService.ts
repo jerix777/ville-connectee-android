@@ -43,7 +43,7 @@ export const carburantService = {
     const { data, error } = await (supabase as any)
       .from('stations_carburant')
       .select('*')
-      .order('nom');
+      .order('created_at', { ascending: false });
 
     if (error) {
       throw error;

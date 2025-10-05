@@ -41,7 +41,7 @@ export const getDirectoryEntries = async (): Promise<DirectoryEntry[]> => {
       village:villages(nom)
     `
     )
-    .order("name", { ascending: true });
+    .order("created_at", { ascending: false });
 
   if (entriesError) {
     console.error("Error fetching directory entries:", entriesError);

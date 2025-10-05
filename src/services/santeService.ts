@@ -26,7 +26,7 @@ export const santeService = {
     const { data, error } = await (supabase as any)
       .from('etablissements_sante')
       .select('*')
-      .order('nom');
+      .order('created_at', { ascending: false });
 
     if (error) {
       console.error('Error fetching etablissements:', error);

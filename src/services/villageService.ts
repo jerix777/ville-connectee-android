@@ -16,7 +16,7 @@ export async function getVillages(): Promise<Village[]> {
     const { data, error } = await (supabase as any)
       .from("villages")
       .select("*")
-      .order("nom");
+      .order("created_at", { ascending: false });
       
     if (error) {
       console.error("Erreur chargement villages:", error);

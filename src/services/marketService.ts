@@ -16,7 +16,8 @@ export const getMarketItems = async (): Promise<MarketItem[]> => {
   try {
     const { data, error } = await (supabase as any)
       .from("marche")
-      .select("*");
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Error fetching market items:", error);

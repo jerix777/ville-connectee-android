@@ -40,7 +40,8 @@ export const getEvents = async (): Promise<Event[]> => {
     .select(`
       *,
       type:event_types(id, label)
-    `);
+    `)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Error fetching events:", error);
