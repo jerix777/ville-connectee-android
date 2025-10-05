@@ -26,7 +26,7 @@ export function useSanteProximiteFilters(options?: UseSanteProximiteFiltersOptio
   const loadAllEtablissements = async () => {
     setLoading(true);
     try {
-      let results = await santeService.getAllEtablissements();
+      let results = await santeService.getEtablissements();
 
       // Appliquer les filtres
       results = applyFilters(results);
@@ -48,12 +48,9 @@ export function useSanteProximiteFilters(options?: UseSanteProximiteFiltersOptio
   const searchNearbyEtablissements = async (lat: number, lon: number) => {
     setLoading(true);
     try {
-      let results = await santeService.getEtablissementsProches(
-        lat,
-        lon,
-        radiusFilter,
-        typeFilter,
-      );
+      let results = await santeService.getEtablissements();
+      
+      // Le filtrage par proximité sera fait côté client après récupération des résultats
 
       // Appliquer les autres filtres
       results = applyFilters(results);

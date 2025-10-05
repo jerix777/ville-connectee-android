@@ -1,6 +1,6 @@
 import { MainLayout } from "@/components/layout/MainLayout";
 import { FeatureCard } from "@/components/ui/feature-card";
-import { Newspaper, Building, CalendarDays, Bell, Info, MapPin, Users, MessageSquare, ShoppingBag, PhoneCall, Music2, Bus, Stethoscope, Heart } from "lucide-react";
+import { BikeIcon, Music, Newspaper, Building, CalendarDays, Bell, Info, MapPin, Users, MessageSquare, ShoppingBag, PhoneCall, BookmarkCheck, Bus, Stethoscope, Heart } from "lucide-react";
 
 const featuresSection1 = [
   {
@@ -41,15 +41,15 @@ const featuresSection1 = [
   },
   {
     title: "Jukebox",
-    icon: Music2,
+    icon: Music,
     to: "/jukebox",
     description: "Écoutez et partagez de la musique"
   },
   {
-    title: "Taxi Communal",
-    icon: Bus,
-    to: "/taxi-communal",
-    description: "Trouvez ou proposez un taxi communal"
+    title: "Moto-taxi",
+    icon: BikeIcon,
+    to: "/taxi",
+    description: "Trouvez ou proposez une moto-taxi"
   },
 ];
 
@@ -80,7 +80,7 @@ const featuresSection2 = [
   },
   {
     title: "Souvenirs",
-    icon: Newspaper,
+    icon: BookmarkCheck,
     to: "/souvenirs",
     description: "Mémoire collective"
   },
@@ -98,7 +98,7 @@ const featuresSection2 = [
   },
   {
     title: "Santé de Proximité",
-    icon: Heart,
+    icon: Stethoscope,
     to: "/sante-proximite",
     description: "Pharmacies, cliniques et hôpitaux"
   },

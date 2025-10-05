@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Bell, Newspaper, Building, CalendarDays, Home, Info, PhoneCall, MapPin, MessageSquare, Music2, Search, ShoppingBag, Users, BriefcaseBusiness, LucideProps, User, Bus, Radio, Heart, UtensilsCrossed, Fuel, Settings, BoomBox } from "lucide-react";
+import { BikeIcon, Bell, Newspaper, Building, CalendarDays, Home, Info, PhoneCall, MapPin, MessageSquare, Music, Search, ShoppingBag, Users, BriefcaseBusiness, LucideProps, User, Bus, Radio, Heart, UtensilsCrossed, Fuel, Settings, BoomBox, Stethoscope, BookmarkCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useModuleVisibility } from "@/contexts/ModuleVisibilityContext";
 
@@ -25,7 +25,7 @@ const navItems = [
   { path: "/actualites", label: "Actualités", icon: Newspaper, id: "actualites" },
   { path: "/evenements", label: "Événements", icon: CalendarDays, id: "evenements" },
   { path: "/messages", label: "Messages", icon: MessageSquare, id: "messages", private: true },
-  { path: "/jukebox", label: "Ambiance baoulé", icon: Music2, id: "jukebox" },
+  { path: "/jukebox", label: "Ambiance baoulé", icon: BoomBox, id: "jukebox" },
   { path: "/main-doeuvre", label: "Professionnels", icon: Users, id: "main_doeuvre" },
   { path: "/marche", label: "Marché", icon: ShoppingBag, id: "marche" },
   { path: "/emplois", label: "Offres d'emploi", icon: BriefcaseBusiness, id: "emplois" },
@@ -36,15 +36,15 @@ const navItems = [
   { path: "/annonces", label: "Avis et Communiqués", icon: Info, id: "annonces" },
   { path: "/services", label: "Services et commerces", icon: Building, id: "services" },
   { path: "/villages", label: "Villages", icon: MapPin, id: "villages" },
-  { path: "/necrologie", label: "Nécrologie", icon: Newspaper, id: "necrologie" },
-  { path: "/souvenirs", label: "Souvenirs", icon: Newspaper, id: "souvenirs" },
+  { path: "/necrologie", label: "Nécrologie", icon: Heart, id: "necrologie" },
+  { path: "/souvenirs", label: "Souvenirs", icon: BookmarkCheck, id: "souvenirs" },
   { path: "/tribune", label: "Tribune", icon: MessageSquare, id: "tribune" },
   { path: "/suggestions", label: "Suggestions", icon: MessageSquare, id: "suggestions" },
-  { path: "/taxi", label: "Motos Taxis", icon: Bus, id: "taxi" },
+  { path: "/taxi", label: "Motos Taxis", icon: BikeIcon, id: "taxi" },
   { path: "/hotelerie", label: "Hôtels et résidences", icon: Building, id: "hotelerie" },
   { path: "/taxi-communal", label: "Taxis villages", icon: Bus, id: "taxi_communal" },
-  { path: "/radio", label: "Radios", icon: BoomBox, id: "radios" },
-  { path: "/sante-proximite", label: "Hôpitaux", icon: Heart, id: "sante" },
+  { path: "/radio", label: "Radios", icon: Music, id: "radios" },
+  { path: "/sante-proximite", label: "Hôpitaux", icon: Stethoscope, id: "sante" },
   { path: "/maquis-resto", label: "Maquis et Restaus", icon: UtensilsCrossed, id: "maquis_resto" },
   { path: "/carburant-gaz", label: "Carburant et Gaz", icon: Fuel, id: "carburant_gaz" },
 ];
