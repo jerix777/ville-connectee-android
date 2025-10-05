@@ -1,24 +1,23 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Etablissement, getEtablissements } from '@/services/santeService';
-import { PageLayout } from '@/components/common/PageLayout';
+import { EtablissementSante, santeService } from '@/services/santeService';
+import { DetailPageHeader } from '@/components/common/DetailPageHeader';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Phone, MapPin, Clock, Building } from 'lucide-react';
 import { toast } from 'sonner';
 import { LoadingSkeleton } from '@/components/common/LoadingSkeleton';
-import { getCategoryInfo } from './utils/categoryIcons';
 
 export default function EtablissementDetailPage() {
   const { id } = useParams<{ id: string }>();
 
-  const { data: etablissement, isLoading } = useQuery<Etablissement>({
+  const { data: etablissement, isLoading } = useQuery<EtablissementSante>({
     queryKey: ['etablissement', id],
     queryFn: async () => {
       if (!id) throw new Error('ID manquant');
-      const etablissements = await getEtablissements();
+      const etablissements = await santeService.getEtablissements();
       const etablissement = etablissements.find(e => e.id === id);
       if (!etablissement) throw new Error('Établissement non trouvé');
       return etablissement;
@@ -46,48 +45,34 @@ export default function EtablissementDetailPage() {
 
   if (isLoading) {
     return (
-      <PageLayout
-        title="Détails de l'établissement"
-        moduleId="sante"
-        icon={Building}
-      >
+      <div className="container mx-auto p-4">
+        <DetailPageHeader title="Détails de l'établissement" />
         <LoadingSkeleton />
-      </PageLayout>
+      </div>
     );
   }
 
   if (!etablissement) {
     return (
-      <PageLayout
-        title="Établissement non trouvé"
-        moduleId="sante"
-        icon={Building}
-      >
+      <div className="container mx-auto p-4">
+        <DetailPageHeader title="Établissement non trouvé" />
         <div className="p-4 text-center">
           <p>L'établissement demandé n'existe pas.</p>
         </div>
-      </PageLayout>
+      </div>
     );
   }
 
-  const categoryInfo = getCategoryInfo(etablissement.categorie?.nom || '');
-
   return (
-    <PageLayout
-      title={etablissement.nom}
-      moduleId="sante"
-      icon={Building}
-    >
+    <div className="container mx-auto p-4">
+      <DetailPageHeader title={etablissement.nom} />
       <Card>
         <CardContent className="p-6">
           <div className="space-y-6">
             <div className="flex flex-wrap gap-2">
-              <Badge
-                variant="outline"
-                className={\`flex items-center gap-1 \${categoryInfo.bgColor} \${categoryInfo.textColor}\`}
-              >
-                <categoryInfo.Icon size={12} />
-                {etablissement.categorie?.nom}
+              <Badge variant="outline">
+                <Building size={12} className="mr-1" />
+                {etablissement.type}
               </Badge>
               {etablissement.urgences && (
                 <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200">
@@ -158,6 +143,6 @@ export default function EtablissementDetailPage() {
           </div>
         </CardContent>
       </Card>
-    </PageLayout>
+    </div>
   );
 }
