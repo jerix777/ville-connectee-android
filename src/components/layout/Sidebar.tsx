@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Bell, BookmarkCheck, Building, Calendar, Home, Info, Link as LinkIcon, MapPin, MessageSquare, Music, Search, Star, Users, BriefcaseBusiness, LucideProps, User, Bus, Radio, Heart, UtensilsCrossed, Fuel, Settings } from "lucide-react";
+import { Bell, Newspaper, Building, CalendarDays, Home, Info, PhoneCall, MapPin, MessageSquare, Music2, Search, ShoppingBag, Users, BriefcaseBusiness, LucideProps, User, Bus, Radio, Heart, UtensilsCrossed, Fuel, Settings, BoomBox } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useModuleVisibility } from "@/contexts/ModuleVisibilityContext";
 
@@ -20,30 +20,30 @@ interface NavItemProps {
 
 const navItems = [
   { path: "/", label: "Accueil", icon: Home, id: "home" },
-  { path: "/catalogue", label: "Catalogue", icon: BookmarkCheck, id: "catalogue" },
-  { path: "/actualites", label: "Actualités", icon: BookmarkCheck, id: "actualites" },
-  { path: "/evenements", label: "Événements", icon: Calendar, id: "evenements" },
+  { path: "/steve-yobouet", label: "Steve YOBOUET", icon: User, id: "steve_yobouet" },
+  { path: "/catalogue", label: "Catalogue", icon: Newspaper, id: "catalogue" },
+  { path: "/actualites", label: "Actualités", icon: Newspaper, id: "actualites" },
+  { path: "/evenements", label: "Événements", icon: CalendarDays, id: "evenements" },
   { path: "/messages", label: "Messages", icon: MessageSquare, id: "messages", private: true },
-  { path: "/jukebox", label: "Ambiance baoulé", icon: Music, id: "jukebox" },
+  { path: "/jukebox", label: "Ambiance baoulé", icon: Music2, id: "jukebox" },
   { path: "/main-doeuvre", label: "Professionnels", icon: Users, id: "main_doeuvre" },
-  { path: "/marche", label: "Marché", icon: Star, id: "marche" },
+  { path: "/marche", label: "Marché", icon: ShoppingBag, id: "marche" },
   { path: "/emplois", label: "Offres d'emploi", icon: BriefcaseBusiness, id: "emplois" },
-  { path: "/annuaire", label: "Annuaire", icon: LinkIcon, id: "annuaire" },
+  { path: "/annuaire", label: "Annuaire", icon: PhoneCall, id: "annuaire" },
   { path: "/associations", label: "Associations", icon: Users, id: "associations" },
   { path: "/immobilier", label: "Espace immobilier", icon: Building, id: "immobilier" },
   { path: "/alertes", label: "Alertes", icon: Bell, id: "alertes" },
   { path: "/annonces", label: "Avis et Communiqués", icon: Info, id: "annonces" },
   { path: "/services", label: "Services et commerces", icon: Building, id: "services" },
   { path: "/villages", label: "Villages", icon: MapPin, id: "villages" },
-  { path: "/necrologie", label: "Nécrologie", icon: BookmarkCheck, id: "necrologie" },
-  { path: "/souvenirs", label: "Souvenirs", icon: Calendar, id: "souvenirs" },
+  { path: "/necrologie", label: "Nécrologie", icon: Newspaper, id: "necrologie" },
+  { path: "/souvenirs", label: "Souvenirs", icon: Newspaper, id: "souvenirs" },
   { path: "/tribune", label: "Tribune", icon: MessageSquare, id: "tribune" },
   { path: "/suggestions", label: "Suggestions", icon: MessageSquare, id: "suggestions" },
-  { path: "/steve-yobouet", label: "Steve YOBOUET", icon: User, id: "steve_yobouet" },
   { path: "/taxi", label: "Motos Taxis", icon: Bus, id: "taxi" },
   { path: "/hotelerie", label: "Hôtels et résidences", icon: Building, id: "hotelerie" },
   { path: "/taxi-communal", label: "Taxis villages", icon: Bus, id: "taxi_communal" },
-  { path: "/radio", label: "Radios", icon: Radio, id: "radios" },
+  { path: "/radio", label: "Radios", icon: BoomBox, id: "radios" },
   { path: "/sante-proximite", label: "Hôpitaux", icon: Heart, id: "sante" },
   { path: "/maquis-resto", label: "Maquis et Restaus", icon: UtensilsCrossed, id: "maquis_resto" },
   { path: "/carburant-gaz", label: "Carburant et Gaz", icon: Fuel, id: "carburant_gaz" },

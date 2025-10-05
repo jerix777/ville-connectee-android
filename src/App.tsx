@@ -18,6 +18,7 @@ import ActualitesPage from "./pages/Actualites";
 import EmploisPage from "./pages/Emplois";
 import AnnuairePage from "./pages/Annuaire";
 import MyProfilePage from "./pages/Annuaire/MyProfile.tsx";
+const EtablissementDetailPage = lazy(() => import("./pages/SanteProximite/EtablissementDetailPage"));
 import AssociationsPage from "./pages/Associations";
 import ImmobilierPage from "./pages/Immobilier";
 import AlertesPage from "./pages/Alertes";
@@ -95,6 +96,7 @@ const AppContent = () => {
           <Route path="/taxi-communal" element={<TaxiCommunalPage />} />
           <Route path="/radio" element={<RadioPage />} />
           <Route path="/sante-proximite" element={<SanteProximite />} />
+          <Route path="/sante-proximite/:id" element={<EtablissementDetailPage />} />
           <Route path="/maquis-resto" element={<MaquisResto />} />
           <Route path="/carburant-gaz" element={<CarburantGaz />} />
           <Route path="/hotelerie" element={<Hotelerie />} />

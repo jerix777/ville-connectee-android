@@ -1,11 +1,11 @@
 import { MainLayout } from "@/components/layout/MainLayout";
 import { FeatureCard } from "@/components/ui/feature-card";
-import { BookmarkCheck, Building, Calendar, Bell, Info, MapPin, Users, MessageSquare, Star, Link as LinkIcon, Music, Bus } from "lucide-react";
+import { Newspaper, Building, CalendarDays, Bell, Info, MapPin, Users, MessageSquare, ShoppingBag, PhoneCall, Music2, Bus, Stethoscope, Heart } from "lucide-react";
 
 const featuresSection1 = [
   {
     title: "Événements",
-    icon: Calendar,
+    icon: CalendarDays,
     to: "/evenements",
     description: "Consultez les événements à venir"
   },
@@ -17,7 +17,7 @@ const featuresSection1 = [
   },
   {
     title: "Marché",
-    icon: Star,
+    icon: ShoppingBag,
     to: "/marche",
     description: "Achetez et vendez des biens"
   },
@@ -29,7 +29,7 @@ const featuresSection1 = [
   },
   {
     title: "Annuaire",
-    icon: LinkIcon,
+    icon: PhoneCall,
     to: "/annuaire",
     description: "Retrouvez les contacts locaux"
   },
@@ -41,7 +41,7 @@ const featuresSection1 = [
   },
   {
     title: "Jukebox",
-    icon: Music,
+    icon: Music2,
     to: "/jukebox",
     description: "Écoutez et partagez de la musique"
   },
@@ -80,7 +80,7 @@ const featuresSection2 = [
   },
   {
     title: "Souvenirs",
-    icon: BookmarkCheck,
+    icon: Newspaper,
     to: "/souvenirs",
     description: "Mémoire collective"
   },
@@ -95,6 +95,12 @@ const featuresSection2 = [
     icon: Bus,
     to: "/taxi-communal",
     description: "Transport local"
+  },
+  {
+    title: "Santé de Proximité",
+    icon: Heart,
+    to: "/sante-proximite",
+    description: "Pharmacies, cliniques et hôpitaux"
   },
 ];
 
