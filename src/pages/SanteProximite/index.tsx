@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 import { PageLayout } from "@/components/common/PageLayout";
-import { Stethoscope } from "lucide-react";
+import { Stethoscope, Pill } from "lucide-react";
 import AddSanteProximiteForm from "./components/AddSanteProximiteForm";
 import { useQuery } from "@tanstack/react-query";
 import { type EtablissementSante, santeService } from "@/services/santeService";
 import { EtablissementCard } from "./components/EtablissementCard";
+import { Button } from "@/components/ui/button";
+import { MedicamentSearch } from "./components/MedicamentSearch";
+import { MedicamentPanierDialog } from "./components/MedicamentPanier";
+import { type Medicament, type MedicamentPanier, type RegimeType } from "@/services/medicamentService";
 
 export default function SanteProximite() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeView, setActiveView] = useState<"liste" | "ajouter">("liste");
+  const [medicamentSearchOpen, setMedicamentSearchOpen] = useState(false);
+  const [panierOpen, setPanierOpen] = useState(false);
+  const [panier, setPanier] = useState<MedicamentPanier[]>([]);
+  const [regime, setRegime] = useState<RegimeType>('public');
 
   const { data: etablissements = [], isLoading, error } = useQuery<
     EtablissementSante[]
@@ -30,50 +38,105 @@ export default function SanteProximite() {
     },
   );
 
+  const handleAddToPanier = (medicament: Medicament) => {
+    setPanier(prev => {
+      const exists = prev.find(p => p.id === medicament.id);
+      if (exists) return prev;
+      return [...prev, { ...medicament, quantite: 1 }];
+    });
+  };
+
+  const handleUpdateQuantite = (id: string, quantite: number) => {
+    setPanier(prev => prev.map(item => 
+      item.id === id ? { ...item, quantite: Math.max(1, quantite) } : item
+    ));
+  };
+
+  const handleRemoveFromPanier = (id: string) => {
+    setPanier(prev => prev.filter(item => item.id !== id));
+  };
+
+  const handleOpenPanier = () => {
+    setMedicamentSearchOpen(false);
+    setPanierOpen(true);
+  };
+
   return (
-    <PageLayout
-      moduleId="sante"
-      title="Pharmacies, Hôpitaux et Cliniques"
-      description="Trouvez la liste des professionnels de la santé"
-      icon={Stethoscope}
-      iconClassName="text-blue-600"
-      searchQuery={searchQuery}
-      onSearchChange={setSearchQuery}
-      activeTab={activeView}
-      onTabChange={(tab: string) => setActiveView(tab as "liste" | "ajouter")}
-      customTabs={[
-        { value: "liste", label: "Liste" },
-        { value: "ajouter", label: "Ajouter" },
-      ]}
-      showAddButton={activeView === "liste"}
-      onAddClick={() => setActiveView("ajouter")}
-      hasData={etablissements.length > 0}
-      loading={isLoading}
-      listContent={activeView === "liste"
-        ? (
-          <div className="space-y-6">
-            {error
-              ? (
-                <div className="text-center py-10 text-red-500">
-                  <p>Erreur lors du chargement des établissements.</p>
-                </div>
-              )
-              : (
-                <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                  {filteredEtablissements.map((
-                    etablissement: EtablissementSante,
-                  ) => (
-                    <EtablissementCard
-                      key={etablissement.id}
-                      etablissement={etablissement}
-                    />
-                  ))}
-                </div>
-              )}
-          </div>
-        )
-        : null}
-      addContent={activeView === "ajouter" ? <AddSanteProximiteForm /> : null}
-    />
+    <>
+      <PageLayout
+        moduleId="sante"
+        title="Pharmacies, Hôpitaux et Cliniques"
+        description="Trouvez la liste des professionnels de la santé"
+        icon={Stethoscope}
+        iconClassName="text-blue-600"
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        activeTab={activeView}
+        onTabChange={(tab: string) => setActiveView(tab as "liste" | "ajouter")}
+        customTabs={[
+          { value: "liste", label: "Liste" },
+          { value: "ajouter", label: "Ajouter" },
+        ]}
+        showAddButton={activeView === "liste"}
+        onAddClick={() => setActiveView("ajouter")}
+        hasData={etablissements.length > 0}
+        loading={isLoading}
+        listContent={activeView === "liste"
+          ? (
+            <div className="space-y-6">
+              <div className="flex justify-center">
+                <Button
+                  onClick={() => setMedicamentSearchOpen(true)}
+                  size="lg"
+                  className="gap-2"
+                >
+                  <Pill size={20} />
+                  Calculer le montant d'une ordonnance
+                </Button>
+              </div>
+
+              {error
+                ? (
+                  <div className="text-center py-10 text-red-500">
+                    <p>Erreur lors du chargement des établissements.</p>
+                  </div>
+                )
+                : (
+                  <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                    {filteredEtablissements.map((
+                      etablissement: EtablissementSante,
+                    ) => (
+                      <EtablissementCard
+                        key={etablissement.id}
+                        etablissement={etablissement}
+                      />
+                    ))}
+                  </div>
+                )}
+            </div>
+          )
+          : null}
+        addContent={activeView === "ajouter" ? <AddSanteProximiteForm /> : null}
+      />
+
+      <MedicamentSearch
+        open={medicamentSearchOpen}
+        onOpenChange={setMedicamentSearchOpen}
+        onPanierOpen={handleOpenPanier}
+        panier={panier}
+        onAddToPanier={handleAddToPanier}
+        regime={regime}
+        onRegimeChange={setRegime}
+      />
+
+      <MedicamentPanierDialog
+        open={panierOpen}
+        onOpenChange={setPanierOpen}
+        panier={panier}
+        onUpdateQuantite={handleUpdateQuantite}
+        onRemoveFromPanier={handleRemoveFromPanier}
+        regime={regime}
+      />
+    </>
   );
 }

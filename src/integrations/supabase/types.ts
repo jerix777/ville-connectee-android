@@ -993,6 +993,60 @@ export type Database = {
           },
         ]
       }
+      medicament: {
+        Row: {
+          created_at: string
+          dci: string | null
+          description: string | null
+          disponible: boolean | null
+          dosage: string | null
+          forme: string
+          id: string
+          laboratoire: string | null
+          nom: string
+          prescription_requise: boolean | null
+          prix_cmuc: number | null
+          prix_indigent: number | null
+          prix_mutuelle: number | null
+          prix_public: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          dci?: string | null
+          description?: string | null
+          disponible?: boolean | null
+          dosage?: string | null
+          forme: string
+          id?: string
+          laboratoire?: string | null
+          nom: string
+          prescription_requise?: boolean | null
+          prix_cmuc?: number | null
+          prix_indigent?: number | null
+          prix_mutuelle?: number | null
+          prix_public: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          dci?: string | null
+          description?: string | null
+          disponible?: boolean | null
+          dosage?: string | null
+          forme?: string
+          id?: string
+          laboratoire?: string | null
+          nom?: string
+          prescription_requise?: boolean | null
+          prix_cmuc?: number | null
+          prix_indigent?: number | null
+          prix_mutuelle?: number | null
+          prix_public?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           content: string
