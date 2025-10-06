@@ -17,6 +17,7 @@ export interface UserProfile {
   contact_telephone: string | null;
   commune_id: string | null;
   village_origine_id: string | null;
+  geolocation_enabled?: boolean | null;
   created_at?: string | null;
 }
 

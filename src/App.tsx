@@ -8,6 +8,7 @@ import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AudioProvider } from "@/contexts/AudioContext";
 import { ModuleVisibilityProvider } from "@/contexts/ModuleVisibilityContext";
+import { GeolocationProvider } from "@/contexts/GeolocationContext";
 import { useUpdateChecker } from "@/hooks/useUpdateChecker";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -110,17 +111,19 @@ const AppContent = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <AudioProvider>
-        <ModuleVisibilityProvider>
-          <TooltipProvider>
-            <AppContent />
-          </TooltipProvider>
-        </ModuleVisibilityProvider>
-      </AudioProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <GeolocationProvider>
+          <AudioProvider>
+            <ModuleVisibilityProvider>
+              <TooltipProvider>
+                <AppContent />
+              </TooltipProvider>
+            </ModuleVisibilityProvider>
+          </AudioProvider>
+        </GeolocationProvider>
+      </AuthProvider>
+    </QueryClientProvider>
 );
 
 export default App;

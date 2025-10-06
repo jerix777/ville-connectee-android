@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { MapPin, Loader2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useGeolocationPreference } from "@/contexts/GeolocationContext";
 
 interface GeolocationButtonProps {
   onLocationFound: (lat: number, lon: number) => void;
@@ -9,7 +10,12 @@ interface GeolocationButtonProps {
 }
 
 export function GeolocationButton({ onLocationFound, isLoading }: GeolocationButtonProps) {
+  const { geolocationEnabled } = useGeolocationPreference();
   const [isGettingLocation, setIsGettingLocation] = useState(false);
+
+  if (!geolocationEnabled) {
+    return null;
+  }
 
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {

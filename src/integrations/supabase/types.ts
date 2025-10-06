@@ -2098,6 +2098,7 @@ export type Database = {
           contact_telephone: string | null
           created_at: string | null
           date_naissance: string | null
+          geolocation_enabled: boolean | null
           id: string
           lieu_naissance: string | null
           lieu_residence: string | null
@@ -2111,6 +2112,7 @@ export type Database = {
           contact_telephone?: string | null
           created_at?: string | null
           date_naissance?: string | null
+          geolocation_enabled?: boolean | null
           id?: string
           lieu_naissance?: string | null
           lieu_residence?: string | null
@@ -2124,6 +2126,7 @@ export type Database = {
           contact_telephone?: string | null
           created_at?: string | null
           date_naissance?: string | null
+          geolocation_enabled?: boolean | null
           id?: string
           lieu_naissance?: string | null
           lieu_residence?: string | null

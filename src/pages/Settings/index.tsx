@@ -9,6 +9,8 @@ import { Separator } from "@/components/ui/separator";
 import { Settings, User, MapPin, Bell, Palette, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { CommuneSelector } from "@/components/CommuneSelector";
+import { Switch } from "@/components/ui/switch";
+import { useGeolocationPreference } from "@/contexts/GeolocationContext";
 import AccessibilitySettings from "./components/AccessibilitySettings";
 import { updateUserProfile } from "@/services/authService";
 import { toast } from "@/hooks/use-toast";
@@ -16,6 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export default function SettingsPage() {
   const { user, profile, refreshProfile } = useAuth();
+  const { geolocationEnabled, setGeolocationEnabled } = useGeolocationPreference();
   const [activeTab, setActiveTab] = useState("profile");
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [profileForm, setProfileForm] = useState({
@@ -175,7 +178,47 @@ export default function SettingsPage() {
           <TabsContent value="location" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Localisation</CardTitle>
+                <CardTitle>Géolocalisation</CardTitle>
+                <CardDescription>
+                  Activez ou désactivez les fonctionnalités de géolocalisation dans l'application
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="geolocation-toggle">Activer la géolocalisation</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Permet d'utiliser votre position pour trouver des établissements, services et autres fonctionnalités à proximité
+                    </p>
+                  </div>
+                  <Switch
+                    id="geolocation-toggle"
+                    checked={geolocationEnabled}
+                    onCheckedChange={async (checked) => {
+                      try {
+                        await setGeolocationEnabled(checked);
+                        toast({
+                          title: checked ? "Géolocalisation activée" : "Géolocalisation désactivée",
+                          description: checked 
+                            ? "Vous pouvez maintenant utiliser les fonctionnalités de localisation" 
+                            : "Les fonctionnalités de localisation sont désactivées"
+                        });
+                      } catch (error) {
+                        toast({
+                          title: "Erreur",
+                          description: "Impossible de modifier la préférence de géolocalisation",
+                          variant: "destructive"
+                        });
+                      }
+                    }}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Commune</CardTitle>
                 <CardDescription>
                   Sélectionnez votre commune pour personnaliser votre expérience
                 </CardDescription>
