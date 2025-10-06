@@ -33,6 +33,7 @@ const formSchema = z.object({
   }),
   adresse: z.string().min(1, "L'adresse est requise"),
   telephone: z.string().optional().nullable(),
+  telephone2: z.string().optional().nullable(),
   horaires: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   urgences: z.boolean().default(false),
@@ -63,6 +64,7 @@ export function AddEtablissementForm({ inline, onClose }: Props) {
       type: undefined,
       adresse: "",
       telephone: "",
+      telephone2: "",
       horaires: "",
       description: "",
       urgences: false,
@@ -154,6 +156,20 @@ export function AddEtablissementForm({ inline, onClose }: Props) {
               <FormLabel>Contact 1</FormLabel>
               <FormControl>
                 <Input type="tel" placeholder="Numéro de téléphone" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="telephone2"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Contact 2 (optionnel)</FormLabel>
+              <FormControl>
+                <Input type="tel" placeholder="Numéro de téléphone alternatif" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

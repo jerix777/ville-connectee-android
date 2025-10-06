@@ -279,6 +279,7 @@ export type Database = {
       associations: {
         Row: {
           contact: string
+          contact2: string | null
           created_at: string | null
           date_creation: string | null
           description: string
@@ -292,6 +293,7 @@ export type Database = {
         }
         Insert: {
           contact: string
+          contact2?: string | null
           created_at?: string | null
           date_creation?: string | null
           description: string
@@ -305,6 +307,7 @@ export type Database = {
         }
         Update: {
           contact?: string
+          contact2?: string | null
           created_at?: string | null
           date_creation?: string | null
           description?: string
@@ -672,6 +675,7 @@ export type Database = {
           quartier_id: string | null
           services: string[] | null
           telephone: string | null
+          telephone2: string | null
           type: string
           updated_at: string
           urgences: boolean | null
@@ -691,6 +695,7 @@ export type Database = {
           quartier_id?: string | null
           services?: string[] | null
           telephone?: string | null
+          telephone2?: string | null
           type: string
           updated_at?: string
           urgences?: boolean | null
@@ -710,6 +715,7 @@ export type Database = {
           quartier_id?: string | null
           services?: string[] | null
           telephone?: string | null
+          telephone2?: string | null
           type?: string
           updated_at?: string
           urgences?: boolean | null
@@ -835,6 +841,7 @@ export type Database = {
           adresse: string
           chambres: number | null
           contact: string
+          contact2: string | null
           created_at: string | null
           description: string
           id: string
@@ -851,6 +858,7 @@ export type Database = {
           adresse: string
           chambres?: number | null
           contact: string
+          contact2?: string | null
           created_at?: string | null
           description: string
           id?: string
@@ -867,6 +875,7 @@ export type Database = {
           adresse?: string
           chambres?: number | null
           contact?: string
+          contact2?: string | null
           created_at?: string | null
           description?: string
           id?: string
@@ -1626,6 +1635,7 @@ export type Database = {
           services: string[] | null
           specialites: string[] | null
           telephone: string | null
+          telephone2: string | null
           type: string
           updated_at: string
         }
@@ -1645,6 +1655,7 @@ export type Database = {
           services?: string[] | null
           specialites?: string[] | null
           telephone?: string | null
+          telephone2?: string | null
           type: string
           updated_at?: string
         }
@@ -1664,6 +1675,7 @@ export type Database = {
           services?: string[] | null
           specialites?: string[] | null
           telephone?: string | null
+          telephone2?: string | null
           type?: string
           updated_at?: string
         }
@@ -1674,6 +1686,7 @@ export type Database = {
           adresse: string
           categorie: string
           contact: string
+          contact2: string | null
           created_at: string | null
           description: string
           horaires: string | null
@@ -1687,6 +1700,7 @@ export type Database = {
           adresse: string
           categorie: string
           contact: string
+          contact2?: string | null
           created_at?: string | null
           description: string
           horaires?: string | null
@@ -1700,6 +1714,7 @@ export type Database = {
           adresse?: string
           categorie?: string
           contact?: string
+          contact2?: string | null
           created_at?: string | null
           description?: string
           horaires?: string | null
@@ -1852,6 +1867,7 @@ export type Database = {
           quartier_id: string | null
           services: string[] | null
           telephone: string | null
+          telephone2: string | null
           type: string
           updated_at: string
         }
@@ -1872,6 +1888,7 @@ export type Database = {
           quartier_id?: string | null
           services?: string[] | null
           telephone?: string | null
+          telephone2?: string | null
           type: string
           updated_at?: string
         }
@@ -1892,6 +1909,7 @@ export type Database = {
           quartier_id?: string | null
           services?: string[] | null
           telephone?: string | null
+          telephone2?: string | null
           type?: string
           updated_at?: string
         }
@@ -2156,6 +2174,8 @@ export type Database = {
         Row: {
           code_postal: string | null
           commune_id: string | null
+          contact: string | null
+          contact2: string | null
           created_at: string | null
           description: string | null
           id: string
@@ -2166,6 +2186,8 @@ export type Database = {
         Insert: {
           code_postal?: string | null
           commune_id?: string | null
+          contact?: string | null
+          contact2?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
@@ -2176,6 +2198,8 @@ export type Database = {
         Update: {
           code_postal?: string | null
           commune_id?: string | null
+          contact?: string | null
+          contact2?: string | null
           created_at?: string | null
           description?: string | null
           id?: string

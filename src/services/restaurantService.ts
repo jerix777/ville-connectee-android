@@ -7,6 +7,7 @@ export interface RestaurantBuvette {
   description?: string;
   adresse: string;
   telephone?: string;
+  telephone2?: string;
   email?: string;
   horaires?: string;
   prix_moyen?: number;
@@ -26,6 +27,7 @@ export interface RestaurantBuvetteInput {
   description?: string;
   adresse: string;
   telephone?: string;
+  telephone2?: string;
   email?: string;
   horaires?: string;
   prix_moyen?: string;

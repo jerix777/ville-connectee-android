@@ -5,6 +5,7 @@ export interface Association {
   nom: string;
   description: string;
   contact: string;
+  contact2?: string;
   quartier_id?: string;
   logo_url?: string;
   nombre_membres: number;

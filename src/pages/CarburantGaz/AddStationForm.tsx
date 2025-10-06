@@ -187,6 +187,15 @@ export function AddStationForm({ onClose }: AddStationFormProps) {
                 placeholder="Numéro de téléphone"
               />
             </div>
+            <div>
+              <Label htmlFor="telephone2">Téléphone 2</Label>
+              <Input
+                id="telephone2"
+                value={formData.telephone2}
+                onChange={(e) => handleInputChange("telephone2", e.target.value)}
+                placeholder="Numéro de téléphone alternatif"
+              />
+            </div>
             {
               /*
             <div>

@@ -165,6 +165,16 @@ export function AddRestaurantForm() {
               />
             </div>
 
+            <div>
+              <Label htmlFor="telephone2">Téléphone 2</Label>
+              <Input
+                id="telephone2"
+                value={formData.telephone2}
+                onChange={(e) => handleInputChange('telephone2', e.target.value)}
+                placeholder="Numéro de téléphone alternatif"
+              />
+            </div>
+
             {/* <div>
               <Label htmlFor="email">Email</Label>
               <Input

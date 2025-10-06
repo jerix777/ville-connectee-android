@@ -8,6 +8,7 @@ export type EtablissementSante = {
   latitude: number;
   longitude: number;
   telephone?: string | null;
+  telephone2?: string | null;
   email?: string | null;
   horaires?: string | null;
   services?: string[] | null;

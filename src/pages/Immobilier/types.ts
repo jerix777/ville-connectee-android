@@ -11,6 +11,7 @@ export const formSchema = z.object({
   chambres: z.coerce.number().int().min(0).optional(),
   adresse: z.string().min(3, "L'adresse est requise"),
   contact: z.string().min(8, "Le contact doit contenir au moins 8 caractères"),
+  contact2: z.string().optional(),
   is_for_sale: z.boolean().default(true),
   vendeur: z.string().min(2, "Le nom du vendeur est requis")
 });

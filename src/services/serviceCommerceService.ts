@@ -9,6 +9,7 @@ export interface ServiceCommerce {
   description: string;
   adresse: string;
   contact: string;
+  contact2?: string;
   horaires?: string;
   image_url?: string;
   quartier_id?: string;
@@ -25,6 +26,7 @@ export interface ServiceCommerceInput {
   description: string;
   adresse: string;
   contact: string;
+  contact2?: string;
   horaires?: string;
   image_url?: string;
   quartier_id?: string;

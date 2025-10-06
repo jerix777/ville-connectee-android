@@ -12,6 +12,7 @@ export interface Immobilier {
   chambres?: number;
   adresse: string;
   contact: string;
+  contact2?: string;
   created_at?: string;
   is_for_sale: boolean;
   vendeur: string;

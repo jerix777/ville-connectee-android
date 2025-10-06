@@ -21,6 +21,8 @@ export function AddVillageForm() {
   const [description, setDescription] = useState("");
   const [population, setPopulation] = useState<string>("");
   const [codePostal, setCodePostal] = useState("");
+  const [contact, setContact] = useState("");
+  const [contact2, setContact2] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const queryClient = useQueryClient();
@@ -43,6 +45,8 @@ export function AddVillageForm() {
         description,
         population: population ? parseInt(population, 10) : null,
         code_postal: codePostal || null,
+        contact: contact || null,
+        contact2: contact2 || null,
         image_url: imageUrl || null
       });
       
@@ -57,6 +61,8 @@ export function AddVillageForm() {
         setDescription("");
         setPopulation("");
         setCodePostal("");
+        setContact("");
+        setContact2("");
         setImageUrl("");
       }
     } catch (error) {
@@ -120,6 +126,27 @@ export function AddVillageForm() {
               value={codePostal}
               onChange={(e) => setCodePostal(e.target.value)}
               placeholder="Code postal"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="contact">Contact *</Label>
+            <Input
+              id="contact"
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
+              placeholder="Numéro de téléphone principal"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="contact2">Contact 2 (optionnel)</Label>
+            <Input
+              id="contact2"
+              value={contact2}
+              onChange={(e) => setContact2(e.target.value)}
+              placeholder="Numéro de téléphone alternatif"
             />
           </div>
 

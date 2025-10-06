@@ -34,6 +34,20 @@ export function ContactFields({ form }: ContactFieldsProps) {
 
       <FormField
         control={form.control}
+        name="contact2"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Contact 2 (optionnel)</FormLabel>
+            <FormControl>
+              <Input placeholder="Ex: 77 98 76 54" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
         name="vendeur"
         render={({ field }) => (
           <FormItem>

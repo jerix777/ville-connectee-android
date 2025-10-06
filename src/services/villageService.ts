@@ -7,6 +7,8 @@ export interface Village {
   description: string | null;
   population: number | null;
   code_postal: string | null;
+  contact?: string | null;
+  contact2?: string | null;
   image_url: string | null;
   created_at?: string | null;
 }

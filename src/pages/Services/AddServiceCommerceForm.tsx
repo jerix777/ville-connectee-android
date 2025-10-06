@@ -50,6 +50,7 @@ const formSchema = z.object({
   contact: z.string().min(8, {
     message: "Le numéro de téléphone doit contenir au moins 8 caractères.",
   }),
+  contact2: z.string().optional(),
   horaires: z.string().optional(),
   quartier_id: z.string().optional(),
 });
@@ -85,6 +86,7 @@ export function AddServiceCommerceForm() {
       description: "",
       adresse: "",
       contact: "",
+      contact2: "",
       horaires: "",
       quartier_id: "",
     },
@@ -113,6 +115,7 @@ export function AddServiceCommerceForm() {
         description: values.description,
         adresse: values.adresse,
         contact: values.contact,
+        contact2: values.contact2,
         horaires: values.horaires,
         quartier_id: values.quartier_id,
         image_url: imageUrl || undefined,
@@ -254,6 +257,20 @@ export function AddServiceCommerceForm() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="contact2"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Contact 2 (optionnel)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Numéro de téléphone alternatif" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
               <FormField
                 control={form.control}
                 name="horaires"

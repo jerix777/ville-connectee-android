@@ -16,6 +16,7 @@ const createAssociationSchema = z.object({
   nom: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
   description: z.string().min(10, "La description doit contenir au moins 10 caractères"),
   contact: z.string().min(5, "Le contact est obligatoire"),
+  contact2: z.string().optional(),
   logo_url: z.string().url().optional().or(z.literal("")),
 });
 
@@ -36,6 +37,7 @@ export function CreateAssociationForm({ onSuccess, onCancel }: CreateAssociation
       nom: "",
       description: "",
       contact: "",
+      contact2: "",
       logo_url: "",
     },
   });
@@ -55,6 +57,7 @@ export function CreateAssociationForm({ onSuccess, onCancel }: CreateAssociation
         nom: data.nom,
         description: data.description,
         contact: data.contact,
+        contact2: data.contact2,
         logo_url: data.logo_url || undefined,
         responsable_id: user.id,
         statut: 'active',
@@ -149,6 +152,23 @@ export function CreateAssociationForm({ onSuccess, onCancel }: CreateAssociation
                     <FormControl>
                       <Input 
                         placeholder="Email, téléphone ou adresse..."
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="contact2"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Contact 2 (optionnel)</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="Contact alternatif..."
                         {...field} 
                       />
                     </FormControl>

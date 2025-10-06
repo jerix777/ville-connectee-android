@@ -6,6 +6,7 @@ export interface StationCarburant {
   type: string;
   adresse: string;
   telephone?: string | null;
+  telephone2?: string | null;
   email?: string | null;
   horaires?: string | null;
   services: string[] | null;
@@ -26,6 +27,7 @@ export interface StationCarburantInput {
   type: string;
   adresse: string;
   telephone?: string;
+  telephone2?: string;
   email?: string;
   horaires?: string;
   services?: string;
