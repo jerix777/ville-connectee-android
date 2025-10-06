@@ -34,13 +34,14 @@ export function useEtablissements() {
   };
 
   return {
-    etablissements,
+    etablissements: filteredEtablissements,
     filteredEtablissements,
     isLoading,
     error,
     searchQuery,
     setSearchQuery,
     activeView,
-    setActiveView
+    setActiveView,
+    prefetchSearch
   };
 }

@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { PageLayout } from "@/components/common/PageLayout";
-import { Stethoscope } from "lucide-react";
+import { Stethoscope, Pill } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import AddSanteProximiteForm from "./components/AddSanteProximiteForm";
 import { MedicamentSearch } from "./components/MedicamentSearch";
 import { MedicamentPanierDialog } from "./components/MedicamentPanier";
-import { EtablissementsList } from "./components/EtablissementsList";
-import { useEtablissements } from "./hooks/useEtablissements";
-import { useMedicamentPanier } from "./hooks/useMedicamentPanier";
+import { EtablissementCard } from "./components/EtablissementCard";
+import { Medicament, MedicamentPanier, RegimeType } from "@/services/medicamentService";
+import { EtablissementSante, santeService } from "@/services/santeService";
 
 export default function SanteProximite() {
   const [searchQuery, setSearchQuery] = useState("");
