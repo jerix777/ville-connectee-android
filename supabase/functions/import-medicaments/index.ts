@@ -1,4 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
+// @deno-types="npm:@types/pdf-parse@1.1.4"
+import pdfParse from 'npm:pdf-parse@1.1.1'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -39,11 +41,17 @@ Deno.serve(async (req) => {
 
     console.log(`Processing file: ${file.name}, size: ${file.size} bytes`);
 
-    // Read file content
+    // Read file content as buffer
     const arrayBuffer = await file.arrayBuffer();
-    const textContent = new TextDecoder().decode(arrayBuffer);
+    const buffer = new Uint8Array(arrayBuffer);
     
-    console.log('File content extracted, parsing...');
+    console.log('Parsing PDF with pdf-parse...');
+
+    // Parse PDF to extract text
+    const pdfData = await pdfParse(buffer);
+    const textContent = pdfData.text;
+    
+    console.log(`PDF parsed successfully, extracted ${textContent.length} characters`);
 
     // Fonction pour nettoyer les caractères problématiques
     const cleanText = (text: string): string => {
@@ -52,7 +60,7 @@ Deno.serve(async (req) => {
       return text.replace(/\u0000/g, '').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '').trim();
     };
 
-    // Parse the text content (simple parser)
+    // Parse the text content
     const lines = textContent.split(/\r?\n/).map(l => cleanText(l)).filter(Boolean);
     const medicaments: ParsedMedicament[] = [];
     
