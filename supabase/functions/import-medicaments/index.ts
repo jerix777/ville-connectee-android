@@ -45,8 +45,15 @@ Deno.serve(async (req) => {
     
     console.log('File content extracted, parsing...');
 
+    // Fonction pour nettoyer les caractères problématiques
+    const cleanText = (text: string): string => {
+      if (!text) return '';
+      // Supprimer les caractères NULL et autres caractères de contrôle
+      return text.replace(/\u0000/g, '').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '').trim();
+    };
+
     // Parse the text content (simple parser)
-    const lines = textContent.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const lines = textContent.split(/\r?\n/).map(l => cleanText(l)).filter(Boolean);
     const medicaments: ParsedMedicament[] = [];
     
     let processedLines = 0;
@@ -57,7 +64,7 @@ Deno.serve(async (req) => {
       }
 
       // Split by multiple spaces or tabs
-      const parts = line.split(/\t|\s{2,}/).map(p => p.trim()).filter(Boolean);
+      const parts = line.split(/\t|\s{2,}/).map(p => cleanText(p)).filter(Boolean);
       
       if (parts.length < 7) {
         continue; // Skip lines that don't have enough data
@@ -76,14 +83,14 @@ Deno.serve(async (req) => {
       const regime = rest[rest.length - 1] || 'RCO';
 
       medicaments.push({
-        code_produit: code_produit || '',
-        nom: nom || '',
-        groupe_therapeutique: groupe_therapeutique || '',
-        dci: dci || '',
-        categorie: categorie || '',
-        type_medicament: type_medicament || '',
+        code_produit: cleanText(code_produit || ''),
+        nom: cleanText(nom || ''),
+        groupe_therapeutique: cleanText(groupe_therapeutique || ''),
+        dci: cleanText(dci || ''),
+        categorie: cleanText(categorie || ''),
+        type_medicament: cleanText(type_medicament || ''),
         prix_public,
-        regime: regime || 'RCO',
+        regime: cleanText(regime || 'RCO'),
         disponible: true,
       });
 
