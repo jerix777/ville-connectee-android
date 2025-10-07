@@ -1004,12 +1004,15 @@ export type Database = {
       }
       medicament: {
         Row: {
+          categorie: string | null
+          code_produit: string | null
           created_at: string
           dci: string | null
           description: string | null
           disponible: boolean | null
           dosage: string | null
           forme: string
+          groupe_therapeutique: string | null
           id: string
           laboratoire: string | null
           nom: string
@@ -1018,15 +1021,20 @@ export type Database = {
           prix_indigent: number | null
           prix_mutuelle: number | null
           prix_public: number
+          regime: string | null
+          type_medicament: string | null
           updated_at: string
         }
         Insert: {
+          categorie?: string | null
+          code_produit?: string | null
           created_at?: string
           dci?: string | null
           description?: string | null
           disponible?: boolean | null
           dosage?: string | null
           forme: string
+          groupe_therapeutique?: string | null
           id?: string
           laboratoire?: string | null
           nom: string
@@ -1035,15 +1043,20 @@ export type Database = {
           prix_indigent?: number | null
           prix_mutuelle?: number | null
           prix_public: number
+          regime?: string | null
+          type_medicament?: string | null
           updated_at?: string
         }
         Update: {
+          categorie?: string | null
+          code_produit?: string | null
           created_at?: string
           dci?: string | null
           description?: string | null
           disponible?: boolean | null
           dosage?: string | null
           forme?: string
+          groupe_therapeutique?: string | null
           id?: string
           laboratoire?: string | null
           nom?: string
@@ -1052,6 +1065,8 @@ export type Database = {
           prix_indigent?: number | null
           prix_mutuelle?: number | null
           prix_public?: number
+          regime?: string | null
+          type_medicament?: string | null
           updated_at?: string
         }
         Relationships: []

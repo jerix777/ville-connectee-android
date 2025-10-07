@@ -16,6 +16,11 @@ export type Medicament = {
   disponible?: boolean;
   prescription_requise?: boolean;
   description?: string | null;
+  code_produit?: string | null;
+  groupe_therapeutique?: string | null;
+  categorie?: string | null;
+  regime?: string | null;
+  type_medicament?: string | null;
   created_at: string;
   updated_at: string;
 };

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import AddSanteProximiteForm from "./components/AddSanteProximiteForm";
 import { MedicamentSearch } from "./components/MedicamentSearch";
 import { MedicamentPanierDialog } from "./components/MedicamentPanier";
+import { MedicamentImport } from "./components/MedicamentImport";
 import { EtablissementCard } from "./components/EtablissementCard";
 import { Medicament, MedicamentPanier, RegimeType } from "@/services/medicamentService";
 import { EtablissementSante, santeService } from "@/services/santeService";
@@ -96,6 +97,8 @@ export default function SanteProximite() {
                   Calculer mon ordonnance
                 </Button>
               </div>
+
+              <MedicamentImport />
 
               {error
                 ? (
