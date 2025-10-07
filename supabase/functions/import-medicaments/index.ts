@@ -53,56 +53,75 @@ Deno.serve(async (req) => {
     
     console.log(`PDF parsed successfully, extracted ${textContent.length} characters`);
 
-    // Fonction pour nettoyer les caractères problématiques
+    // Fonction pour nettoyer agressivement les caractères problématiques
     const cleanText = (text: string): string => {
       if (!text) return '';
-      // Supprimer les caractères NULL et autres caractères de contrôle
-      return text.replace(/\u0000/g, '').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '').trim();
+      // Remplacer tous les caractères non-ASCII et de contrôle
+      // Garder seulement les lettres, chiffres, espaces et ponctuation de base
+      return text
+        .replace(/[\x00-\x1F\x7F-\x9F]/g, '') // Enlever tous les caractères de contrôle
+        .replace(/[^\x20-\x7E\u00C0-\u024F]/g, '') // Garder ASCII imprimable + lettres accentuées
+        .replace(/\s+/g, ' ') // Normaliser les espaces
+        .trim();
     };
 
     // Parse the text content
     const lines = textContent.split(/\r?\n/).map(l => cleanText(l)).filter(Boolean);
     const medicaments: ParsedMedicament[] = [];
     
+    console.log(`Processing ${lines.length} lines...`);
+    
     let processedLines = 0;
     for (const line of lines) {
-      // Skip header lines and lines that don't look like data
-      if (line.includes('CODE') || line.includes('PRODUIT') || line.length < 20) {
+      try {
+        // Skip header lines and lines that don't look like data
+        if (line.includes('CODE') || line.includes('PRODUIT') || line.length < 20) {
+          continue;
+        }
+
+        // Split by multiple spaces or tabs
+        const parts = line.split(/\s{2,}/).map(p => cleanText(p)).filter(Boolean);
+        
+        if (parts.length < 7) {
+          console.log(`Skipping line with insufficient parts (${parts.length}): ${line.substring(0, 50)}`);
+          continue;
+        }
+
+        const [code_produit, nom, groupe_therapeutique, dci, categorie, type_medicament, prixRaw, ...rest] = parts;
+      
+        // Extract price
+        const prixMatch = prixRaw?.match(/[\d.,]+/);
+        if (!prixMatch) {
+          console.log(`Skipping line with invalid price: ${prixRaw}`);
+          continue;
+        }
+        
+        const prix_public = parseFloat(prixMatch[0].replace(',', '.'));
+        if (isNaN(prix_public)) {
+          console.log(`Skipping line with NaN price: ${prixMatch[0]}`);
+          continue;
+        }
+
+        // Get regime (last meaningful part)
+        const regime = rest[rest.length - 1] || 'RCO';
+
+        medicaments.push({
+          code_produit: cleanText(code_produit || '').substring(0, 100),
+          nom: cleanText(nom || '').substring(0, 255),
+          groupe_therapeutique: cleanText(groupe_therapeutique || '').substring(0, 255),
+          dci: cleanText(dci || '').substring(0, 255),
+          categorie: cleanText(categorie || '').substring(0, 100),
+          type_medicament: cleanText(type_medicament || '').substring(0, 100),
+          prix_public,
+          regime: cleanText(regime || 'RCO').substring(0, 50),
+          disponible: true,
+        });
+
+        processedLines++;
+      } catch (lineError) {
+        console.error(`Error processing line: ${lineError.message}`);
         continue;
       }
-
-      // Split by multiple spaces or tabs
-      const parts = line.split(/\t|\s{2,}/).map(p => cleanText(p)).filter(Boolean);
-      
-      if (parts.length < 7) {
-        continue; // Skip lines that don't have enough data
-      }
-
-      const [code_produit, nom, groupe_therapeutique, dci, categorie, type_medicament, prixRaw, ...rest] = parts;
-      
-      // Extract price
-      const prixMatch = prixRaw?.match(/[\d.,]+/);
-      if (!prixMatch) continue;
-      
-      const prix_public = parseFloat(prixMatch[0].replace(',', '.'));
-      if (isNaN(prix_public)) continue;
-
-      // Get regime (last meaningful part)
-      const regime = rest[rest.length - 1] || 'RCO';
-
-      medicaments.push({
-        code_produit: cleanText(code_produit || ''),
-        nom: cleanText(nom || ''),
-        groupe_therapeutique: cleanText(groupe_therapeutique || ''),
-        dci: cleanText(dci || ''),
-        categorie: cleanText(categorie || ''),
-        type_medicament: cleanText(type_medicament || ''),
-        prix_public,
-        regime: cleanText(regime || 'RCO'),
-        disponible: true,
-      });
-
-      processedLines++;
     }
 
     console.log(`Parsed ${medicaments.length} medicaments from ${processedLines} lines`);
