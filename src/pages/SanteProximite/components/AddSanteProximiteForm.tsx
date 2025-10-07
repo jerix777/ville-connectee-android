@@ -89,7 +89,7 @@ export default function AddSanteProximiteForm({ inline = false }: AddSanteProxim
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="telephone">Téléphone</Label>
+        <Label htmlFor="telephone">Contact 1 *</Label>
         <Input
           id="telephone"
           {...register('telephone')}
@@ -98,13 +98,22 @@ export default function AddSanteProximiteForm({ inline = false }: AddSanteProxim
       </div>
 
       <div className="space-y-2">
+        <Label htmlFor="telephone2">Contact 2 (optionnel)</Label>
+        <Input
+          id="telephone"
+          {...register('telephone')}
+          placeholder="Numéro de téléphone"
+        />
+      </div>
+
+      {/* <div className="space-y-2">
         <Label htmlFor="horaires">Horaires d'ouverture</Label>
         <Input
           id="horaires"
           {...register('horaires')}
           placeholder="Ex: Lun-Ven: 8h-18h, Sam: 8h-12h"
         />
-      </div>
+      </div> */}
 
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>

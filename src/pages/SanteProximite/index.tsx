@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { PageLayout } from "@/components/common/PageLayout";
-import { Stethoscope, Pill } from "lucide-react";
+import { Calculator, Stethoscope, Pill } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AddSanteProximiteForm from "./components/AddSanteProximiteForm";
 import { MedicamentSearch } from "./components/MedicamentSearch";
@@ -92,7 +92,7 @@ export default function SanteProximite() {
                   size="lg"
                   className="gap-2"
                 >
-                  <Pill size={20} />
+                  <Calculator size={20} />
                   Calculer mon ordonnance
                 </Button>
               </div>

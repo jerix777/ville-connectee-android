@@ -22,14 +22,17 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { santeService, type CreateEtablissementSanteDTO } from "@/services/santeService";
+import {
+  type CreateEtablissementSanteDTO,
+  santeService,
+} from "@/services/santeService";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const formSchema = z.object({
   nom: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
-  type: z.enum(['hopital', 'pharmacie', 'clinique', 'centre_sante'], {
-    required_error: "Veuillez sélectionner un type d'établissement"
+  type: z.enum(["hopital", "pharmacie", "clinique", "centre_sante"], {
+    required_error: "Veuillez sélectionner un type d'établissement",
   }),
   adresse: z.string().min(1, "L'adresse est requise"),
   telephone: z.string().optional().nullable(),
@@ -51,10 +54,10 @@ export function AddEtablissementForm({ inline, onClose }: Props) {
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const TYPES_ETABLISSEMENT = [
-    { id: 'hopital', label: 'Hôpital' },
-    { id: 'pharmacie', label: 'Pharmacie' },
-    { id: 'clinique', label: 'Clinique' },
-    { id: 'centre_sante', label: 'Centre de santé' },
+    { id: "hopital", label: "Hôpital" },
+    { id: "pharmacie", label: "Pharmacie" },
+    { id: "clinique", label: "Clinique" },
+    { id: "centre_sante", label: "Centre de santé" },
   ];
 
   const form = useForm<FormValues>({
@@ -155,7 +158,11 @@ export function AddEtablissementForm({ inline, onClose }: Props) {
             <FormItem>
               <FormLabel>Contact 1</FormLabel>
               <FormControl>
-                <Input type="tel" placeholder="Numéro de téléphone" {...field} />
+                <Input
+                  type="tel"
+                  placeholder="Numéro de téléphone"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -169,14 +176,19 @@ export function AddEtablissementForm({ inline, onClose }: Props) {
             <FormItem>
               <FormLabel>Contact 2 (optionnel)</FormLabel>
               <FormControl>
-                <Input type="tel" placeholder="Numéro de téléphone alternatif" {...field} />
+                <Input
+                  type="tel"
+                  placeholder="Numéro de téléphone alternatif"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <FormField
+        {
+          /* <FormField
           control={form.control}
           name="horaires"
           render={({ field }) => (
@@ -191,8 +203,10 @@ export function AddEtablissementForm({ inline, onClose }: Props) {
               <FormMessage />
             </FormItem>
           )}
-        />
-{/* 
+        /> */
+        }
+        {
+          /*
         <FormField
           control={form.control}
           name="is_open"
@@ -209,9 +223,15 @@ export function AddEtablissementForm({ inline, onClose }: Props) {
               </FormControl>
             </FormItem>
           )}
-        /> */}
+        /> */
+        }
 
-        <Button type="submit" className="w-full" disabled={loading}>
+        <Button
+          type="submit"
+          variant="secondary"
+          className="w-full"
+          disabled={loading}
+        >
           {loading ? "Ajout en cours..." : "Ajouter l'établissement"}
         </Button>
       </form>
