@@ -3,6 +3,7 @@ import { Phone, Plus } from "lucide-react";
 import { PageLayout } from "@/components/common/PageLayout";
 import { ServiceCard } from "./ServiceCard";
 import { AddServiceForm } from "./AddServiceForm";
+import { EditServiceForm } from "./EditServiceForm";
 import { serviceRapideService, ServiceRapide } from "@/services/serviceRapideService";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -20,8 +21,10 @@ export default function AppelsRapides() {
   const [services, setServices] = useState<ServiceRapide[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [serviceType, setServiceType] = useState<'public' | 'prive'>('public');
   const [filterType, setFilterType] = useState<'all' | 'public' | 'prive'>('all');
+  const [selectedService, setSelectedService] = useState<ServiceRapide | null>(null);
   const { user } = useAuth();
 
   const fetchServices = async () => {
@@ -59,6 +62,17 @@ export default function AppelsRapides() {
   const handleAddSuccess = () => {
     setDialogOpen(false);
     fetchServices();
+  };
+
+  const handleEditSuccess = () => {
+    setEditDialogOpen(false);
+    setSelectedService(null);
+    fetchServices();
+  };
+
+  const handleEdit = (service: ServiceRapide) => {
+    setSelectedService(service);
+    setEditDialogOpen(true);
   };
 
   const openDialog = (type: 'public' | 'prive') => {
@@ -119,6 +133,7 @@ export default function AppelsRapides() {
                   service={service}
                   canEdit={!!user}
                   onDelete={handleDelete}
+                  onEdit={handleEdit}
                 />
               ))}
             </div>
@@ -137,6 +152,22 @@ export default function AppelsRapides() {
             </DialogDescription>
           </DialogHeader>
           <AddServiceForm type={serviceType} onSuccess={handleAddSuccess} />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              Modifier le service
+            </DialogTitle>
+            <DialogDescription>
+              Modifiez les informations du service
+            </DialogDescription>
+          </DialogHeader>
+          {selectedService && (
+            <EditServiceForm service={selectedService} onSuccess={handleEditSuccess} />
+          )}
         </DialogContent>
       </Dialog>
     </>
