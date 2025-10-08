@@ -51,8 +51,8 @@ const TaxiCommunal: React.FC = () => {
   return (
     <PageLayout
       moduleId="taxi-communal"
-      title="Taxis des villages"
-      description="Service de transport communal local - motos, tricycles et taxis brousse"
+      title="Taxi-brousse" 
+      description="Service de transport communal à bord de taxis-brousse"
       icon={Car}
       activeTab={activeTab}
       onTabChange={setActiveTab}
