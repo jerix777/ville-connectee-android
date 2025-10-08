@@ -1696,6 +1696,53 @@ export type Database = {
         }
         Relationships: []
       }
+      service_rapide: {
+        Row: {
+          contact1: string
+          contact2: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          logo_url: string | null
+          nom_etablissement: string
+          quartier_id: string | null
+          type_service: string
+          updated_at: string
+        }
+        Insert: {
+          contact1: string
+          contact2?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          logo_url?: string | null
+          nom_etablissement: string
+          quartier_id?: string | null
+          type_service: string
+          updated_at?: string
+        }
+        Update: {
+          contact1?: string
+          contact2?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          logo_url?: string | null
+          nom_etablissement?: string
+          quartier_id?: string | null
+          type_service?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_rapide_quartier_id_fkey"
+            columns: ["quartier_id"]
+            isOneToOne: false
+            referencedRelation: "commune"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       services_commerces: {
         Row: {
           adresse: string

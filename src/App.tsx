@@ -46,6 +46,7 @@ import TaxiPage from "./pages/Taxi";
 import AssociationDashboard from "./pages/Associations/AssociationDashboard";
 import TaxiCommunalPage from "./pages/TaxiCommunal";
 import RadioPage from "./pages/Radio";
+import AppelsRapidesPage from "./pages/AppelsRapides";
 const SanteProximite = lazy(() => import('./pages/SanteProximite'));
 const MaquisResto = lazy(() => import('./pages/MaquisResto'));
 const CarburantGaz = lazy(() => import('./pages/CarburantGaz'));
@@ -96,6 +97,7 @@ const AppContent = () => {
           <Route path="/taxi" element={<TaxiPage />} />
           <Route path="/taxi-communal" element={<TaxiCommunalPage />} />
           <Route path="/radio" element={<RadioPage />} />
+          <Route path="/appels-rapides" element={<AppelsRapidesPage />} />
           <Route path="/sante-proximite" element={<SanteProximite />} />
           <Route path="/sante-proximite/:id" element={<EtablissementDetailPage />} />
           <Route path="/maquis-resto" element={<MaquisResto />} />
