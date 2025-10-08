@@ -1,6 +1,5 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.30.0';
-import pdf from 'https://esm.sh/pdf-parse@1.1.1';
 
 // CORS headers
 const corsHeaders = {
@@ -51,9 +50,25 @@ serve(async (req) => {
       });
     }
 
+    // Convert to Uint8Array for PDF processing
     const arrayBuffer = await file.arrayBuffer();
-    const pdfData = await pdf(arrayBuffer);
-    const text = pdfData.text;
+    const uint8Array = new Uint8Array(arrayBuffer);
+    
+    // Use pdfjs to extract text
+    const pdfjsLib = await import('https://esm.sh/pdfjs-dist@3.11.174/build/pdf.mjs');
+    
+    // Load the PDF document
+    const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
+    const pdfDoc = await loadingTask.promise;
+    
+    // Extract text from all pages
+    let text = '';
+    for (let i = 1; i <= pdfDoc.numPages; i++) {
+      const page = await pdfDoc.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items.map((item: any) => item.str).join(' ');
+      text += pageText + '\n';
+    }
 
     const medicaments: MedicamentInsert[] = [];
     const lines = text.split('\n');

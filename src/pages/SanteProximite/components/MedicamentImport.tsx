@@ -3,14 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Upload, Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { FunctionsHttpError } from '@supabase/supabase-js'
-
-const { data, error } = await supabase.functions.invoke('...')
-
-if (error && error instanceof FunctionsHttpError) {
-  const errorMessage = await error.context.json()
-  console.log('Function returned an error', errorMessage)
-}
 
 export function MedicamentImport() {
   const [uploading, setUploading] = useState(false);
