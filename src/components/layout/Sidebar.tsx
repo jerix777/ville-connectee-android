@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Lightbulb, BikeIcon, Bed, Bell, Blend, Newspaper, Building, CalendarDays, Home, Info, PhoneCall, MapPin, MessageSquare, Music, Search, ShoppingCart, Users, BriefcaseBusiness, LucideProps, User, Bus, Briefcase, Heart, UtensilsCrossed, Fuel, Settings, BoomBox, Stethoscope, BookmarkCheck } from "lucide-react";
+import { Lightbulb, BikeIcon, Bed, Bell, Blend, Newspaper, Building, CalendarDays, Home, Info, PhoneCall, MapPin, MessageSquare, Music, Search, ShoppingCart, Users, BriefcaseBusiness, LucideProps, User, Bus, Briefcase, Heart, UtensilsCrossed, Fuel, Settings, BoomBox, Stethoscope, BookmarkCheck, Phone } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useModuleVisibility } from "@/contexts/ModuleVisibilityContext";
 
@@ -30,6 +30,7 @@ const navItems = [
   { path: "/marche", label: "Marché", icon: ShoppingCart, id: "marche" },
   { path: "/emplois", label: "Offres d'emploi", icon: BriefcaseBusiness, id: "emplois" },
   { path: "/annuaire", label: "Annuaire", icon: PhoneCall, id: "annuaire" },
+  { path: "/appels-rapides", label: "Appels Rapides", icon: Phone, id: "appels_rapides" },
   { path: "/associations", label: "Associations", icon: Blend, id: "associations" },
   { path: "/immobilier", label: "Espace immobilier", icon: Building, id: "immobilier" },
   { path: "/alertes", label: "Alertes", icon: Bell, id: "alertes" },
