@@ -112,7 +112,8 @@ serve(async (req) => {
 
   } catch (e) {
     console.error('Erreur inattendue:', e);
-    return new Response(JSON.stringify({ error: e.message }), {
+    const errorMessage = e instanceof Error ? e.message : 'Erreur inconnue';
+    return new Response(JSON.stringify({ error: errorMessage }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
