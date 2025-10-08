@@ -8,7 +8,7 @@ import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
 import { EmptyState } from "@/components/common/EmptyState";
 import { hotelService, type Hotel } from "@/services/hotelService";
 import { usePagination } from "@/hooks/usePagination";
-import { Hotel as HotelIcon } from "lucide-react";
+import { Bed, Hotel as HotelIcon } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 export default function HotelGaz() {
@@ -186,7 +186,7 @@ export default function HotelGaz() {
       moduleId="hotelerie"
       title="Hôtels et Résidences"
       description="Contactez les hôtels et résidences de Ouellé, Daoukro, M'Bahiakro, Prikro et plus pour passer vos réservations."
-      icon={HotelIcon}
+      icon={Bed}
       iconClassName="text-blue-600"
       activeTab={activeViewTab}
       onTabChange={setActiveViewTab}
@@ -196,7 +196,7 @@ export default function HotelGaz() {
       addContent={<AddHotelForm onClose={() => setActiveViewTab("liste")} />}
       loading={loading}
       hasData={filteredHotels.length > 0}
-      emptyStateIcon={HotelIcon}
+      emptyStateIcon={Bed}
       emptyStateTitle="Aucun hôtel trouvé"
       emptyStateDescription="Aucun hôtel ne correspond à vos critères de recherche."
       currentPage={currentPage}

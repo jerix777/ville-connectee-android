@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { hotelService } from "@/services/hotelService";
-import { Hotel } from "lucide-react";
+import { Hotel, Bed } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export interface HotelFormInput {
@@ -105,7 +105,7 @@ export function AddHotelForm({ onClose }: AddHotelFormProps) {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Hotel className="h-5 w-5" />
+          <Bed className="h-5 w-5" />
           Ajouter un hôtel
         </CardTitle>
       </CardHeader>

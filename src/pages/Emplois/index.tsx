@@ -5,7 +5,7 @@ import { getOffresEmploi, OffreEmploi } from "@/services/offresEmploiService";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { Briefcase } from "lucide-react";
+import { BriefcaseBusiness } from "lucide-react";
 
 export default function EmploisPage() {
   const [offres, setOffres] = useState<OffreEmploi[]>([]);
@@ -65,7 +65,7 @@ export default function EmploisPage() {
       moduleId="emplois"
       title="Offres d'emploi"
       description="Consultez les offres d'emploi locales et publiez vos annonces"
-      icon={Briefcase}
+      icon={BriefcaseBusiness}
       activeTab="liste"
       onTabChange={() => {}}
       listContent={renderListContent()}
