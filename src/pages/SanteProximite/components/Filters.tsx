@@ -19,7 +19,6 @@ interface FiltersProps {
 }
 
 const TYPE_LABELS = {
-  tous: 'Tous',
   hopital: 'Hôpitaux',
   pharmacie: 'Pharmacies',
   clinique: 'Cliniques',

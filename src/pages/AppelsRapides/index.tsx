@@ -103,7 +103,7 @@ export default function AppelsRapides() {
       <PageLayout
         moduleId="appels-rapides"
         title="Appels Rapides"
-        description="Numéros d'urgence et services essentiels"
+        description="Numéros d'urgence"
         icon={Phone}
         activeTab="liste"
         onTabChange={() => {}}

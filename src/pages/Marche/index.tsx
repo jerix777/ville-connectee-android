@@ -13,7 +13,7 @@ import { SellForm } from "./SellForm";
 import { BuyForm } from "./BuyForm";
 import { usePagination } from "@/hooks/usePagination";
 import { PaginationControls } from "@/components/ui/pagination-controls";
-
+-
 export default function MarchePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sellDialogOpen, setSellDialogOpen] = useState(false);
