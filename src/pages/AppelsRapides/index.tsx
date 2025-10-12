@@ -113,7 +113,7 @@ export default function AppelsRapides() {
         <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
           <Tabs value={filterType} onValueChange={(v) => setFilterType(v as any)} className="mb-6">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="all">Tous</TabsTrigger>
+              {/* <TabsTrigger value="all">Tous</TabsTrigger> */}
               <TabsTrigger value="public">Services Publics</TabsTrigger>
               <TabsTrigger value="prive">Services Privés</TabsTrigger>
             </TabsList>
