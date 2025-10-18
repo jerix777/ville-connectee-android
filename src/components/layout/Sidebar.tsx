@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Lightbulb, BikeIcon, Bed, Bell, Blend, Newspaper, Building, CalendarDays, Home, Info, PhoneCall, MapPin, MessageSquare, Music, Search, ShoppingCart, Users, BriefcaseBusiness, LucideProps, User, Bus, Briefcase, Heart, UtensilsCrossed, Fuel, Settings, BoomBox, Stethoscope, BookmarkCheck, Phone } from "lucide-react";
+import { Gift, Lightbulb, BikeIcon, Bed, Bell, Blend, Newspaper, Building, CalendarDays, Home, Info, PhoneCall, MapPin, MessageSquare, Music, Search, ShoppingCart, Users, BriefcaseBusiness, LucideProps, User, Bus, Briefcase, Heart, UtensilsCrossed, Fuel, Settings, BoomBox, Stethoscope, BookmarkCheck, Phone } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useModuleVisibility } from "@/contexts/ModuleVisibilityContext";
 
@@ -22,6 +22,7 @@ const navItems = [
   { path: "/", label: "Accueil", icon: Home, id: "home" },
   { path: "/steve-yobouet", label: "Steve YOBOUET", icon: User, id: "steve_yobouet" },
   { path: "/catalogue", label: "Catalogue", icon: Lightbulb, id: "catalogue" },
+  { path: "/materiels-gratuits", label: "Matériels Gratuits", icon: Gift, id: "materiels_gratuits" },
   { path: "/actualites", label: "Actualités", icon: Newspaper, id: "actualites" },
   { path: "/evenements", label: "Événements", icon: CalendarDays, id: "evenements" },
   { path: "/messages", label: "Messages", icon: MessageSquare, id: "messages", private: true },

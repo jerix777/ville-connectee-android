@@ -7,13 +7,7 @@ import { EditServiceForm } from "./EditServiceForm";
 import { serviceRapideService, ServiceRapide } from "@/services/serviceRapideService";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

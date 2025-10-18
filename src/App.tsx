@@ -42,6 +42,7 @@ import ImmobilierDetailPage from "./pages/Immobilier/ImmobilierDetailPage";
 import ServiceDetailPage from "./pages/Services/ServiceDetailPage";
 import MarketItemDetailPage from "./pages/Marche/MarketItemDetailPage";
 import SteveYobouetPage from "./pages/SteveYobouet";
+import MaterielsGratuitsPage from "./pages/MaterielsGratuits";
 import TaxiPage from "./pages/Taxi";
 import AssociationDashboard from "./pages/Associations/AssociationDashboard";
 import TaxiCommunalPage from "./pages/TaxiCommunal";
@@ -56,7 +57,7 @@ const queryClient = new QueryClient();
 
 const AppContent = () => {
   useUpdateChecker();
-  
+
   return (
     <>
       <Toaster />
@@ -64,47 +65,48 @@ const AppContent = () => {
       <BrowserRouter>
         <Suspense fallback={<LoadingSkeleton type="list" count={1} />}>
           <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/actualites" element={<ActualitesPage />} />
-          <Route path="/evenements" element={<EvenementsPage />} />
-          <Route path="/main-doeuvre" element={<MainDoeuvrePage />} />
-          <Route path="/marche" element={<MarchePage />} />
-          <Route path="/emplois" element={<EmploisPage />} />
-          <Route path="/annuaire" element={<AnnuairePage />} />
-          <Route path="/annuaire/mon-profil" element={<MyProfilePage />} />
-          <Route path="/associations" element={<AssociationsPage />} />
-          <Route path="/immobilier" element={<ImmobilierPage />} />
-          <Route path="/alertes" element={<AlertesPage />} />
-          <Route path="/annonces" element={<AnnoncesPage />} />
-          <Route path="/villages" element={<VillagesPage />} />
-          <Route path="/necrologie" element={<NecrologiePage />} />
-          <Route path="/souvenirs" element={<SouvenirsPage />} />
-          <Route path="/tribune" element={<TribunePage />} />
-          <Route path="/suggestions" element={<SuggestionsPage />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/messages" element={<MessagesPage />} />
-          <Route path="/jukebox" element={<JukeboxPage />} />
-          <Route path="/catalogue" element={<CataloguePage />} />
-          <Route path="/catalogue/category/:id" element={<CategorieDetailsPage />} />
-          <Route path="/actualites/:id" element={<NewsDetailPage />} />
-          <Route path="/evenements/:id" element={<EventDetailPage />} />
-          <Route path="/immobilier/:id" element={<ImmobilierDetailPage />} />
-          <Route path="/services/:id" element={<ServiceDetailPage />} />
-          <Route path="/marche/:id" element={<MarketItemDetailPage />} />
-          <Route path="/steve-yobouet" element={<SteveYobouetPage />} />
-          <Route path="/taxi" element={<TaxiPage />} />
-          <Route path="/taxi-communal" element={<TaxiCommunalPage />} />
-          <Route path="/radio" element={<RadioPage />} />
-          <Route path="/appels-rapides" element={<AppelsRapidesPage />} />
-          <Route path="/sante-proximite" element={<SanteProximite />} />
-          <Route path="/sante-proximite/:id" element={<EtablissementDetailPage />} />
-          <Route path="/maquis-resto" element={<MaquisResto />} />
-          <Route path="/carburant-gaz" element={<CarburantGaz />} />
-          <Route path="/hotelerie" element={<Hotelerie />} />
-         <Route path="/associations/:id" element={<AssociationDashboard />} />
-          <Route path="*" element={<NotFound />} />
+            <Route path="/" element={<Index />} />
+            <Route path="/actualites" element={<ActualitesPage />} />
+            <Route path="/evenements" element={<EvenementsPage />} />
+            <Route path="/main-doeuvre" element={<MainDoeuvrePage />} />
+            <Route path="/marche" element={<MarchePage />} />
+            <Route path="/emplois" element={<EmploisPage />} />
+            <Route path="/annuaire" element={<AnnuairePage />} />
+            <Route path="/annuaire/mon-profil" element={<MyProfilePage />} />
+            <Route path="/associations" element={<AssociationsPage />} />
+            <Route path="/immobilier" element={<ImmobilierPage />} />
+            <Route path="/alertes" element={<AlertesPage />} />
+            <Route path="/annonces" element={<AnnoncesPage />} />
+            <Route path="/villages" element={<VillagesPage />} />
+            <Route path="/necrologie" element={<NecrologiePage />} />
+            <Route path="/souvenirs" element={<SouvenirsPage />} />
+            <Route path="/tribune" element={<TribunePage />} />
+            <Route path="/suggestions" element={<SuggestionsPage />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/messages" element={<MessagesPage />} />
+            <Route path="/jukebox" element={<JukeboxPage />} />
+            <Route path="/catalogue" element={<CataloguePage />} />
+            <Route path="/catalogue/category/:id" element={<CategorieDetailsPage />} />
+            <Route path="/actualites/:id" element={<NewsDetailPage />} />
+            <Route path="/evenements/:id" element={<EventDetailPage />} />
+            <Route path="/immobilier/:id" element={<ImmobilierDetailPage />} />
+            <Route path="/services/:id" element={<ServiceDetailPage />} />
+            <Route path="/marche/:id" element={<MarketItemDetailPage />} />
+            <Route path="/steve-yobouet" element={<SteveYobouetPage />} />
+            <Route path="/materiels-gratuits" element={<MaterielsGratuitsPage />} />
+            <Route path="/taxi" element={<TaxiPage />} />
+            <Route path="/taxi-communal" element={<TaxiCommunalPage />} />
+            <Route path="/radio" element={<RadioPage />} />
+            <Route path="/appels-rapides" element={<AppelsRapidesPage />} />
+            <Route path="/sante-proximite" element={<SanteProximite />} />
+            <Route path="/sante-proximite/:id" element={<EtablissementDetailPage />} />
+            <Route path="/maquis-resto" element={<MaquisResto />} />
+            <Route path="/carburant-gaz" element={<CarburantGaz />} />
+            <Route path="/hotelerie" element={<Hotelerie />} />
+            <Route path="/associations/:id" element={<AssociationDashboard />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
@@ -113,19 +115,19 @@ const AppContent = () => {
 };
 
 const App = () => (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <GeolocationProvider>
-          <AudioProvider>
-            <ModuleVisibilityProvider>
-              <TooltipProvider>
-                <AppContent />
-              </TooltipProvider>
-            </ModuleVisibilityProvider>
-          </AudioProvider>
-        </GeolocationProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <GeolocationProvider>
+        <AudioProvider>
+          <ModuleVisibilityProvider>
+            <TooltipProvider>
+              <AppContent />
+            </TooltipProvider>
+          </ModuleVisibilityProvider>
+        </AudioProvider>
+      </GeolocationProvider>
+    </AuthProvider>
+  </QueryClientProvider>
 );
 
 export default App;
