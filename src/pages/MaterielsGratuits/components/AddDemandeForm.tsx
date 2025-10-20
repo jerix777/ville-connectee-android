@@ -14,9 +14,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
 
 const formSchema = z.object({
+  nom_demandeur: z.string().min(2, "Nom du demandeur requis"),
+  date_evenement: z.string().min(1, "Date de l'événement requise"),
+  heure_evenement: z.string().min(1, "Heure de l'événement requise"),
+  lieu_evenement: z.string().min(2, "Lieu de l'événement requis"),
   materiel_id: z.number().min(1, "Sélectionnez un matériel"),
   quantite: z.number().min(1, "Quantité requise"),
   justification: z.string().optional(),
+  contact1: z.string().min(1, "Contact 1 requis"),
+  contact2: z.string().optional(),
 });
 
 interface AddDemandeFormProps {
@@ -56,11 +62,37 @@ export function AddDemandeForm({ onClose }: AddDemandeFormProps) {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField name="nom_demandeur" control={form.control} render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nom du demandeur</FormLabel>
+                <FormControl><Input {...field} placeholder="Nom de l'association ou de la personne" /></FormControl>
+              </FormItem>
+            )}/>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField name="date_evenement" control={form.control} render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date de l'événement</FormLabel>
+                  <FormControl><Input type="date" {...field} /></FormControl>
+                </FormItem>
+              )}/>
+              <FormField name="heure_evenement" control={form.control} render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Heure de l'événement</FormLabel>
+                  <FormControl><Input type="time" {...field} /></FormControl>
+                </FormItem>
+              )}/>
+            </div>
+            <FormField name="lieu_evenement" control={form.control} render={({ field }) => (
+              <FormItem>
+                <FormLabel>Lieu de l'événement</FormLabel>
+                <FormControl><Input {...field} placeholder="Adresse ou lieu de l'événement" /></FormControl>
+              </FormItem>
+            )}/>
             <FormField name="materiel_id" control={form.control} render={({ field }) => (
               <FormItem>
-                <FormLabel>Matériel</FormLabel>
+                <FormLabel>Matériel souhaité</FormLabel>
                 <FormControl>
-                  <select {...field} className="w-full p-2 border rounded">
+                  <select {...field} className="w-full p-2 border rounded" onChange={(e) => field.onChange(Number(e.target.value))}>
                     <option value="">Sélectionnez un matériel</option>
                     <option value="1">Mégaphone</option>
                     <option value="2">Sonorisation</option>
@@ -80,6 +112,18 @@ export function AddDemandeForm({ onClose }: AddDemandeFormProps) {
               <FormItem>
                 <FormLabel>Justification (optionnel)</FormLabel>
                 <FormControl><textarea {...field} className="w-full p-2 border rounded" rows={3} /></FormControl>
+              </FormItem>
+            )}/>
+            <FormField name="contact1" control={form.control} render={({ field }) => (
+              <FormItem>
+                <FormLabel>Contact 1</FormLabel>
+                <FormControl><Input type="tel" {...field} placeholder="Numéro de téléphone principal" /></FormControl>
+              </FormItem>
+            )}/>
+            <FormField name="contact2" control={form.control} render={({ field }) => (
+              <FormItem>
+                <FormLabel>Contact 2 (optionnel)</FormLabel>
+                <FormControl><Input type="tel" {...field} placeholder="Numéro de téléphone secondaire" /></FormControl>
               </FormItem>
             )}/>
 

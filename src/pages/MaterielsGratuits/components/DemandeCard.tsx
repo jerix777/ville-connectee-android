@@ -1,9 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DemandeMateriel } from "@/services/materielsGratuitsService";
 import { Phone, Calendar, Package, CheckCircle, XCircle, Clock, MessageSquare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface DemandeCardProps {
   demande: DemandeMateriel;
@@ -53,9 +55,32 @@ const getMaterielInfo = (materielId: number) => {
 export const DemandeCard = ({ demande, isAdmin = false, onStatusChange }: DemandeCardProps) => {
   const statusInfo = getStatusInfo(demande.statut);
   const materielInfo = getMaterielInfo(demande.materiel_id);
+  const [showContactSelector, setShowContactSelector] = useState(false);
+  const [selectedContact, setSelectedContact] = useState<string>("");
+
+  const availableContacts = [
+    demande.contact1 && { label: "Contact 1", value: demande.contact1 },
+    demande.contact2 && { label: "Contact 2", value: demande.contact2 },
+  ].filter(Boolean);
 
   const handleAppeler = () => {
-    window.location.href = `tel:+2250102030405`; // TODO: Remplacer par un numéro réel
+    if (availableContacts.length === 1) {
+      // Si un seul contact, appeler directement
+      window.location.href = `tel:${availableContacts[0].value}`;
+    } else if (availableContacts.length > 1) {
+      // Si plusieurs contacts, afficher le sélecteur
+      setShowContactSelector(true);
+    } else {
+      toast.error("Aucun numéro de contact disponible");
+    }
+  };
+
+  const handleContactSelected = () => {
+    if (selectedContact) {
+      window.location.href = `tel:${selectedContact}`;
+      setShowContactSelector(false);
+      setSelectedContact("");
+    }
   };
 
   const handleWhatsApp = () => {
@@ -161,21 +186,55 @@ export const DemandeCard = ({ demande, isAdmin = false, onStatusChange }: Demand
 
           {!isAdmin && demande.statut === "approuvee" && (
             <>
-              <Button
-                variant="default"
-                className="flex-1"
-                onClick={handleAppeler}
-              >
-                <Phone className="w-4 h-4 mr-2" />
-                Contacter
-              </Button>
+              {showContactSelector ? (
+                <div className="flex gap-2 w-full">
+                  <Select value={selectedContact} onValueChange={setSelectedContact}>
+                    <SelectTrigger className="flex-1">
+                      <SelectValue placeholder="Choisir un contact" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableContacts.map((contact) => (
+                        <SelectItem key={contact.value} value={contact.value}>
+                          {contact.label}: {contact.value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    variant="default"
+                    onClick={handleContactSelected}
+                    disabled={!selectedContact}
+                  >
+                    <Phone className="w-4 h-4 mr-2" />
+                    Appeler
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setShowContactSelector(false)}
+                  >
+                    ✕
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <Button
+                    variant="default"
+                    className="flex-1"
+                    onClick={handleAppeler}
+                  >
+                    <Phone className="w-4 h-4 mr-2" />
+                    Contacter
+                  </Button>
 
-              <Button
-                variant="outline"
-                onClick={handleWhatsApp}
-              >
-                <MessageSquare className="w-4 h-4" />
-              </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleWhatsApp}
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                  </Button>
+                </>
+              )}
             </>
           )}
         </div>

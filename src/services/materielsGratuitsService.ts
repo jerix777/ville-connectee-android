@@ -14,6 +14,12 @@ export type DemandeMateriel = {
   statut: "en_attente" | "approuvee" | "rejetee";
   valide_par: string | null;
   commentaires: string | null;
+  contact1: string | null;
+  contact2: string | null;
+  nom_demandeur: string | null;
+  date_evenement: string | null;
+  heure_evenement: string | null;
+  lieu_evenement: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -21,7 +27,14 @@ export type DemandeMateriel = {
 export type CreateDemandeMaterielDTO = Omit<
   DemandeMateriel,
   "id" | "created_at" | "updated_at" | "statut" | "quantite_accordee" | "date_validation" | "reference" | "valide_par" | "commentaires"
->;
+> & {
+  contact1: string;
+  contact2?: string;
+  nom_demandeur: string;
+  date_evenement: string;
+  heure_evenement: string;
+  lieu_evenement: string;
+};
 
 const TABLE = "demandes_materiels";
 
