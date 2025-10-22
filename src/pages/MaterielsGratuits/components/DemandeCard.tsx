@@ -10,7 +10,7 @@ import { useState } from "react";
 interface DemandeCardProps {
   demande: DemandeMateriel;
   isAdmin?: boolean;
-  onStatusChange?: (id: number, status: "approuvee" | "rejetee") => void;
+  onStatusChange?: (id: string, status: "approuvee" | "rejetee") => void;
 }
 
 const getStatusInfo = (status: string) => {
@@ -42,14 +42,14 @@ const getStatusInfo = (status: string) => {
   }
 };
 
-const getMaterielInfo = (materielId: number) => {
-  const materiels = {
+const getMaterielInfo = (materielId: string | number) => {
+  const materiels: Record<string | number, { name: string; icon: string }> = {
     1: { name: 'Mégaphone', icon: '🎤' },
     2: { name: 'Sonorisation', icon: '🔊' },
     3: { name: 'Chaises', icon: '🪑' },
     4: { name: 'Bâche', icon: '⛺' },
   };
-  return materiels[materielId as keyof typeof materiels] || { name: 'Matériel inconnu', icon: '❓' };
+  return materiels[materielId] || { name: 'Matériel inconnu', icon: '❓' };
 };
 
 export const DemandeCard = ({ demande, isAdmin = false, onStatusChange }: DemandeCardProps) => {

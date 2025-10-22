@@ -15,8 +15,10 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const formSchema = z.object({
   nom_demandeur: z.string().min(2, "Nom du demandeur requis"),
-  date_evenement: z.string().min(1, "Date de l'événement requise"),
-  heure_evenement: z.string().min(1, "Heure de l'événement requise"),
+  date_debut_evenement: z.string().min(1, "Date de début requise"),
+  heure_debut_evenement: z.string().min(1, "Heure de début requise"),
+  date_fin_evenement: z.string().min(1, "Date de fin requise"),
+  heure_fin_evenement: z.string().min(1, "Heure de fin requise"),
   lieu_evenement: z.string().min(2, "Lieu de l'événement requis"),
   materiel_id: z.number().min(1, "Sélectionnez un matériel"),
   quantite: z.number().min(1, "Quantité requise"),
@@ -69,15 +71,29 @@ export function AddDemandeForm({ onClose }: AddDemandeFormProps) {
               </FormItem>
             )}/>
             <div className="grid grid-cols-2 gap-4">
-              <FormField name="date_evenement" control={form.control} render={({ field }) => (
+              <FormField name="date_debut_evenement" control={form.control} render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date de l'événement</FormLabel>
+                  <FormLabel>Date de début</FormLabel>
                   <FormControl><Input type="date" {...field} /></FormControl>
                 </FormItem>
               )}/>
-              <FormField name="heure_evenement" control={form.control} render={({ field }) => (
+              <FormField name="heure_debut_evenement" control={form.control} render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Heure de l'événement</FormLabel>
+                  <FormLabel>Heure de début</FormLabel>
+                  <FormControl><Input type="time" {...field} /></FormControl>
+                </FormItem>
+              )}/>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField name="date_fin_evenement" control={form.control} render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date de fin</FormLabel>
+                  <FormControl><Input type="date" {...field} /></FormControl>
+                </FormItem>
+              )}/>
+              <FormField name="heure_fin_evenement" control={form.control} render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Heure de fin</FormLabel>
                   <FormControl><Input type="time" {...field} /></FormControl>
                 </FormItem>
               )}/>

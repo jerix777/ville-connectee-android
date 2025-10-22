@@ -1,10 +1,11 @@
 // src/services/materielsGratuitsService.ts
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 
 export type DemandeMateriel = {
-  id: number;
+  id: string;
   user_id: string;
-  materiel_id: number;
+  materiel_id: string;
   quantite: number;
   quantite_accordee: number | null;
   date_demande: string;
@@ -17,8 +18,10 @@ export type DemandeMateriel = {
   contact1: string | null;
   contact2: string | null;
   nom_demandeur: string | null;
-  date_evenement: string | null;
-  heure_evenement: string | null;
+  date_debut_evenement: string | null;
+  heure_debut_evenement: string | null;
+  date_fin_evenement: string | null;
+  heure_fin_evenement: string | null;
   lieu_evenement: string | null;
   created_at: string;
   updated_at: string;
@@ -31,9 +34,12 @@ export type CreateDemandeMaterielDTO = Omit<
   contact1: string;
   contact2?: string;
   nom_demandeur: string;
-  date_evenement: string;
-  heure_evenement: string;
+  date_debut_evenement: string;
+  heure_debut_evenement: string;
+  date_fin_evenement: string;
+  heure_fin_evenement: string;
   lieu_evenement: string;
+  materiel_id: string;
 };
 
 const TABLE = "demandes_materiels";
@@ -43,15 +49,15 @@ export const materielsGratuitsService = {
     const { data, error } = await supabase
       .from(TABLE)
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false }) as { data: Database['public']['Tables']['demandes_materiels']['Row'][] | null; error: any };
 
     if (error) {
       console.error("Erreur Supabase :", error);
       throw error;
     }
 
-    console.log("Demandes récupérées :", data);
-    return data as DemandeMateriel[];
+    // console.log("Demandes récupérées :", data);
+    return data as unknown as DemandeMateriel[];
   },
 
   async addDemande(demande: CreateDemandeMaterielDTO) {
@@ -69,13 +75,13 @@ export const materielsGratuitsService = {
         },
       ])
       .select()
-      .single();
+      .single() as { data: Database['public']['Tables']['demandes_materiels']['Row'] | null; error: any };
 
     if (error) throw error;
-    return data as DemandeMateriel;
+    return data as unknown as DemandeMateriel;
   },
 
-  async updateStatut(id: number, statut: "approuvee" | "rejetee", valide_par: string, commentaires?: string) {
+  async updateStatut(id: string, statut: "approuvee" | "rejetee", valide_par: string, commentaires?: string) {
     const { error } = await supabase
       .from(TABLE)
       .update({
@@ -85,7 +91,7 @@ export const materielsGratuitsService = {
         date_validation: new Date().toISOString(),
         updated_at: new Date().toISOString()
       })
-      .eq("id", id);
+      .eq("id", id) as { error: any };
     if (error) throw error;
   },
 };

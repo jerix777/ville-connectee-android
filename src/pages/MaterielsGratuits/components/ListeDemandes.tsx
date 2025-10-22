@@ -15,7 +15,7 @@ interface Props {
 export function ListeDemandes({ demandes, isLoading, error, isAdmin = false }: Props) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const handleStatut = async (id: number, statut: "approuvee" | "rejetee") => {
+  const handleStatut = async (id: string, statut: "approuvee" | "rejetee") => {
     try {
       await materielsGratuitsService.updateStatut(id, statut, user?.id || "", `Demande ${statut === "approuvee" ? "approuvée" : "rejetée"}`);
       toast.success(`Demande ${statut === "approuvee" ? "approuvée" : "rejetée"}`);

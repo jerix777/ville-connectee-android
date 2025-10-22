@@ -26,7 +26,7 @@ const MaterielsGratuits = () => {
     refresh: refreshDemandes,
     pagination: demandesPagination,
     hasData: hasDemandes,
-  } = useDataManagement({
+  } = useDataManagement<DemandeMateriel>({
     fetchData: materielsGratuitsService.getDemandes,
     searchFields: ['reference'],
     itemsPerPage: 6,
@@ -67,47 +67,40 @@ const MaterielsGratuits = () => {
     <AddDemandeForm onClose={() => setActiveTab('liste')} />
   );
 
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Gratuit avec Steve YOBOUET</h1>
-          <p className="text-gray-600 mt-1">
-            Sollicitez gratuitement nos équipements pour vos réunions, cérémonies et autres événements.
-            Seules conditions : assurer le transport et l'entretien.
-          </p>
-        </div>
-        {isAdmin && (
-          <Button
-            onClick={() => navigate('/admin/materiels')}
-            variant="outline"
-            className="flex items-center gap-2"
-          >
-            <Settings className="w-4 h-4" />
-            Gestion des matériels
-          </Button>
-        )}
-      </div>
+  const renderAdditionalOptions = () => {
+    if (!isAdmin) return null;
 
-      <PageLayout
-        moduleId="materiels-gratuits"
-        title=""
-        description=""
-        icon={Gift}
-        iconClassName="text-pink-600"
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        searchPlaceholder="Rechercher par référence..."
-        addButtonText="Nouvelle demande"
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        hasData={hasDemandes}
-        listContent={renderListContent()}
-        addContent={renderAddContent()}
-        showAddButton={!isAdmin && activeTab !== "ajouter"}
-        hideHeader={true}
-      />
-    </div>
+    return (
+      <Button
+        onClick={() => navigate('/admin/materiels')}
+        variant="outline"
+        className="flex items-center gap-2"
+      >
+        <Settings className="w-4 h-4" />
+        Gestion des matériels
+      </Button>
+    );
+  };
+
+  return (
+    <PageLayout
+      moduleId="materiels-gratuits"
+      title="Gratuit avec Steve YOBOUET"
+      description="Sollicitez gratuitement nos équipements pour vos réunions, cérémonies et autres événements. Seules conditions : assurer le transport et l'entretien."
+      icon={Gift}
+      iconClassName="text-pink-600"
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      searchPlaceholder="Rechercher par référence..."
+      addButtonText="Nouvelle demande"
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      hasData={hasDemandes}
+      listContent={renderListContent()}
+      addContent={renderAddContent()}
+      showAddButton={!isAdmin && activeTab !== "ajouter"}
+      additionalOptions={renderAdditionalOptions()}
+    />
   );
 };
 
