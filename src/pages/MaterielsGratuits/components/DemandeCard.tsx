@@ -10,7 +10,7 @@ import { useState } from "react";
 interface DemandeCardProps {
   demande: DemandeMateriel;
   isAdmin?: boolean;
-  onStatusChange?: (id: string, status: "approuvee" | "rejetee") => void;
+  onStatusChange?: (id: number, status: "approuvee" | "rejetee") => void;
   onClick?: () => void;
 }
 
