@@ -10,9 +10,10 @@ interface Props {
   isLoading: boolean;
   error: any;
   isAdmin?: boolean;
+  onDemandeClick?: (demande: DemandeMateriel) => void;
 }
 
-export function ListeDemandes({ demandes, isLoading, error, isAdmin = false }: Props) {
+export function ListeDemandes({ demandes, isLoading, error, isAdmin = false, onDemandeClick }: Props) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const handleStatut = async (id: string, statut: "approuvee" | "rejetee") => {
@@ -42,6 +43,7 @@ export function ListeDemandes({ demandes, isLoading, error, isAdmin = false }: P
           demande={demande}
           isAdmin={isAdmin}
           onStatusChange={handleStatut}
+          onClick={() => onDemandeClick?.(demande)}
         />
       ))}
     </div>

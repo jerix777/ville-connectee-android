@@ -42,7 +42,7 @@ export function AddDemandeForm({ onClose }: AddDemandeFormProps) {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
     try {
-      const demandeData = { ...values, user_id: user?.id || "", date_demande: new Date().toISOString() } as CreateDemandeMaterielDTO;
+      const demandeData = { ...values, user_id: user?.id || "", date_demande: new Date().toISOString(), materiel_id: values.materiel_id.toString() } as unknown as CreateDemandeMaterielDTO;
       await materielsGratuitsService.addDemande(demandeData);
       toast.success("Demande envoyée avec succès !");
       queryClient.invalidateQueries({ queryKey: ["demandes-materiels"] });

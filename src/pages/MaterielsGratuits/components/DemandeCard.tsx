@@ -11,6 +11,7 @@ interface DemandeCardProps {
   demande: DemandeMateriel;
   isAdmin?: boolean;
   onStatusChange?: (id: string, status: "approuvee" | "rejetee") => void;
+  onClick?: () => void;
 }
 
 const getStatusInfo = (status: string) => {
@@ -52,7 +53,7 @@ const getMaterielInfo = (materielId: string | number) => {
   return materiels[materielId] || { name: 'Matériel inconnu', icon: '❓' };
 };
 
-export const DemandeCard = ({ demande, isAdmin = false, onStatusChange }: DemandeCardProps) => {
+export const DemandeCard = ({ demande, isAdmin = false, onStatusChange, onClick }: DemandeCardProps) => {
   const statusInfo = getStatusInfo(demande.statut);
   const materielInfo = getMaterielInfo(demande.materiel_id);
   const [showContactSelector, setShowContactSelector] = useState(false);
@@ -92,7 +93,10 @@ export const DemandeCard = ({ demande, isAdmin = false, onStatusChange }: Demand
   };
 
   return (
-    <Card className="hover:shadow-lg transition-all duration-200 border-l-4 border-l-blue-500">
+    <Card
+      className={`hover:shadow-lg transition-all duration-200 border-l-4 border-l-blue-500 ${onClick ? 'cursor-pointer hover:bg-gray-50' : ''}`}
+      onClick={onClick}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

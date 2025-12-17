@@ -1,133 +1,51 @@
-import React, { lazy, Suspense } from "react";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
-import { AuthProvider } from "@/contexts/AuthContext";
-import { AudioProvider } from "@/contexts/AudioContext";
-import { ModuleVisibilityProvider } from "@/contexts/ModuleVisibilityContext";
-import { GeolocationProvider } from "@/contexts/GeolocationContext";
-import { useUpdateChecker } from "@/hooks/useUpdateChecker";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
-import EvenementsPage from "./pages/Evenements";
-const MainDoeuvrePage = lazy(() => import("./pages/MainDoeuvre"));
-import MarchePage from "./pages/Marche";
-import ActualitesPage from "./pages/Actualites";
-import EmploisPage from "./pages/Emplois";
-import AnnuairePage from "./pages/Annuaire";
-import MyProfilePage from "./pages/Annuaire/MyProfile.tsx";
-const EtablissementDetailPage = lazy(() => import("./pages/SanteProximite/EtablissementDetailPage"));
-import AssociationsPage from "./pages/Associations";
-import ImmobilierPage from "./pages/Immobilier";
-import AlertesPage from "./pages/Alertes";
-import AnnoncesPage from "./pages/Annonces";
-import VillagesPage from "./pages/Villages";
-import NecrologiePage from "./pages/Necrologie";
-import SouvenirsPage from "./pages/Souvenirs";
-import TribunePage from "./pages/Tribune";
-import SuggestionsPage from "./pages/Suggestions";
-import ServicesPage from "./pages/Services";
-import AuthPage from "./pages/Auth";
-import SettingsPage from "./pages/Settings";
-import MessagesPage from "./pages/Messages";
-import { JukeboxPage } from "./pages/Jukebox";
-import { CataloguePage } from "./pages/Catalogue";
-import { CategorieDetailsPage } from "./pages/Catalogue/CategorieDetailsPage";
-import NewsDetailPage from "./pages/Actualites/NewsDetailPage";
-import EventDetailPage from "./pages/Evenements/EventDetailPage";
-import ImmobilierDetailPage from "./pages/Immobilier/ImmobilierDetailPage";
-import ServiceDetailPage from "./pages/Services/ServiceDetailPage";
-import MarketItemDetailPage from "./pages/Marche/MarketItemDetailPage";
-import SteveYobouetPage from "./pages/SteveYobouet";
-import MaterielsGratuitsPage from "./pages/MaterielsGratuits";
-import TaxiPage from "./pages/Taxi";
-import AssociationDashboard from "./pages/Associations/AssociationDashboard";
-import TaxiCommunalPage from "./pages/TaxiCommunal";
-import RadioPage from "./pages/Radio";
-import AppelsRapidesPage from "./pages/AppelsRapides";
-const SanteProximite = lazy(() => import('./pages/SanteProximite'));
-const MaquisResto = lazy(() => import('./pages/MaquisResto'));
-const CarburantGaz = lazy(() => import('./pages/CarburantGaz'));
-const Hotelerie = lazy(() => import('./pages/Hotelerie'));
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'sonner';
+import { AuthProvider } from './contexts/AuthContext';
+import { AudioProvider } from './contexts/AudioContext';
+import { ModuleVisibilityProvider } from './contexts/ModuleVisibilityContext';
 
-const queryClient = new QueryClient();
+// Pages
+import Index from './pages/Index';
+import NotFound from './pages/NotFound';
+import MaterielsGratuits from './pages/MaterielsGratuits';
+import DemandeDetailPage from './pages/MaterielsGratuits/DemandeDetailPage';
+import MaterielsGestion from './pages/Admin/MaterielsGestion';
 
-const AppContent = () => {
-  useUpdateChecker();
+// Import other pages...
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      cacheTime: 1000 * 60 * 10, // 10 minutes
+    },
+  },
+});
 
+function App() {
   return (
-    <>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Suspense fallback={<LoadingSkeleton type="list" count={1} />}>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Router>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/actualites" element={<ActualitesPage />} />
-            <Route path="/evenements" element={<EvenementsPage />} />
-            <Route path="/main-doeuvre" element={<MainDoeuvrePage />} />
-            <Route path="/marche" element={<MarchePage />} />
-            <Route path="/emplois" element={<EmploisPage />} />
-            <Route path="/annuaire" element={<AnnuairePage />} />
-            <Route path="/annuaire/mon-profil" element={<MyProfilePage />} />
-            <Route path="/associations" element={<AssociationsPage />} />
-            <Route path="/immobilier" element={<ImmobilierPage />} />
-            <Route path="/alertes" element={<AlertesPage />} />
-            <Route path="/annonces" element={<AnnoncesPage />} />
-            <Route path="/villages" element={<VillagesPage />} />
-            <Route path="/necrologie" element={<NecrologiePage />} />
-            <Route path="/souvenirs" element={<SouvenirsPage />} />
-            <Route path="/tribune" element={<TribunePage />} />
-            <Route path="/suggestions" element={<SuggestionsPage />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/auth" element={<AuthPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/messages" element={<MessagesPage />} />
-            <Route path="/jukebox" element={<JukeboxPage />} />
-            <Route path="/catalogue" element={<CataloguePage />} />
-            <Route path="/catalogue/category/:id" element={<CategorieDetailsPage />} />
-            <Route path="/actualites/:id" element={<NewsDetailPage />} />
-            <Route path="/evenements/:id" element={<EventDetailPage />} />
-            <Route path="/immobilier/:id" element={<ImmobilierDetailPage />} />
-            <Route path="/services/:id" element={<ServiceDetailPage />} />
-            <Route path="/marche/:id" element={<MarketItemDetailPage />} />
-            <Route path="/steve-yobouet" element={<SteveYobouetPage />} />
-            <Route path="/materiels-gratuits" element={<MaterielsGratuitsPage />} />
-            <Route path="/taxi" element={<TaxiPage />} />
-            <Route path="/taxi-communal" element={<TaxiCommunalPage />} />
-            <Route path="/radio" element={<RadioPage />} />
-            <Route path="/appels-rapides" element={<AppelsRapidesPage />} />
-            <Route path="/sante-proximite" element={<SanteProximite />} />
-            <Route path="/sante-proximite/:id" element={<EtablissementDetailPage />} />
-            <Route path="/maquis-resto" element={<MaquisResto />} />
-            <Route path="/carburant-gaz" element={<CarburantGaz />} />
-            <Route path="/hotelerie" element={<Hotelerie />} />
-            <Route path="/associations/:id" element={<AssociationDashboard />} />
+
+            {/* Materiels Gratuits */}
+            <Route path="/materiels-gratuits" element={<MaterielsGratuits />} />
+            <Route path="/materiels-gratuits/demande/:id" element={<DemandeDetailPage />} />
+
+            {/* Admin */}
+            <Route path="/admin/materiels" element={<MaterielsGestion />} />
+
+            {/* Other routes... */}
+
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </Suspense>
-      </BrowserRouter>
-    </>
+        </Router>
+        <Toaster position="top-right" />
+      </AuthProvider>
+    </QueryClientProvider>
   );
-};
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <GeolocationProvider>
-        <AudioProvider>
-          <ModuleVisibilityProvider>
-            <TooltipProvider>
-              <AppContent />
-            </TooltipProvider>
-          </ModuleVisibilityProvider>
-        </AudioProvider>
-      </GeolocationProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-);
+}
 
 export default App;

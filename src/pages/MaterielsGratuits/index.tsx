@@ -60,6 +60,9 @@ const MaterielsGratuits = () => {
       isLoading={demandesLoading}
       error={null}
       isAdmin={isAdmin}
+      onDemandeClick={(demande) => {
+        navigate(`/materiels-gratuits/demande/${demande.id}`);
+      }}
     />
   );
 
@@ -77,7 +80,7 @@ const MaterielsGratuits = () => {
         className="flex items-center gap-2"
       >
         <Settings className="w-4 h-4" />
-        Gestion des matériels
+        Gérer le matériel
       </Button>
     );
   };
