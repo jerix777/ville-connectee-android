@@ -17,7 +17,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5 minutes
-      cacheTime: 1000 * 60 * 10, // 10 minutes
+      gcTime: 1000 * 60 * 10, // 10 minutes
     },
   },
 });
@@ -26,23 +26,27 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Index />} />
+        <AudioProvider>
+          <ModuleVisibilityProvider>
+            <Router>
+              <Routes>
+                <Route path="/" element={<Index />} />
 
-            {/* Materiels Gratuits */}
-            <Route path="/materiels-gratuits" element={<MaterielsGratuits />} />
-            <Route path="/materiels-gratuits/demande/:id" element={<DemandeDetailPage />} />
+                {/* Materiels Gratuits */}
+                <Route path="/materiels-gratuits" element={<MaterielsGratuits />} />
+                <Route path="/materiels-gratuits/demande/:id" element={<DemandeDetailPage />} />
 
-            {/* Admin */}
-            <Route path="/admin/materiels" element={<MaterielsGestion />} />
+                {/* Admin */}
+                <Route path="/admin/materiels" element={<MaterielsGestion />} />
 
-            {/* Other routes... */}
+                {/* Other routes... */}
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Router>
-        <Toaster position="top-right" />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Router>
+            <Toaster position="top-right" />
+          </ModuleVisibilityProvider>
+        </AudioProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

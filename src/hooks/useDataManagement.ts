@@ -8,7 +8,7 @@ interface UseDataManagementProps<T> {
   enableRealTimeRefresh?: boolean;
 }
 
-export function useDataManagement<T extends { id: string }>({
+export function useDataManagement<T extends { id: string | number }>({
   fetchData,
   searchFields,
   itemsPerPage = 6,

@@ -335,7 +335,7 @@ export type Database = {
           created_at: string | null
           details: Json | null
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           resource_id: string | null
           resource_type: string
           user_agent: string | null
@@ -346,7 +346,7 @@ export type Database = {
           created_at?: string | null
           details?: Json | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           resource_id?: string | null
           resource_type: string
           user_agent?: string | null
@@ -357,7 +357,7 @@ export type Database = {
           created_at?: string | null
           details?: Json | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           resource_id?: string | null
           resource_type?: string
           user_agent?: string | null
@@ -581,7 +581,7 @@ export type Database = {
           action: string
           created_at: string | null
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           resource_id: string | null
           resource_type: string
           sensitive_data_accessed: boolean | null
@@ -592,7 +592,7 @@ export type Database = {
           action: string
           created_at?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           resource_id?: string | null
           resource_type: string
           sensitive_data_accessed?: boolean | null
@@ -603,12 +603,87 @@ export type Database = {
           action?: string
           created_at?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           resource_id?: string | null
           resource_type?: string
           sensitive_data_accessed?: boolean | null
           user_agent?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      demandes_materiels: {
+        Row: {
+          commentaires: string | null
+          contact1: string | null
+          contact2: string | null
+          created_at: string | null
+          date_debut_evenement: string | null
+          date_demande: string | null
+          date_fin_evenement: string | null
+          date_validation: string | null
+          heure_debut_evenement: string | null
+          heure_fin_evenement: string | null
+          id: number
+          justification: string | null
+          lieu_evenement: string | null
+          materiel_id: number | null
+          nom_demandeur: string | null
+          quantite: number
+          quantite_accordee: number | null
+          reference: string | null
+          statut: string
+          updated_at: string | null
+          user_id: string | null
+          valide_par: string | null
+        }
+        Insert: {
+          commentaires?: string | null
+          contact1?: string | null
+          contact2?: string | null
+          created_at?: string | null
+          date_debut_evenement?: string | null
+          date_demande?: string | null
+          date_fin_evenement?: string | null
+          date_validation?: string | null
+          heure_debut_evenement?: string | null
+          heure_fin_evenement?: string | null
+          id?: number
+          justification?: string | null
+          lieu_evenement?: string | null
+          materiel_id?: number | null
+          nom_demandeur?: string | null
+          quantite?: number
+          quantite_accordee?: number | null
+          reference?: string | null
+          statut?: string
+          updated_at?: string | null
+          user_id?: string | null
+          valide_par?: string | null
+        }
+        Update: {
+          commentaires?: string | null
+          contact1?: string | null
+          contact2?: string | null
+          created_at?: string | null
+          date_debut_evenement?: string | null
+          date_demande?: string | null
+          date_fin_evenement?: string | null
+          date_validation?: string | null
+          heure_debut_evenement?: string | null
+          heure_fin_evenement?: string | null
+          id?: number
+          justification?: string | null
+          lieu_evenement?: string | null
+          materiel_id?: number | null
+          nom_demandeur?: string | null
+          quantite?: number
+          quantite_accordee?: number | null
+          reference?: string | null
+          statut?: string
+          updated_at?: string | null
+          user_id?: string | null
+          valide_par?: string | null
         }
         Relationships: []
       }
@@ -1001,6 +1076,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      materiels: {
+        Row: {
+          categorie: string | null
+          created_at: string | null
+          description: string | null
+          disponible: boolean | null
+          etat: string | null
+          id: string
+          image_url: string | null
+          localisation: string | null
+          nom: string
+          quantite_disponible: number | null
+          quantite_totale: number
+          updated_at: string | null
+        }
+        Insert: {
+          categorie?: string | null
+          created_at?: string | null
+          description?: string | null
+          disponible?: boolean | null
+          etat?: string | null
+          id?: string
+          image_url?: string | null
+          localisation?: string | null
+          nom: string
+          quantite_disponible?: number | null
+          quantite_totale?: number
+          updated_at?: string | null
+        }
+        Update: {
+          categorie?: string | null
+          created_at?: string | null
+          description?: string | null
+          disponible?: boolean | null
+          etat?: string | null
+          id?: string
+          image_url?: string | null
+          localisation?: string | null
+          nom?: string
+          quantite_disponible?: number | null
+          quantite_totale?: number
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       medicament: {
         Row: {

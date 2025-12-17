@@ -20,7 +20,7 @@ export default function DemandeDetailPage() {
     queryKey: ['demande-detail', id],
     queryFn: async () => {
       const demandes = await materielsGratuitsService.getDemandes();
-      return demandes.find(d => d.id === id);
+      return demandes.find(d => d.id === Number(id));
     },
     enabled: !!id,
   });

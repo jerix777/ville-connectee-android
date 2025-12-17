@@ -3,9 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
 export type DemandeMateriel = {
-  id: string;
+  id: number;
   user_id: string;
-  materiel_id: string;
+  materiel_id: number;
   quantite: number;
   quantite_accordee: number | null;
   date_demande: string;
@@ -39,7 +39,7 @@ export type CreateDemandeMaterielDTO = Omit<
   date_fin_evenement: string;
   heure_fin_evenement: string;
   lieu_evenement: string;
-  materiel_id: string;
+  materiel_id: number;
 };
 
 const TABLE = "demandes_materiels";
@@ -81,7 +81,7 @@ export const materielsGratuitsService = {
     return data as unknown as DemandeMateriel;
   },
 
-  async updateStatut(id: string, statut: "approuvee" | "rejetee", valide_par: string, commentaires?: string) {
+  async updateStatut(id: number, statut: "approuvee" | "rejetee", valide_par: string, commentaires?: string) {
     const { error } = await supabase
       .from(TABLE)
       .update({
