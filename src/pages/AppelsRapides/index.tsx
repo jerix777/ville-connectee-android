@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { Phone, Plus } from "lucide-react";
 import { PageLayout } from "@/components/common/PageLayout";
 import { ServiceCard } from "./ServiceCard";
@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default function AppelsRapides() {
+function AppelsRapides() {
   const [services, setServices] = useState<ServiceRapide[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -167,3 +167,5 @@ export default function AppelsRapides() {
     </>
   );
 }
+
+export default memo(AppelsRapides);
