@@ -5,3 +5,4 @@ export { useIsMobile } from './use-mobile';
 export { useUpdateChecker } from './useUpdateChecker';
 export { useMessageNotifications } from './useMessageNotifications';
 export { useDebounce } from './useDebounce';
+export { useOptimizedQuery, useOptimizedMutation, usePrefetch } from './useOptimizedQuery';

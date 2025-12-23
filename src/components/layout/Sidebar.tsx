@@ -1,8 +1,16 @@
-import { useState, useMemo } from "react";
+import { memo, useMemo, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Gift, Lightbulb, BikeIcon, Bed, Bell, Blend, Newspaper, Building, CalendarDays, Home, Info, PhoneCall, MapPin, MessageSquare, Music, Search, ShoppingCart, Users, BriefcaseBusiness, LucideProps, User, Bus, Briefcase, Heart, UtensilsCrossed, Fuel, Settings, BoomBox, Stethoscope, BookmarkCheck, Phone } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { 
+  Gift, Lightbulb, BikeIcon, Bed, Bell, Blend, Newspaper, Building, 
+  CalendarDays, Home, Info, PhoneCall, MapPin, MessageSquare, Music, 
+  Search, ShoppingCart, Users, BriefcaseBusiness, User, Bus, Heart, 
+  UtensilsCrossed, Fuel, Settings, BoomBox, Stethoscope, BookmarkCheck, Phone,
+  type LucideIcon 
+} from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useModuleVisibility } from "@/contexts/ModuleVisibilityContext";
 
@@ -10,15 +18,15 @@ interface SidebarProps {
   isOpen: boolean;
 }
 
-interface NavItemProps {
-  to: string;
-  icon: React.ComponentType<LucideProps>;
+interface NavItemData {
+  path: string;
   label: string;
-  isActive: boolean;
-  onClick?: () => void;
+  icon: LucideIcon;
+  id: string;
+  private?: boolean;
 }
 
-const navItems = [
+const NAV_ITEMS: NavItemData[] = [
   { path: "/", label: "Accueil", icon: Home, id: "home" },
   { path: "/steve-yobouet", label: "Steve YOBOUET", icon: User, id: "steve_yobouet" },
   { path: "/catalogue", label: "Catalogue", icon: Lightbulb, id: "catalogue" },
@@ -51,45 +59,44 @@ const navItems = [
   { path: "/carburant-gaz", label: "Carburant et Gaz", icon: Fuel, id: "carburant_gaz" },
 ];
 
-function NavItem({ to, icon: Icon, label, isActive, onClick }: NavItemProps) {
+interface NavItemProps {
+  item: NavItemData;
+  isActive: boolean;
+}
+
+const NavItem = memo(function NavItem({ item, isActive }: NavItemProps) {
+  const Icon = item.icon;
+  
   return (
     <li>
-      <Link to={to} onClick={onClick}>
+      <Link to={item.path}>
         <Button
           variant={isActive ? "secondary" : "ghost"}
           className={cn(
-            "w-full justify-start gap-2 font-normal",
-            isActive ? "bg-ville-light text-ville-dark" : "text-gray-700"
+            "w-full justify-start gap-2 font-normal transition-colors",
+            isActive ? "bg-primary/10 text-primary" : "text-foreground/70 hover:text-foreground"
           )}
         >
           <Icon size={18} />
-          <span>{label}</span>
+          <span>{item.label}</span>
         </Button>
       </Link>
     </li>
   );
-}
+});
 
-export function Sidebar({ isOpen }: SidebarProps) {
+export const Sidebar = memo(function Sidebar({ isOpen }: SidebarProps) {
   const { pathname } = useLocation();
-  const [searchQuery, setSearchQuery] = useState("");
   const { user } = useAuth();
   const { modules, loading } = useModuleVisibility();
 
   const visibleNavItems = useMemo(() => {
     if (loading) return [];
     
-    let items = navItems.filter(item => {
-      // @ts-ignore
-      if (item.private && !user) {
-        return false;
-      }
+    const items = NAV_ITEMS.filter(item => {
+      if (item.private && !user) return false;
+      if (user) return true;
       
-      if (user) {
-        return true;
-      }
-      
-      // @ts-ignore
       const module = modules.find(m => m.id === item.id);
       return module ? module.is_public : true;
     });
@@ -101,46 +108,28 @@ export function Sidebar({ isOpen }: SidebarProps) {
     return items;
   }, [user, modules, loading]);
 
-  const sidebarClasses = cn(
-    "fixed top-0 left-0 bottom-0 z-40 w-64 bg-white shadow-lg transition-transform duration-300 pt-16 overflow-y-auto",
-    isOpen ? "translate-x-0" : "-translate-x-full"
-  );
+  const isActive = useCallback((path: string) => {
+    if (path === "/") return pathname === "/";
+    return pathname.startsWith(path);
+  }, [pathname]);
 
-  const filteredNavItems = searchQuery
-    ? visibleNavItems.filter((item) =>
-        item.label.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : visibleNavItems;
+  if (!isOpen) return null;
 
   return (
-    <aside className={sidebarClasses}>
-      <div className="p-4">
-        <div className="relative mb-4">
-          <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Rechercher..."
-            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-ville-DEFAULT"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-
-        <nav>
+    <aside className="fixed left-0 top-16 z-30 h-[calc(100vh-4rem)] w-64 border-r border-border bg-background shadow-sm lg:block">
+      <ScrollArea className="h-full py-4">
+        <nav className="px-3">
           <ul className="space-y-1">
-            {filteredNavItems.map((item) => (
-              <NavItem
-                key={item.path}
-                to={item.path}
-                icon={item.icon}
-                label={item.label}
-                isActive={pathname === item.path}
-                onClick={() => {}}
+            {visibleNavItems.map((item) => (
+              <NavItem 
+                key={item.path} 
+                item={item} 
+                isActive={isActive(item.path)} 
               />
             ))}
           </ul>
         </nav>
-      </div>
+      </ScrollArea>
     </aside>
   );
-}
+});
