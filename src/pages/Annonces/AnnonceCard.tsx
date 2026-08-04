@@ -34,7 +34,7 @@ export function AnnonceCard({ annonce }: AnnonceCardProps) {
       </CardHeader>
       <CardContent>
         {annonce.image_url && (
-          <img src={annonce.image_url} alt="" className="w-full max-h-72 object-cover rounded mb-3" />
+          <img src={annonce.image_url} alt={"Illustration du communiqué : " + annonce.titre} className="w-full max-h-72 object-cover rounded mb-3" />
         )}
         <div className="whitespace-pre-line text-gray-800">{annonce.contenu}</div>
       </CardContent>

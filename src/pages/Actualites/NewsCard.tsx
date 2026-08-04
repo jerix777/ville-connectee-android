@@ -33,7 +33,7 @@ export function NewsCard({ news }: NewsCardProps) {
       </CardHeader>
       <CardContent>
         {news.image_url && (
-          <img src={news.image_url} alt="" className="w-full max-h-72 object-cover rounded mb-3" />
+          <img src={news.image_url} alt={"Illustration de l’actualité : " + news.titre} className="w-full max-h-72 object-cover rounded mb-3" />
         )}
         <div className="whitespace-pre-line text-gray-800">{news.contenu}</div>
       </CardContent>

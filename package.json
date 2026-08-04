@@ -10,7 +10,9 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy:functions": "supabase functions deploy"
+    "deploy:functions": "supabase functions deploy",
+    "predev": "bunx tsx scripts/generate-sitemap.ts",
+    "prebuild": "bunx tsx scripts/generate-sitemap.ts"
   },
   "dependencies": {
     "@capacitor/android": "^7.2.0",

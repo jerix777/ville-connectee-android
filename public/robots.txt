@@ -12,3 +12,6 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://ville-connectee.lovable.app/sitemap.xml
+

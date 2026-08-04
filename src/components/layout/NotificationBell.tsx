@@ -22,6 +22,7 @@ export function NotificationBell() {
         variant="ghost" 
         size="icon" 
         onClick={handleClick}
+        aria-label={unreadCount > 0 ? `Messages, ${unreadCount} non lus` : "Messages"}
         className="text-current hover:bg-ville-hover"
       >
         <Bell size={20} />

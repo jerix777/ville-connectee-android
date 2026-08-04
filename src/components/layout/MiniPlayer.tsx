@@ -19,6 +19,7 @@ export function MiniPlayer() {
         variant="ghost"
         size="sm"
         onClick={togglePlayback}
+        aria-label={isPlaying ? "Mettre la radio en pause" : "Lire la radio"}
         className="h-6 w-6 p-0"
       >
         {isPlaying ? (
@@ -40,6 +41,7 @@ export function MiniPlayer() {
         variant="ghost"
         size="sm"
         onClick={pauseRadio}
+        aria-label="Fermer le lecteur radio"
         className="h-6 w-6 p-0 ml-1"
       >
         <X className="h-3 w-3" />
