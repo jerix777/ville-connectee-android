@@ -12,6 +12,7 @@ import { PaginationControls } from "@/components/ui/pagination-controls";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageLayout } from "@/components/common/PageLayout";
 import { Toaster } from "@/components/ui/toaster";
+import { StructuredData } from "@/components/common/StructuredData";
 
 export default function EvenementsPage() {
   const [activeViewTab, setActiveViewTab] = useState<string>("liste");
@@ -176,8 +177,31 @@ export default function EvenementsPage() {
     );
   };
 
+  const eventSchemas = (events || []).slice(0, 20).map((event) => ({
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.titre,
+    startDate: event.heure_debut ? `${event.date_debut}T${event.heure_debut}` : event.date_debut,
+    ...(event.date_fin
+      ? { endDate: event.heure_fin ? `${event.date_fin}T${event.heure_fin}` : event.date_fin }
+      : {}),
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    location: {
+      "@type": "Place",
+      name: event.lieu,
+      address: { "@type": "PostalAddress", addressLocality: "Ouellé", addressCountry: "CI" },
+    },
+    organizer: { "@type": "Organization", name: event.organisateur },
+  }));
+
   return (
     <>
+      <StructuredData
+        path="/evenements"
+        title="Événements à Ouellé — Ouellé en mouvement"
+        description="Découvrez les événements à venir à Ouellé : dates, lieux et organisateurs, et publiez les vôtres."
+        schemas={eventSchemas}
+      />
       <PageLayout
         moduleId="evenements"
         title="Événements"
