@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { BriefcaseBusiness } from "lucide-react";
+import { StructuredData } from "@/components/common/StructuredData";
 
 export default function EmploisPage() {
   const [offres, setOffres] = useState<OffreEmploi[]>([]);
@@ -60,7 +61,32 @@ export default function EmploisPage() {
     <AddOffreForm onAdded={refresh} />
   );
 
+  const jobSchemas = offres.slice(0, 20).map((offre) => ({
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: offre.titre,
+    description: offre.description,
+    ...(offre.publie_le ? { datePosted: offre.publie_le } : {}),
+    employmentType: offre.type_contrat,
+    hiringOrganization: { "@type": "Organization", name: offre.employeur },
+    jobLocation: {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: offre.localisation || "Ouellé",
+        addressCountry: "CI",
+      },
+    },
+  }));
+
   return (
+    <>
+    <StructuredData
+      path="/emplois"
+      title="Offres d'emploi à Ouellé — Ouellé en mouvement"
+      description="Consultez les offres d'emploi locales à Ouellé et publiez vos annonces de recrutement."
+      schemas={jobSchemas}
+    />
     <PageLayout
       moduleId="emplois"
       title="Offres d'emploi"
@@ -73,5 +99,6 @@ export default function EmploisPage() {
       loading={loading}
       hasData={offres.length > 0}
     />
+    </>
   );
 }
