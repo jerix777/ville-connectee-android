@@ -68,6 +68,7 @@ export const Header = memo(function Header({ toggleSidebar }: HeaderProps) {
           variant="ghost" 
           size="icon" 
           onClick={toggleSidebar}
+          aria-label="Ouvrir le menu"
           className="text-current mr-2 hover:bg-primary/80"
         >
           <Menu size={24} />
@@ -75,12 +76,14 @@ export const Header = memo(function Header({ toggleSidebar }: HeaderProps) {
         
         <BackButton className="mr-2" />
         
-        <h1 
+        <span 
+          role="button"
+          tabIndex={0}
           className="text-lg font-bold cursor-pointer hover:underline"
           onClick={handleOpenSelector}
         >
           {loading ? <Skeleton className="h-6 w-32 bg-primary-foreground/20" /> : communeName}
-        </h1>
+        </span>
       </div>
       
       <MiniPlayer />
