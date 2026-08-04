@@ -27,7 +27,11 @@ const setupMobile = async () => {
 const initializeApp = async () => {
   await setupMobile();
   await initDefaultData();
-  createRoot(document.getElementById("root")!).render(<App />);
+  createRoot(document.getElementById("root")!).render(
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>
+  );
 };
 
 initializeApp();
