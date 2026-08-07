@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@capacitor/android": "^7.2.0",
-    "@capacitor/cli": "^7.4.1",
+    "@capacitor/cli": "^7.5.0",
     "@capacitor/core": "^7.4.1",
     "@capacitor/splash-screen": "^7.0.2",
     "@capacitor/status-bar": "^7.0.2",
@@ -73,7 +73,7 @@
     "react-router-dom": "^6.26.2",
     "recharts": "^2.12.7",
     "sonner": "^1.5.0",
-    "supabase": "^2.31.8",
+    "supabase": "^2.76.17",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.1.0",
