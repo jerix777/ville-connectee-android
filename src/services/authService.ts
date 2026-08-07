@@ -262,6 +262,17 @@ export async function signIn(email: string, password: string): Promise<{ success
   }
 }
 
+/** Chemin de retour sûr (même origine) transmis via ?next=, sinon la racine. */
+function safeNextPath(): string {
+  try {
+    const next = new URLSearchParams(window.location.search).get("next");
+    if (next && next.startsWith("/") && !next.startsWith("//")) return next;
+  } catch {
+    // ignore
+  }
+  return "/";
+}
+
 // Inscription utilisateur
 export async function signUp(email: string, password: string): Promise<{ success: boolean; error?: string }> {
   try {
