@@ -12,6 +12,7 @@ import {
   Index,
   NotFound,
   Auth,
+  OAuthConsent,
   Messages,
   Settings,
   Actualites,
@@ -75,6 +76,7 @@ const AppRoutes = memo(function AppRoutes() {
       
       {/* Auth */}
       <Route path="/auth" element={<Auth />} />
+      <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
       <Route path="/messages" element={<Messages />} />
       <Route path="/settings" element={<Settings />} />
 
