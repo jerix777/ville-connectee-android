@@ -4,6 +4,7 @@ import { lazy } from 'react';
 export const Index = lazy(() => import('@/pages/Index'));
 export const NotFound = lazy(() => import('@/pages/NotFound'));
 export const Auth = lazy(() => import('@/pages/Auth'));
+export const OAuthConsent = lazy(() => import('@/pages/OAuthConsent'));
 
 // Messages et Settings
 export const Messages = lazy(() => import('@/pages/Messages'));

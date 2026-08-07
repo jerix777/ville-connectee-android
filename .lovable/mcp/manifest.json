@@ -1,0 +1,181 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://mmslqomfaeklpgmdpxcq.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "ville-connectee",
+      "version": "0.1.0",
+      "title": "ville-connectee"
+    },
+    "tools": [
+      {
+        "name": "list_actualites",
+        "title": "Lister les actualités",
+        "description": "Liste les actualités de la commune, les plus récentes d'abord. Recherche optionnelle par mot-clé dans le titre.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "search": {
+              "type": "string",
+              "description": "Mot-clé recherché dans le titre."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "description": "Nombre maximum d'actualités (défaut 10)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_evenements",
+        "title": "Lister les événements",
+        "description": "Liste les événements de la commune. Par défaut seuls les événements à venir sont renvoyés.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_past": {
+              "type": "boolean",
+              "description": "Inclure aussi les événements déjà terminés (défaut false)."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "description": "Nombre maximum d'événements (défaut 10)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_offres_emploi",
+        "title": "Lister les offres d'emploi",
+        "description": "Liste les offres d'emploi publiées sur l'application, les plus récentes d'abord. Recherche optionnelle par mot-clé dans le titre.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "search": {
+              "type": "string",
+              "description": "Mot-clé recherché dans le titre de l'offre."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "description": "Nombre maximum d'offres (défaut 10)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_villages",
+        "title": "Lister les villages",
+        "description": "Liste les villages rattachés à la commune, avec leur description et leurs contacts. Recherche optionnelle par nom.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "search": {
+              "type": "string",
+              "description": "Mot-clé recherché dans le nom du village."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Nombre maximum de villages (défaut 20)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_my_profile",
+        "title": "Mon profil",
+        "description": "Renvoie le profil de l'utilisateur connecté (nom, prénom, commune, village d'origine, contact).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_suggestion",
+        "title": "Créer une suggestion",
+        "description": "Publie une suggestion adressée à la mairie au nom de l'utilisateur connecté. Écrit une nouvelle ligne dans l'application.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "titre": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Titre court de la suggestion."
+            },
+            "contenu": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Contenu détaillé de la suggestion."
+            }
+          },
+          "required": [
+            "titre",
+            "contenu"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

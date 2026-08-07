@@ -4,7 +4,7 @@ import { MainLayout } from "@/components/layout/MainLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { LoginForm } from "./LoginForm";
 import { SignupForm } from "./SignupForm";
 import { CommuneSelector } from "@/components/CommuneSelector";
@@ -14,14 +14,20 @@ export default function AuthPage() {
   const { user, communeId } = useAuth();
   const [activeTab, setActiveTab] = useState<string>("login");
   const navigate = useNavigate();
-  
-  // Si l'utilisateur est déjà connecté, rediriger vers la page d'accueil
+  const [searchParams] = useSearchParams();
+
+  // Destination de retour (ex: écran de consentement OAuth), même origine uniquement
+  const nextParam = searchParams.get("next");
+  const redirectTo =
+    nextParam && nextParam.startsWith("/") && !nextParam.startsWith("//") ? nextParam : "/";
+
+  // Si l'utilisateur est déjà connecté, rediriger
   if (user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={redirectTo} replace />;
   }
 
   const handleLoginSuccess = () => {
-    navigate("/");
+    navigate(redirectTo);
   };
 
   return (
