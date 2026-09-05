@@ -5,6 +5,7 @@ import { Toaster } from 'sonner';
 import { AuthProvider } from './contexts/AuthContext';
 import { AudioProvider } from './contexts/AudioContext';
 import { ModuleVisibilityProvider } from './contexts/ModuleVisibilityContext';
+import { GeolocationProvider } from './contexts/GeolocationContext';
 import { PageLoader } from './components/common/PageLoader';
 
 // Lazy loaded routes
@@ -158,12 +159,14 @@ function App() {
       <AuthProvider>
         <AudioProvider>
           <ModuleVisibilityProvider>
-            <Router>
-              <Suspense fallback={<PageLoader />}>
-                <AppRoutes />
-              </Suspense>
-            </Router>
-            <Toaster position="top-right" richColors closeButton />
+            <GeolocationProvider>
+              <Router>
+                <Suspense fallback={<PageLoader />}>
+                  <AppRoutes />
+                </Suspense>
+              </Router>
+              <Toaster position="top-right" richColors closeButton />
+            </GeolocationProvider>
           </ModuleVisibilityProvider>
         </AudioProvider>
       </AuthProvider>
